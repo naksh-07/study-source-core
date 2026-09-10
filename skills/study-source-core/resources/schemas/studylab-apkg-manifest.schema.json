@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabApkgCompanionManifest",
+  "description": "Authoritative Draft-07 JSON schema for StudyLab APKG companion manifests per Section 20 of the StudyLab specification.",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "package_type",
+    "package_classification",
+    "subject",
+    "chapter",
+    "concept_count",
+    "skill_count",
+    "question_type_count",
+    "archetype_count",
+    "variant_count",
+    "object_count",
+    "difficulty_coverage",
+    "coverage_summary",
+    "question_types",
+    "items"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "manifest_version": {
+      "type": "string",
+      "enum": ["2.0.0"]
+    },
+    "package_version": {
+      "type": "string"
+    },
+    "package_type": {
+      "type": "string",
+      "enum": ["studylab_procedural_practice", "studylab_procedural_anchors", "studylab_practice_questions"]
+    },
+    "package_classification": {
+      "type": "string",
+      "enum": ["SELF_CONTAINED_PORTABLE", "HYDRATION_DEPENDENT"]
+    },
+    "self_contained_verified": {
+      "type": "boolean"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "chapter": {
+      "type": "string"
+    },
+    "deck_name": {
+      "type": "string"
+    },
+    "deckName": {
+      "type": "string"
+    },
+    "deck_id": {
+      "type": "integer"
+    },
+    "deckId": {
+      "type": "integer"
+    },
+    "apkg_file": {
+      "type": "string"
+    },
+    "apkgFile": {
+      "type": "string"
+    },
+    "generation_timestamp": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "generation_version": {
+      "type": "string"
+    },
+    "contract_version": {
+      "type": "string"
+    },
+    "concept_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "skill_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "question_type_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "source_question_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "canonical_question_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "generated_variant_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "instance_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "archetype_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "variant_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "object_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "hint_coverage": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    "solution_coverage": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    "diagnostic_coverage": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    "remediation_coverage": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    "adaptive_metadata_coverage": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0
+    },
+    "readiness_breakdown": {
+      "type": "object",
+      "properties": {
+        "structural_coverage": { "type": "number", "minimum": 0.0, "maximum": 100.0 },
+        "source_depth": { "type": "string" },
+        "variant_depth": { "type": "string" },
+        "mock_readiness": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "totalItems": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "totalQuestions": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "totalPatterns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "difficulty_coverage": {
+      "type": "object",
+      "required": ["min", "max", "mean", "bands"],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 5.0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 5.0
+        },
+        "mean": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 5.0
+        },
+        "bands": {
+          "type": "object",
+          "required": ["1", "2", "3", "4", "5"],
+          "properties": {
+            "1": { "type": "integer", "minimum": 0 },
+            "2": { "type": "integer", "minimum": 0 },
+            "3": { "type": "integer", "minimum": 0 },
+            "4": { "type": "integer", "minimum": 0 },
+            "5": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage_summary": {
+      "type": "object",
+      "required": ["total_chapter_skills", "covered_skills", "coverage_percentage", "modality_breakdown"],
+      "properties": {
+        "total_chapter_skills": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "covered_skills": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coverage_percentage": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 100.0
+        },
+        "uncovered_skills": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "modality_breakdown": {
+          "type": "object",
+          "required": ["mcq", "numerical", "stepwise", "reference_only"],
+          "properties": {
+            "mcq": { "type": "integer", "minimum": 0 },
+            "numerical": { "type": "integer", "minimum": 0 },
+            "stepwise": { "type": "integer", "minimum": 0 },
+            "reference_only": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "question_types": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type_id",
+          "name",
+          "object_types",
+          "required_interaction",
+          "coverage",
+          "hint_status",
+          "solution_status",
+          "diagnostic_status",
+          "remediation_status"
+        ],
+        "properties": {
+          "type_id": { "type": "string" },
+          "name": { "type": "string" },
+          "object_types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["mcq", "numerical", "stepwise", "reference_only"]
+            }
+          },
+          "required_interaction": { "type": "string" },
+          "coverage": {
+            "type": "object",
+            "required": ["instance_count", "authentic_pyq_count", "synthetic_count"],
+            "properties": {
+              "instance_count": { "type": "integer", "minimum": 0 },
+              "authentic_pyq_count": { "type": "integer", "minimum": 0 },
+              "synthetic_count": { "type": "integer", "minimum": 0 },
+              "source_question_count": { "type": "integer", "minimum": 0 },
+              "canonical_problem_count": { "type": "integer", "minimum": 0 },
+              "generated_variant_count": { "type": "integer", "minimum": 0 }
+            },
+            "additionalProperties": true
+          },
+          "hint_status": {
+            "type": "string",
+            "enum": ["COMPLETE_3_TIER", "PARTIAL", "MISSING"]
+          },
+          "solution_status": {
+            "type": "string",
+            "enum": ["COMPLETE_STEP_GRAPH", "STANDARD_TEXT", "MISSING"]
+          },
+          "diagnostic_status": {
+            "type": "string",
+            "enum": ["EXPLICIT_TAXONOMY_MAPPED", "STANDARD", "MISSING"]
+          },
+          "remediation_status": {
+            "type": "string",
+            "enum": ["REMEDIATION_PATH_DECLARED", "STANDARD", "MISSING"]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "guid",
+          "schema_id",
+          "domain",
+          "difficulty",
+          "has_inline_contract",
+          "is_self_contained"
+        ],
+        "properties": {
+          "note_id": { "type": "integer" },
+          "card_id": { "type": "integer" },
+          "noteId": { "type": "integer" },
+          "cardId": { "type": "integer" },
+          "guid": { "type": "string" },
+          "practice_question_id": { "type": ["string", "null"] },
+          "practiceQuestionId": { "type": ["string", "null"] },
+          "pattern_id": { "type": ["string", "null"] },
+          "patternId": { "type": ["string", "null"] },
+          "schema_id": { "type": "string" },
+          "schemaId": { "type": "string" },
+          "proc_schema": { "type": "string" },
+          "procSchema": { "type": "string" },
+          "problem_type": { "type": "string" },
+          "problemType": { "type": "string" },
+          "question_type": { "type": "string" },
+          "questionType": { "type": "string" },
+          "origin_type": { "type": "string" },
+          "originType": { "type": "string" },
+          "domain": { "type": "string" },
+          "problem_family": { "type": "string" },
+          "problemFamily": { "type": "string" },
+          "difficulty": { "type": "number" },
+          "has_inline_contract": { "type": "boolean" },
+          "hasInlineContract": { "type": "boolean" },
+          "is_self_contained": { "type": "boolean" },
+          "isSelfContained": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "anchors": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

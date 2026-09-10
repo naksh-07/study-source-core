@@ -1,0 +1,410 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DeclarativeFamilyContract",
+  "description": "Authoritative contract for declarative procedural problem families, archetypes, parameter generators, and step graphs.",
+  "type": "object",
+  "required": ["contract", "archetypes"],
+  "properties": {
+    "contract": {
+      "type": "object",
+      "required": [
+        "family_id",
+        "skill_id",
+        "domain",
+        "default_schema",
+        "capability"
+      ],
+      "properties": {
+        "family_id": { "type": "string", "maxLength": 256 },
+        "skill_id": { "type": "string", "maxLength": 256 },
+        "domain": {
+          "type": "string",
+          "enum": ["mathematics", "reasoning", "physics", "chemistry"]
+        },
+        "default_schema": { "type": "string", "maxLength": 256 },
+        "capability": {
+          "type": "string",
+          "enum": [
+            "declarative",
+            "constraint_solver",
+            "symbolic_logic",
+            "domain_physics",
+            "domain_chemistry",
+            "domain_geometry",
+            "specialized"
+          ]
+        },
+        "modality": {
+          "type": "string",
+          "enum": ["mcq", "numerical", "structured", "short_answer", "essay"]
+        },
+        "rendering_metadata": {
+          "type": "object",
+          "properties": {
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "text": { "type": "string" },
+                  "correct": { "type": "boolean" }
+                }
+              }
+            },
+            "tolerance": { "type": "number" }
+          }
+        },
+        "min_difficulty": { "type": "number", "minimum": 1.0, "maximum": 5.0, "default": 1.0 },
+        "max_difficulty": { "type": "number", "minimum": 1.0, "maximum": 5.0, "default": 5.0 },
+        "supported_variants": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "variant_categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["parameter", "isomorphic", "structural", "contextual", "multi_concept", "transfer"]
+          },
+          "default": ["parameter"]
+        },
+        "target_latency_model": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 1000, "maximum": 600000 },
+          "default": { "1": 25000, "2": 35000, "3": 50000, "4": 65000, "5": 80000 }
+        },
+        "structural_tags": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "decision_points": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "error_categories": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "prerequisites": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "provenance": { "$ref": "studylab-provenance.schema.json" },
+        "metadata": { "type": "object", "default": {} }
+      },
+      "additionalProperties": false
+    },
+    "archetypes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": [
+          "archetype_id",
+          "difficulty_level",
+          "variant_category",
+          "variant_name",
+          "parameters",
+          "prompt_template",
+          "answer_derivation",
+          "answer_formatted_template",
+          "solution_template"
+        ],
+        "properties": {
+          "archetype_id": { "type": "string", "maxLength": 256 },
+          "difficulty_level": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "variant_category": {
+            "type": "string",
+            "enum": ["parameter", "isomorphic", "structural", "contextual", "multi_concept", "transfer"]
+          },
+          "variant_name": { "type": "string", "maxLength": 128 },
+          "parameters": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "type": "object",
+              "required": ["name", "domain"],
+              "properties": {
+                "name": { "type": "string", "maxLength": 64 },
+                "domain": { "$ref": "#/definitions/ParameterDomain" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "maxItems": 50,
+            "items": { "$ref": "#/definitions/ConstraintSpec" },
+            "default": []
+          },
+          "prompt_template": { "type": "string", "maxLength": 10000 },
+          "answer_derivation": { "$ref": "#/definitions/AnswerDerivation" },
+          "answer_formatted_template": { "type": "string", "maxLength": 1000 },
+          "solution_template": { "type": "string", "maxLength": 20000 },
+          "step_nodes": {
+            "type": "array",
+            "maxItems": 20,
+            "items": { "$ref": "#/definitions/StepNodeSpec" },
+            "default": []
+          },
+          "target_time_ms": { "type": "integer", "minimum": 1000, "maximum": 600000, "default": 30000 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "ParameterDomain": {
+      "type": "object",
+      "required": ["type"],
+      "discriminator": { "propertyName": "type" },
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "integer_range" },
+            "min": { "type": "integer" },
+            "max": { "type": "integer" },
+            "step": { "type": ["integer", "null"] },
+            "non_zero": { "type": ["boolean", "null"] }
+          },
+          "required": ["type", "min", "max"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "float_range" },
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "precision": { "type": "integer", "minimum": 0, "maximum": 10, "default": 2 }
+          },
+          "required": ["type", "min", "max"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "discrete_choice" },
+            "values": { "type": "array", "minItems": 1 }
+          },
+          "required": ["type", "values"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_linear" },
+            "a_param": { "type": "string" },
+            "x_param": { "type": "string" },
+            "b_param": { "type": "string" }
+          },
+          "required": ["type", "a_param", "x_param", "b_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_product" },
+            "a_param": { "type": "string" },
+            "b_param": { "type": "string" }
+          },
+          "required": ["type", "a_param", "b_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_sum" },
+            "a_param": { "type": "string" },
+            "b_param": { "type": "string" }
+          },
+          "required": ["type", "a_param", "b_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_difference" },
+            "a_param": { "type": "string" },
+            "b_param": { "type": "string" }
+          },
+          "required": ["type", "a_param", "b_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_quotient" },
+            "a_param": { "type": "string" },
+            "b_param": { "type": "string" },
+            "precision": { "type": ["integer", "null"] }
+          },
+          "required": ["type", "a_param", "b_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_signed_string" },
+            "param": { "type": "string" }
+          },
+          "required": ["type", "param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_power" },
+            "base_param": { "type": "string" },
+            "exponent": { "type": "integer", "minimum": 0, "maximum": 10 }
+          },
+          "required": ["type", "base_param", "exponent"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_percentage" },
+            "base_param": { "type": "string" },
+            "rate_param": { "type": "string" }
+          },
+          "required": ["type", "base_param", "rate_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_hypotenuse" },
+            "a_param": { "type": "string" },
+            "b_param": { "type": "string" }
+          },
+          "required": ["type", "a_param", "b_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "derived_pythagorean_leg" },
+            "c_param": { "type": "string" },
+            "a_param": { "type": "string" }
+          },
+          "required": ["type", "c_param", "a_param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "permutation_choice" },
+            "pool": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "count": { "type": "integer", "minimum": 1 }
+          },
+          "required": ["type", "pool", "count"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "prime_factor_grid" },
+            "base_primes": { "type": "array", "items": { "type": "integer", "minimum": 2 }, "minItems": 1 },
+            "min_exponents": { "type": "array", "items": { "type": "integer", "minimum": 1, "maximum": 63 } },
+            "max_exponents": { "type": "array", "items": { "type": "integer", "minimum": 1, "maximum": 63 } }
+          },
+          "required": ["type", "base_primes", "min_exponents", "max_exponents"],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": { "const": "coprime_pair" },
+            "min": { "type": "integer" },
+            "max": { "type": "integer" }
+          },
+          "required": ["type", "min", "max"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ConstraintSpec": {
+      "type": "object",
+      "required": ["type"],
+      "discriminator": { "propertyName": "type" },
+      "oneOf": [
+        {
+          "properties": { "type": { "const": "not_equal" }, "param_a": { "type": "string" }, "param_b": { "type": "string" } },
+          "required": ["type", "param_a", "param_b"],
+          "additionalProperties": false
+        },
+        {
+          "properties": { "type": { "const": "non_zero" }, "param": { "type": "string" } },
+          "required": ["type", "param"],
+          "additionalProperties": false
+        },
+        {
+          "properties": { "type": { "const": "divisible" }, "numerator": { "type": "string" }, "denominator": { "type": "string" } },
+          "required": ["type", "numerator", "denominator"],
+          "additionalProperties": false
+        },
+        {
+          "properties": { "type": { "const": "greater_than" }, "param_a": { "type": "string" }, "param_b": { "type": "string" } },
+          "required": ["type", "param_a", "param_b"],
+          "additionalProperties": false
+        },
+        {
+          "properties": { "type": { "const": "less_than" }, "param_a": { "type": "string" }, "param_b": { "type": "string" } },
+          "required": ["type", "param_a", "param_b"],
+          "additionalProperties": false
+        },
+        {
+          "properties": { "type": { "const": "sum_equals" }, "param_a": { "type": "string" }, "param_b": { "type": "string" }, "target": { "type": "integer" } },
+          "required": ["type", "param_a", "param_b", "target"],
+          "additionalProperties": false
+        },
+        {
+          "properties": { "type": { "const": "predicate" }, "name": { "type": "string" } },
+          "required": ["type", "name"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AnswerDerivation": {
+      "type": "object",
+      "required": ["type"],
+      "discriminator": { "propertyName": "type" },
+      "oneOf": [
+        { "properties": { "type": { "const": "direct_param" }, "param_name": { "type": "string" } }, "required": ["type", "param_name"] },
+        { "properties": { "type": { "const": "direct_string_param" }, "param_name": { "type": "string" } }, "required": ["type", "param_name"] },
+        { "properties": { "type": { "const": "linear_two_step" }, "c_param": { "type": "string" }, "b_param": { "type": "string" }, "a_param": { "type": "string" } }, "required": ["type", "c_param", "b_param", "a_param"] },
+        { "properties": { "type": { "const": "linear_variables_both_sides" }, "d_param": { "type": "string" }, "b_param": { "type": "string" }, "a_param": { "type": "string" }, "c_param": { "type": "string" } }, "required": ["type", "d_param", "b_param", "a_param", "c_param"] },
+        { "properties": { "type": { "const": "linear_distributive" }, "d_param": { "type": "string" }, "a_param": { "type": "string" }, "c_param": { "type": "string" }, "b_param": { "type": "string" } }, "required": ["type", "d_param", "a_param", "c_param", "b_param"] },
+        { "properties": { "type": { "const": "linear_fractional" }, "c_param": { "type": "string" }, "b_param": { "type": "string" }, "a_param": { "type": "string" } }, "required": ["type", "c_param", "b_param", "a_param"] },
+        { "properties": { "type": { "const": "quotient" }, "numerator_param": { "type": "string" }, "denominator_param": { "type": "string" } }, "required": ["type", "numerator_param", "denominator_param"] },
+        { "properties": { "type": { "const": "product" }, "a_param": { "type": "string" }, "b_param": { "type": "string" } }, "required": ["type", "a_param", "b_param"] },
+        { "properties": { "type": { "const": "percentage_amount" }, "base_param": { "type": "string" }, "percent_param": { "type": "string" } }, "required": ["type", "base_param", "percent_param"] },
+        { "properties": { "type": { "const": "lcm_array" }, "params": { "type": "array", "items": { "type": "string" } } }, "required": ["type", "params"] },
+        { "properties": { "type": { "const": "gcd_array" }, "params": { "type": "array", "items": { "type": "string" } } }, "required": ["type", "params"] },
+        { "properties": { "type": { "const": "remainder" }, "dividend_param": { "type": "string" }, "divisor_param": { "type": "string" } }, "required": ["type", "dividend_param", "divisor_param"] },
+        { "properties": { "type": { "const": "pythagoras_hypotenuse" }, "a_param": { "type": "string" }, "b_param": { "type": "string" } }, "required": ["type", "a_param", "b_param"] },
+        { "properties": { "type": { "const": "pythagoras_leg" }, "c_param": { "type": "string" }, "a_param": { "type": "string" } }, "required": ["type", "c_param", "a_param"] },
+        { "properties": { "type": { "const": "triangle_area" }, "base_param": { "type": "string" }, "height_param": { "type": "string" } }, "required": ["type", "base_param", "height_param"] },
+        { "properties": { "type": { "const": "circle_area" }, "radius_param": { "type": "string" }, "pi_approx": { "type": ["number", "null"] } }, "required": ["type", "radius_param"] },
+        { "properties": { "type": { "const": "arithmetic_series_sum" }, "n_param": { "type": "string" }, "a_param": { "type": "string" }, "d_param": { "type": "string" } }, "required": ["type", "n_param", "a_param", "d_param"] },
+        { "properties": { "type": { "const": "kinematic_velocity" }, "u_param": { "type": "string" }, "a_param": { "type": "string" }, "t_param": { "type": "string" } }, "required": ["type", "u_param", "a_param", "t_param"] },
+        { "properties": { "type": { "const": "kinematic_displacement" }, "u_param": { "type": "string" }, "a_param": { "type": "string" }, "t_param": { "type": "string" } }, "required": ["type", "u_param", "a_param", "t_param"] },
+        { "properties": { "type": { "const": "kinematic_stopping_distance" }, "u_param": { "type": "string" }, "a_param": { "type": "string" } }, "required": ["type", "u_param", "a_param"] },
+        { "properties": { "type": { "const": "kinematic_time" }, "u_param": { "type": "string" }, "v_param": { "type": "string" }, "a_param": { "type": "string" } }, "required": ["type", "u_param", "v_param", "a_param"] },
+        { "properties": { "type": { "const": "kinematic_work_energy" }, "mass_param": { "type": "string" }, "velocity_param": { "type": "string" } }, "required": ["type", "mass_param", "velocity_param"] },
+        { "properties": { "type": { "const": "stoichiometric_moles_to_mass" }, "moles_param": { "type": "string" }, "molar_mass_param": { "type": "string" } }, "required": ["type", "moles_param", "molar_mass_param"] },
+        { "properties": { "type": { "const": "stoichiometric_mass_to_moles" }, "mass_param": { "type": "string" }, "molar_mass_param": { "type": "string" } }, "required": ["type", "mass_param", "molar_mass_param"] },
+        { "properties": { "type": { "const": "stoichiometric_mole_ratio" }, "moles_a_param": { "type": "string" }, "coeff_a": { "type": "number" }, "coeff_b": { "type": "number" } }, "required": ["type", "moles_a_param", "coeff_a", "coeff_b"] },
+        { "properties": { "type": { "const": "stoichiometric_mass_to_mass" }, "mass_a_param": { "type": "string" }, "molar_mass_a": { "type": "string" }, "coeff_a": { "type": "number" }, "coeff_b": { "type": "number" }, "molar_mass_b": { "type": "string" } }, "required": ["type", "mass_a_param", "molar_mass_a", "coeff_a", "coeff_b", "molar_mass_b"] },
+        { "properties": { "type": { "const": "equilibrium_kc" }, "conc_products": { "type": "array" }, "conc_reactants": { "type": "array" } }, "required": ["type", "conc_products", "conc_reactants"] },
+        { "properties": { "type": { "const": "ideal_gas_law_pressure" }, "moles_param": { "type": "string" }, "temp_param": { "type": "string" }, "vol_param": { "type": "string" }, "r_const": { "type": ["number", "null"] } }, "required": ["type", "moles_param", "temp_param", "vol_param"] },
+        { "properties": { "type": { "const": "ideal_gas_law_volume" }, "moles_param": { "type": "string" }, "temp_param": { "type": "string" }, "press_param": { "type": "string" }, "r_const": { "type": ["number", "null"] } }, "required": ["type", "moles_param", "temp_param", "press_param"] },
+        { "properties": { "type": { "const": "symbolic_logic_evaluation" }, "p_param": { "type": "string" }, "q_param": { "type": "string" }, "operator": { "type": "string", "enum": ["AND", "OR", "IMPLIES", "EQUIV", "XOR", "NOT_P"] } }, "required": ["type", "p_param", "q_param", "operator"] },
+        { "properties": { "type": { "enum": ["derived_power", "derived_linear", "derived_percentage", "derived_formula", "formula", "custom_expression"] }, "formula": { "type": "string" } }, "required": ["type", "formula"], "additionalProperties": false }
+      ]
+    },
+    "StepNodeSpec": {
+      "type": "object",
+      "required": [
+        "id",
+        "step_type",
+        "label",
+        "description_template",
+        "expected_expression_template",
+        "hint_principle",
+        "hint_operation",
+        "hint_intermediate"
+      ],
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "step_type": { "type": "string" },
+        "label": { "type": "string", "maxLength": 256 },
+        "description_template": { "type": "string", "maxLength": 2000 },
+        "expected_expression_template": { "type": "string", "maxLength": 2000 },
+        "alternate_templates": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "hint_principle": { "type": "string", "maxLength": 2000 },
+        "hint_operation": { "type": "string", "maxLength": 2000 },
+        "hint_intermediate": { "type": "string", "maxLength": 2000 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

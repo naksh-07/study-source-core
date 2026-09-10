@@ -1,0 +1,14 @@
+{
+    "basic":  true,
+    "cloze":  true,
+    "apkg":  true,
+    "proceduralApkg":  false,
+    "bmQa":  true,
+    "notes":  true,
+    "imageOcclusion":  true,
+    "bmGraph":  true,
+    "problemPatterns":  false,
+    "slideDeck":  true,
+    "mindmap":  true,
+    "practiceQuestions":  false
+}

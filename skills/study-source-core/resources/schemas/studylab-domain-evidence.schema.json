@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabVersionedDomainEvidence",
+  "description": "Schema for runtime diagnostic evidence submitted via reviewer telemetry and processed by RemediationPolicy.",
+  "type": "object",
+  "required": ["version", "domain", "evidence"],
+  "properties": {
+    "version": { "type": "integer", "default": 1 },
+    "domain": {
+      "type": "string",
+      "enum": ["math", "reasoning", "physics", "chemistry"]
+    },
+    "evidence": {
+      "oneOf": [
+        {
+          "title": "MathEvidence",
+          "type": "object",
+          "properties": {
+            "pattern_recognition": { "type": ["boolean", "null"] },
+            "method_selection": { "type": ["boolean", "null"] },
+            "execution": { "type": ["boolean", "null"] },
+            "verification": { "type": ["boolean", "null"] },
+            "structural_transfer": { "type": ["boolean", "null"] }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "ReasoningEvidence",
+          "type": "object",
+          "properties": {
+            "pattern_recognition": { "type": ["boolean", "null"] },
+            "representation": { "type": ["boolean", "null"] },
+            "constraint_extraction": { "type": ["boolean", "null"] },
+            "decision_path": { "type": ["boolean", "null"] },
+            "deduction": { "type": ["boolean", "null"] },
+            "trap_checking": { "type": ["boolean", "null"] },
+            "structural_transfer": { "type": ["boolean", "null"] }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "PhysicsEvidence",
+          "type": "object",
+          "properties": {
+            "physical_model_selection": { "type": ["boolean", "null"] },
+            "representation": { "type": ["boolean", "null"] },
+            "governing_principle": { "type": ["boolean", "null"] },
+            "equation_setup": { "type": ["boolean", "null"] },
+            "calculation": { "type": ["boolean", "null"] },
+            "unit_validity": { "type": ["boolean", "null"] },
+            "boundary_validity": { "type": ["boolean", "null"] },
+            "verification": { "type": ["boolean", "null"] },
+            "transfer": { "type": ["boolean", "null"] }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "ChemistryEvidence",
+          "type": "object",
+          "required": ["branch"],
+          "properties": {
+            "branch": { "type": "string", "enum": ["Physical", "Organic", "Inorganic"] },
+            "model_setup": { "type": ["boolean", "null"] },
+            "equation_selection": { "type": ["boolean", "null"] },
+            "intermediate_quantity": { "type": ["boolean", "null"] },
+            "calculation": { "type": ["boolean", "null"] },
+            "conservation": { "type": ["boolean", "null"] },
+            "substrate_recognition": { "type": ["boolean", "null"] },
+            "mechanism_pathway": { "type": ["boolean", "null"] },
+            "reagent_interpretation": { "type": ["boolean", "null"] },
+            "product_prediction": { "type": ["boolean", "null"] },
+            "trend_reasoning": { "type": ["boolean", "null"] },
+            "exception_handling": { "type": ["boolean", "null"] },
+            "qualitative_reasoning": { "type": ["boolean", "null"] },
+            "verification": { "type": ["boolean", "null"] },
+            "transfer": { "type": ["boolean", "null"] }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

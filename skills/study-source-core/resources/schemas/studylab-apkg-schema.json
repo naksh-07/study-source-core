@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabProceduralCardAnchor",
+  "description": "Canonical schema for the StudyLab Procedural Card Anchor JSON embedded in Anki 'StudyLab Procedural Anchor' notes.",
+  "type": "object",
+  "required": ["proc_schema"],
+  "properties": {
+    "proc_schema": {
+      "type": "string",
+      "description": "Schema ID of the target practice object (e.g. 'schema.math.number_system.lcm_hcf.v1')."
+    },
+    "content_ref": {
+      "type": ["string", "null"],
+      "description": "Optional ID referencing the originating pattern or question item."
+    },
+    "custom_params": {
+      "type": ["object", "null"],
+      "description": "Optional map of fixed parameter values overriding random generation."
+    },
+    "seed_mode": {
+      "description": "Strategy for problem instance generation seed.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["random", "daily"]
+        },
+        {
+          "type": "object",
+          "required": ["fixed"],
+          "properties": {
+            "fixed": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "default": "random"
+    },
+    "difficulty_override": {
+      "type": "number",
+      "minimum": 1.0,
+      "maximum": 5.0,
+      "description": "Optional fixed difficulty override between [1.0, 5.0]."
+    },
+    "inline_contract": {
+      "$ref": "studylab-rich-content-contract.schema.json",
+      "description": "Modern self-contained rich-content contract bundled directly in the anchor. When present, cards generate with zero pre-seeded database dependencies."
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StudySourceCoreImageOcclusion",
+  "type": "object",
+  "required": ["id", "title", "subject", "chapter", "cards"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "subject": { "type": "string", "minLength": 1 },
+    "chapter": { "type": "string", "minLength": 1 },
+    "language": { "type": "string", "default": "hi" },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "asset", "mode", "regions"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "source": {
+            "type": "object",
+            "required": ["chapter", "evidence_ids"],
+            "properties": {
+              "chapter": { "type": "string", "minLength": 1 },
+              "evidence_ids": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1 }
+              }
+            },
+            "additionalProperties": false
+          },
+          "asset": {
+            "type": "object",
+            "required": ["path", "width", "height"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "original_name": { "type": "string" },
+              "width": { "type": "integer", "exclusiveMinimum": 0 },
+              "height": { "type": "integer", "exclusiveMinimum": 0 },
+              "source_type": {
+                "type": "string",
+                "enum": ["source_provided", "programmatic", "ai_generated", "external", "user_provided"]
+              },
+              "provenance_note": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["hide_all_guess_one", "hide_one_guess_one"]
+          },
+          "regions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "shape", "answer"],
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "shape": {
+                  "type": "string",
+                  "enum": ["rectangle", "ellipse", "polygon"]
+                },
+                "coordinates": {
+                  "type": "array",
+                  "items": { "type": "number" }
+                },
+                "points": {
+                  "type": "array",
+                  "minItems": 3,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": { "type": "number" }
+                  }
+                },
+                "answer": { "type": "string", "minLength": 1 },
+                "label": { "type": "string" },
+                "hint": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "header": { "type": "string" },
+          "extra": { "type": "string" },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabSolutionGraph",
+  "description": "Schema for deterministic directed acyclic solution graphs, step-level diagnostics, and 3-tier progressive hints.",
+  "type": "object",
+  "required": ["steps", "final_step_id"],
+  "properties": {
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "step_type",
+          "title",
+          "description",
+          "expected_expression",
+          "dependencies",
+          "is_final",
+          "hints"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "step_type": {
+            "type": "string",
+            "enum": [
+              "formula_selection", "transformation", "substitution", "arithmetic",
+              "simplification", "equation_rearrangement", "comparison", "unit_conversion",
+              "intermediate_result", "final_answer", "identify_knowns", "select_model",
+              "choose_coordinate_system", "select_equation", "physical_sanity_check",
+              "identify_chemical_species", "balance_equation", "convert_mass_to_moles",
+              "apply_stoichiometric_ratio", "identify_limiting_reagent",
+              "construct_equilibrium_expression", "chemical_sanity_check",
+              "identify_schema", "select_strategy", "build_representation",
+              "apply_constraint", "propagate_constraint", "make_inference",
+              "create_case", "eliminate_case", "check_contradiction", "verify_conclusion"
+            ]
+          },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "expected_expression": { "type": "string" },
+          "expected_value": { "type": ["number", "null"] },
+          "alternate_expressions": { "type": "array", "items": { "type": "string" }, "default": [] },
+          "dependencies": { "type": "array", "items": { "type": "string" }, "default": [] },
+          "is_final": { "type": "boolean" },
+          "hints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["level", "content"],
+              "properties": {
+                "level": { "type": "integer", "enum": [1, 2, 3] },
+                "content": { "type": "string" },
+                "reveals_expression": { "type": "boolean", "default": false }
+              },
+              "additionalProperties": false
+            },
+            "default": []
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "final_step_id": { "type": "string" },
+    "metadata": { "type": "object", "default": {} }
+  },
+  "additionalProperties": false
+}

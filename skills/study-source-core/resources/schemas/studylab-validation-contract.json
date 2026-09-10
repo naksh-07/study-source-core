@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabValidationContract",
+  "description": "Exhaustive specification of validation gates, size bounds, arithmetic overflow checks, and integrity invariants enforced by the StudyLab Procedural Engine.",
+  "validation_gates": {
+    "family_contract": {
+      "family_id": { "min_len": 1, "max_bytes": 256, "rule": "Must be non-empty UTF-8 string" },
+      "default_schema": { "min_len": 1, "max_bytes": 256, "rule": "Must be non-empty UTF-8 string" },
+      "difficulty_bounds": { "min": 1.0, "max": 5.0, "rule": "min_difficulty <= max_difficulty" },
+      "archetypes_count": { "min": 1, "max": 50, "rule": "Must contain 1 to 50 archetypes" }
+    },
+    "archetype": {
+      "archetype_id": { "min_len": 1, "max_bytes": 256, "rule": "Must be non-empty string" },
+      "prompt_template": { "min_len": 1, "max_bytes": 10000, "rule": "Must be non-empty template" },
+      "solution_template": { "max_bytes": 20000, "rule": "Must not exceed 20,000 bytes" },
+      "target_time_ms": { "min": 1000, "max": 600000, "rule": "Must be between 1s and 10min" },
+      "parameters_count": { "max": 50, "rule": "Max 50 parameters per archetype" },
+      "constraints_count": { "max": 50, "rule": "Max 50 constraints per archetype" },
+      "step_nodes_count": { "max": 20, "rule": "Max 20 step nodes per archetype" }
+    },
+    "parameter_domains": {
+      "integer_range": {
+        "rules": [
+          "min <= max",
+          "step > 0 (if present)",
+          "max.checked_sub(min).is_some() (no i64 overflow)"
+        ]
+      },
+      "float_range": {
+        "rules": [
+          "min <= max",
+          "!min.is_nan() && !max.is_nan()",
+          "!min.is_infinite() && !max.is_infinite()"
+        ]
+      },
+      "discrete_choice": {
+        "rules": ["!values.is_empty()"]
+      },
+      "permutation_choice": {
+        "rules": ["!pool.is_empty()", "count > 0", "count <= pool.len()"]
+      },
+      "prime_factor_grid": {
+        "rules": [
+          "!base_primes.is_empty()",
+          "all base_primes != 0",
+          "min_exponent <= max_exponent <= 63"
+        ]
+      },
+      "coprime_pair": {
+        "rules": [
+          "min <= max",
+          "max.checked_sub(min).is_some()"
+        ]
+      }
+    },
+    "solution_graph": {
+      "topology": {
+        "rules": [
+          "All dependency step IDs must exist in steps array",
+          "Graph must be strictly acyclic (DFS recursion validation)",
+          "Final step ID must exist and have is_final=true"
+        ]
+      }
+    },
+    "sampling_and_eval": {
+      "rejection_sampling": { "max_attempts": 20, "rule": "Aborts if constraints unsatisfied after 20 attempts" },
+      "arithmetic_safety": {
+        "rules": [
+          "Division by zero guarded (returns 0.0 or safe fallback)",
+          "Remainder i64::MIN / -1 overflow guarded",
+          "DerivedSignedString uses unsigned_abs() to prevent i64::MIN negation panic",
+          "PrimeFactorGrid uses checked_pow with saturating_mul"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.npm/
+
+# Build / cache
+.build/
+.bm-cache/
+*.log
+*.tmp
+
+# Test output logs (ephemeral)
+scripts/scratch/
+skills/study-source-core/test_output.log
+skills/study-source-core/old_test_output.log
+skills/study-source-core/scripts/test_output.log
+skills/study-source-core/scripts/scratch/
+skills/study-source-core/fix_bio.js
+skills/study-source-core/fix_math.js
+skills/study-source-core/fix_math2.js
+skills/study-source-core/fix_math4.js
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Scratch / transient files
+handoff.md
+fix.js

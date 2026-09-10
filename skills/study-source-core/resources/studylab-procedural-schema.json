@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StudySourceCoreProceduralSchema",
+  "type": "object",
+  "required": ["id", "title", "domain", "chapter", "patterns"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema_version": { "type": "string", "default": "1.0.0" },
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "Math",
+        "Physics",
+        "Chemistry",
+        "Reasoning",
+        "Biology",
+        "Geography",
+        "History",
+        "Map",
+        "Political Science",
+        "General"
+      ]
+    },
+    "chapter": { "type": "string", "minLength": 1 },
+    "language": { "type": "string", "default": "hi" },
+    "skill_id": { "type": "string" },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string" },
+        "chapter": { "type": "string" },
+        "page_range": { "type": "string" },
+        "section": { "type": "string" },
+        "exam": { "type": "string" },
+        "year": { "type": "integer" },
+        "generator_version": { "type": "string" },
+        "content_version": { "type": "string" },
+        "notes_file": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "decision_trees": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "rules"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "rules": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["condition", "action"],
+              "properties": {
+                "condition": { "type": "string", "minLength": 1 },
+                "action": { "type": "string", "minLength": 1 },
+                "method": { "type": "string" },
+                "notes": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "practice_progression": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["level", "name", "difficulty", "description"],
+        "properties": {
+          "level": { "type": "integer", "minimum": 1, "maximum": 10 },
+          "name": { "type": "string", "minLength": 1 },
+          "difficulty": { "type": "string" },
+          "description": { "type": "string", "minLength": 1 },
+          "focus_areas": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "error_log_taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "correction_rule"],
+        "properties": {
+          "id": { "type": ["integer", "string"] },
+          "category": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "example": { "type": "string" },
+          "correction_rule": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "patterns": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "domain",
+          "problem_type",
+          "deep_structure",
+          "recognition_signals",
+          "governing_method",
+          "common_traps",
+          "difficulty"
+        ],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "Math",
+              "Physics",
+              "Chemistry",
+              "Reasoning",
+              "Biology",
+              "Geography",
+              "History",
+              "Map",
+              "Political Science",
+              "General"
+            ]
+          },
+          "skill_id": { "type": "string" },
+          "schema_id": { "type": "string" },
+          "problem_family": { "type": "string" },
+          "problem_type": { "type": "string", "minLength": 1 },
+          "deep_structure": { "type": "string", "minLength": 1 },
+          "recognition_signals": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "representation": {
+            "type": ["string", "object"]
+          },
+          "governing_method": {
+            "type": "object",
+            "required": ["standard_algorithm"],
+            "properties": {
+              "standard_algorithm": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1 }
+              },
+              "shortcut_or_alternative": {
+                "type": ["string", "array"],
+                "items": { "type": "string" }
+              },
+              "sub_types": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name"],
+                  "properties": {
+                    "name": { "type": "string", "minLength": 1 },
+                    "formula": { "type": "string" },
+                    "conditions": { "type": "string" }
+                  },
+                  "additionalProperties": true
+                }
+              }
+            },
+            "additionalProperties": true
+          },
+          "decision_points": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["condition", "action"],
+              "properties": {
+                "condition": { "type": "string", "minLength": 1 },
+                "action": { "type": "string", "minLength": 1 },
+                "method": { "type": "string" },
+                "notes": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "common_traps": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "verification_rules": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "Easy",
+              "Medium",
+              "Difficult",
+              "Easy-Medium",
+              "Medium-Difficult",
+              "E",
+              "M",
+              "D",
+              "E/M",
+              "M/D"
+            ]
+          },
+          "difficulty_dimensions": {
+            "type": "object",
+            "properties": {
+              "conceptual": { "type": "string" },
+              "computational": { "type": "string" },
+              "trap_density": { "type": "string" }
+            },
+            "additionalProperties": true
+          },
+          "variation_opportunities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "transfer_opportunities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "error_categories": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "representative_examples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "setup": { "type": "string" },
+                "steps": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "solution_outline": { "type": "string" },
+                "answer": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "pyq_references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["exam", "year"],
+              "properties": {
+                "exam": { "type": "string", "minLength": 1 },
+                "year": { "type": "integer" },
+                "shift": { "type": "string" },
+                "question_number": { "type": "string" },
+                "source": { "type": "string" },
+                "notes": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "properties": {
+              "source": { "type": "string" },
+              "chapter": { "type": "string" },
+              "page": { "type": ["integer", "string"] },
+              "question_id": { "type": "string" },
+              "section": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

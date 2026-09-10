@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabPracticeItem",
+  "description": "Canonical data model for ingested or generated PracticeItem objects in StudyLab database and content datasets.",
+  "type": "object",
+  "required": [
+    "id",
+    "origin",
+    "domain",
+    "chapter",
+    "skill_id",
+    "schema_id",
+    "problem_family_id",
+    "question_type",
+    "prompt",
+    "difficulty"
+  ],
+  "properties": {
+    "id": { "type": "string", "description": "Unique identifier (e.g. 'math_lcm_001')" },
+    "origin": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "origin_type": { "const": "AUTHENTIC_PYQ" },
+            "pyq_id": { "type": "string" },
+            "exam": { "type": "string" },
+            "year": { "type": "integer" },
+            "shift": { "type": "string" }
+          },
+          "required": ["origin_type", "exam", "year"]
+        },
+        {
+          "properties": {
+            "origin_type": { "const": "CURATED_SOURCE" },
+            "source_reference": { "type": "string" }
+          },
+          "required": ["origin_type", "source_reference"]
+        },
+        {
+          "properties": {
+            "origin_type": { "const": "DERIVED_VARIANT" },
+            "parent_id": { "type": "string" },
+            "generator_version": { "type": "integer" },
+            "seed": { "type": "integer" },
+            "variant_type": { "type": "string" }
+          },
+          "required": ["origin_type", "parent_id", "generator_version", "variant_type"]
+        },
+        {
+          "properties": {
+            "origin_type": { "const": "SYNTHETIC_SCHEMA" },
+            "generator_version": { "type": "integer" },
+            "seed": { "type": "integer" }
+          },
+          "required": ["origin_type", "generator_version"]
+        }
+      ]
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["mathematics", "reasoning", "physics", "chemistry"]
+    },
+    "chapter": { "type": "string" },
+    "skill_id": { "type": "string" },
+    "schema_id": { "type": "string" },
+    "problem_family_id": { "type": "string" },
+    "question_type": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "mcq" },
+            "options": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+            "correct_option": { "type": "string" },
+            "explanation": { "type": "string" }
+          },
+          "required": ["type", "options", "correct_option"]
+        },
+        {
+          "properties": {
+            "type": { "const": "numerical" },
+            "answer": { "type": "number" },
+            "tolerance": { "type": "number", "default": 0.001 }
+          },
+          "required": ["type", "answer"]
+        },
+        {
+          "properties": {
+            "type": { "const": "structured" },
+            "steps": { "type": "array" }
+          },
+          "required": ["type", "steps"]
+        },
+        {
+          "properties": {
+            "type": { "const": "reference_only" },
+            "source_reference": { "type": "string" }
+          },
+          "required": ["type", "source_reference"]
+        }
+      ]
+    },
+    "prompt": { "type": "string" },
+    "difficulty": { "type": "number", "minimum": 1.0, "maximum": 5.0 },
+    "structural_tags": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "decision_points": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "error_categories": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "prerequisites": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "provenance": { "$ref": "studylab-provenance.schema.json" },
+    "created_at": { "type": "integer" },
+    "metadata": { "type": "object", "default": {} }
+  },
+  "additionalProperties": false
+}

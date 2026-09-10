@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabCanonicalSchemaIndex",
+  "description": "Consolidated schema index for StudyLab Content Authoring and APKG generation.",
+  "version": "2.0.0-phase40-canonical",
+  "schemas": {
+    "apkg_anchor": {
+      "file": "studylab-apkg-schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/anchor/mod.rs:28-51",
+      "consumer": "rslib/src/notetype/render.rs & ProceduralService::resolve_procedural_target",
+      "description": "Embedded payload in Anki notes defining procedural schema, inline contract, or content reference."
+    },
+    "rich_content_contract": {
+      "file": "studylab-rich-content-contract.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/problems/contract.rs:764-909",
+      "consumer": "DeclarativeFamilyRegistry & DeclarativeProblemGenerator",
+      "description": "Complete declarative specification for problem families, archetypes, parameter domains, constraints, and step nodes."
+    },
+    "practice_item": {
+      "file": "studylab-practice-item.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/content/item.rs:57-79",
+      "consumer": "PracticeContentIngester & ProceduralStore",
+      "description": "Canonical data model for ingested PYQs, curated items, and synthetic practice instances."
+    },
+    "pattern_archetype": {
+      "file": "studylab-pattern-archetype.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/content/ingestion.rs:11-402",
+      "consumer": "ChapterPracticeProfile & Pattern Catalog",
+      "description": "Problem pattern taxonomy, recognition signals, and PYQ references."
+    },
+    "solution_graph": {
+      "file": "studylab-solution-graph.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/problems/steps/step_graph.rs:6-331",
+      "consumer": "StepValidator & Reviewer Stepwise Engine",
+      "description": "Directed acyclic graph of problem solution steps, 32 step types, and 3-tier hints."
+    },
+    "domain_evidence": {
+      "file": "studylab-domain-evidence.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/skills/domain_evidence.rs:6-190",
+      "consumer": "Reviewer Telemetry & RemediationPolicy::evaluate",
+      "description": "Cognitive diagnostic evidence payload routed from reviewer to adaptive remediation policy."
+    },
+    "provenance": {
+      "file": "studylab-provenance.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/exam/pyq.rs:18-33",
+      "consumer": "ContentProvenance & Audit Trail",
+      "description": "Exam source grounding, shift/year metadata, and generator versioning."
+    },
+    "validation_contract": {
+      "file": "studylab-validation-contract.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "rslib/procedural/src/problems/contract.rs:791-908",
+      "consumer": "DeclarativeFamilyContract::validate",
+      "description": "Exhaustive limits, bounds, and arithmetic safety invariants."
+    },
+    "topic_capability_map": {
+      "file": "studylab-topic-capability-map.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "tools/studylab_content_factory.py & rslib/procedural/tests/phase36c_all_175_topics_factory_tests.rs",
+      "consumer": "Universal 175-Topic Content Factory",
+      "description": "Complete map of 175 target topics across 4 domains."
+    },
+    "legacy_difficulty_hint": {
+      "classification": "LEGACY",
+      "status": "DEPRECATED",
+      "replacement": "difficulty_override",
+      "description": "Old field found in legacy docs; silently ignored by engine. Must use difficulty_override."
+    },
+    "runtime_only_skill_state": {
+      "classification": "RUNTIME-ONLY",
+      "source_of_truth": "rslib/procedural/src/storage/store.rs",
+      "description": "Learner history, SkillState, FSRS parameters, and RemediationQueue are strictly runtime-managed and must NEVER be embedded in authoring datasets or APKGs."
+    }
+  }
+}

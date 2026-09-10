@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "node scripts/test_subject_policy_resolver.js && node scripts/test_routing.js && node scripts/test_orchestration.js && node scripts/test_artifact_registry.js && node scripts/test_change_isolation.js && node scripts/test_change_isolation_vnext.js && node scripts/test_contracts.js && node scripts/test_regression.js && node scripts/test_vnext_orchestration.js && node scripts/test_r1_r5_verification.js"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "jszip": "^3.10.1",
+    "sql.js": "^1.14.2",
+    "@modelcontextprotocol/sdk": "^1.30.0"
+  }
+}

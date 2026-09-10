@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabContentProvenance",
+  "description": "Schema for content lineage, exam source grounding, and generator versioning.",
+  "type": "object",
+  "properties": {
+    "source_pyq_id": { "type": ["string", "null"] },
+    "source_version": { "type": "integer", "default": 1 },
+    "generator_version": { "type": "integer", "default": 1 },
+    "schema_version": { "type": "integer", "default": 1 },
+    "catalog_version": { "type": "integer", "default": 1 },
+    "variant_type": { "type": "string", "default": "standard" },
+    "seed": { "type": ["integer", "null"] },
+    "source": { "type": ["string", "null"] },
+    "exam": { "type": ["string", "null"] },
+    "year": { "type": ["integer", "string", "null"] },
+    "shift": { "type": ["string", "integer", "null"] }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "schema_version": "1.0.0",
+  "description": "Authoritative machine-readable registry of all 9 StudySourceCore Subject Skills defining domain taxonomy, categories, artifact eligibility, and StudyLab capabilities. ",
+  "subjects": {
+    "Biology": {
+      "subject_id": "biology-study",
+      "display_name": "Biology",
+      "category": "GENERIC_DECLARATIVE",
+      "skill_path": "subject-skills/Biology/SKILL.md",
+      "studylab_support": false,
+      "specialist_agent": null,
+      "aliases": [
+        "biology",
+        "Biology",
+        "bio",
+        "Bio"
+      ]
+    },
+    "Chemistry": {
+      "subject_id": "chemistry-study",
+      "display_name": "Chemistry",
+      "category": "STEM_PROCEDURAL",
+      "skill_path": "subject-skills/Chemistry/SKILL.md",
+      "studylab_support": true,
+      "specialist_agent": "chemistry-numerical-apkg-author",
+      "aliases": [
+        "chemistry",
+        "Chemistry",
+        "chem",
+        "Chem"
+      ]
+    },
+    "Geography": {
+      "subject_id": "geography-study",
+      "display_name": "Geography",
+      "category": "GENERIC_DECLARATIVE",
+      "skill_path": "subject-skills/Geography/SKILL.md",
+      "studylab_support": false,
+      "specialist_agent": null,
+      "aliases": [
+        "geography",
+        "Geography",
+        "geo",
+        "Geo"
+      ]
+    },
+    "History": {
+      "subject_id": "history-study",
+      "display_name": "History",
+      "category": "GENERIC_DECLARATIVE",
+      "skill_path": "subject-skills/History/SKILL.md",
+      "studylab_support": false,
+      "specialist_agent": null,
+      "aliases": [
+        "history",
+        "History",
+        "hist",
+        "Hist"
+      ]
+    },
+    "Map": {
+      "subject_id": "map-study",
+      "display_name": "Map & Cartography",
+      "category": "GENERIC_DECLARATIVE",
+      "skill_path": "subject-skills/Map/SKILL.md",
+      "studylab_support": false,
+      "specialist_agent": null,
+      "aliases": [
+        "map",
+        "Map",
+        "maps",
+        "Maps",
+        "Geography/Map"
+      ]
+    },
+    "Math": {
+      "subject_id": "math-study",
+      "display_name": "Mathematics",
+      "category": "STEM_PROCEDURAL",
+      "skill_path": "subject-skills/Math/SKILL.md",
+      "studylab_support": true,
+      "specialist_agent": "math-apkg-author",
+      "aliases": [
+        "math",
+        "Math",
+        "maths",
+        "Maths",
+        "mathematics",
+        "Mathematics"
+      ]
+    },
+    "Physics": {
+      "subject_id": "physics-study",
+      "display_name": "Physics",
+      "category": "STEM_PROCEDURAL",
+      "skill_path": "subject-skills/Physics/SKILL.md",
+      "studylab_support": true,
+      "specialist_agent": "physics-numerical-apkg-author",
+      "aliases": [
+        "physics",
+        "Physics",
+        "phys",
+        "Phys"
+      ]
+    },
+    "Political Science": {
+      "subject_id": "political-science-study",
+      "display_name": "Political Science",
+      "category": "GENERIC_DECLARATIVE",
+      "skill_path": "subject-skills/Political Science/SKILL.md",
+      "studylab_support": false,
+      "specialist_agent": null,
+      "aliases": [
+        "political science",
+        "Political Science",
+        "political_science",
+        "polity",
+        "Polity"
+      ]
+    },
+    "Reasoning": {
+      "subject_id": "reasoning-study",
+      "display_name": "Reasoning",
+      "category": "STEM_PROCEDURAL",
+      "skill_path": "subject-skills/Reasoning/SKILL.md",
+      "studylab_support": true,
+      "specialist_agent": "reasoning-apkg-author",
+      "aliases": [
+        "reasoning",
+        "Reasoning",
+        "Logical Reasoning",
+        "logical reasoning",
+        "logical_reasoning",
+        "logic",
+        "Logic"
+      ]
+    }
+  }
+}

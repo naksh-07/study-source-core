@@ -1,0 +1,231 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabTopicCapabilityMap",
+  "description": "Full topic universe and capability map for all 175 StudyLab procedural topics across 4 domains.",
+  "universe_summary": {
+    "total_topics": 175,
+    "mathematics_count": 59,
+    "reasoning_count": 30,
+    "physics_count": 40,
+    "chemistry_count": 46
+  },
+  "domains": {
+    "mathematics": {
+      "count": 59,
+      "capability": "declarative",
+      "categories": [
+        {
+          "name": "Number System & Basic Arithmetic",
+          "topics": [
+            "math.number_system.lcm_hcf",
+            "math.number_system.prime_factorization",
+            "math.number_system.divisibility_rules",
+            "math.number_system.unit_digit",
+            "math.number_system.surds_indices",
+            "math.number_system.fractions_decimals",
+            "math.number_system.recurring_decimals",
+            "math.number_system.bodmas_simplification"
+          ]
+        },
+        {
+          "name": "Commercial Mathematics & Percentages",
+          "topics": [
+            "math.commercial.percentage_basic",
+            "math.commercial.percentage_change",
+            "math.commercial.successive_percentage",
+            "math.commercial.profit_loss_basic",
+            "math.commercial.discount_marked_price",
+            "math.commercial.false_weight_trader",
+            "math.commercial.simple_interest",
+            "math.commercial.compound_interest_annual",
+            "math.commercial.compound_interest_half_yearly",
+            "math.commercial.ci_si_difference",
+            "math.commercial.installment_simple",
+            "math.commercial.installment_compound"
+          ]
+        },
+        {
+          "name": "Ratio, Proportion & Mixture",
+          "topics": [
+            "math.ratio.ratio_basic",
+            "math.ratio.mean_proportional",
+            "math.ratio.third_fourth_proportional",
+            "math.ratio.coin_currency_problems",
+            "math.ratio.income_expenditure_ratio",
+            "math.ratio.partnership_simple",
+            "math.ratio.partnership_sleeping_active",
+            "math.ratio.mixture_replacement",
+            "math.ratio.alligation_rule"
+          ]
+        },
+        {
+          "name": "Averages & Age",
+          "topics": [
+            "math.average.average_basic",
+            "math.average.weighted_average",
+            "math.average.average_replacement",
+            "math.average.batting_bowling_average",
+            "math.average.age_ratio_problems",
+            "math.average.age_linear_relations"
+          ]
+        },
+        {
+          "name": "Time, Work, Pipes & Cisterns",
+          "topics": [
+            "math.work.time_work_basic",
+            "math.work.alternate_days_work",
+            "math.work.efficiency_ratio_work",
+            "math.work.man_woman_boy_work",
+            "math.work.work_wages_distribution",
+            "math.work.pipes_cisterns_basic",
+            "math.work.pipe_leakage_problem"
+          ]
+        },
+        {
+          "name": "Time, Speed & Distance",
+          "topics": [
+            "math.speed.speed_conversion_basic",
+            "math.speed.average_speed_harmonic",
+            "math.speed.relative_speed_same_dir",
+            "math.speed.relative_speed_opp_dir",
+            "math.speed.train_pole_platform",
+            "math.speed.train_passing_train",
+            "math.speed.boats_streams_upstream",
+            "math.speed.boats_streams_downstream",
+            "math.speed.circular_track_race"
+          ]
+        },
+        {
+          "name": "Algebra, Geometry & Mensuration",
+          "topics": [
+            "math.algebra.linear_equations",
+            "math.algebra.monic_quadratic",
+            "math.algebra.arithmetic_progression",
+            "math.algebra.geometric_progression",
+            "math.mensuration.triangle_area",
+            "math.mensuration.circle_area",
+            "math.mensuration.pythagoras_theorem",
+            "math.mensuration.cylinder_volume"
+          ]
+        }
+      ]
+    },
+    "reasoning": {
+      "count": 30,
+      "capabilities": [
+        "declarative",
+        "symbolic_logic",
+        "constraint_solver"
+      ],
+      "categories": [
+        {
+          "name": "Logical & Verbal Reasoning",
+          "topics": [
+            "reasoning.logic.syllogism_two_statement",
+            "reasoning.logic.syllogism_possibility",
+            "reasoning.logic.statement_assumption",
+            "reasoning.logic.statement_conclusion",
+            "reasoning.logic.cause_effect",
+            "reasoning.logic.course_of_action"
+          ]
+        },
+        {
+          "name": "Analytical & Arrangement",
+          "topics": [
+            "reasoning.analytical.linear_seating",
+            "reasoning.analytical.circular_seating_inward",
+            "reasoning.analytical.circular_seating_bidirectional",
+            "reasoning.analytical.floor_puzzle",
+            "reasoning.analytical.box_puzzle",
+            "reasoning.analytical.day_month_puzzle"
+          ]
+        },
+        {
+          "name": "Coding, Decoding & Series",
+          "topics": [
+            "reasoning.coding.letter_shift",
+            "reasoning.coding.direct_substitution",
+            "reasoning.coding.matrix_coding",
+            "reasoning.series.number_difference",
+            "reasoning.series.number_alternating",
+            "reasoning.series.alpha_numeric_series"
+          ]
+        },
+        {
+          "name": "Relations, Direction & Order",
+          "topics": [
+            "reasoning.relations.blood_relation_coded",
+            "reasoning.relations.blood_relation_pointing",
+            "reasoning.direction.distance_pythagoras",
+            "reasoning.direction.shadow_sun_direction",
+            "reasoning.order.ranking_total_students",
+            "reasoning.order.ranking_interchange_position"
+          ]
+        },
+        {
+          "name": "Non-Verbal & Miscellaneous",
+          "topics": [
+            "reasoning.non_verbal.mirror_image_clock",
+            "reasoning.non_verbal.water_image_alphanumeric",
+            "reasoning.non_verbal.dice_opposite_face",
+            "reasoning.non_verbal.cube_cutting_painted",
+            "reasoning.misc.calendar_day_finding",
+            "reasoning.misc.clock_angle_calculation"
+          ]
+        }
+      ]
+    },
+    "physics": {
+      "count": 40,
+      "capability": "domain_physics",
+      "categories": [
+        {
+          "name": "Mechanics & Kinematics (Numericals)",
+          "topics": []
+        },
+        {
+          "name": "Fluids & Thermodynamics (Numericals)",
+          "topics": [
+            "physics.thermodynamics_laws",
+            "physics.thermometry_scales"
+          ]
+        },
+        {
+          "name": "Electromagnetism & Optics (Numericals)",
+          "topics": [
+            "physics.electromagnetic_induction",
+            "physics.optics_lenses_instruments",
+            "physics.optics_reflection_mirrors",
+            "physics.optics_refraction_snell"
+          ]
+        }
+      ]
+    },
+    "chemistry": {
+      "count": 46,
+      "capability": "domain_chemistry",
+      "branches": {
+        "physical": 18,
+        "inorganic": 14,
+        "organic": 14
+      },
+      "categories": [
+        {
+          "name": "Physical Chemistry (Numericals & Equilibrium)",
+          "topics": []
+        },
+        {
+          "name": "Inorganic Chemistry (Trends & Coordination)",
+          "topics": []
+        },
+        {
+          "name": "Organic Chemistry (Mechanisms & Synthesis)",
+          "topics": [
+            "chemistry.organic_iupac_nomenclature",
+            "chemistry.organic_nitrogen_amines"
+          ]
+        }
+      ]
+    }
+  }
+}
