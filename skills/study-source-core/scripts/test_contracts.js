@@ -2047,6 +2047,7 @@ aliases:
         const routing = evaluateMasterRouting({
             subject: 'Math',
             chapter: 'IndusValley',
+            artifactPolicy: { proceduralApkg: true },
             proceduralProfile: {
                 patterns: []
             }
@@ -2056,6 +2057,16 @@ aliases:
         assert.strictEqual(routing.proceduralApkg, false);
         assert.strictEqual(routing.suppressions.problemPatterns, 'ZERO_PROCEDURAL_PATTERNS');
         assert.strictEqual(routing.suppressions.proceduralApkg, 'ZERO_PROCEDURAL_PATTERNS');
+
+        const defaultRouting = evaluateMasterRouting({
+            subject: 'Math',
+            chapter: 'IndusValley',
+            proceduralProfile: {
+                patterns: []
+            }
+        });
+        assert.strictEqual(defaultRouting.proceduralQuestionBank, false);
+        assert.strictEqual(defaultRouting.suppressions.proceduralQuestionBank, 'ZERO_PROCEDURAL_PATTERNS');
     });
 
     // ----------------------------------------------------
@@ -2065,6 +2076,7 @@ aliases:
         const routing = evaluateMasterRouting({
             subject: 'Physics',
             chapter: 'IntroPhysics',
+            artifactPolicy: { proceduralApkg: true },
             proceduralProfile: {
                 patterns: [
                     {
@@ -2120,6 +2132,7 @@ aliases:
         const routing = evaluateMasterRouting({
             subject: 'Math',
             chapter: 'Divisibility',
+            artifactPolicy: { proceduralApkg: true },
             proceduralProfile: {
                 patterns: [
                     {
@@ -2322,9 +2335,33 @@ aliases:
         assert.strictEqual(mathDecision.basic, true);
         assert.strictEqual(mathDecision.cloze, true);
         assert.strictEqual(mathDecision.problemPatterns, true);
-        assert.strictEqual(mathDecision.proceduralApkg, true);
+        assert.strictEqual(mathDecision.proceduralQuestionBank, true);
+        assert.strictEqual(mathDecision.proceduralApkg, false);
         assert.strictEqual(mathDecision.bmGraph, true);
         assert.strictEqual(mathDecision.bmQa, true);
+
+        // Also verify explicit APKG override retains full APKG routing
+        const mathApkgDecision = evaluateMasterRouting({
+            subject: 'Math',
+            chapter: 'LCM-HCF',
+            artifactPolicy: { proceduralApkg: true },
+            basicCandidateCount: 21,
+            clozeCandidateCount: 20,
+            noteWordCount: 1400,
+            evidenceChars: 4000,
+            candidateVaultTargets: ['Prime Factorization', 'HCF Division'],
+            isComplexDomain: true,
+            proceduralProfile: {
+                patterns: [
+                    {
+                        id: 'pat-1',
+                        problem_type: 'Prime Factorization',
+                        governing_method: { standard_algorithm: ['Step 1'] }
+                    }
+                ]
+            }
+        });
+        assert.strictEqual(mathApkgDecision.proceduralApkg, true);
     });
 
     // ====================================================
@@ -2742,7 +2779,21 @@ aliases:
         });
         assert.strictEqual(routingWithQuestions.practiceQuestions, true);
         assert.strictEqual(routingWithQuestions.problemPatterns, true);
-        assert.strictEqual(routingWithQuestions.proceduralApkg, true);
+        assert.strictEqual(routingWithQuestions.proceduralQuestionBank, true);
+        assert.strictEqual(routingWithQuestions.proceduralApkg, false);
+
+        // Also test with explicit APKG override
+        const routingWithApkg = evaluateMasterRouting({
+            subject: 'Math',
+            chapter: 'LCM-HCF',
+            artifactPolicy: { proceduralApkg: true },
+            practiceQuestionsCount: 15,
+            proceduralProfile: {
+                patterns: [{ id: 'pat-1', problem_type: 'Test', governing_method: { standard_algorithm: ['Step 1'] } }],
+                practiceQuestions: [{ id: 'q-1', question_type: 'mcq' }]
+            }
+        });
+        assert.strictEqual(routingWithApkg.proceduralApkg, true);
 
         const routingWithoutQuestions = evaluateMasterRouting({
             subject: 'History',
@@ -2909,6 +2960,7 @@ aliases:
         const routing = evaluateMasterRouting({
             subject: 'Math',
             chapter: 'AncientCitations',
+            artifactPolicy: { proceduralApkg: true },
             proceduralProfile: {
                 patterns: [{ id: 'pat-hist-1', problem_type: 'Chronology', governing_method: { standard_algorithm: ['Step 1'] } }],
                 practiceQuestions: [
@@ -2920,6 +2972,21 @@ aliases:
         assert.strictEqual(routing.practiceQuestions, true);
         assert.strictEqual(routing.proceduralApkg, false);
         assert.strictEqual(routing.suppressions.proceduralApkg, 'ZERO_SOLVABLE_PRACTICE_QUESTIONS');
+
+        // Also verify default Question Bank suppression
+        const defaultRouting = evaluateMasterRouting({
+            subject: 'Math',
+            chapter: 'AncientCitations',
+            proceduralProfile: {
+                patterns: [{ id: 'pat-hist-1', problem_type: 'Chronology', governing_method: { standard_algorithm: ['Step 1'] } }],
+                practiceQuestions: [
+                    { id: 'ref-q-1', question_type: 'reference_only', source_provenance: { source: 'mock' } },
+                    { id: 'ref-q-2', question_type: 'reference_only', source_provenance: { source: 'mock' } }
+                ]
+            }
+        });
+        assert.strictEqual(defaultRouting.proceduralQuestionBank, false);
+        assert.strictEqual(defaultRouting.suppressions.proceduralQuestionBank, 'ZERO_SOLVABLE_PRACTICE_QUESTIONS');
 
         // Exporter check
         const refOnlyPq = {

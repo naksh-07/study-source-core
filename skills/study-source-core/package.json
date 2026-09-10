@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "node scripts/test_subject_policy_resolver.js && node scripts/test_routing.js && node scripts/test_orchestration.js && node scripts/test_artifact_registry.js && node scripts/test_change_isolation.js && node scripts/test_change_isolation_vnext.js && node scripts/test_contracts.js && node scripts/test_regression.js && node scripts/test_vnext_orchestration.js && node scripts/test_r1_r5_verification.js"
+    "test": "node scripts/test_subject_policy_resolver.js && node scripts/test_routing.js && node scripts/test_orchestration.js && node scripts/test_artifact_registry.js && node scripts/test_change_isolation.js && node scripts/test_change_isolation_vnext.js && node scripts/test_contracts.js && node scripts/test_regression.js && node scripts/test_vnext_orchestration.js && node scripts/test_r1_r5_verification.js && node scripts/test_studylab_question_bank.js"
   },
   "dependencies": {
     "ajv": "^8.20.0",

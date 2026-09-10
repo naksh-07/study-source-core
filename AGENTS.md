@@ -137,49 +137,49 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 
 ### 9. `math-apkg-author` — Track B Mathematics APKG Author
 - **Definition File**: `.agents/agents/math-apkg-author.md`
-- **Role**: Authors mathematical problem pattern catalogs, practice question inventories, Solution DAGs, 3-tier hints, and compiles StudyLab APKGs.
+- **Role**: Authors mathematical problem pattern catalogs, practice question inventories, canonical Markdown Question Banks, Solution DAGs, 3-tier hints, and compiles StudyLab APKGs when APKG mode is active.
 - **Why Exists**: Embeds deep mathematical solvers, integer constraints, coprime factorizations, and procedural practice progression.
 - **Does Not Own**: Non-math study notes, basic flashcards, slide decks.
 - **Input**: `scratch/evidence-pack.md` (Math domain) and authentic PYQs.
-- **Required Context**: `skills/study-source-core/subject-skills/Math/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`, `skills/study-source-core/resources/studylab/anti-fallback-invariant.md`.
+- **Required Context**: `skills/study-source-core/subject-skills/Math/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`, `skills/study-source-core/resources/studylab-question-bank-contract.md`.
 - **Invocation Trigger**: Subject === 'Math' AND solvable practice questions exist in source evidence.
-- **Process**: Extract solvable math questions $\to$ map to canonical problem families $\to$ author JSON manifests $\to$ compile APKG $\to$ validate $\to$ return handoff.
+- **Process**: Extract solvable math questions $\to$ map to canonical problem families $\to$ author procedural items $\to$ render Markdown Question Bank or compile APKG $\to$ validate $\to$ return handoff.
 - **Failure Conditions**: Incomplete solution DAG, Tier 1/2 hint leaking final answer, MCQ with $< 4$ options, generic flashcard fallback.
 - **Duplication Guard**: Preserves discrete identities (`1 Pattern != 1 Question`); points to `.agents/RESOURCES.md`.
 
-### 10. `reasoning-apkg-author` — Track C Reasoning APKG Author
+### 10. `reasoning-apkg-author` — Track C Reasoning Specialist Author
 - **Definition File**: `.agents/agents/reasoning-apkg-author.md`
-- **Role**: Authors logical deduction, syllogism, seating arrangement, and matrix puzzle problem patterns and compiles StudyLab APKGs.
+- **Role**: Authors logical deduction, syllogism, seating arrangement, matrix puzzles, canonical Markdown Question Banks, and compiles StudyLab APKGs when APKG mode is active.
 - **Why Exists**: Implements a 7-layer cognitive thinking pipeline with 4-tier constraint classification and step-by-step deduction nodes.
 - **Does Not Own**: Essay notes, basic TSVs, slide decks.
 - **Input**: `scratch/evidence-pack.md` (Reasoning domain).
-- **Required Context**: `skills/study-source-core/subject-skills/Reasoning/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`.
+- **Required Context**: `skills/study-source-core/subject-skills/Reasoning/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`, `skills/study-source-core/resources/studylab-question-bank-contract.md`.
 - **Invocation Trigger**: Subject === 'Reasoning' AND solvable practice questions/puzzles exist.
-- **Process**: Extract puzzles $\to$ classify constraints $\to$ construct deduction graphs $\to$ author JSONs $\to$ compile APKG $\to$ validate $\to$ return handoff.
+- **Process**: Extract puzzles $\to$ classify constraints $\to$ construct deduction graphs $\to$ author procedural items $\to$ render Markdown Question Bank or compile APKG $\to$ validate $\to$ return handoff.
 - **Failure Conditions**: Logical ambiguity resulting in multiple solutions, MCQ options $< 4$, hint answer leaks.
 - **Duplication Guard**: Preserves distinct puzzle scenarios; points to `.agents/RESOURCES.md`.
 
-### 11. `physics-numerical-apkg-author` — Track D Physics Numerical APKG Author
+### 11. `physics-numerical-apkg-author` — Track D Physics Numerical Specialist Author
 - **Definition File**: `.agents/agents/physics-numerical-apkg-author.md`
-- **Role**: Authors numerical Physics problem patterns, practice questions, and compiles StudyLab APKGs strictly for calculational topics.
+- **Role**: Authors numerical Physics problem patterns, practice questions, canonical Markdown Question Banks, and compiles StudyLab APKGs strictly for calculational topics.
 - **Why Exists**: Enforces a 6-stage calculational pipeline (FBD, Coordinates, Law, Solve, SI, Sanity) with strict dimensional analysis. Qualitative theory is excluded.
 - **Does Not Own**: Qualitative non-calculational physics facts, generic notes, basic TSVs.
 - **Input**: `scratch/evidence-pack.md` (Physics domain).
-- **Required Context**: `skills/study-source-core/subject-skills/Physics/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`.
+- **Required Context**: `skills/study-source-core/subject-skills/Physics/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`, `skills/study-source-core/resources/studylab-question-bank-contract.md`.
 - **Invocation Trigger**: Subject === 'Physics' AND numerical calculational problems exist; suppressed if descriptive-only (`DESCRIPTIVE_ONLY_NO_NUMERICALS`).
-- **Process**: Extract numericals $\to$ apply 6-stage pipeline $\to$ author JSON manifests $\to$ compile APKG $\to$ validate $\to$ return handoff.
+- **Process**: Extract numericals $\to$ apply 6-stage pipeline $\to$ author procedural items $\to$ render Markdown Question Bank or compile APKG $\to$ validate $\to$ return handoff.
 - **Failure Conditions**: Descriptive questions in procedural deck, dimensional mismatches, unphysical values (speed $> c$, negative mass).
 - **Duplication Guard**: Preserves distinct physical setups; points to `.agents/RESOURCES.md`.
 
-### 12. `chemistry-numerical-apkg-author` — Track E Chemistry Numerical APKG Author
+### 12. `chemistry-numerical-apkg-author` — Track E Chemistry Numerical Specialist Author
 - **Definition File**: `.agents/agents/chemistry-numerical-apkg-author.md`
-- **Role**: Authors stoichiometry, equilibrium ICE tables, reaction mechanisms, and compiles StudyLab APKGs strictly for calculational/mechanistic topics.
+- **Role**: Authors stoichiometry, equilibrium ICE tables, reaction mechanisms, canonical Markdown Question Banks, and compiles StudyLab APKGs strictly for calculational/mechanistic topics.
 - **Why Exists**: Structures chemical calculations ($K_c/K_p$, pH, Nernst) and reaction mechanisms ($S_N1/S_N2$) without rote descriptive facts.
 - **Does Not Own**: Rote descriptive facts (ore colors, discovery dates), generic notes, basic TSVs.
 - **Input**: `scratch/evidence-pack.md` (Chemistry domain).
-- **Required Context**: `skills/study-source-core/subject-skills/Chemistry/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`.
+- **Required Context**: `skills/study-source-core/subject-skills/Chemistry/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`, `skills/study-source-core/resources/studylab-question-bank-contract.md`.
 - **Invocation Trigger**: Subject === 'Chemistry' AND calculational or mechanistic problems exist; suppressed if rote-only (`DESCRIPTIVE_ROTE_NO_CALCULATIONS`).
-- **Process**: Extract chemical problems $\to$ build ICE tables and reaction step DAGs $\to$ author JSON manifests $\to$ compile APKG $\to$ validate $\to$ return handoff.
+- **Process**: Extract chemical problems $\to$ build ICE tables and reaction step DAGs $\to$ author procedural items $\to$ render Markdown Question Bank or compile APKG $\to$ validate $\to$ return handoff.
 - **Failure Conditions**: Unbalanced equations, invalid stoichiometry, non-calculational facts in procedural deck.
 - **Duplication Guard**: Preserves distinct chemical reaction systems; points to `.agents/RESOURCES.md`.
 

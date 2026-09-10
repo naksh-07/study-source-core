@@ -33,6 +33,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `note_contract_audit.js` | `AUDIT` | Node.js | Verifies YAML frontmatter metadata, required structural sections, and note architecture. | `core-notes` | `ACTIVE` |
 | `path_resolver.js` | `UTILITY` | Node.js | Normalizes paths across Windows backslashes and POSIX forward slashes. | All scripts and agents | `ACTIVE` |
 | `pdf_inventory.py` | `UTILITY` | Python 3 | Extracts page counts, metadata, and structural outlines from source PDFs during intake. | `project_orchestrator` | `ACTIVE` |
+| `render_studylab_question_bank.js` | `RENDERER` | Node.js | Deterministically renders canonical StudyLab procedural questions into Obsidian Markdown. | Procedural Specialists (Wave 1) | `ACTIVE` |
 | `resolve_visual_asset.js` | `UTILITY` | Node.js | Resolves local visual image paths and computes asset cryptographic hashes. | `core-image-occlusion` | `ACTIVE` |
 | `routing_engine.js` | `ROUTING` | Node.js | Evaluates chapter content and computes required artifact tracks and subagent dispatch. | `project_orchestrator` | `ACTIVE` |
 | `shared_anki_utils.js` | `UTILITY` | Node.js | Shared helper library for SQLite collections, model definitions, and Anki zip packaging. | `export_anki.js`, `export_studylab_procedural_anki.js` | `FROZEN` |
@@ -46,6 +47,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `validate_studylab_practice_questions.js` | `VALIDATION` | Node.js | Validates JSON syntax and pedagogical quality of authentic practice questions. | StudyLab Specialists | `ACTIVE` |
 | `validate_studylab_procedural.js` | `VALIDATION` | Node.js | Validates StudyLab procedural problem patterns against domain rules and schemas. | StudyLab Specialists | `ACTIVE` |
 | `validate_studylab_procedural_apkg.js` | `VALIDATION` | Node.js | Deep validator for procedural SQLite schema, Anki Model 1600000004 fields, and options. | `adversarial-apkg-reviewer` | `ACTIVE` |
+| `validate_studylab_question_bank.js` | `VALIDATION` | Node.js | Validates canonical Question Bank JSON schemas and rendered Markdown Question Bank files. | Procedural Specialists / `orchestration_engine` | `ACTIVE` |
 | `validate_tsv.js` | `VALIDATION` | Node.js | Validates TSV structure, tab delimiters, and field counts for Basic and Cloze cards. | `core-basic-anki`, `core-cloze-anki` | `ACTIVE` |
 | `vault_indexer.js` | `UTILITY` | Node.js | Indexes Markdown notes, headers, wikilinks, and tags across the Obsidian vault. | `bm-graph` | `ACTIVE` |
 | `yaml_validator.js` | `VALIDATION` | Node.js | Validates YAML syntax in Markdown frontmatter and configuration manifests. | `core-notes` | `ACTIVE` |

@@ -7,6 +7,32 @@ const path = require('path');
 
 const { resolveSubjectPolicy } = require('./subject_policy_resolver');
 
+const manifestPath = path.join(__dirname, '..', 'resources', 'subject-skill-manifest.json');
+let manifest = null;
+try {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+} catch (e) {}
+
+function isStudyLabCapableSubject(subjName) {
+    if (!manifest || !manifest.subjects) return false;
+    for (const [canonical, data] of Object.entries(manifest.subjects)) {
+        if (canonical.toLowerCase() === subjName.toLowerCase() || 
+            (data.aliases && data.aliases.map(a => a.toLowerCase()).includes(subjName.toLowerCase()))) {
+            return data.studylab_support === true;
+        }
+    }
+    return false;
+}
+
+const PROCEDURAL_TRACK_KEYS = new Set([
+    'proceduralApkg',
+    'procedural_apkg',
+    'proceduralQuestionBank',
+    'procedural_question_bank',
+    'problemPatterns',
+    'practiceQuestions'
+]);
+
 /**
  * Evaluates comprehensive artifact eligibility, subagent dispatching,
  * and downstream complexity gating for a given chapter context.
@@ -26,18 +52,56 @@ function evaluateArtifactRouting(context = {}) {
 
     // Deterministic Subject Policy Resolution
     const artifactPolicy = resolveSubjectPolicy(subject);
+    const isCapable = isStudyLabCapableSubject(subject);
     
     // Core remains a policy CONSUMER. It NEVER infers from evidence.
     // We override with explicit policy ONLY if provided for testing backwards compatibility.
     // However, the new deterministic resolver is the canonical source.
     const finalPolicy = { ...artifactPolicy };
     if (explicitPolicy) {
+        let explicitMode = explicitPolicy.procedural_mode || explicitPolicy.proceduralMode;
+        if (!explicitMode && isCapable) {
+            const hasApkg = explicitPolicy.proceduralApkg === true || explicitPolicy.procedural_apkg === true;
+            const hasQb = explicitPolicy.proceduralQuestionBank === true || explicitPolicy.procedural_question_bank === true;
+            if (hasApkg && hasQb) {
+                explicitMode = 'both';
+            } else if (hasApkg) {
+                explicitMode = 'apkg';
+            } else if (hasQb) {
+                explicitMode = 'markdown';
+            }
+        }
+
+        if (explicitMode && isCapable) {
+            if (explicitMode === 'markdown') {
+                finalPolicy.proceduralQuestionBank = true;
+                finalPolicy.proceduralApkg = false;
+            } else if (explicitMode === 'apkg') {
+                finalPolicy.proceduralQuestionBank = false;
+                finalPolicy.proceduralApkg = true;
+            } else if (explicitMode === 'both') {
+                finalPolicy.proceduralQuestionBank = true;
+                finalPolicy.proceduralApkg = true;
+            } else if (explicitMode === 'none') {
+                finalPolicy.proceduralQuestionBank = false;
+                finalPolicy.proceduralApkg = false;
+            }
+            finalPolicy.procedural_mode = explicitMode;
+            finalPolicy.proceduralMode = explicitMode;
+        }
+
         for (const [k, v] of Object.entries(explicitPolicy)) {
-            // Ignore attempt to enable an artifact explicitly forbidden by the subject policy
-            if (artifactPolicy[k] === false && v === true) {
+            // Non-capable subjects can NEVER enable procedural artifacts via override
+            if (!isCapable && PROCEDURAL_TRACK_KEYS.has(k) && v === true) {
+                // Do nothing (fail closed)
+            } else if (artifactPolicy[k] === false && v === true && !isCapable) {
                 // Do nothing
             } else {
                 finalPolicy[k] = v;
+                if (k === 'procedural_apkg') finalPolicy.proceduralApkg = v;
+                if (k === 'proceduralApkg') finalPolicy.procedural_apkg = v;
+                if (k === 'procedural_question_bank') finalPolicy.proceduralQuestionBank = v;
+                if (k === 'proceduralQuestionBank') finalPolicy.procedural_question_bank = v;
             }
         }
     }
@@ -60,6 +124,12 @@ function evaluateArtifactRouting(context = {}) {
             }
         }
     }
+
+    if (finalPolicy.procedural_mode) {
+        routing.procedural_mode = finalPolicy.procedural_mode;
+    }
+    routing.procedural_apkg = routing.proceduralApkg;
+    routing.procedural_question_bank = routing.proceduralQuestionBank;
 
     // Dynamic Activation Gating
 
@@ -95,20 +165,36 @@ function evaluateArtifactRouting(context = {}) {
                 routing.proceduralApkg = false;
                 routing.suppressions.proceduralApkg = 'ZERO_PROCEDURAL_PATTERNS';
             }
+            if (routing.proceduralQuestionBank) {
+                routing.proceduralQuestionBank = false;
+                routing.suppressions.proceduralQuestionBank = 'ZERO_PROCEDURAL_PATTERNS';
+            }
         } else {
             const supportedPatterns = patterns.filter(p => p.status !== 'UNSUPPORTED_BY_CURRENT_STUDYLAB_ENGINE' && p.governing_method);
-            if (supportedPatterns.length === 0 && routing.proceduralApkg) {
-                routing.proceduralApkg = false;
-                routing.suppressions.proceduralApkg = 'INSUFFICIENT_PROCEDURAL_DENSITY_FOR_APKG';
+            if (supportedPatterns.length === 0) {
+                if (routing.proceduralApkg) {
+                    routing.proceduralApkg = false;
+                    routing.suppressions.proceduralApkg = 'INSUFFICIENT_PROCEDURAL_DENSITY_FOR_APKG';
+                }
+                if (routing.proceduralQuestionBank) {
+                    routing.proceduralQuestionBank = false;
+                    routing.suppressions.proceduralQuestionBank = 'INSUFFICIENT_PROCEDURAL_DENSITY_FOR_QUESTION_BANK';
+                }
             }
         }
         
         if (context.proceduralProfile.practiceQuestions !== undefined) {
             const pqs = context.proceduralProfile.practiceQuestions;
             const solvable = pqs.filter(q => q.question_type !== 'reference_only');
-            if (solvable.length === 0 && routing.proceduralApkg && routing.suppressions.proceduralApkg !== 'ZERO_PROCEDURAL_PATTERNS' && routing.suppressions.proceduralApkg !== 'INSUFFICIENT_PROCEDURAL_DENSITY_FOR_APKG') {
-                routing.proceduralApkg = false;
-                routing.suppressions.proceduralApkg = 'ZERO_SOLVABLE_PRACTICE_QUESTIONS';
+            if (solvable.length === 0) {
+                if (routing.proceduralApkg && routing.suppressions.proceduralApkg !== 'ZERO_PROCEDURAL_PATTERNS' && routing.suppressions.proceduralApkg !== 'INSUFFICIENT_PROCEDURAL_DENSITY_FOR_APKG') {
+                    routing.proceduralApkg = false;
+                    routing.suppressions.proceduralApkg = 'ZERO_SOLVABLE_PRACTICE_QUESTIONS';
+                }
+                if (routing.proceduralQuestionBank && routing.suppressions.proceduralQuestionBank !== 'ZERO_PROCEDURAL_PATTERNS' && routing.suppressions.proceduralQuestionBank !== 'INSUFFICIENT_PROCEDURAL_DENSITY_FOR_QUESTION_BANK') {
+                    routing.proceduralQuestionBank = false;
+                    routing.suppressions.proceduralQuestionBank = 'ZERO_SOLVABLE_PRACTICE_QUESTIONS';
+                }
             }
         }
     }

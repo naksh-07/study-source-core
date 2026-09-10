@@ -143,6 +143,20 @@
         "validator_export": "validateProceduralApkg",
         "validator_format": "async_path"
     },
+    "proceduralQuestionBank": {
+        "task_id": "task-studylab-question-bank",
+        "task_name": "StudyLab Procedural Question Bank",
+        "wave": 1,
+        "owner_agent": "$DOMAIN_SPECIALIST",
+        "writer_agent": "$DOMAIN_SPECIALIST",
+        "validator": "validate_studylab_question_bank.js",
+        "artifactKey": "proceduralQuestionBank",
+        "dependencies": [],
+        "output_dir": "Questions",
+        "file_pattern": "{chapter}_Questions.md",
+        "validator_export": "validateQuestionBank",
+        "validator_format": "path"
+    },
     "bmGraph": {
         "task_id": "task-bm-graph",
         "task_name": "Vault Knowledge Graph Linking",

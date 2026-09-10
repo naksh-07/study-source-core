@@ -61,21 +61,71 @@ function resolveSubjectPolicy(subject) {
         throw new Error(`INVALID_POLICY_SCHEMA: Policy for '${subject}' must be a JSON object.`);
     }
 
+    const VALID_PROCEDURAL_MODES = new Set(['markdown', 'apkg', 'both', 'none']);
+    const ALLOWED_CONFIG_KEYS = new Set([
+        ...POLICY_SCHEMA_KEYS,
+        'procedural_mode',
+        'proceduralMode',
+        'procedural_apkg',
+        'procedural_question_bank'
+    ]);
+
+    // Handle aliases before schema validation
+    const normalizedPolicy = { ...policy };
+    if ('procedural_apkg' in normalizedPolicy && !('proceduralApkg' in normalizedPolicy)) {
+        normalizedPolicy.proceduralApkg = normalizedPolicy.procedural_apkg;
+    }
+    if ('proceduralApkg' in normalizedPolicy && !('procedural_apkg' in normalizedPolicy)) {
+        normalizedPolicy.procedural_apkg = normalizedPolicy.proceduralApkg;
+    }
+    if ('procedural_question_bank' in normalizedPolicy && !('proceduralQuestionBank' in normalizedPolicy)) {
+        normalizedPolicy.proceduralQuestionBank = normalizedPolicy.procedural_question_bank;
+    }
+    if ('proceduralQuestionBank' in normalizedPolicy && !('procedural_question_bank' in normalizedPolicy)) {
+        normalizedPolicy.procedural_question_bank = normalizedPolicy.proceduralQuestionBank;
+    }
+
     const result = {};
     
     // Check required boolean keys
     for (const key of POLICY_SCHEMA_KEYS) {
-        if (!(key in policy)) {
+        if (!(key in normalizedPolicy)) {
             throw new Error(`INVALID_POLICY_SCHEMA: Missing required boolean flag '${key}' in policy for '${subject}'`);
         }
-        if (typeof policy[key] !== 'boolean') {
+        if (typeof normalizedPolicy[key] !== 'boolean') {
             throw new Error(`INVALID_POLICY_SCHEMA: Flag '${key}' must be a boolean in policy for '${subject}'`);
         }
-        result[key] = policy[key];
+        result[key] = normalizedPolicy[key];
     }
 
+    // Validate procedural_mode if specified
+    const mode = normalizedPolicy.procedural_mode || normalizedPolicy.proceduralMode;
+    if (mode !== undefined) {
+        if (typeof mode !== 'string' || !VALID_PROCEDURAL_MODES.has(mode)) {
+            throw new Error(`INVALID_POLICY_SCHEMA: Invalid procedural_mode '${mode}' in policy for '${subject}'. Expected one of: ${Array.from(VALID_PROCEDURAL_MODES).join(', ')}`);
+        }
+        result.procedural_mode = mode;
+        result.proceduralMode = mode;
+    } else {
+        // Derive default procedural_mode from flags
+        if (result.proceduralQuestionBank && result.proceduralApkg) {
+            result.procedural_mode = 'both';
+        } else if (result.proceduralQuestionBank) {
+            result.procedural_mode = 'markdown';
+        } else if (result.proceduralApkg) {
+            result.procedural_mode = 'apkg';
+        } else {
+            result.procedural_mode = 'none';
+        }
+        result.proceduralMode = result.procedural_mode;
+    }
+
+    // Attach aliases to result
+    result.procedural_apkg = result.proceduralApkg;
+    result.procedural_question_bank = result.proceduralQuestionBank;
+
     for (const key of Object.keys(policy)) {
-        if (!POLICY_SCHEMA_KEYS.includes(key)) {
+        if (!ALLOWED_CONFIG_KEYS.has(key)) {
             throw new Error(`INVALID_POLICY_SCHEMA: Unknown flag '${key}' in policy for '${subject}'`);
         }
     }

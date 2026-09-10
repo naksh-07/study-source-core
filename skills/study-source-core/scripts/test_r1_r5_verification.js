@@ -871,6 +871,8 @@ async function runMasterVerificationSuite() {
                 } else {
                     fs.writeFileSync(task.target_path, 'MOCK_PROC_APKG');
                 }
+            } else if (task.task_id === 'task-studylab-question-bank') {
+                fs.writeFileSync(task.target_path, '# LCM-HCF Questions\n\n## q1\nMock Question Bank Content');
             } else if (task.task_id === 'task-bm-qa') {
                 fs.writeFileSync(task.target_path, '# QA Report\nAll passed');
             }
