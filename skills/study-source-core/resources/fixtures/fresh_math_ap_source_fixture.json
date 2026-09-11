@@ -1,0 +1,196 @@
+{
+  "chapter": "ArithmeticProgression",
+  "subject": "Math",
+  "domain": "Mathematics",
+  "topic": "Arithmetic Progression - Nth Term & Series Summation",
+  "skill_id": "math.algebra.arithmetic_progression",
+  "source_provenance": {
+    "source_title": "NCERT Class X Mathematics Chapter 5: Arithmetic Progressions",
+    "edition": "2024-2025",
+    "exam_corpus": [
+      "CBSE Board",
+      "SSC CGL",
+      "Authentic PYQ"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Arithmetic Progression & Common Difference",
+      "definition": "A sequence of numbers such that the difference between the consecutive terms is constant, denoted by d.",
+      "conditions": "d = a_{k+1} - a_k for all k >= 1. d can be positive, negative or zero."
+    },
+    {
+      "name": "General Term (nth term) of an AP",
+      "definition": "The nth term a_n of an AP with first term a and common difference d is given by a_n = a + (n - 1)d.",
+      "conditions": "n must be a positive integer (n in N)."
+    },
+    {
+      "name": "Sum of First n Terms of an AP",
+      "definition": "The sum of first n terms S_n = (n/2)[2a + (n - 1)d] or (n/2)[a + l] where l is the last term.",
+      "conditions": "n is the number of terms, a is the first term, l is the nth term."
+    }
+  ],
+  "master_formulas": [
+    {
+      "name": "Nth Term Formula",
+      "formula": "a_n = a + (n - 1)d",
+      "scope": "Any arithmetic progression with first term a and common difference d"
+    },
+    {
+      "name": "Sum of n Terms Formula",
+      "formula": "S_n = \\frac{n}{2}[2a + (n - 1)d]",
+      "scope": "Sum of first n terms of an AP"
+    },
+    {
+      "name": "Sum with First and Last Term",
+      "formula": "S_n = \\frac{n}{2}(a + l)",
+      "scope": "When first term a and last term l are known"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "PAT_AP_01",
+      "family_id": "nth_term_determination",
+      "title": "Determining Specific Term or Term Count in AP",
+      "deep_structure": "Given initial terms or a specific term condition, determine unknown index n or term value a_n",
+      "governing_method": "Extract first term a and common difference d, set up a_n = a + (n-1)d, solve for target variable",
+      "decision_points": [
+        "Identify first term a and compute d = a_2 - a_1",
+        "Check whether n must be checked for integer validity",
+        "Substitute into linear equation in n"
+      ],
+      "common_traps": [
+        "Off-by-one error using n instead of (n - 1)",
+        "Sign error when common difference d is negative"
+      ],
+      "error_categories": [
+        "ERR_OFF_BY_ONE",
+        "ERR_NEGATIVE_DIFFERENCE",
+        "ERR_ARITHMETIC"
+      ]
+    },
+    {
+      "pattern_id": "PAT_AP_02",
+      "family_id": "summation_series_ap",
+      "title": "Sum of Terms of an Arithmetic Series",
+      "deep_structure": "Calculate sum of first n terms or determine n given the total sum S_n",
+      "governing_method": "Use S_n = (n/2)[2a + (n-1)d], set up quadratic equation in n if sum is given, select positive integer root",
+      "decision_points": [
+        "Check if last term l is directly available",
+        "Solve resulting quadratic equation for n",
+        "Discard negative or non-integer roots for term count"
+      ],
+      "common_traps": [
+        "Forgetting the factor of 1/2 in summation formula",
+        "Accepting negative roots of quadratic equation for term count n"
+      ],
+      "error_categories": [
+        "ERR_QUADRATIC_ROOT_SELECTION",
+        "ERR_SUMMATION_FACTOR",
+        "ERR_CALCULATION"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "PYQ_SSC_2023_AP_01",
+      "exam": "SSC CGL 2023",
+      "pattern_ref": "PAT_AP_01",
+      "raw_type": "MCQ",
+      "statement": "Which term of the arithmetic progression 21, 18, 15, ... is -81?",
+      "options": [
+        "34th",
+        "35th",
+        "36th",
+        "33rd"
+      ],
+      "correct_answer": "35th",
+      "difficulty": "MEDIUM",
+      "source_solution_steps": [
+        "First term a = 21, common difference d = 18 - 21 = -3.",
+        "Target term a_n = -81.",
+        "Equation: a + (n - 1)d = -81 => 21 + (n - 1)(-3) = -81.",
+        "-3(n - 1) = -102 => n - 1 = 34 => n = 35.",
+        "Therefore, the 35th term is -81."
+      ],
+      "prerequisites": [
+        "arithmetic_progression",
+        "linear_equations"
+      ]
+    },
+    {
+      "source_id": "PYQ_CBSE_2022_AP_02",
+      "exam": "CBSE 2022",
+      "pattern_ref": "PAT_AP_01",
+      "raw_type": "MCQ",
+      "statement": "The 11th term of the arithmetic progression -3, -1/2, 2, ... is:",
+      "options": [
+        "28",
+        "22",
+        "-38",
+        "-46.5"
+      ],
+      "correct_answer": "22",
+      "difficulty": "EASY",
+      "source_solution_steps": [
+        "First term a = -3, second term a_2 = -1/2.",
+        "Common difference d = -1/2 - (-3) = 5/2 = 2.5.",
+        "11th term a_11 = a + 10d = -3 + 10(2.5) = -3 + 25 = 22."
+      ],
+      "prerequisites": [
+        "arithmetic_progression",
+        "fraction_arithmetic"
+      ]
+    },
+    {
+      "source_id": "PYQ_SSC_2022_AP_03",
+      "exam": "SSC CGL 2022",
+      "pattern_ref": "PAT_AP_02",
+      "raw_type": "MCQ",
+      "statement": "Find the sum of the first 22 terms of the arithmetic progression 8, 3, -2, ...",
+      "options": [
+        "-979",
+        "-990",
+        "-968",
+        "-1012"
+      ],
+      "correct_answer": "-979",
+      "difficulty": "MEDIUM",
+      "source_solution_steps": [
+        "First term a = 8, common difference d = 3 - 8 = -5, n = 22.",
+        "Sum S_22 = (n/2)[2a + (n - 1)d] = (22/2)[2(8) + (21)(-5)].",
+        "S_22 = 11 * [16 - 105] = 11 * (-89) = -979."
+      ],
+      "prerequisites": [
+        "arithmetic_progression",
+        "series_summation"
+      ]
+    },
+    {
+      "source_id": "PYQ_CBSE_2021_AP_04",
+      "exam": "CBSE 2021",
+      "pattern_ref": "PAT_AP_02",
+      "raw_type": "MCQ",
+      "statement": "How many terms of the AP: 24, 21, 18, ... must be taken so that their sum is 78?",
+      "options": [
+        "4 or 13",
+        "5 or 12",
+        "6 or 11",
+        "3 or 14"
+      ],
+      "correct_answer": "4 or 13",
+      "difficulty": "HARD",
+      "source_solution_steps": [
+        "First term a = 24, d = 21 - 24 = -3, S_n = 78.",
+        "S_n = (n/2)[2(24) + (n - 1)(-3)] = (n/2)[48 - 3n + 3] = (n/2)[51 - 3n] = 78.",
+        "n(51 - 3n) = 156 => 3n^2 - 51n + 156 = 0 => n^2 - 17n + 52 = 0.",
+        "Factorize: (n - 4)(n - 13) = 0 => n = 4 or n = 13.",
+        "Both values are valid because the sum of terms from 5th to 13th is zero."
+      ],
+      "prerequisites": [
+        "arithmetic_progression",
+        "quadratic_equations"
+      ]
+    }
+  ]
+}

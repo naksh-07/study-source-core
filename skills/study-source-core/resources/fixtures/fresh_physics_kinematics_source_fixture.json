@@ -1,0 +1,211 @@
+{
+  "chapter": "Kinematics-1D",
+  "subject": "Physics",
+  "domain": "Physics",
+  "topic": "1D Motion Under Gravity & Uniform Acceleration",
+  "skill_id": "physics.mechanics.kinematics_1d",
+  "source_provenance": {
+    "source_title": "NCERT Physics Class XI Chapter 3: Motion in a Straight Line",
+    "edition": "2024-2025",
+    "exam_corpus": [
+      "JEE Main",
+      "NEET",
+      "Authentic PYQ"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Uniformly Accelerated Motion",
+      "definition": "Motion in a straight line with constant acceleration, where velocity changes by equal amounts in equal time intervals.",
+      "conditions": "Acceleration vector is constant in magnitude and direction along the motion axis.",
+      "si_unit": "m/s^2",
+      "dimensional_formula": "[M^0 L^1 T^-2]"
+    },
+    {
+      "name": "Free Fall Under Gravity",
+      "definition": "Vertical motion of an object solely under the influence of Earth gravity, neglecting air resistance.",
+      "conditions": "Near Earth surface, downward acceleration magnitude is g = 9.8 m/s^2 or 10 m/s^2.",
+      "si_unit": "m/s^2",
+      "dimensional_formula": "[M^0 L^1 T^-2]"
+    },
+    {
+      "name": "Stopping Distance & Reaction Time",
+      "definition": "Distance traversed by a vehicle between driver reaction initiation and complete halt under braking retardation.",
+      "conditions": "Final velocity v = 0 under constant braking acceleration a = -a_brake.",
+      "si_unit": "m",
+      "dimensional_formula": "[M^0 L^1 T^0]"
+    }
+  ],
+  "master_formulas": [
+    {
+      "name": "First Equation of Motion",
+      "formula": "v = u + at",
+      "scope": "Constant acceleration along a straight line",
+      "units": "m/s"
+    },
+    {
+      "name": "Second Equation of Motion",
+      "formula": "s = ut + 0.5 * at^2",
+      "scope": "Constant acceleration displacement relation",
+      "units": "m"
+    },
+    {
+      "name": "Third Equation of Motion",
+      "formula": "v^2 = u^2 + 2as",
+      "scope": "Time-independent kinematic identity for constant acceleration",
+      "units": "m^2/s^2"
+    },
+    {
+      "name": "Displacement in nth Second",
+      "formula": "s_n = u + 0.5 * a(2n - 1)",
+      "scope": "Interval displacement between second n-1 and n",
+      "units": "m"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "PAT_KIN_01",
+      "family_id": "uniform_acceleration_kinematics",
+      "title": "Linear Kinematics with Constant Acceleration",
+      "deep_structure": "Given initial velocity and acceleration or time, determine final velocity or displacement using kinematic equations",
+      "governing_method": "Identify knowns (u, v, a, s, t), select kinematic equation eliminating unknown, solve algebraically, verify SI units",
+      "decision_points": [
+        "Check whether acceleration is constant",
+        "Set coordinate origin and sign convention",
+        "Choose equation containing knowns and target variable"
+      ],
+      "common_traps": [
+        "Confusing average speed with instantaneous speed",
+        "Incorrect sign convention for acceleration opposing motion"
+      ],
+      "error_categories": [
+        "ERR_SIGN_CONVENTION",
+        "ERR_EQUATION_SELECTION",
+        "ERR_UNIT_CONVERSION"
+      ]
+    },
+    {
+      "pattern_id": "PAT_KIN_02",
+      "family_id": "free_fall_vertical_motion",
+      "title": "Vertical Projectile Motion Under Gravity",
+      "deep_structure": "Object thrown vertically upward reaches max height with v = 0 and falls back under constant downward gravity g",
+      "governing_method": "Establish upward positive axis with a = -g, compute max height H = u^2/(2g) and time of flight T = 2u/g",
+      "decision_points": [
+        "Set v = 0 at peak height",
+        "Account for downward acceleration g = 10 m/s^2",
+        "Utilize symmetry of ascent and descent durations"
+      ],
+      "common_traps": [
+        "Assuming acceleration is zero at highest point",
+        "Forgetting net displacement is zero upon returning to launch height"
+      ],
+      "error_categories": [
+        "ERR_PEAK_ACCELERATION_MISCONCEPTION",
+        "ERR_SIGN_GRAVITY",
+        "ERR_QUADRATIC_ROOT"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "PYQ_JEE_2023_KIN_01",
+      "exam": "JEE Main 2023",
+      "pattern_ref": "PAT_KIN_01",
+      "raw_type": "MCQ",
+      "statement": "A vehicle accelerates uniformly from rest at a rate of 2.5 m/s^2 for 8 s. It then travels at constant speed for 10 s. What is the total distance covered by the vehicle?",
+      "options": [
+        "200 m",
+        "280 m",
+        "320 m",
+        "240 m"
+      ],
+      "correct_answer": "280 m",
+      "difficulty": "MEDIUM",
+      "source_solution_steps": [
+        "Phase 1: Acceleration from rest (u = 0, a = 2.5 m/s^2, t1 = 8 s). s1 = 0.5 * a * t1^2 = 0.5 * 2.5 * 64 = 80 m.",
+        "Speed attained: v = u + a * t1 = 0 + 2.5 * 8 = 20 m/s.",
+        "Phase 2: Constant speed (v = 20 m/s, t2 = 10 s). s2 = v * t2 = 20 * 10 = 200 m.",
+        "Total distance: s = s1 + s2 = 80 + 200 = 280 m."
+      ],
+      "prerequisites": [
+        "uniform_acceleration",
+        "kinematic_equations"
+      ]
+    },
+    {
+      "source_id": "PYQ_NEET_2022_KIN_02",
+      "exam": "NEET 2022",
+      "pattern_ref": "PAT_KIN_01",
+      "raw_type": "MCQ",
+      "statement": "A car moving with an initial speed of 30 m/s is brought to rest with uniform retardation in 6 s. The distance traversed by the car during this retardation period is:",
+      "options": [
+        "90 m",
+        "120 m",
+        "60 m",
+        "180 m"
+      ],
+      "correct_answer": "90 m",
+      "difficulty": "EASY",
+      "source_solution_steps": [
+        "Initial speed u = 30 m/s, final speed v = 0, time t = 6 s.",
+        "Acceleration a = (v - u) / t = (0 - 30) / 6 = -5 m/s^2.",
+        "Distance s = ut + 0.5 * a * t^2 = 30 * 6 + 0.5 * (-5) * 36 = 180 - 90 = 90 m."
+      ],
+      "prerequisites": [
+        "kinematic_equations",
+        "retardation"
+      ]
+    },
+    {
+      "source_id": "PYQ_JEE_2022_KIN_03",
+      "exam": "JEE Main 2022",
+      "pattern_ref": "PAT_KIN_02",
+      "raw_type": "MCQ",
+      "statement": "A stone is thrown vertically upward with an initial speed of 20 m/s from the top of a tower of height 25 m. Taking g = 10 m/s^2, the total time taken by the stone to reach the ground is:",
+      "options": [
+        "5 s",
+        "4 s",
+        "6 s",
+        "3 s"
+      ],
+      "correct_answer": "5 s",
+      "difficulty": "HARD",
+      "source_solution_steps": [
+        "Choose upward as positive axis. Position of release y0 = 0, ground is at y = -25 m.",
+        "Initial velocity u = +20 m/s, acceleration a = -g = -10 m/s^2.",
+        "Kinematic equation: y = ut + 0.5 * a * t^2 => -25 = 20t - 5t^2.",
+        "Rearrange quadratic: 5t^2 - 20t - 25 = 0 => t^2 - 4t - 5 = 0.",
+        "Factorize: (t - 5)(t + 1) = 0. Since time t > 0, t = 5 s."
+      ],
+      "prerequisites": [
+        "free_fall",
+        "quadratic_equations",
+        "sign_convention"
+      ]
+    },
+    {
+      "source_id": "PYQ_NEET_2021_KIN_04",
+      "exam": "NEET 2021",
+      "pattern_ref": "PAT_KIN_02",
+      "raw_type": "MCQ",
+      "statement": "A ball dropped from the top of a building takes 3 s to reach the ground. Taking g = 10 m/s^2, the height of the building and the speed with which it strikes the ground are respectively:",
+      "options": [
+        "45 m, 30 m/s",
+        "40 m, 25 m/s",
+        "50 m, 35 m/s",
+        "30 m, 20 m/s"
+      ],
+      "correct_answer": "45 m, 30 m/s",
+      "difficulty": "MEDIUM",
+      "source_solution_steps": [
+        "Dropped from rest: u = 0, t = 3 s, g = 10 m/s^2.",
+        "Height h = 0.5 * g * t^2 = 0.5 * 10 * 9 = 45 m.",
+        "Final speed v = g * t = 10 * 3 = 30 m/s."
+      ],
+      "prerequisites": [
+        "free_fall",
+        "kinematic_equations"
+      ]
+    }
+  ]
+}
