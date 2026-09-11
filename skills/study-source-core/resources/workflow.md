@@ -129,6 +129,14 @@ For high-risk changes (core contract, schema, release freeze, multi-module modif
 ## Phase 7: TARGETED RECOVERY ENGINE & ORCHESTRATION FAILURE RECOVERY
 - **Failure Isolation**: A failure in one generated artifact MUST NOT destroy or invalidate successful sibling artifacts. Only the failed artifact enters recovery.
 - **Executable Recovery Loop**: `GENERATE -> VALIDATE -> CLASSIFY FAILURE -> LOCAL REPAIR -> VALIDATE AGAIN -> ESCALATE ONLY IF NECESSARY`.
+- **Adaptive Retry Policy (`scripts/retry_policy.js`)**:
+  - Classifies failures into canonical failure modes and maps to retry classes (`CRITICAL: 0`, `HIGH: 2`, `MEDIUM: 1`, `LOW: 1`).
+  - Terminal failures (`SECURITY_BOUNDARY_VIOLATION`, `SOURCE_PROVENANCE_FAILURE`) fail closed with 0 retries.
+  - Generates targeted adaptations with explicit directives, reason codes, and model capability escalation (`CHEAP` $\to$ `DEFAULT` $\to$ `STRONG`).
+  - Adapts context strategy to `FOCUSED` upon `CONTEXT_OVERFLOW`.
+- **Execution State Checkpointing (`scripts/execution_state.js`)**:
+  - Checkpoints task lifecycle (`PLANNED` $\to$ `RUNNING` $\to$ `RETRYING` $\to$ `COMPLETED` / `FAILED`) live in `scratch/execution-state.json`.
+  - Enforces global mission ceilings (Max 4 concurrent workers, Max 10 total launches).
 - **Orchestration Failure Recovery**: If delegation is triggered but subagent creation fails:
   1. Diagnose why dispatch failed.
   2. Retry dispatch once.

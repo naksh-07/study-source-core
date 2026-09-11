@@ -16,7 +16,15 @@ const { getArtifactRegistry } = require('./artifact_registry');
 const { planContextSlice, verifyContextProvenance } = require('./context_planner');
 const { resolveModelRouting, MODEL_CLASSES, TASK_COMPLEXITY } = require('./model_routing_policy');
 const { classifyFailure, canRetryTask, getTargetedRetryPlan, GLOBAL_RESOURCE_LIMITS, FAILURE_CLASSES, RETRY_CLASSES } = require('./retry_policy');
-const { initExecutionState, saveExecutionState, updateTaskState } = require('./execution_state');
+const { 
+    initExecutionState, 
+    saveExecutionState, 
+    updateTaskState,
+    checkpointTaskStart,
+    checkpointTaskComplete,
+    checkpointTaskRetry,
+    checkpointTaskFail
+} = require('./execution_state');
 
 /**
  * Standard required fields in specialist handoff contract.
@@ -144,16 +152,24 @@ function buildExecutionTaskGraph(context = {}) {
             status: isEligible ? 'PLANNED' : 'SKIPPED',
             suppression_reason: isEligible ? null : suppressionReason,
             validation_rule: taskDef.validator,
-            retry_budget: 1,
+            retry_budget: typeof taskDef.retry_budget === 'number' ? taskDef.retry_budget : undefined,
             current_retries: 0,
             input_fingerprint: taskFingerprint
         });
     }
 
+    const isLegacySimulation = (
+        evidenceHash === '0000000000000000000000000000000000000000000000000000000000000000' &&
+        !context.evidencePack &&
+        context.isProduction !== true
+    );
+    const compatibilityMode = context.compatibilityMode !== undefined ? context.compatibilityMode : isLegacySimulation;
+
     return {
         chapter,
         subject,
         evidenceHash,
+        compatibilityMode,
         context,
         tasks,
         singleWriterMap: Object.fromEntries(singleWriterMap),
@@ -321,6 +337,19 @@ async function executeTaskWorkflow(graph, taskExecutor) {
         efficiencyAudit: {}
     };
 
+    let storageDir = null;
+    if (graph.context && graph.context.customRoot) {
+        storageDir = path.join(graph.context.customRoot, 'scratch');
+    } else if (graph.context && graph.context.storage_dir) {
+        storageDir = graph.context.storage_dir;
+    }
+    const executionState = initExecutionState({
+        chapter: graph.chapter,
+        subject: graph.subject,
+        evidenceHash: graph.evidenceHash,
+        storage_dir: storageDir
+    });
+
     const taskStatusMap = new Map();
     let totalInvocations = 0;
     let duplicateInvocations = 0;
@@ -332,6 +361,15 @@ async function executeTaskWorkflow(graph, taskExecutor) {
     // Initialize statuses
     for (const task of graph.tasks) {
         taskStatusMap.set(task.task_id, task.status);
+        updateTaskState(executionState, task.task_id, {
+            status: task.status,
+            task_name: task.task_name,
+            wave: task.wave,
+            owner_agent: task.owner_agent,
+            writer_agent: task.writer_agent,
+            target_path: task.target_path,
+            suppression_reason: task.suppression_reason
+        });
         traces.executionPlan.push({
             task_id: task.task_id,
             name: task.task_name,
@@ -360,6 +398,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
             // Unresolvable dependencies (circular or missing)
             for (const task of pendingTasks) {
                 taskStatusMap.set(task.task_id, 'BLOCKED');
+                updateTaskState(executionState, task.task_id, { status: 'BLOCKED', unmet_dependency: 'UNRESOLVABLE_GRAPH' });
                 blockedCount++;
                 traces.dispatchTrace.push({
                     task_id: task.task_id,
@@ -376,6 +415,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
             pendingTasks = pendingTasks.filter(t => t.task_id !== task.task_id);
 
             if (taskStatusMap.get(task.task_id) === 'SKIPPED') {
+                updateTaskState(executionState, task.task_id, { status: 'SKIPPED', suppression_reason: task.suppression_reason });
                 skippedCount++;
                 traces.dispatchTrace.push({
                     task_id: task.task_id,
@@ -394,6 +434,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
 
             if (unmetDependency) {
                 taskStatusMap.set(task.task_id, 'BLOCKED');
+                updateTaskState(executionState, task.task_id, { status: 'BLOCKED', unmet_dependency: unmetDependency });
                 blockedCount++;
                 traces.dispatchTrace.push({
                     task_id: task.task_id,
@@ -441,7 +482,8 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                     specialist: task.owner_agent,
                     evidencePack: evidenceSource,
                     evidenceHash: evidenceHash,
-                    strategy: 'TASK_SCOPED'
+                    strategy: 'TASK_SCOPED',
+                    compatibilityMode: graph.compatibilityMode === true
                 });
                 task.contextSlice = contextPlan.context_slice_content;
                 task.contextPlan = contextPlan;
@@ -489,6 +531,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                 if (totalInvocations >= GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES) {
                     const limitMsg = `RESOURCE_LIMIT_EXCEEDED: Global launch limit (${GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES}) exhausted`;
                     taskStatusMap.set(task.task_id, 'FAILED');
+                    checkpointTaskFail(executionState, task.task_id, new Error(limitMsg));
                     failedCount++;
                     traces.completionEvidence.push({
                         task_id: task.task_id,
@@ -500,6 +543,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                 }
 
                 totalInvocations++;
+                executionState.metrics.total_launches = totalInvocations;
 
                 // If retry attempt > 0, update model routing with recovery escalation
                 if (currentAttempt > 0) {
@@ -519,6 +563,10 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                         task_complexity: modelRouting.task_complexity,
                         reason: modelRouting.reason
                     });
+                }
+
+                if (currentAttempt === 0) {
+                    checkpointTaskStart(executionState, task, modelRouting.model_class, (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED');
                 }
 
                 traces.dispatchTrace.push({
@@ -556,8 +604,18 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                         taskStatusMap.set(task.task_id, statusToSet);
                         if (isSuppressed) {
                             skippedCount++;
+                            updateTaskState(executionState, task.task_id, {
+                                status: 'SKIPPED',
+                                suppression_reason: (handoff && handoff.warnings && handoff.warnings[0]) || 'SUPPRESSED'
+                            });
                         } else {
                             completedCount++;
+                            checkpointTaskComplete(executionState, task.task_id, {
+                                output_paths: handoff.output_paths,
+                                validator: task.validation_rule,
+                                validator_result: completionVal,
+                                attempt: currentAttempt + 1
+                            });
                         }
                         traces.completionEvidence.push({
                             task_id: task.task_id,
@@ -607,6 +665,18 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                         const adaptation = getTargetedRetryPlan(task, classification, currentAttempt + 1, contextPlan);
                         task.promptConstraints = adaptation.prompt_constraints;
 
+                        checkpointTaskRetry(executionState, task.task_id, {
+                            attempt: currentAttempt,
+                            failure_class: classification.failure_class,
+                            retry_class: classification.retry_class,
+                            reason: retryDecision.reason,
+                            error: err.message,
+                            model_class: modelRouting.model_class,
+                            context_strategy: adaptation.context_strategy || (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
+                            adaptation_directives: adaptation.adaptation_directives,
+                            adaptation_reason: adaptation.adaptation_reason
+                        });
+
                         // Adapt context if needed (e.g. FOCUSED strategy on overflow)
                         if (adaptation.context_strategy === 'FOCUSED' && contextPlan) {
                             try {
@@ -618,7 +688,8 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                                     specialist: task.owner_agent,
                                     evidencePack: evidenceSource,
                                     evidenceHash: graph.evidenceHash,
-                                    strategy: 'FOCUSED'
+                                    strategy: 'FOCUSED',
+                                    compatibilityMode: graph.compatibilityMode === true
                                 });
                                 task.contextSlice = contextPlan.context_slice_content;
                                 task.contextPlan = contextPlan;
@@ -626,6 +697,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                         }
                     } else {
                         taskStatusMap.set(task.task_id, 'FAILED');
+                        checkpointTaskFail(executionState, task.task_id, err);
                         failedCount++;
                         traces.completionEvidence.push({
                             task_id: task.task_id,
@@ -654,11 +726,16 @@ async function executeTaskWorkflow(graph, taskExecutor) {
         within_resource_budget: totalInvocations <= 10
     };
 
+    if (storageDir) {
+        saveExecutionState(executionState, storageDir);
+    }
+
     const overallVerdict = failedCount === 0 && blockedCount === 0 ? 'SUCCESS' : (completedCount > 0 ? 'PARTIAL_SUCCESS' : 'FAILED');
 
     return {
         overallVerdict,
         taskStatusMap: Object.fromEntries(taskStatusMap),
+        executionState,
         traces
     };
 }

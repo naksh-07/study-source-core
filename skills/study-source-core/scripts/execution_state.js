@@ -153,12 +153,19 @@ function updateTaskState(state, taskId, taskUpdate) {
 }
 
 function checkpointTaskStart(state, task, modelClass, contextStrategy) {
-    return updateTaskState(state, task.task_id, {
+    const taskState = state.tasks[task.task_id] || {};
+    const attempts = taskState.attempts || [];
+    const updated = updateTaskState(state, task.task_id, {
         status: 'RUNNING',
         model_class: modelClass,
         context_strategy: contextStrategy,
-        owner_agent: task.owner_agent
+        owner_agent: task.owner_agent,
+        attempts
     });
+    if (state._storageDir) {
+        saveExecutionState(state, state._storageDir);
+    }
+    return updated;
 }
 
 function checkpointTaskComplete(state, taskId, result = {}) {
@@ -168,7 +175,10 @@ function checkpointTaskComplete(state, taskId, result = {}) {
     }
     const updated = updateTaskState(state, taskId, {
         status: 'COMPLETED',
-        output_paths: result.output_paths || result.outputs_produced || []
+        output_paths: result.output_paths || result.outputs_produced || [],
+        validator: result.validator || null,
+        validator_result: result.validator_result || { passed: true },
+        attempt: result.attempt || 1
     });
     if (state._storageDir) {
         saveExecutionState(state, state._storageDir);
@@ -177,18 +187,32 @@ function checkpointTaskComplete(state, taskId, result = {}) {
 }
 
 function checkpointTaskRetry(state, taskId, retryInfo = {}) {
-    return updateTaskState(state, taskId, {
+    const task = state.tasks[taskId] || {};
+    const attempts = task.attempts || [];
+    attempts.push(retryInfo);
+    const updated = updateTaskState(state, taskId, {
         status: 'RETRYING',
-        retry_info: retryInfo
+        retry_info: retryInfo,
+        attempts: attempts,
+        model_class: retryInfo.model_class || task.model_class,
+        context_strategy: retryInfo.context_strategy || task.context_strategy
     });
+    if (state._storageDir) {
+        saveExecutionState(state, state._storageDir);
+    }
+    return updated;
 }
 
 function checkpointTaskFail(state, taskId, error) {
     const msg = error ? (error.message || String(error)) : 'Unknown error';
-    return updateTaskState(state, taskId, {
+    const updated = updateTaskState(state, taskId, {
         status: 'FAILED',
         error: msg
     });
+    if (state._storageDir) {
+        saveExecutionState(state, state._storageDir);
+    }
+    return updated;
 }
 
 module.exports = {

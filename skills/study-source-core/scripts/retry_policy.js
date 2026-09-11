@@ -16,7 +16,7 @@ const RETRY_CLASSES = {
     LOW: { name: 'LOW', defaultMaxRetries: 1 },
     MEDIUM: { name: 'MEDIUM', defaultMaxRetries: 1 },
     HIGH: { name: 'HIGH', defaultMaxRetries: 2 },
-    CRITICAL: { name: 'CRITICAL', defaultMaxRetries: 3 }
+    CRITICAL: { name: 'CRITICAL', defaultMaxRetries: 0 }
 };
 
 const FAILURE_CLASSES = {
@@ -30,6 +30,7 @@ const FAILURE_CLASSES = {
     SPECIALIST_FAILURE: 'SPECIALIST_FAILURE',
     TIMEOUT: 'TIMEOUT',
     SOURCE_PROVENANCE_FAILURE: 'SOURCE_PROVENANCE_FAILURE',
+    SLICE_PROVENANCE_CORRUPTION: 'SLICE_PROVENANCE_CORRUPTION',
     SECURITY_BOUNDARY_VIOLATION: 'SECURITY_BOUNDARY_VIOLATION'
 };
 
@@ -39,6 +40,7 @@ const FAILURE_TO_RETRY_CLASS_MAP = {
     [FAILURE_CLASSES.INCOMPLETE_OUTPUT]: RETRY_CLASSES.MEDIUM,
     [FAILURE_CLASSES.SCHEMA_VALIDATION_FAILURE]: RETRY_CLASSES.MEDIUM,
     [FAILURE_CLASSES.TIMEOUT]: RETRY_CLASSES.MEDIUM,
+    [FAILURE_CLASSES.SLICE_PROVENANCE_CORRUPTION]: RETRY_CLASSES.MEDIUM,
     [FAILURE_CLASSES.CONTENT_VALIDATION_FAILURE]: RETRY_CLASSES.HIGH,
     [FAILURE_CLASSES.CONTRACT_VIOLATION]: RETRY_CLASSES.HIGH,
     [FAILURE_CLASSES.CONTEXT_OVERFLOW]: RETRY_CLASSES.HIGH,
@@ -84,17 +86,32 @@ function classifyFailure(errorOrErrors) {
         };
     }
 
-    // 2. Provenance Violations
+    // 2. Provenance Violations (Distinguish canonical source loss vs recoverable slice corruption)
     if (msg.includes('CONTEXT_PROVENANCE_FAILURE') ||
+        msg.includes('SLICE_PROVENANCE_CORRUPTION') ||
+        msg.includes('Evidence SHA-256 hash mismatch') ||
+        msg.includes('SHA-256 mismatch') ||
         msg.includes('hash mismatch') ||
         msg.includes('LINEAGE_BREACH') ||
-        msg.includes('PROVENANCE_MISSING')) {
+        msg.includes('PROVENANCE_MISSING') ||
+        msg.includes('tampering detected') ||
+        msg.includes('dummy hash')) {
+        const isSliceCorruptionOnly = msg.includes('SLICE_PROVENANCE_CORRUPTION') || msg.includes('Context slice content tampering detected') || msg.includes('slice hash mismatch');
+        if (isSliceCorruptionOnly) {
+            return {
+                failure_class: FAILURE_CLASSES.SLICE_PROVENANCE_CORRUPTION,
+                retry_class: RETRY_CLASSES.MEDIUM.name,
+                error_message: msg,
+                is_terminal: false,
+                suggested_action: 'REGENERATE_DERIVED_SLICE_FROM_CANONICAL_EVIDENCE'
+            };
+        }
         return {
             failure_class: FAILURE_CLASSES.SOURCE_PROVENANCE_FAILURE,
             retry_class: RETRY_CLASSES.CRITICAL.name,
             error_message: msg,
-            is_terminal: false,
-            suggested_action: 'REGENERATE_CANONICAL_PROVENANCE'
+            is_terminal: true, // Canonical provenance failure is terminal
+            suggested_action: 'CANONICAL_SOURCE_UNAVAILABLE_OR_TAMPERED_ABORT'
         };
     }
 
@@ -252,17 +269,17 @@ function canRetryTask(task, classification, attemptCount, totalInvocationsSoFar)
     let allowedRetries = retryConfig.defaultMaxRetries;
 
     // Respect custom task-specific retry budget if defined lower
-    if (typeof task.retry_budget === 'number') {
+    if (task && typeof task.retry_budget === 'number') {
         allowedRetries = Math.min(allowedRetries, task.retry_budget);
     }
 
     // Check if attempt limit reached (attemptCount = 1 means 0 retries so far; retries = attemptCount - 1)
     const retriesConsumed = attemptCount; // If attempt 1 failed, next attempt is 2 (retry 1)
-    if (retriesConsumed > allowedRetries) {
+    if (allowedRetries === 0 || retriesConsumed > allowedRetries) {
         return {
             canRetry: false,
             maxRetriesAllowed: allowedRetries,
-            reason: `RETRY_BUDGET_EXHAUSTED: Attempt ${retriesConsumed} exceeds max allowed ${allowedRetries} for ${classification.retry_class}`
+            reason: `RETRY_BUDGET_EXHAUSTED: Retries consumed (${retriesConsumed}) reach or exceed max allowed ${allowedRetries} for ${classification.retry_class}`
         };
     }
 
@@ -290,7 +307,8 @@ function getTargetedRetryPlan(task, classification, nextAttemptNumber, currentCo
         model_class: 'STRONG', // Default to STRONG on retried complex errors
         context_strategy: currentContextPlan.context_strategy || 'TASK_SCOPED',
         prompt_constraints: [],
-        reason: ''
+        reason: '',
+        adaptation_reason: ''
     };
 
     switch (classification.failure_class) {
@@ -317,12 +335,36 @@ function getTargetedRetryPlan(task, classification, nextAttemptNumber, currentCo
             adaptations.reason = 'CONTRACT_FAILURE_ENFORCE_DUAL_LANG';
             break;
 
+        case FAILURE_CLASSES.SLICE_PROVENANCE_CORRUPTION:
+            adaptations.context_strategy = 'REGENERATED';
+            adaptations.model_class = 'STRONG';
+            adaptations.prompt_constraints.push('CRITICAL PROVENANCE DIRECTIVE: Context slice corrupted or tampered. Regenerate cleanly from canonical Evidence Pack.');
+            adaptations.reason = 'SLICE_CORRUPTION_REGENERATE_FROM_CANONICAL_SOURCE';
+            break;
+
+        case FAILURE_CLASSES.SECURITY_BOUNDARY_VIOLATION:
+            adaptations.prompt_constraints.push(`TERMINAL SECURITY ERROR: ${classification.error_message}. Automatic retries are forbidden.`);
+            adaptations.reason = 'SECURITY_BOUNDARY_VIOLATION_TERMINAL';
+            break;
+
+        case FAILURE_CLASSES.SOURCE_PROVENANCE_FAILURE:
+            adaptations.prompt_constraints.push(`TERMINAL PROVENANCE ERROR: ${classification.error_message}. Source evidence is missing or tampered.`);
+            adaptations.reason = 'SOURCE_PROVENANCE_FAILURE_TERMINAL';
+            break;
+
+        case FAILURE_CLASSES.TRANSIENT_TOOL_FAILURE:
+            adaptations.prompt_constraints.push(`TRANSIENT TOOL FAILURE: ${classification.error_message}. Retry with exponential backoff.`);
+            adaptations.reason = 'TRANSIENT_TOOL_EXPONENTIAL_BACKOFF';
+            break;
+
         default:
             adaptations.prompt_constraints.push(`PREVIOUS ATTEMPT FAILED: ${classification.error_message}`);
             adaptations.reason = 'DEFAULT_TARGETED_RETRY_ADAPTATION';
             break;
     }
 
+    adaptations.adaptation_directives = adaptations.prompt_constraints;
+    adaptations.adaptation_reason = adaptations.reason;
     return adaptations;
 }
 

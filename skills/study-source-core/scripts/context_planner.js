@@ -28,8 +28,8 @@ function computeSha256(content) {
  */
 const CONTEXT_BUDGET_TIERS = {
     SMALL: { maxTokens: 1500, label: 'SMALL' },
-    MEDIUM: { maxTokens: 6000, label: 'MEDIUM' },
-    LARGE: { maxTokens: 16000, label: 'LARGE' },
+    MEDIUM: { maxTokens: 4000, label: 'MEDIUM' },
+    LARGE: { maxTokens: 10000, label: 'LARGE' },
     VERY_LARGE: { maxTokens: Infinity, label: 'VERY_LARGE' }
 };
 
@@ -43,12 +43,12 @@ function parseEvidenceSections(markdownText) {
     let currentLines = [];
 
     const sectionMatchMap = [
-        { key: 'METADATA', pattern: /^##\s*1\.\s*Chapter Metadata/i },
-        { key: 'CONCEPTS', pattern: /^##\s*2\.\s*Core Concepts/i },
-        { key: 'FORMULAS', pattern: /^##\s*3\.\s*Master (Formulas|Principles)/i },
-        { key: 'PATTERNS', pattern: /^##\s*4\.\s*Problem Pattern/i },
-        { key: 'PROBLEMS', pattern: /^##\s*5\.\s*Authentic Source Problems/i },
-        { key: 'VISUAL', pattern: /^##\s*6\.\s*(Visual|Diagram)/i }
+        { key: 'METADATA', pattern: /^##\s*\d*\.?\s*Chapter Metadata/i },
+        { key: 'CONCEPTS', pattern: /^##\s*\d*\.?\s*Core Concepts/i },
+        { key: 'FORMULAS', pattern: /^##\s*\d*\.?\s*(Master|Mathematical)?\s*(Formulas|Principles)/i },
+        { key: 'PATTERNS', pattern: /^##\s*\d*\.?\s*Problem Pattern/i },
+        { key: 'PROBLEMS', pattern: /^##\s*\d*\.?\s*Authentic Source Problems/i },
+        { key: 'VISUAL', pattern: /^##\s*\d*\.?\s*(Visual|Diagram)/i }
     ];
 
     for (let i = 0; i < lines.length; i++) {
@@ -121,77 +121,114 @@ const TASK_SECTION_RULES = {
     // 1. Notes: Core concepts, definitions, master formulas, metadata (omits source problem banks to minimize bloat)
     'notes': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS', 'FORMULAS'],
+        defaultSpecialist: 'core-notes',
         reason: 'definitions_and_core_concepts',
         complexity: 'MEDIUM'
     },
     // 2. Basic Anki: Atomic facts, definitions, master formulas (omits lengthy problem step DAGs)
     'basic': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS', 'FORMULAS'],
+        defaultSpecialist: 'core-basic-anki',
         reason: 'direct_recall_facts_and_formulae',
         complexity: 'LOW'
     },
     // 3. Cloze Anki: Key definitions, identities, relationships
     'cloze': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS', 'FORMULAS'],
+        defaultSpecialist: 'core-cloze-anki',
         reason: 'high_value_relational_statements',
         complexity: 'LOW'
     },
     // 4. Image Occlusion: Visual candidates and spatial relationships only (strictly zero external visual injection)
     'imageOcclusion': {
         requiredSections: ['HEADER', 'METADATA', 'VISUAL', 'CONCEPTS'],
+        defaultSpecialist: 'core-image-occlusion',
         reason: 'visual_target_semantics',
         complexity: 'MEDIUM'
     },
     // 5. MindMap: Conceptual taxonomy and hierarchical relationships
     'mindmap': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS'],
+        defaultSpecialist: 'core-mindmap',
         reason: 'hierarchical_concept_topology',
         complexity: 'MEDIUM'
     },
     // 6. SlideDeck: Narrative concepts, formulas, visual pointers (5-15 slide budget)
     'slideDeck': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS', 'FORMULAS', 'VISUAL'],
+        defaultSpecialist: 'core-slide-deck',
         reason: 'pedagogical_slide_narrative',
         complexity: 'MEDIUM'
     },
     // 7. StudyLab Procedural Question Bank & APKG: Formulas, problem patterns, authentic PYQs
     'proceduralQuestionBank': {
         requiredSections: ['HEADER', 'METADATA', 'FORMULAS', 'PATTERNS', 'PROBLEMS'],
+        defaultSpecialist: '$DOMAIN_SPECIALIST',
         reason: 'procedural_problem_patterns_and_authentic_pyqs',
         complexity: 'HIGH'
     },
     'proceduralApkg': {
         requiredSections: ['HEADER', 'METADATA', 'FORMULAS', 'PATTERNS', 'PROBLEMS'],
+        defaultSpecialist: '$DOMAIN_SPECIALIST',
         reason: 'procedural_problem_patterns_and_authentic_pyqs',
         complexity: 'HIGH'
     },
     'problemPatterns': {
         requiredSections: ['HEADER', 'METADATA', 'FORMULAS', 'PATTERNS'],
+        defaultSpecialist: '$DOMAIN_SPECIALIST',
         reason: 'canonical_problem_patterns',
         complexity: 'HIGH'
     },
     'practiceQuestions': {
         requiredSections: ['HEADER', 'METADATA', 'FORMULAS', 'PATTERNS', 'PROBLEMS'],
+        defaultSpecialist: '$DOMAIN_SPECIALIST',
         reason: 'authentic_source_practice_questions',
         complexity: 'HIGH'
     },
     // 8. Declarative APKG Packaging: Packaging only needs metadata
     'apkg': {
         requiredSections: ['HEADER', 'METADATA'],
+        defaultSpecialist: 'export_anki.js',
         reason: 'declarative_packaging_metadata',
         complexity: 'MEDIUM'
     },
     // 9. Downstream Graph: Concepts and metadata
     'bmGraph': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS'],
+        defaultSpecialist: 'bm-graph',
         reason: 'vault_entity_candidate_matching',
         complexity: 'MEDIUM'
     },
     // 10. Downstream QA: Full evidence to ensure zero-drift audit
     'bmQa': {
         requiredSections: ['HEADER', 'METADATA', 'CONCEPTS', 'FORMULAS', 'PATTERNS', 'PROBLEMS', 'VISUAL'],
+        defaultSpecialist: 'bm-qa',
         reason: 'cross_artifact_full_evidence_audit',
         complexity: 'CRITICAL'
+    },
+    'qaReport': {
+        requiredSections: ['HEADER', 'METADATA', 'CONCEPTS', 'FORMULAS', 'PATTERNS', 'PROBLEMS', 'VISUAL'],
+        defaultSpecialist: 'bm-qa',
+        reason: 'cross_artifact_full_evidence_audit',
+        complexity: 'CRITICAL'
+    },
+    'graph': {
+        requiredSections: ['HEADER', 'METADATA', 'CONCEPTS'],
+        defaultSpecialist: 'bm-graph',
+        reason: 'vault_entity_candidate_matching',
+        complexity: 'MEDIUM'
+    },
+    'problemPatternsJson': {
+        requiredSections: ['HEADER', 'METADATA', 'FORMULAS', 'PATTERNS'],
+        defaultSpecialist: '$DOMAIN_SPECIALIST',
+        reason: 'canonical_problem_patterns',
+        complexity: 'HIGH'
+    },
+    'moldGapAudit': {
+        requiredSections: ['HEADER', 'METADATA', 'PATTERNS'],
+        defaultSpecialist: 'mold-gap-auditor',
+        reason: 'contract_gap_analysis',
+        complexity: 'HIGH'
     }
 };
 
@@ -216,7 +253,8 @@ function planContextSlice(params) {
         artifactKey,
         specialist,
         strategy = 'TASK_SCOPED',
-        focusConstraints = {}
+        focusConstraints = {},
+        compatibilityMode = false
     } = params;
 
     // 1. Resolve raw evidence text
@@ -241,10 +279,26 @@ function planContextSlice(params) {
     // 2. Canonical SHA-256 Evidence Hash Verification
     const computedEvidenceHash = computeSha256(evidenceText);
     const DUMMY_HASH = '0000000000000000000000000000000000000000000000000000000000000000';
-    const hasExplicitHash = params.evidenceHash && params.evidenceHash !== DUMMY_HASH;
+    const SHA256_HEX_REGEX = /^[0-9a-f]{64}$/i;
 
-    if (hasExplicitHash && params.evidenceHash !== computedEvidenceHash) {
-        throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Evidence SHA-256 hash mismatch! Expected '${params.evidenceHash}' but computed '${computedEvidenceHash}'`);
+    if (!compatibilityMode) {
+        if (!params.evidenceHash) {
+            throw new Error('[CONTEXT_PROVENANCE_FAILURE] Missing canonical evidenceHash');
+        }
+        if (params.evidenceHash === DUMMY_HASH) {
+            throw new Error('[CONTEXT_PROVENANCE_FAILURE] Placeholder dummy hash is strictly forbidden in production context planning');
+        }
+        if (!SHA256_HEX_REGEX.test(params.evidenceHash)) {
+            throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Invalid canonical evidenceHash format: '${params.evidenceHash}'. Must be a 64-character hex SHA-256 hash.`);
+        }
+        if (params.evidenceHash !== computedEvidenceHash) {
+            throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Evidence SHA-256 hash mismatch! Expected '${params.evidenceHash}' but computed '${computedEvidenceHash}'`);
+        }
+    } else {
+        const hasExplicitHash = params.evidenceHash && params.evidenceHash !== DUMMY_HASH;
+        if (hasExplicitHash && params.evidenceHash !== computedEvidenceHash) {
+            throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Evidence SHA-256 hash mismatch! Expected '${params.evidenceHash}' but computed '${computedEvidenceHash}'`);
+        }
     }
 
     // 3. Parse Sections
@@ -252,11 +306,19 @@ function planContextSlice(params) {
     const availableSectionKeys = Object.keys(allSections);
 
     // 4. Resolve Selection Rule
-    const rule = TASK_SECTION_RULES[artifactKey] || {
-        requiredSections: availableSectionKeys,
-        reason: 'default_fallback_evidence_allocation',
-        complexity: 'MEDIUM'
-    };
+    let rule = TASK_SECTION_RULES[artifactKey];
+    if (!rule) {
+        if (compatibilityMode) {
+            rule = {
+                requiredSections: availableSectionKeys,
+                defaultSpecialist: specialist || 'unknown',
+                reason: 'default_fallback_evidence_allocation',
+                complexity: 'MEDIUM'
+            };
+        } else {
+            throw new Error(`[UNSUPPORTED_CONTEXT_TASK] Unknown artifactKey '${artifactKey}'. Task-scoped context planning requires an explicit rule.`);
+        }
+    }
 
     let targetSectionKeys = rule.requiredSections.filter(k => allSections[k] !== undefined);
 
@@ -349,7 +411,7 @@ function planContextSlice(params) {
 function estimateContextBudget(text) {
     const estimatedChars = (text || '').length;
     const estimatedTokens = Math.ceil(estimatedChars / 4);
-    let budgetTier = 'EXTREME';
+    let budgetTier = 'VERY_LARGE';
     if (estimatedTokens <= CONTEXT_BUDGET_TIERS.SMALL.maxTokens) budgetTier = 'SMALL';
     else if (estimatedTokens <= CONTEXT_BUDGET_TIERS.MEDIUM.maxTokens) budgetTier = 'MEDIUM';
     else if (estimatedTokens <= CONTEXT_BUDGET_TIERS.LARGE.maxTokens) budgetTier = 'LARGE';
@@ -375,7 +437,26 @@ function verifyContextProvenance(sliceOrManifest, expectedEvidenceHash) {
     }
 
     const DUMMY_HASH = '0000000000000000000000000000000000000000000000000000000000000000';
-    if (expectedEvidenceHash && expectedEvidenceHash !== DUMMY_HASH && sourceHash !== expectedEvidenceHash) {
+    const SHA256_HEX_REGEX = /^[0-9a-f]{64}$/i;
+
+    if (sourceHash === DUMMY_HASH) {
+        throw new Error('[CONTEXT_PROVENANCE_FAILURE] Context slice contains placeholder dummy hash');
+    }
+    if (!SHA256_HEX_REGEX.test(sourceHash)) {
+        throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Context slice contains invalid source hash format: '${sourceHash}'`);
+    }
+
+    if (!expectedEvidenceHash) {
+        throw new Error('[CONTEXT_PROVENANCE_FAILURE] Missing expected evidence hash for verification');
+    }
+    if (expectedEvidenceHash === DUMMY_HASH) {
+        throw new Error('[CONTEXT_PROVENANCE_FAILURE] Cannot verify context slice against placeholder dummy hash');
+    }
+    if (!SHA256_HEX_REGEX.test(expectedEvidenceHash)) {
+        throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Invalid expected evidence hash format: '${expectedEvidenceHash}'`);
+    }
+
+    if (sourceHash !== expectedEvidenceHash) {
         throw new Error(`[CONTEXT_PROVENANCE_FAILURE] Context slice provenance hash '${sourceHash}' does not match expected evidence hash '${expectedEvidenceHash}'`);
     }
 

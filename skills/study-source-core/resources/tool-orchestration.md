@@ -81,11 +81,16 @@ To eliminate context bloat, control token economics, and optimize task-model cap
 
 ### 2. Context Minimization & Provenance (`context_planner.js`)
 - **Task-Scoped Slicing**: Every specialist receives ONLY the evidence sections required for its specific deliverable, yielding 25%–60% context reduction.
-- **Cryptographic Provenance**: Context slices track `source_hash` and `slice_hash` (SHA-256) back to the canonical `evidence-pack.md`. Tampered slices or mismatched hashes fail closed (`CONTEXT_PROVENANCE_FAILURE`).
-- **Token Budget Tiers**: Slices are budgeted into `SMALL` ($\le 1,500$ tokens), `MEDIUM` ($\le 4,000$ tokens), and `LARGE` ($> 4,000$ tokens).
+- **Cryptographic Provenance**: Context slices track `source_hash` and `slice_hash` (SHA-256) back to the canonical `evidence-pack.md`. Tampered slices, invalid hashes, or missing provenance fail closed (`CONTEXT_PROVENANCE_FAILURE`).
+- **Token Budget Tiers**: Slices are budgeted into canonical tiers:
+  - `SMALL`: $\le 1,500$ tokens
+  - `MEDIUM`: $\le 4,000$ tokens
+  - `LARGE`: $\le 10,000$ tokens
+  - `VERY_LARGE`: $> 10,000$ tokens
 
 ### 3. Capability Moderation & Escalation
-- Tasks exceeding their normal context budget escalate model class (`CHEAP` $\to$ `DEFAULT`, `DEFAULT` $\to$ `STRONG`).
-- Subsequent retry attempts escalate model class to maximize recovery probability on complex domain failures.
+- **Non-Downgrade Invariant**: High or critical tasks are NEVER downgraded based on context size (`HIGH` + `SMALL` = `STRONG`).
+- **Scale Upgrade**: Low-complexity `CHEAP` tasks upgrade to `DEFAULT` if context is `VERY_LARGE` (> 10,000 tokens) to prevent truncation or hallucination.
+- **Recovery Escalation**: Subsequent retry attempts escalate model capability (`CHEAP` $\to$ `DEFAULT` $\to$ `STRONG`) upon severe failures (`CONTENT_VALIDATION_FAILURE`, `CONTRACT_VIOLATION`, `SPECIALIST_FAILURE`, `CONTEXT_OVERFLOW`).
 
 
