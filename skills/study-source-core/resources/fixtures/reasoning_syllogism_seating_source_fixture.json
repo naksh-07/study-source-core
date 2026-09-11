@@ -1,0 +1,271 @@
+{
+  "chapter": "Syllogism-And-Seating-Arrangement",
+  "subject": "Reasoning",
+  "domain": "Reasoning",
+  "topic": "Logical Deduction & Seating Arrangement",
+  "skill_id": "reasoning-study",
+  "source_provenance": {
+    "source_title": "Authentic Logical Deduction & Analytical Reasoning Compendium",
+    "edition": "2024-2025",
+    "exam_corpus": [
+      "RRB ALP 2018",
+      "SSC CGL 2020",
+      "RRB NTPC 2019",
+      "IBPS Clerk 2021"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Categorical Syllogisms & Minimal Overlap Venn Diagrams (कथनों पर आधारित न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख)",
+      "definition": "न्यायवाक्य में दो अथवा अधिक कथनों के आधार पर तार्किक निष्कर्ष निकाले जाते हैं। इसके समाधान हेतु न्यूनतम अधिव्यापन वेन आरेख (Minimal Overlap Venn Diagram) बनाया जाता है, जिसमें केवल वही संबंध दर्शाए जाते हैं जो कथनों में अनिवार्य रूप से दिए गए हों। किसी भी निष्कर्ष को निश्चित रूप से सत्य तभी माना जाता है जब वह सभी संभावित आरेखों में अनिवार्यतः सत्य हो।",
+      "conditions": "केवल दिए गए कथनों को पूर्ण सत्य मानना है, भले ही वे सामान्य ज्ञात तथ्यों से भिन्न प्रतीत हों।"
+    },
+    {
+      "name": "Possibility & Either-Or Complementary Pairs in Syllogism (न्यायवाक्य में संभावना एवं या-तो पूरक युग्म नियम)",
+      "definition": "यदि कोई निष्कर्ष कथनों से निश्चित सत्य या असत्य सिद्ध न हो सके (अर्थात् संदिग्ध हो), तो उसकी संभावना (Possibility) मान्य होती है। 'या तो निष्कर्ष I या II अनुसरण करता है' (Either-Or) हेतु तीन अनिवार्य शर्तें हैं: (1) दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध/असत्य हों, (2) दोनों निष्कर्षों के उद्देश्य (Subject) एवं विधेय (Predicate) समान हों, तथा (3) वे एक मान्य पूरक युग्म (Some + No अथवा Some + Some Not) बनाते हों।",
+      "conditions": "'All + No' कभी भी मान्य Either-Or पूरक युग्म नहीं बनाता है क्योंकि दोनों एक साथ असत्य हो सकते हैं।"
+    },
+    {
+      "name": "Linear Seating Arrangement with Definite Anchors (निश्चित छोर एवं दिशा सहित रैखिक बैठने की व्यवस्था)",
+      "definition": "एक सीधी पंक्ति में व्यक्तियों को दी गई दिशा (उत्तर/दक्षिण) में बैठाने की समस्या में सबसे पहले निश्चित छोर (Definite Anchor) को स्थापित किया जाता है। इसके पश्चात सापेक्ष शर्तों (Conditional Implication Constraints) एवं निषेधात्मक शर्तों (Negative Constraints) को जोड़कर शेष स्थानों को भरा जाता है।",
+      "conditions": "उत्तर की ओर मुख होने पर बायां और दायां स्वयं के अनुसार होता है; दक्षिण की ओर मुख होने पर दिशाएं उलट जाती हैं।"
+    }
+  ],
+  "master_rules": [
+    {
+      "name": "Principle of Minimal Overlap for Categorical Syllogisms",
+      "rule": "Venn(A, B, C) reflects only mandatory intersections stated in premises. Definite conclusion holds iff valid in all models.",
+      "scope": "कथन 'सभी A, B हैं' तथा 'कुछ B, C हैं' में A और C का सीधा संबंध न होने पर कोई निश्चित निष्कर्ष मान्य नहीं होगा।"
+    },
+    {
+      "name": "Either-Or Complementary Pair Validation Invariant",
+      "rule": "Either-Or iff (Indiv Doubtful(C1, C2) AND Same Elements(S, P) AND (C1, C2) in {(Some, No), (Some, Some Not)})",
+      "scope": "केवल Some + No अथवा Some + Some Not युग्मों हेतु लागू; All + No अवैध है।"
+    },
+    {
+      "name": "Definite Anchor Priority in Linear Arrangements",
+      "rule": "Anchor(fixed) -> Conditional(offset) -> Negative Bounds -> Single Consistent Model",
+      "scope": "शाखाओं (branching/cases) को न्यूनतम करने हेतु निश्चित स्थिति को पहले स्थापित करना अनिवार्य है।"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "pat-reas-syl-standard",
+      "family_id": "family.reasoning.logical.syllogism_standard",
+      "title": "Standard Categorical Syllogism with Minimal Overlap Venn (मानक न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख)",
+      "deep_structure": "दिए गए कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख बनाकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सत्यता का परीक्षण।",
+      "governing_method": "1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "common_traps": [
+        "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+        "कथन 'सभी A, B हैं' से उल्टा निष्कर्ष 'सभी B, A हैं' मान लेना (Converse Fallacy)",
+        "मध्यम पद के अवितरित होने पर दो असंबंधित पदों में निश्चित संबंध जोड़ना (Undistributed Middle)"
+      ],
+      "error_categories": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-either-or",
+      "family_id": "family.reasoning.logical.syllogism_either_or",
+      "title": "Syllogism Complementary Pairs and Either-Or Logic (न्यायवाक्य पूरक युग्म एवं या-तो तार्किक विकल्प)",
+      "deep_structure": "जब दो निष्कर्ष अलग-अलग निश्चित रूप से संदिग्ध हों, लेकिन एक ही दो तत्वों के बारे में हों और एक सकारात्मक तथा दूसरा नकारात्मक हो, तो पूरक युग्म के आधार पर 'या तो I या II' का परीक्षण।",
+      "governing_method": "1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "common_traps": [
+        "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+        "यदि कोई एक निष्कर्ष निश्चित रूप से सत्य हो तो भी Either-Or लगा देना",
+        "असमान पदों (different subjects/predicates) के बीच Either-Or लगाना"
+      ],
+      "error_categories": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-seating-linear",
+      "family_id": "family.reasoning.analytical.seating_linear",
+      "title": "Linear Seating Arrangement with Definite Anchors (निश्चित छोर एवं दिशा सहित रैखिक बैठने की व्यवस्था)",
+      "deep_structure": "एक सीधी पंक्ति में उत्तर या दक्षिण की ओर मुख करके बैठे व्यक्तियों की निश्चित और सापेक्ष स्थिति शर्तों के आधार पर अद्वितीय व्यवस्था निर्धारित करना।",
+      "governing_method": "1. कुल सीटों की संख्या और मुख की दिशा नोट करें। 2. निश्चित छोर (Definite Anchor) वाले व्यक्ति को पहले पंक्ति में बैठाएं। 3. निश्चित व्यक्ति से जुड़ी सापेक्ष शर्तों को लागू करें। 4. यदि 2 संभावनाएं बनें तो Case 1 और Case 2 बनाएं। 5. निषेधात्मक शर्तों से अमान्य स्थिति को निरस्त करें। 6. सभी शर्तों की अंतिम सुसंगतता जांचें।",
+      "decision_points": [
+        "सर्वप्रथम निश्चित छोर (Fixed End/Anchor) से शुरुआत करें, न कि अनिर्धारित सापेक्ष शर्तों से",
+        "मुख उत्तर की ओर होने पर बायां/दायां सामान्य रहेगा; दक्षिण की ओर होने पर उलट जाएगा",
+        "यदि निश्चित छोर सीधे न मिले, तो सर्वाधिक बार आने वाले घटक को आधार बनाएं"
+      ],
+      "common_traps": [
+        "उत्तर और दक्षिण मुख होने पर बाएं और दाएं में भ्रम (Direction Frame Confusion)",
+        "बीच में बैठे व्यक्तियों की संख्या और स्थिति के अंतर में 1 का अंतर (Parity Interval Miscount)",
+        "किसी निषेधात्मक शर्त (Negative Constraint) को अनदेखा कर देना"
+      ],
+      "error_categories": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_04: DIRECTION_FRAME_CONFUSION",
+        "ERR_07: PARITY_INTERVAL_MISCOUNT"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "reas-src-001",
+      "exam": "RRB ALP 2018 (Shift-2)",
+      "pattern_ref": "pat-reas-syl-standard",
+      "raw_type": "mcq",
+      "statement": "कथन:\n1. सभी पेन पेंसिल हैं। (All pens are pencils.)\n2. सभी पेंसिल किताबें हैं। (All pencils are books.)\n\nनिष्कर्ष:\nI. सभी पेन किताबें हैं। (All pens are books.)\nII. कुछ किताबें पेन हैं। (Some books are pens.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "difficulty": 2.0,
+      "source_solution_steps": [
+        "कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं: 'पेन' का वृत्त 'पेंसिल' के वृत्त के अंदर है, और 'पेंसिल' का वृत्त 'किताबें' के वृत्त के अंदर है (Pen ⊆ Pencil ⊆ Books)।",
+        "निष्कर्ष I की जांच: चूंकि पेन पूरी तरह से पेंसिल में है और पेंसिल पूरी तरह से किताबों में है, अतः सभी पेन निश्चित रूप से किताबें हैं (Pen ⊆ Books)। निष्कर्ष I सत्य है।",
+        "निष्कर्ष II की जांच: चूंकि पेन किताबों के अंदर हैं, अतः किताबों का कुछ भाग अनिवार्य रूप से पेन द्वारा घेरा गया है। अतः कुछ किताबें पेन हैं। निष्कर्ष II सत्य है।",
+        "अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।"
+      ],
+      "prerequisites": [
+        "reasoning.logical.syllogism_basics"
+      ]
+    },
+    {
+      "source_id": "reas-src-002",
+      "exam": "SSC CGL 2020 (Tier-1)",
+      "pattern_ref": "pat-reas-syl-standard",
+      "raw_type": "mcq",
+      "statement": "कथन:\n1. कुछ सेब लाल हैं। (Some apples are red.)\n2. सभी लाल फल हैं। (All red are fruits.)\n\nनिष्कर्ष:\nI. कुछ सेब फल हैं। (Some apples are fruits.)\nII. कोई फल सेब नहीं है। (No fruits are apples.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं: 'सेब' और 'लाल' के वृत्तों में कुछ अधिव्यापन है, और 'लाल' का पूरा वृत्त 'फल' के वृत्त के भीतर है।",
+        "निष्कर्ष I की जांच: सेब का वह भाग जो लाल है, वह फल के अंदर भी अनिवार्य रूप से आता है। अतः 'कुछ सेब फल हैं' निश्चित रूप से अनुसरण करता है।",
+        "निष्कर्ष II की जांच: चूंकि कुछ सेब पहले से ही फल हैं, अतः 'कोई फल सेब नहीं है' पूर्णतः असत्य है।",
+        "अतः केवल निष्कर्ष I अनुसरण करता है।"
+      ],
+      "prerequisites": [
+        "reasoning.logical.syllogism_basics"
+      ]
+    },
+    {
+      "source_id": "reas-src-003",
+      "exam": "RRB NTPC 2019 (CBT-1)",
+      "pattern_ref": "pat-reas-syl-either-or",
+      "raw_type": "mcq",
+      "statement": "कथन:\n1. कुछ फूल सफेद हैं। (Some flowers are white.)\n2. कोई सफेद सुंदर नहीं है। (No white is beautiful.)\n\nनिष्कर्ष:\nI. कुछ फूल सुंदर हैं। (Some flowers are beautiful.)\nII. कोई फूल सुंदर नहीं है। (No flower is beautiful.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_answer": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "difficulty": 3.0,
+      "source_solution_steps": [
+        "वेन आरेख बनाएं: 'फूल' का कुछ भाग 'सफेद' है, और 'सफेद' तथा 'सुंदर' के वृत्तों में शून्य अधिव्यापन (No overlap) है।",
+        "निष्कर्षों की व्यक्तिगत जांच: फूल का सफेद वाला भाग सुंदर नहीं हो सकता, किन्तु फूल का शेष भाग सुंदर हो भी सकता है और नहीं भी। अतः निष्कर्ष I ('कुछ फूल सुंदर हैं') और निष्कर्ष II ('कोई फूल सुंदर नहीं है') दोनों व्यक्तिगत रूप से संदिग्ध (doubtful) हैं।",
+        "पूरक युग्म की जांच: (1) दोनों निष्कर्ष एक ही पदों (फूल और सुंदर) के बीच हैं, (2) एक निष्कर्ष 'Some' तथा दूसरा 'No' है, जो एक मान्य पूरक युग्म बनाता है।",
+        "अतः 'या तो निष्कर्ष I या II अनुसरण करता है' (Either-Or) मान्य है।"
+      ],
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "source_id": "reas-src-004",
+      "exam": "IBPS Clerk 2021 (Prelims)",
+      "pattern_ref": "pat-reas-syl-either-or",
+      "raw_type": "mcq",
+      "statement": "कथन:\n1. सभी गाड़ियां बस हैं। (All vehicles are buses.)\n2. कुछ बस कार हैं। (Some buses are cars.)\n\nनिष्कर्ष:\nI. कुछ गाड़ियां कार हैं। (Some vehicles are cars.)\nII. कोई गाड़ी कार नहीं है। (No vehicle is a car.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_answer": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "difficulty": 3.0,
+      "source_solution_steps": [
+        "वेन आरेख बनाएं: 'गाड़ियां' पूर्णतः 'बस' के अंदर है, और 'बस' तथा 'कार' में आंशिक अधिव्यापन है। गाड़ियों और कार के बीच कोई सीधा संबंध नहीं दिया गया है।",
+        "निष्कर्षों की व्यक्तिगत जांच: गाड़ियों और कार के बीच संबंध संभव है किन्तु निश्चित नहीं। अतः निष्कर्ष I ('कुछ गाड़ियां कार हैं') संदिग्ध है, और निष्कर्ष II ('कोई गाड़ी कार नहीं है') भी संदिग्ध है।",
+        "पूरक युग्म की जांच: दोनों निष्कर्ष समान पदों (गाड़ियां और कार) के बीच हैं और 'Some + No' पूरक युग्म बनाते हैं।",
+        "अतः 'या तो निष्कर्ष I या II अनुसरण करता है' सही उत्तर है।"
+      ],
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "source_id": "reas-src-005",
+      "exam": "RRB ALP 2018 (Shift-1)",
+      "pattern_ref": "pat-reas-seating-linear",
+      "raw_type": "mcq",
+      "statement": "पांच मित्र P, Q, R, S और T एक सीधी पंक्ति में उत्तर की ओर मुख करके बैठे हैं।\n1. S पंक्ति के बाएं छोर (Extreme Left End) पर बैठा है।\n2. Q, S के ठीक दाएं (Immediate Right) बैठा है।\n3. P, T के ठीक दाएं बैठा है।\n4. R पंक्ति के दाएं छोर (Extreme Right End) पर बैठा है।\nपंक्ति के ठीक मध्य (Exact Middle) में कौन बैठा है?",
+      "options": [
+        "P",
+        "Q",
+        "T",
+        "S"
+      ],
+      "correct_answer": "T",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "कुल 5 स्थान हैं: [1, 2, 3, 4, 5], सभी का मुख उत्तर की ओर है (बायां = स्थान 1, दायां = स्थान 5)।",
+        "निश्चित छोर (Definite Anchor): शर्त 1 के अनुसार S बाएं छोर पर है, अतः स्थान 1 = S।",
+        "शर्त 2 के अनुसार Q, S के ठीक दाएं है, अतः स्थान 2 = Q। पंक्ति अब है: [S, Q, _, _, _] ।",
+        "शर्त 4 के अनुसार R दाएं छोर पर है, अतः स्थान 5 = R। पंक्ति अब है: [S, Q, _, _, R] ।",
+        "शर्त 3 के अनुसार P, T के ठीक दाएं बैठा है (T और P साथ हैं, T के बाद P)। शेष खाली स्थान 3 और 4 हैं, अतः स्थान 3 = T और स्थान 4 = P।",
+        "अंतिम व्यवस्था: [1: S, 2: Q, 3: T, 4: P, 5: R] ।",
+        "ठीक मध्य में स्थान 3 वाला व्यक्ति अर्थात् 'T' बैठा है।"
+      ],
+      "prerequisites": [
+        "reasoning.analytical.linear_seating"
+      ]
+    },
+    {
+      "source_id": "reas-src-006",
+      "exam": "SSC CGL 2020 (Shift-3)",
+      "pattern_ref": "pat-reas-seating-linear",
+      "raw_type": "mcq",
+      "statement": "छह व्यक्ति A, B, C, D, E और F एक सीधी पंक्ति में उत्तर की ओर मुख करके बैठे हैं।\n1. A पंक्ति के बाएं छोर (Extreme Left End) पर बैठा है।\n2. E पंक्ति के दाएं छोर (Extreme Right End) पर बैठा है।\n3. B, A के ठीक दाएं बैठा है।\n4. D, B और C के ठीक बीच में बैठा है।\n5. F, C के ठीक दाएं बैठा है।\nF के ठीक दाएं (Immediate Right) कौन बैठा है?",
+      "options": [
+        "E",
+        "C",
+        "D",
+        "B"
+      ],
+      "correct_answer": "E",
+      "difficulty": 3.0,
+      "source_solution_steps": [
+        "कुल 6 स्थान हैं: [1, 2, 3, 4, 5, 6], सभी का मुख उत्तर की ओर है।",
+        "निश्चित छोर (Definite Anchors): शर्त 1 के अनुसार स्थान 1 = A, तथा शर्त 2 के अनुसार स्थान 6 = E। पंक्ति: [A, _, _, _, _, E] ।",
+        "शर्त 3 के अनुसार B, A के ठीक दाएं है, अतः स्थान 2 = B। पंक्ति: [A, B, _, _, _, E] ।",
+        "शर्त 4 के अनुसार D, B और C के ठीक बीच में है, अतः स्थान 3 = D और स्थान 4 = C। पंक्ति: [A, B, D, C, _, E] ।",
+        "शर्त 5 के अनुसार F, C के ठीक दाएं है, अतः स्थान 5 = F।",
+        "अंतिम व्यवस्था: [1: A, 2: B, 3: D, 4: C, 5: F, 6: E] ।",
+        "F (स्थान 5) के ठीक दाएं स्थान 6 वाला व्यक्ति अर्थात् 'E' बैठा है।"
+      ],
+      "prerequisites": [
+        "reasoning.analytical.linear_seating"
+      ]
+    }
+  ]
+}

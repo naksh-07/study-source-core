@@ -88,7 +88,9 @@ Study Materials/[Subject]/[Chapter]/Questions/[Chapter]_Questions.md
      - **Mathematics**: Stepwise factoring, prime factorizations, product identities.
      - **Physics**: 6-Stage Numerical Pipeline (`FBD -> Coordinates -> Law -> Solve -> SI -> Sanity`).
      - **Chemistry**: 7-Stage Chemical Reasoning Pipeline (`Given Context -> Chemical Relationship -> Equation/Reaction Setup -> Stoichiometric/Algebraic Transformation -> Unit/Temperature Consistency -> Final Result -> Chemical Sanity Check`).
+     - **Reasoning**: 7-Layer Cognitive Thinking Pipeline (`Pattern Recognition -> Representation Setup (Venn/Matrix/Track) -> Constraint Extraction (Definite vs Conditional vs Negative vs Hidden) -> Decision Tree Start (Definite Anchor) -> Step-by-Step Deduction & Case Splitting -> Trap & Boundary Check -> Final Conclusion & Consistency Check`).
    - `### Verification`: Sanity check, reverse substitution, or dimensional analysis.
      - **Mathematics**: Reverse plug-in equation check.
      - **Physics**: Dimensional analysis, magnitude and physical boundary sanity.
      - **Chemistry**: Chemical plausibility, reaction quotient ($Q_c$ vs $K_c$), temperature in Kelvin, and valid pH bounds ($0 \le \text{pH} \le 14$).
+     - **Reasoning**: Domain-aware logical consistency check (Minimal Overlap Venn validity, full constraint satisfaction across all positions in arrangements, complementary pair validity).

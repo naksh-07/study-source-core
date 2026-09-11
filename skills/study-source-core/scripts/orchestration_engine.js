@@ -503,6 +503,11 @@ function createSpecialistTaskDispatcher(context = {}) {
             return await executeChemistrySpecialistTask(task, { ...context, retryCount });
         }
 
+        if (task.owner_agent === 'reasoning-apkg-author') {
+            const { executeReasoningSpecialistTask } = require('./author_reasoning_studylab');
+            return await executeReasoningSpecialistTask(task, { ...context, retryCount });
+        }
+
         if (context.fallbackExecutor) {
             return await context.fallbackExecutor(task, retryCount);
         }
