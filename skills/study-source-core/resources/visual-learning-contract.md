@@ -172,3 +172,82 @@ visual_learning_grammar:
 
 The Slide Deck and Image Occlusion generators combine this discipline-specific grammar with the chapter's extracted evidence to determine appropriate visual designs without imposing rigid or artificial template constraints.
 
+---
+
+## 7. Source-Grounded Visual Asset Policy (Phase 6)
+
+Image Occlusion depends on **approved source-grounded visual assets**, not arbitrary image discovery or generated visuals.
+
+### Approved Asset Sources:
+- `Sources/Diagrams/{Subject}/` — Canonical Diagram Drop Folder.
+- Source-embedded diagrams extracted from authorized PDF/documents.
+- User-supplied diagrams explicitly provided for a chapter.
+
+### Forbidden Automatic Fallbacks:
+- Web image search or download.
+- AI-generated image synthesis.
+- Random local file substitution.
+- Silent cross-chapter asset reuse.
+
+If no appropriate asset exists, the pipeline returns `NO_APPROVED_ASSET` — not a fabricated image.
+
+---
+
+## 8. Visual Need Discovery Categories
+
+16 canonical visual need types used for deterministic discovery:
+
+1. `anatomical_diagram` — Organ systems, cellular structures
+2. `process_diagram` — Multi-step mechanisms, pathways
+3. `cycle` — Water cycle, rock cycle, life cycles
+4. `map` — Political/physical maps, cartographic features
+5. `geographical_feature` — Mountains, rivers, relief features
+6. `scientific_apparatus` — Lab equipment, experimental setups
+7. `graph` — Data plots, curves, histograms
+8. `coordinate_geometry` — Cartesian planes, loci, conic sections
+9. `ray_diagram` — Optics, reflection, refraction
+10. `circuit` — Electrical components, series/parallel networks
+11. `chemical_structure` — Molecular structures, bonding
+12. `reaction_scheme` — Reaction mechanisms, equilibrium
+13. `classification_diagram` — Taxonomies, hierarchies
+14. `timeline` — Chronological sequences
+15. `flowchart` — Decision trees, algorithms
+16. `logical_arrangement` — Seating, Venn diagrams, matrices
+
+---
+
+## 9. Asset Manifest Contract
+
+Every selected asset has a deterministic manifest entry recording:
+- `asset_id` — SHA-256 hash-based identifier
+- `subject` / `chapter` / `concept` — Scope linkage
+- `source_provenance` — One of: `source_embedded`, `source_extracted`, `user_supplied`, `approved_local`, `derived`
+- `local_path` — Relative path from Sources/Diagrams root
+- `sha256` — Cryptographic integrity hash
+- `status` — `approved`, `pending`, `rejected`, `missing`
+- `occlusion_eligible` — Boolean eligibility determination
+
+Schema defined in `resources/asset-manifest-schema.json`.
+
+---
+
+## 10. Provenance Classes
+
+| Class | Description |
+|---|---|
+| `source_embedded` | Diagram directly in source PDF/document |
+| `source_extracted` | Programmatically extracted from source |
+| `user_supplied` | Explicitly provided by the user |
+| `approved_local` | Placed in Sources/Diagrams/{Subject}/ |
+| `derived` | Programmatically generated from source data |
+
+If an image came from outside the source, that fact must remain visible in the `provenance_note`.
+
+---
+
+## 11. No-Hallucination Invariant
+
+> **IMAGE OCCLUSION MUST NEVER CLAIM A VISUAL FACT THAT IS NOT SUPPORTED BY THE APPROVED ASSET/SOURCE.**
+
+The system must not invent labels, structures, relationships, or diagram elements. If semantic information is unavailable, the system MUST fail closed.
+

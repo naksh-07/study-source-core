@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StudySourceCoreAssetManifest",
+  "description": "Canonical asset manifest recording visual asset metadata, provenance, integrity, and occlusion eligibility.",
+  "type": "object",
+  "required": ["manifest_version", "subject", "chapter", "assets"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "manifest_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chapter": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["asset_id", "subject", "chapter", "source_provenance", "local_path", "asset_type", "status", "occlusion_eligible"],
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Deterministic identifier based on SHA-256 hash prefix."
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chapter": {
+            "type": "string",
+            "minLength": 1
+          },
+          "concept": {
+            "type": "string",
+            "description": "The specific concept this asset illustrates."
+          },
+          "source_provenance": {
+            "type": "string",
+            "enum": ["source_embedded", "source_extracted", "user_supplied", "approved_local", "derived"],
+            "description": "Provenance class indicating the origin of this visual asset."
+          },
+          "local_path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative path to the asset from the Sources/Diagrams root."
+          },
+          "asset_type": {
+            "type": "string",
+            "description": "MIME type or visual category (e.g., image/png, image/svg+xml)."
+          },
+          "visual_purpose": {
+            "type": "string",
+            "description": "Intended learning purpose of the visual asset."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["approved", "pending", "rejected", "missing"],
+            "description": "Current lifecycle status of the asset."
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "SHA-256 hash for integrity verification."
+          },
+          "width": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          },
+          "occlusion_eligible": {
+            "type": "boolean",
+            "description": "Whether this asset passes deterministic occlusion eligibility rules."
+          },
+          "rejection_reason": {
+            "type": ["string", "null"],
+            "description": "Reason for rejection if status is 'rejected' or occlusion_eligible is false."
+          },
+          "matched_visual_need": {
+            "type": ["string", "null"],
+            "description": "The visual need category this asset was matched to."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

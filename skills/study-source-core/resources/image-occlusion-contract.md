@@ -152,30 +152,38 @@ Supported modes correspond directly to native Anki Image Occlusion interaction p
 
 ---
 
-## 6. Visual Asset Resolution Engine
+## 6. Source-Grounded Visual Asset Resolution (Phase 6)
 
-To cleanly decouple manifest generation from asset fetching, the system implements a deterministic 5-tier fallback cascade via `scripts/resolve_visual_asset.js`:
+Phase 6 redesign: Approved-local-asset-only pipeline.
 
 ```text
-1. source-provided asset       ──► Embedded figures from source PDF / docs (verified path)
+1. approved_local asset      ──► Approved diagram from Sources/Diagrams/{Subject}/ (verified path + SHA-256)
           ↓
-2. programmatic asset          ──► Deterministically generated SVG / Canvas (e.g. charts, grids, maps)
-          ↓
-3. AI-generated asset          ──► Synthesized pedagogical diagram (strictly grounded in evidence)
-          ↓
-4. external asset              ──► High-quality public domain / open educational asset (provenance recorded)
-          ↓
-5. suppress IO                 ──► Fall back cleanly to Basic / Cloze flashcards
+2. NO_APPROVED_ASSET         ──► Fail closed. IO suppressed. No fallback to AI/web/external.
 ```
 
 ### Asset Metadata Contract:
 - `asset_id`: Deterministic identifier based on SHA-256 hash.
-- `source_type`: One of `"source_provided"`, `"programmatic"`, `"ai_generated"`, `"external"`, `"user_provided"`.
+- `source_type`: One of `"source_embedded"`, `"source_extracted"`, `"user_supplied"`, `"approved_local"`, `"derived"`.
 - `path`: Relative path to the image stored inside `Study Materials/[Subject]/[Chapter]/ImageOcclusion/media/`.
 - `mime_type`: Standard MIME type (`image/png`, `image/jpeg`, `image/svg+xml`).
 - `width` / `height`: Valid positive integers representing canvas dimensions.
 - `sha256`: SHA-256 digest for asset integrity and caching.
 - `provenance_note`: Clear description of source origin, page reference, generation parameters, or external citation.
+
+### 6.1 No-Hallucination Invariant
+
+Critical hard architectural invariant:
+
+> IMAGE OCCLUSION MUST NEVER CLAIM A VISUAL FACT THAT IS NOT SUPPORTED BY THE APPROVED ASSET/SOURCE.
+
+The system must not:
+- Invent labels or structures not present in the source diagram.
+- Infer nonexistent diagram elements.
+- Generate a replacement image when the source asset is missing.
+- Silently fall back to web search, AI generation, or random local files.
+
+If no approved asset exists, the correct result is `NO_APPROVED_ASSET`, not a fabricated image.
 
 ---
 

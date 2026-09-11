@@ -64,3 +64,35 @@ If the source contains an apparent error or contradiction:
 - Add an explicit callout note flagging the discrepancy.
 - Do NOT silently rewrite source statements using external memory.
 - If multiple matching files exist, ask the user to specify rather than guessing.
+
+---
+
+## 6. Visual Asset Source Boundary (Phase 6)
+
+Visual assets follow the same `SOURCE_ONLY` constraint as text content.
+
+### Approved Visual Asset Source:
+- `Sources/Diagrams/{Subject}/` is the canonical approved local visual asset source.
+- Assets in this directory are considered `approved_local` provenance.
+
+### Forbidden by Default:
+- Web-sourced images.
+- AI-generated images.
+- Arbitrary external images.
+- Random local files outside the Diagram Drop Folder.
+
+### Provenance Classes:
+| Class | Description |
+|---|---|
+| `source_embedded` | Diagram embedded directly in the source document (PDF page, DOCX figure). |
+| `source_extracted` | Diagram programmatically extracted from the source document. |
+| `user_supplied` | Diagram explicitly provided by the user for this chapter. |
+| `approved_local` | Diagram placed in `Sources/Diagrams/{Subject}/` and approved for use. |
+| `derived` | Diagram programmatically generated from source data (e.g., SVG from coordinates). |
+
+### Integrity:
+- Every approved visual asset should have a SHA-256 hash recorded in the asset manifest.
+- The manifest must distinguish: same asset, changed asset, missing asset.
+
+### No-Hallucination Invariant:
+Image Occlusion MUST NEVER claim a visual fact that is not supported by the approved asset/source. If semantic information is unavailable, the system MUST fail closed.

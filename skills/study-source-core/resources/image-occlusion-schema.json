@@ -40,9 +40,14 @@
               "height": { "type": "integer", "exclusiveMinimum": 0 },
               "source_type": {
                 "type": "string",
-                "enum": ["source_provided", "programmatic", "ai_generated", "external", "user_provided"]
+                "enum": ["source_embedded", "source_extracted", "user_supplied", "approved_local", "derived", "source_provided", "programmatic", "ai_generated", "external", "user_provided"]
               },
-              "provenance_note": { "type": "string" }
+              "provenance_note": { "type": "string" },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$",
+                "description": "SHA-256 hash for asset integrity verification."
+              }
             },
             "additionalProperties": true
           },
@@ -78,7 +83,12 @@
                 },
                 "answer": { "type": "string", "minLength": 1 },
                 "label": { "type": "string" },
-                "hint": { "type": "string" }
+                "hint": { "type": "string" },
+                "occlusion_target_type": {
+                  "type": "string",
+                  "enum": ["labels", "structures", "components", "arrows", "process_stages", "map_locations", "graph_features", "equations", "terminology", "relationships"],
+                  "description": "Semantic reason for this occlusion target."
+                }
               },
               "additionalProperties": false
             }

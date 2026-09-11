@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Subject-aware visual rules defining preferred visual categories, occlusion defaults, and eligibility hints per subject.",
+  "subjects": {
+    "Biology": {
+      "preferred_visual_categories": [
+        "anatomical_diagram",
+        "process_diagram",
+        "cycle",
+        "classification_diagram",
+        "scientific_apparatus"
+      ],
+      "io_default_mode": "hide_all_guess_one",
+      "high_io_worthiness": true,
+      "typical_target_types": ["labels", "structures", "components", "process_stages"]
+    },
+    "Chemistry": {
+      "preferred_visual_categories": [
+        "chemical_structure",
+        "reaction_scheme",
+        "scientific_apparatus",
+        "graph",
+        "classification_diagram"
+      ],
+      "io_default_mode": "hide_one_guess_one",
+      "high_io_worthiness": true,
+      "typical_target_types": ["labels", "components", "equations", "process_stages"]
+    },
+    "Geography": {
+      "preferred_visual_categories": [
+        "map",
+        "geographical_feature",
+        "classification_diagram",
+        "process_diagram",
+        "cycle"
+      ],
+      "io_default_mode": "hide_all_guess_one",
+      "high_io_worthiness": true,
+      "typical_target_types": ["labels", "map_locations", "structures", "relationships"]
+    },
+    "History": {
+      "preferred_visual_categories": [
+        "timeline",
+        "map",
+        "flowchart",
+        "classification_diagram"
+      ],
+      "io_default_mode": "hide_one_guess_one",
+      "high_io_worthiness": false,
+      "typical_target_types": ["labels", "relationships", "process_stages"]
+    },
+    "Map": {
+      "preferred_visual_categories": [
+        "map",
+        "geographical_feature"
+      ],
+      "io_default_mode": "hide_all_guess_one",
+      "high_io_worthiness": true,
+      "typical_target_types": ["map_locations", "labels", "structures", "relationships"]
+    },
+    "Math": {
+      "preferred_visual_categories": [
+        "coordinate_geometry",
+        "graph",
+        "classification_diagram",
+        "flowchart"
+      ],
+      "io_default_mode": "hide_one_guess_one",
+      "high_io_worthiness": false,
+      "typical_target_types": ["labels", "graph_features", "equations", "terminology"]
+    },
+    "Physics": {
+      "preferred_visual_categories": [
+        "ray_diagram",
+        "circuit",
+        "graph",
+        "scientific_apparatus",
+        "coordinate_geometry"
+      ],
+      "io_default_mode": "hide_one_guess_one",
+      "high_io_worthiness": true,
+      "typical_target_types": ["labels", "components", "arrows", "equations", "structures"]
+    },
+    "Political Science": {
+      "preferred_visual_categories": [
+        "flowchart",
+        "classification_diagram",
+        "timeline"
+      ],
+      "io_default_mode": "hide_one_guess_one",
+      "high_io_worthiness": false,
+      "typical_target_types": ["labels", "relationships", "process_stages"]
+    },
+    "Reasoning": {
+      "preferred_visual_categories": [
+        "logical_arrangement",
+        "flowchart",
+        "classification_diagram"
+      ],
+      "io_default_mode": "hide_one_guess_one",
+      "high_io_worthiness": false,
+      "typical_target_types": ["labels", "relationships", "structures"]
+    }
+  }
+}

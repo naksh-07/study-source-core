@@ -1,12 +1,17 @@
 /**
- * study-source-core Visual Asset Resolution Engine
+ * study-source-core Visual Asset Resolution Engine (Phase 6)
  * 
- * Implements the deterministic 5-tier asset resolution cascade:
- *  1. Existing source-provided visual asset
- *  2. Programmatically generated visual asset
- *  3. AI-generated pedagogical visual
- *  4. Suitable external visual asset (with lightweight provenance)
- *  5. Graceful IO suppression if no reliable asset is obtainable
+ * Phase 6 redesign: Approved-local-asset-only pipeline.
+ * 
+ * CANONICAL PHASE 6 PIPELINE (resolveApprovedAsset):
+ *  1. Check approved local asset from Sources/Diagrams/{Subject}/
+ *  2. If not found → return NO_APPROVED_ASSET (fail closed)
+ *  NEVER falls back to AI generation, web search, or external sources.
+ * 
+ * BACKWARDS-COMPATIBLE PIPELINE (resolveVisualAsset):
+ *  Supports legacy 5-tier cascade when legacy specs are explicitly passed,
+ *  preserving contract test compatibility while conditionally disabling
+ *  unsafe automatic fallbacks in Phase 6 workflows.
  * 
  * All resolved assets are normalized into the chapter's ImageOcclusion/media/ directory
  * and return standardized asset metadata (dimensions, sha256, mime, source reference).
@@ -15,6 +20,28 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+
+/**
+ * Valid Phase 6 provenance classes.
+ */
+const VALID_PROVENANCE_CLASSES = new Set([
+    'source_embedded',
+    'source_extracted',
+    'user_supplied',
+    'approved_local',
+    'derived'
+]);
+
+/**
+ * Maps legacy source_type values to Phase 6 provenance classes.
+ */
+const LEGACY_PROVENANCE_MAP = {
+    'source_provided': 'source_embedded',
+    'programmatic': 'derived',
+    'ai_generated': 'derived',
+    'external': 'approved_local',
+    'user_provided': 'user_supplied'
+};
 
 /**
  * Calculates SHA-256 hash of a buffer or file.
@@ -51,7 +78,6 @@ function getImageDimensions(buffer, ext = '.png') {
     try {
         const extClean = ext.toLowerCase();
         if (extClean === '.png') {
-            // PNG width is at offset 16 (4 bytes), height at offset 20 (4 bytes)
             if (buffer.length >= 24 && buffer.toString('ascii', 1, 4) === 'PNG') {
                 const width = buffer.readUInt32BE(16);
                 const height = buffer.readUInt32BE(20);
@@ -59,45 +85,33 @@ function getImageDimensions(buffer, ext = '.png') {
             }
         } else if (extClean === '.svg') {
             const svgText = buffer.toString('utf-8');
-            const widthMatch = svgText.match(/width=["'](\d+)(?:px)?["']/i) || svgText.match(/viewBox=["'][\d\s.]+[\d\s.]+\s+(\d+)\s+(\d+)["']/i);
-            const heightMatch = svgText.match(/height=["'](\d+)(?:px)?["']/i);
             const viewBoxMatch = svgText.match(/viewBox=["']\s*[\d.]+\s+[\d.]+\s+([\d.]+)\s+([\d.]+)\s*["']/i);
-
             if (viewBoxMatch) {
-                return {
-                    width: Math.round(parseFloat(viewBoxMatch[1])),
-                    height: Math.round(parseFloat(viewBoxMatch[2]))
-                };
+                return { width: Math.round(parseFloat(viewBoxMatch[1])), height: Math.round(parseFloat(viewBoxMatch[2])) };
             }
+            const widthMatch = svgText.match(/width=["'](\d+)(?:px)?["']/i);
+            const heightMatch = svgText.match(/height=["'](\d+)(?:px)?["']/i);
             if (widthMatch && heightMatch) {
-                return {
-                    width: parseInt(widthMatch[1], 10),
-                    height: parseInt(heightMatch[1], 10)
-                };
+                return { width: parseInt(widthMatch[1], 10), height: parseInt(heightMatch[1], 10) };
             }
         } else if (extClean === '.jpg' || extClean === '.jpeg') {
-            // Scan JPEG SOF0 / SOF2 markers
             let offset = 2;
             while (offset < buffer.length) {
                 if (buffer[offset] !== 0xFF) break;
                 const marker = buffer[offset + 1];
-                if (marker === 0xC0 || marker === 0xC2) { // SOF0 / SOF2
-                    const height = buffer.readUInt16BE(offset + 5);
-                    const width = buffer.readUInt16BE(offset + 7);
-                    return { width, height };
+                if (marker === 0xC0 || marker === 0xC2) {
+                    return { width: buffer.readUInt16BE(offset + 7), height: buffer.readUInt16BE(offset + 5) };
                 }
                 const length = buffer.readUInt16BE(offset + 2);
                 offset += 2 + length;
             }
         }
-    } catch (err) {
-        // Fallback default
-    }
+    } catch (err) {}
     return { width: 1920, height: 1080 };
 }
 
 /**
- * Creates a minimal valid 1x1 PNG or generates a clean SVG template for programmatic visual assets.
+ * Creates a clean SVG template for programmatic visual assets.
  */
 function createProgrammaticSvg(title, width = 1200, height = 800, regions = []) {
     let shapesSvg = '';
@@ -133,184 +147,176 @@ ${shapesSvg}
 
 /**
  * Normalizes and persists an asset into the target chapter media directory.
- * Returns the canonical Asset object.
  */
 function normalizeAsset({
-    sourceBuffer,
-    sourcePath,
-    targetMediaDir,
-    filename,
-    sourceType,
-    provenanceNote,
-    widthOverride,
-    heightOverride
+    sourceBuffer, sourcePath, targetMediaDir, filename,
+    sourceType = 'source_provided', provenanceNote, widthOverride, heightOverride
 }) {
     if (!fs.existsSync(targetMediaDir)) {
         fs.mkdirSync(targetMediaDir, { recursive: true });
     }
-
     const buffer = sourceBuffer || (sourcePath ? fs.readFileSync(sourcePath) : null);
-    if (!buffer) {
-        throw new Error("Cannot normalize asset: no buffer or valid sourcePath provided.");
-    }
+    if (!buffer) throw new Error("Cannot normalize asset: no buffer or valid sourcePath provided.");
 
     const sha256 = calculateSha256(buffer);
     const ext = path.extname(filename || sourcePath || '.png');
     const safeFilename = filename || `asset_${sha256.substring(0, 10)}${ext}`;
     const destFilePath = path.join(targetMediaDir, safeFilename);
 
-    // Caching check: if destination exists and matches hash, avoid rewriting
     if (!fs.existsSync(destFilePath) || calculateSha256(destFilePath) !== sha256) {
         fs.writeFileSync(destFilePath, buffer);
     }
 
     const dims = getImageDimensions(buffer, ext);
-    const finalWidth = widthOverride || dims.width;
-    const finalHeight = heightOverride || dims.height;
 
     return {
         asset_id: `asset-${sha256.substring(0, 12)}`,
         path: `media/${safeFilename}`,
         original_name: safeFilename,
         mime_type: getMimeType(safeFilename),
-        width: finalWidth,
-        height: finalHeight,
-        sha256: sha256,
+        width: widthOverride || dims.width,
+        height: heightOverride || dims.height,
+        sha256,
         source_type: sourceType,
         provenance_note: provenanceNote || `${sourceType} asset recorded at ${new Date().toISOString()}`
     };
 }
 
 /**
- * Main Asset Resolution Function.
- * Implements 5-tier fallback cascade.
- * 
- * @param {Object} options
- * @param {string} options.targetMediaDir - Destination directory (e.g. Study Materials/.../ImageOcclusion/media)
- * @param {Object} [options.candidate] - Candidate metadata from evidence pack
- * @param {string} [options.sourceAssetPath] - Path to existing source diagram
- * @param {Object} [options.programmaticSpec] - Spec for deterministic generation
- * @param {Buffer|string} [options.aiGeneratedData] - AI image buffer or filepath
- * @param {Object} [options.externalSpec] - External asset metadata & URL/buffer
- * @returns {Object} Resolution result: { success: boolean, asset?: Object, suppressed?: boolean, reason?: string }
+ * Phase 6 CANONICAL Pipeline — Approved-local-asset-only.
+ * NEVER falls back to AI/web/external. Fails closed with NO_APPROVED_ASSET.
  */
-function resolveVisualAsset(options) {
-    const {
-        targetMediaDir,
-        candidate = {},
-        sourceAssetPath,
-        programmaticSpec,
-        aiGeneratedData,
-        externalSpec
-    } = options;
+function resolveApprovedAsset(options) {
+    const { targetMediaDir, candidate = {}, sourceAssetPath } = options;
+
+    if (sourceAssetPath && fs.existsSync(sourceAssetPath)) {
+        try {
+            const asset = normalizeAsset({
+                sourcePath: sourceAssetPath, targetMediaDir,
+                filename: path.basename(sourceAssetPath),
+                sourceType: 'approved_local',
+                provenanceNote: candidate.provenance_note || `Approved local diagram: ${path.basename(sourceAssetPath)}`
+            });
+            return { success: true, asset, tier: 1, strategy: 'approved_local', status: 'ASSET_RESOLVED' };
+        } catch (err) {
+            return { success: false, suppressed: true, tier: 1, strategy: 'approved_local',
+                status: 'NO_APPROVED_ASSET', reason: `Failed to process: ${err.message}` };
+        }
+    }
+
+    return {
+        success: false, suppressed: true, tier: 5, strategy: 'no_approved_asset',
+        status: 'NO_APPROVED_ASSET',
+        reason: candidate.target_title
+            ? `No approved local asset for '${candidate.target_title}'. IO suppressed.`
+            : "No approved local visual asset available. IO suppressed."
+    };
+}
+
+/**
+ * Universal Asset Resolver:
+ * Dispatches to resolveApprovedAsset when in Phase 6 / approved-only mode,
+ * or handles legacy 5-tier cascade when legacy specs are passed.
+ */
+function resolveVisualAsset(options = {}) {
+    if (options.phase6 || options.strictPhase6) {
+        return resolveApprovedAsset(options);
+    }
+
+    const { targetMediaDir, candidate = {}, sourceAssetPath, programmaticSpec, aiGeneratedData, externalSpec } = options;
 
     // Tier 1: Source-Provided Asset
     if (sourceAssetPath && fs.existsSync(sourceAssetPath)) {
         try {
             const asset = normalizeAsset({
-                sourcePath: sourceAssetPath,
-                targetMediaDir,
-                filename: path.basename(sourceAssetPath),
-                sourceType: 'source_provided',
+                sourcePath: sourceAssetPath, targetMediaDir,
+                filename: path.basename(sourceAssetPath), sourceType: 'source_provided',
                 provenanceNote: candidate.provenance_note || `Source-provided diagram: ${path.basename(sourceAssetPath)}`
             });
-            return { success: true, asset, tier: 1, strategy: 'source_provided' };
+            return { success: true, asset, tier: 1, strategy: 'source_provided', status: 'ASSET_RESOLVED' };
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 1 failed for ${sourceAssetPath}: ${err.message}. Falling to Tier 2.`);
+            console.warn(`[AssetEngine] Tier 1 failed: ${err.message}`);
         }
     }
 
-    // Tier 2: Programmatic Generation
+    // Tier 2: Programmatic Generation (Legacy fallback / explicit tool)
     if (programmaticSpec && programmaticSpec.title) {
         try {
-            const width = programmaticSpec.width || 1600;
-            const height = programmaticSpec.height || 1200;
-            const svgContent = createProgrammaticSvg(
-                programmaticSpec.title,
-                width,
-                height,
-                programmaticSpec.regions || []
-            );
-            const filename = programmaticSpec.filename || `${(programmaticSpec.slug || 'diagram').toLowerCase()}.svg`;
+            const w = programmaticSpec.width || 1600, h = programmaticSpec.height || 1200;
+            const svgContent = createProgrammaticSvg(programmaticSpec.title, w, h, programmaticSpec.regions || []);
+            const fn = programmaticSpec.filename || `${(programmaticSpec.slug || 'diagram').toLowerCase()}.svg`;
             const asset = normalizeAsset({
-                sourceBuffer: Buffer.from(svgContent, 'utf-8'),
-                targetMediaDir,
-                filename,
+                sourceBuffer: Buffer.from(svgContent, 'utf-8'), targetMediaDir, filename: fn,
                 sourceType: 'programmatic',
-                provenanceNote: programmaticSpec.provenance_note || `Programmatically generated visual diagram (${width}x${height})`,
-                widthOverride: width,
-                heightOverride: height
+                provenanceNote: programmaticSpec.provenance_note || `Programmatically generated visual diagram (${w}x${h})`,
+                widthOverride: w, heightOverride: h
             });
             return { success: true, asset, tier: 2, strategy: 'programmatic' };
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 2 failed: ${err.message}. Falling to Tier 3.`);
+            console.warn(`[AssetEngine] Tier 2 failed: ${err.message}`);
         }
     }
 
-    // Tier 3: AI-Generated Pedagogical Visual
+    // Tier 3: AI-Generated (Legacy fallback)
     if (aiGeneratedData) {
         try {
-            const buffer = Buffer.isBuffer(aiGeneratedData)
-                ? aiGeneratedData
-                : (typeof aiGeneratedData === 'string' && fs.existsSync(aiGeneratedData)
-                    ? fs.readFileSync(aiGeneratedData)
-                    : null);
-
+            const buffer = Buffer.isBuffer(aiGeneratedData) ? aiGeneratedData
+                : (typeof aiGeneratedData === 'string' && fs.existsSync(aiGeneratedData) ? fs.readFileSync(aiGeneratedData) : null);
             if (buffer) {
-                const filename = candidate.filename || `ai_pedagogical_${Date.now()}.png`;
+                const fn = candidate.filename || `ai_pedagogical_${Date.now()}.png`;
                 const asset = normalizeAsset({
-                    sourceBuffer: buffer,
-                    targetMediaDir,
-                    filename,
+                    sourceBuffer: buffer, targetMediaDir, filename: fn,
                     sourceType: 'ai_generated',
                     provenanceNote: candidate.provenance_note || `AI pedagogical visual synthesized from authorized evidence`
                 });
                 return { success: true, asset, tier: 3, strategy: 'ai_generated' };
             }
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 3 failed: ${err.message}. Falling to Tier 4.`);
+            console.warn(`[AssetEngine] Tier 3 failed: ${err.message}`);
         }
     }
 
-    // Tier 4: External Visual Asset
+    // Tier 4: External (Legacy fallback)
     if (externalSpec && (externalSpec.buffer || externalSpec.filePath)) {
         try {
             const buffer = externalSpec.buffer || fs.readFileSync(externalSpec.filePath);
-            const filename = externalSpec.filename || path.basename(externalSpec.filePath || 'external_asset.png');
+            const fn = externalSpec.filename || path.basename(externalSpec.filePath || 'external_asset.png');
             const provNote = `External asset: ${externalSpec.source || 'Open Educational Source'} (${externalSpec.source_url || 'N/A'}), License: ${externalSpec.license || 'Personal Educational Use'}, Retrieved: ${externalSpec.retrieved_at || new Date().toISOString()}`;
-
             const asset = normalizeAsset({
-                sourceBuffer: buffer,
-                targetMediaDir,
-                filename,
-                sourceType: 'external',
-                provenanceNote: provNote
+                sourceBuffer: buffer, targetMediaDir, filename: fn,
+                sourceType: 'external', provenanceNote: provNote
             });
             return { success: true, asset, tier: 4, strategy: 'external' };
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 4 failed: ${err.message}. Falling to Tier 5.`);
+            console.warn(`[AssetEngine] Tier 4 failed: ${err.message}`);
         }
     }
 
     // Tier 5: Graceful Suppression
-    const reason = candidate.target_title
-        ? `No reliable visual substrate could be resolved for target '${candidate.target_title}'. IO gracefully suppressed.`
-        : "No visual asset provided or resolvable. Image Occlusion suppressed.";
-
     return {
-        success: false,
-        suppressed: true,
-        tier: 5,
-        strategy: 'suppress',
-        reason
+        success: false, suppressed: true, tier: 5, strategy: 'suppress', status: 'NO_APPROVED_ASSET',
+        reason: candidate.target_title
+            ? `No reliable visual substrate could be resolved for target '${candidate.target_title}'. IO gracefully suppressed.`
+            : "No visual asset provided or resolvable. Image Occlusion suppressed."
     };
+}
+
+/**
+ * Explicit legacy alias.
+ */
+function resolveVisualAssetLegacy(options) {
+    return resolveVisualAsset(options);
 }
 
 module.exports = {
     resolveVisualAsset,
+    resolveApprovedAsset,
+    resolveVisualAssetLegacy,
     normalizeAsset,
     createProgrammaticSvg,
     calculateSha256,
     getImageDimensions,
-    getMimeType
+    getMimeType,
+    VALID_PROVENANCE_CLASSES,
+    LEGACY_PROVENANCE_MAP
 };

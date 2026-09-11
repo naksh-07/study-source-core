@@ -15,7 +15,12 @@ const path = require('path');
 
 const VALID_MODES = new Set(['hide_all_guess_one', 'hide_one_guess_one']);
 const VALID_SHAPES = new Set(['rectangle', 'ellipse', 'polygon']);
-const VALID_SOURCE_TYPES = new Set(['source_provided', 'programmatic', 'ai_generated', 'external', 'user_provided']);
+const VALID_SOURCE_TYPES = new Set(['source_provided', 'programmatic', 'ai_generated', 'external', 'user_provided',
+    'source_embedded', 'source_extracted', 'user_supplied', 'approved_local', 'derived']);
+const VALID_OCCLUSION_TARGET_TYPES = new Set([
+    'labels', 'structures', 'components', 'arrows', 'process_stages',
+    'map_locations', 'graph_features', 'equations', 'terminology', 'relationships'
+]);
 
 function validateImageOcclusionContent(contentOrData, filePath = 'in-memory') {
     let data;
@@ -119,6 +124,18 @@ function validateImageOcclusionContent(contentOrData, filePath = 'in-memory') {
             }
             if (card.asset.source_type && !VALID_SOURCE_TYPES.has(card.asset.source_type)) {
                 warnings.push(`${cardPath}.asset.source_type '${card.asset.source_type}' is unrecognized.`);
+            }
+            // Phase 6: SHA-256 integrity check
+            if (card.asset.sha256) {
+                if (typeof card.asset.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(card.asset.sha256)) {
+                    warnings.push(`${cardPath}.asset.sha256 is not a valid SHA-256 hash.`);
+                }
+            } else if (card.asset.source_type && ['approved_local', 'source_embedded', 'source_extracted', 'user_supplied'].includes(card.asset.source_type)) {
+                warnings.push(`${cardPath}.asset is missing sha256 hash for provenance '${card.asset.source_type}'. Integrity cannot be verified.`);
+            }
+            // Phase 6: Provenance note check
+            if (!card.asset.provenance_note || (typeof card.asset.provenance_note === 'string' && card.asset.provenance_note.trim() === '')) {
+                warnings.push(`${cardPath}.asset is missing provenance_note. Visual asset provenance should be explicit.`);
             }
         }
 
@@ -275,5 +292,7 @@ module.exports = {
     validateImageOcclusion,
     validateImageOcclusionContent,
     VALID_MODES,
-    VALID_SHAPES
+    VALID_SHAPES,
+    VALID_SOURCE_TYPES,
+    VALID_OCCLUSION_TARGET_TYPES
 };

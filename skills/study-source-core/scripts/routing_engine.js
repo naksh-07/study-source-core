@@ -143,9 +143,14 @@ function evaluateArtifactRouting(context = {}) {
         routing.suppressions.cloze = 'ZERO_CLOZE_CANDIDATES';
     }
     
-    if (routing.imageOcclusion && (context.ioCandidateCount === 0 || !context.visualProfile)) {
-        routing.imageOcclusion = false;
-        routing.suppressions.imageOcclusion = 'NO_IO_CANDIDATES';
+    if (routing.imageOcclusion) {
+        if (context.ioCandidateCount === 0 || !context.visualProfile) {
+            routing.imageOcclusion = false;
+            routing.suppressions.imageOcclusion = 'NO_IO_CANDIDATES';
+        } else if (context.approvedAssetCount === 0 && context.approvedAssetCount !== undefined) {
+            routing.imageOcclusion = false;
+            routing.suppressions.imageOcclusion = 'NO_APPROVED_ASSET';
+        }
     }
 
     if (!routing.basic && !routing.cloze && !routing.imageOcclusion) {
