@@ -85,4 +85,10 @@ Study Materials/[Subject]/[Chapter]/Questions/[Chapter]_Questions.md
      - `> [!tip]- Tier 2: Strategy & Setup`
      - `> [!tip]- Tier 3: Step-by-Step Method`
    - `### Solution`: Exhaustive step-by-step mathematical or procedural derivation.
+     - **Mathematics**: Stepwise factoring, prime factorizations, product identities.
+     - **Physics**: 6-Stage Numerical Pipeline (`FBD -> Coordinates -> Law -> Solve -> SI -> Sanity`).
+     - **Chemistry**: 7-Stage Chemical Reasoning Pipeline (`Given Context -> Chemical Relationship -> Equation/Reaction Setup -> Stoichiometric/Algebraic Transformation -> Unit/Temperature Consistency -> Final Result -> Chemical Sanity Check`).
    - `### Verification`: Sanity check, reverse substitution, or dimensional analysis.
+     - **Mathematics**: Reverse plug-in equation check.
+     - **Physics**: Dimensional analysis, magnitude and physical boundary sanity.
+     - **Chemistry**: Chemical plausibility, reaction quotient ($Q_c$ vs $K_c$), temperature in Kelvin, and valid pH bounds ($0 \le \text{pH} \le 14$).

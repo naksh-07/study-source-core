@@ -498,6 +498,11 @@ function createSpecialistTaskDispatcher(context = {}) {
             return await executePhysicsSpecialistTask(task, { ...context, retryCount });
         }
 
+        if (task.owner_agent === 'chemistry-numerical-apkg-author') {
+            const { executeChemistrySpecialistTask } = require('./author_chemistry_studylab');
+            return await executeChemistrySpecialistTask(task, { ...context, retryCount });
+        }
+
         if (context.fallbackExecutor) {
             return await context.fallbackExecutor(task, retryCount);
         }

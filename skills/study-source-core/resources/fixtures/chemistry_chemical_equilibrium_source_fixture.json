@@ -1,0 +1,273 @@
+{
+  "chapter": "Chemical-Equilibrium",
+  "subject": "Chemistry",
+  "domain": "Chemistry",
+  "topic": "Physical Chemistry",
+  "skill_id": "chemistry.physical.equilibrium",
+  "source_provenance": {
+    "source_title": "Authentic Chemical Equilibrium & Physical Chemistry Compendium",
+    "edition": "2024-2025",
+    "exam_corpus": [
+      "RRB ALP 2018",
+      "RRB Group D 2018",
+      "RRB NTPC 2019",
+      "SSC CGL Tier-1 2020",
+      "JEE Main 2021"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Law of Chemical Equilibrium & Equilibrium Constant (रासायनिक साम्यावस्था एवं साम्य स्थिरांक Kc)",
+      "definition": "एक बंद पात्र में उत्क्रमणीय अभिक्रिया में जब अग्र अभिक्रिया की दर और पश्च अभिक्रिया की दर बराबर हो जाती है, तो साम्यावस्था स्थापित होती है। द्रव्यमान अनुपाती क्रिया के नियमानुसार, साम्य स्थिरांक Kc = ([C]^c * [D]^d) / ([A]^a * [B]^b) होता है। Kc केवल तापमान पर निर्भर करता है तथा उत्प्रेरक या प्रारंभिक सांद्रता से अप्रभावित रहता है।",
+      "conditions": "केवल बंद तंत्र (closed vessel) में उत्क्रमणीय रासायनिक अभिक्रियाओं के साम्यावस्था पर मान्य।",
+      "si_unit": "(mol/L)^{\\Delta n} or dimensionless for \\Delta n = 0",
+      "dimensional_formula": "[M^{\\Delta n} L^{-3\\Delta n}]"
+    },
+    {
+      "name": "Relation Between Kp and Kc (साम्य स्थिरांक Kp एवं Kc में संबंध)",
+      "definition": "गैसीय उत्क्रमणीय अभिक्रियाओं हेतु आंशिक दाबों पर आधारित साम्य स्थिरांक Kp तथा मोलर सांद्रताओं पर आधारित साम्य स्थिरांक Kc के मध्य संबंध Kp = Kc * (R * T)^{\\Delta n_g} होता है। यहाँ \\Delta n_g गैसीय उत्पादों के मोलों तथा गैसीय अभिकारकों के मोलों का अंतर है, R = 0.0821 L*atm/(mol*K) तथा T परम ताप (Kelvin) में है।",
+      "conditions": "तापमान सदैव केल्विन (T = t + 273 K) में होना चाहिए। \\Delta n_g की गणना में केवल गैसीय स्पीशीज के स्टोइकिओमेट्रिक गुणांक गिने जाते हैं; शुद्ध ठोस व द्रव को एकांक (1) माना जाता है।",
+      "si_unit": "atm^{\\Delta n_g} or bar^{\\Delta n_g}",
+      "dimensional_formula": "[M^{\\Delta n_g} L^{-\\Delta n_g} T^{-2\\Delta n_g}]"
+    },
+    {
+      "name": "Aqueous Solution pH & Self-Ionization of Water (pH पैमाना एवं जल का आयनिक गुणनफल)",
+      "definition": "जलीय विलयन में हाइड्रोजन आयनों की सक्रियता अथवा मोलर सांद्रता का ऋणात्मक लघुगणक pH कहलाता है: pH = -log10[H+]। 25°C (298 K) पर जल का आयनिक गुणनफल Kw = [H+][OH-] = 1.0 * 10^-14 mol^2/L^2 होता है, अतः pH + pOH = 14 मान्य है।",
+      "conditions": "तनु जलीय विलयनों (Dilute aqueous solutions) के लिए मान्य। 25°C पर उदासीन विलयन का pH = 7, अम्लीय का pH < 7 तथा क्षारीय का pH > 7 होता है।",
+      "si_unit": "Dimensionless (pH scale 0 to 14)",
+      "dimensional_formula": "Dimensionless"
+    }
+  ],
+  "master_formulas": [
+    {
+      "name": "Equilibrium Constant Expression for Gaseous Reactions",
+      "formula": "K_c = \\frac{[C]^c [D]^d}{[A]^a [B]^b}",
+      "scope": "अभिक्रिया aA + bB <=> cC + dD हेतु केवल साम्यावस्था पर सांद्रताओं [X] = n/V (mol/L) के लिए मान्य।",
+      "units": "[X] in mol/L (M)"
+    },
+    {
+      "name": "Kp - Kc Gas Law Thermodynamic Conversion",
+      "formula": "K_p = K_c (RT)^{\\Delta n_g}",
+      "scope": "गैसीय साम्य हेतु मान्य जहाँ \\Delta n_g = \\sum n_{products(g)} - \\sum n_{reactants(g)}, R = 0.0821 L*atm/(mol*K), T in Kelvin।",
+      "units": "K_p in atm^{\\Delta n_g}, R in L*atm/(mol*K), T in K"
+    },
+    {
+      "name": "pH and Hydroxide Ion Logarithmic Relationship",
+      "formula": "\\text{pH} = -\\log_{10}[H^+], \\quad \\text{pOH} = -\\log_{10}[OH^-], \\quad \\text{pH} + \\text{pOH} = 14",
+      "scope": "25°C पर जलीय विलयनों में अम्ल एवं क्षार की प्रबलता तथा आयन सांद्रता की गणना हेतु।",
+      "units": "[H^+], [OH^-] in mol/L, pH dimensionless"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "pat-chem-eq-kc-calc",
+      "family_id": "family.chemistry.physical.equilibrium.kc_calc",
+      "title": "Homogeneous Gaseous Equilibrium Constant (Kc) Calculation (समांगी गैसीय साम्य स्थिरांक Kc की गणना)",
+      "deep_structure": "जब किसी बंद पात्र में संतुलित उत्क्रमणीय गैसीय अभिक्रिया के लिए साम्यावस्था पर अभिकारकों एवं उत्पादों की मोलर सांद्रता या मोल दिए गए हों, तो साम्य स्थिरांक व्यंजक Kc = [उत्पाद]^[गुणांक] / [अभिकारक]^[गुणांक] लागू कर Kc की गणना की जाती है।",
+      "governing_method": "1. संतुलित रासायनिक समीकरण लिखें। 2. यदि मोल दिए हों तो पात्र के आयतन V (L) से भाग देकर मोलर सांद्रता [X] = n/V निकालें। 3. Kc व्यंजक स्थापित करें। 4. मान प्रतिस्थापित कर बीजगणितीय हल प्राप्त करें। 5. रासायनिक सार्थकता जांचें।",
+      "decision_points": [
+        "जांचें कि दिए गए मान सीधे साम्यावस्था सांद्रता (mol/L) हैं अथवा मोल (mol)",
+        "यदि आयतन V > 1 L है, तो सांद्रता निकालने हेतु V से अनिवार्यतः भाग दें",
+        "स्टोइकिओमेट्रिक गुणांकों को सांद्रता की घात के रूप में सही रूप से लगाएं"
+      ],
+      "common_traps": [
+        "पात्र के आयतन (Volume in L) से भाग देना भूल जाना और सीधे मोलों को Kc सूत्र में रख देना",
+        "उत्पाद और अभिकारक के पदों को व्युत्क्रम (invert) कर देना",
+        "स्टोइकिओमेट्रिक गुणांक को घात के बजाय गुणांक के रूप में लिख देना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION",
+        "ERR_CHEM_STOICHIOMETRIC_RATIO",
+        "ERR_CHEM_CONCENTRATION_VOLUME"
+      ]
+    },
+    {
+      "pattern_id": "pat-chem-eq-kp-deltang",
+      "family_id": "family.chemistry.physical.equilibrium.kp_deltang",
+      "title": "Conversion Between Kp and Kc Using Reaction Stoichiometry (Kp एवं Kc का रूपांतरण तथा डेल्टा n_g)",
+      "deep_structure": "गैसीय अभिक्रिया के लिए Kp और Kc के बीच संबंध Kp = Kc(RT)^{\\Delta n_g} द्वारा दिया जाता है। यहाँ \\Delta n_g गैसीय उत्पादों के मोलों और गैसीय अभिकारकों के मोलों का अंतर है तथा T परम ताप (K) है।",
+      "governing_method": "1. संतुलित समीकरण में केवल गैसीय स्पीशीज के मोल गिनकर \\Delta n_g = n_p(g) - n_r(g) ज्ञात करें। 2. तापमान को सेल्सियस से केल्विन में बदलें (T = t + 273 K)। 3. R = 0.0821 L*atm/(mol*K) लेकर Kp = Kc(RT)^{\\Delta n_g} सूत्र में मान रखें। 4. \\Delta n_g = 0 होने पर Kp = Kc की पुष्टि करें।",
+      "decision_points": [
+        "तापमान को डिग्री सेल्सियस के बजाय केल्विन में अनिवार्यतः बदलें",
+        "\\Delta n_g की गणना में ठोस (solid) या द्रव (liquid) घटकों के मोलों को छोड़ दें",
+        "\\Delta n_g के धनात्मक, शून्य या ऋणात्मक होने के अनुसार घात का सही निर्धारण करें"
+      ],
+      "common_traps": [
+        "तापमान को डिग्री सेल्सियस में ही प्रयुक्त कर लेना (T in °C instead of Kelvin)",
+        "समीकरण में उपस्थित ठोस घटकों के मोलों को भी \\Delta n_g में जोड़ लेना",
+        "\\Delta n_g का चिन्ह उलट देना (अभिकारक - उत्पाद कर देना)"
+      ],
+      "error_categories": [
+        "ERR_CHEM_KELVIN_TEMPERATURE_MISS",
+        "ERR_CHEM_DELTA_NG_GAS_ONLY",
+        "ERR_CHEM_STOICHIOMETRIC_RATIO"
+      ]
+    },
+    {
+      "pattern_id": "pat-chem-sol-ph-calc",
+      "family_id": "family.chemistry.physical.solutions.ph_calc",
+      "title": "Aqueous Solution pH & Hydrogen Ion Concentration (जलीय विलयन की pH एवं हाइड्रोजन आयन सांद्रता)",
+      "deep_structure": "विलयन की अम्लीयता या क्षारीयता pH पैमाने से मापी जाती है जहाँ pH = -log10[H+] तथा pOH = -log10[OH-]। 25°C पर जल के आयनिक गुणनफल के आधार पर pH + pOH = 14 होता है।",
+      "governing_method": "1. विलयन की मोलरता एवं अम्ल/क्षार के वियोजन से [H+] या [OH-] ज्ञात करें। 2. यदि प्रबल क्षार है तो pOH = -log10[OH-] निकालें फिर pH = 14 - pOH करें। 3. लघुगणक नियमों से pH की सटीक गणना करें। 4. अम्लीय विलयन हेतु pH < 7 तथा क्षारीय हेतु pH > 7 की संगति जांचें।",
+      "decision_points": [
+        "पहचानें कि दिया गया पदार्थ अम्ल (H+) है या क्षार (OH-)",
+        "क्षार होने पर सीधे pH न निकालें, पहले pOH निकालें फिर 14 से घटाएं",
+        "द्विक्षारकीय अम्ल (जैसे H2SO4) में [H+] = 2 * Molarity लेना न भूलें"
+      ],
+      "common_traps": [
+        "क्षार के विलयन में -log[OH-] को ही सीधे pH मान लेना",
+        "द्विक्षारकीय अम्ल या द्विक्षारीय भस्म में गुणांक 2 से गुणा न करना",
+        "लघुगणक के ऋण चिन्ह को अनदेखा कर ऋणात्मक pH निकाल देना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_PH_LOG_ARITHMETIC",
+        "ERR_CHEM_BASE_POH_CONFUSION",
+        "ERR_CHEM_DIPROTIC_FACTOR"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "pyq-rrb-alp-2018-s2-c04",
+      "exam": "RRB ALP 2018 Shift 2",
+      "pattern_ref": "pat-chem-eq-kc-calc",
+      "raw_type": "mcq",
+      "statement": "एक 2 लीटर के बंद पात्र में 400 K पर साम्यावस्था में 2 mol H2, 2 mol I2 तथा 4 mol HI उपस्थित हैं। उत्क्रमणीय अभिक्रिया H2(g) + I2(g) <=> 2HI(g) के लिए साम्य स्थिरांक Kc का मान क्या होगा?",
+      "options": [
+        "4",
+        "2",
+        "8",
+        "1"
+      ],
+      "correct_answer": "4",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "दिया गया है: पात्र का आयतन V = 2 L, साम्य पर n(H2) = 2 mol, n(I2) = 2 mol, n(HI) = 4 mol।",
+        "साम्य मोलर सांद्रताएं: [H2] = 2/2 = 1 mol/L, [I2] = 2/2 = 1 mol/L, [HI] = 4/2 = 2 mol/L।",
+        "अभिक्रिया H2(g) + I2(g) <=> 2HI(g) के लिए साम्य व्यंजक: Kc = [HI]^2 / ([H2] * [I2])।",
+        "मान प्रतिस्थापित करने पर: Kc = (2)^2 / (1 * 1) = 4 / 1 = 4।",
+        "अतः सही विकल्प (A) 4 है।"
+      ],
+      "prerequisites": [
+        "chemistry.equilibrium_law",
+        "chemistry.molar_concentration"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-groupd-2018-s1-c18",
+      "exam": "RRB Group D 2018 Shift 1",
+      "pattern_ref": "pat-chem-eq-kc-calc",
+      "raw_type": "numerical",
+      "statement": "एक 1 लीटर के बंद फ्लास्क में साम्यावस्था पर N2O4(g) <=> 2NO2(g) अभिक्रिया के लिए [N2O4] = 0.2 mol/L तथा [NO2] = 0.4 mol/L पाए गए। इस ताप पर अभिक्रिया का साम्य स्थिरांक Kc (mol/L में) ज्ञात कीजिए।",
+      "correct_answer": "0.8 mol/L",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "दिया गया है: साम्य पर [N2O4] = 0.2 mol/L तथा [NO2] = 0.4 mol/L।",
+        "अभिक्रिया N2O4(g) <=> 2NO2(g) के लिए साम्य व्यंजक: Kc = [NO2]^2 / [N2O4]।",
+        "मान प्रतिस्थापित करने पर: Kc = (0.4)^2 / 0.2 = 0.16 / 0.2 = 0.8 mol/L।",
+        "अतः साम्य स्थिरांक Kc का मान 0.8 mol/L है।"
+      ],
+      "prerequisites": [
+        "chemistry.equilibrium_law",
+        "chemistry.stoichiometry"
+      ]
+    },
+    {
+      "source_id": "pyq-ssc-cgl-2020-t1-c22",
+      "exam": "SSC CGL 2020 Tier 1",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "mcq",
+      "statement": "उत्क्रमणीय गैसीय अभिक्रिया N2(g) + 3H2(g) <=> 2NH3(g) के लिए साम्य स्थिरांकों Kp और Kc के बीच सही गणितीय संबंध क्या है? (जहाँ R सार्वत्रिक गैस नियतांक और T परम ताप है)",
+      "options": [
+        "Kp = Kc (RT)^(-2)",
+        "Kp = Kc (RT)^2",
+        "Kp = Kc (RT)",
+        "Kp = Kc (RT)^(-1)"
+      ],
+      "correct_answer": "Kp = Kc (RT)^(-2)",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "दी गई अभिक्रिया: N2(g) + 3H2(g) <=> 2NH3(g)।",
+        "गैसीय मोलों का परिवर्तन: Delta n_g = n_p(g) - n_r(g) = 2 - (1 + 3) = 2 - 4 = -2।",
+        "Kp और Kc के बीच शासी संबंध: Kp = Kc * (RT)^(Delta n_g)।",
+        "Delta n_g = -2 प्रतिस्थापित करने पर: Kp = Kc * (RT)^(-2)।",
+        "अतः सही विकल्प (A) Kp = Kc (RT)^(-2) है।"
+      ],
+      "prerequisites": [
+        "chemistry.ideal_gas_law",
+        "chemistry.kp_kc_relation"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-ntpc-2019-s3-c15",
+      "exam": "RRB NTPC 2019 Shift 3",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "numerical",
+      "statement": "अभिक्रिया H2(g) + I2(g) <=> 2HI(g) के लिए 500 K पर Kc का मान 50 है। इस ताप पर Kp का मान क्या होगा?",
+      "correct_answer": "50",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "दी गई अभिक्रिया: H2(g) + I2(g) <=> 2HI(g)।",
+        "गैसीय मोलों में परिवर्तन Delta n_g = n_products(g) - n_reactants(g) = 2 - (1 + 1) = 2 - 2 = 0।",
+        "संबंध Kp = Kc * (RT)^(Delta n_g) से: Kp = Kc * (RT)^0 = Kc * 1 = Kc।",
+        "दिए गए मान Kc = 50 रखने पर: Kp = 50।",
+        "अतः 500 K पर Kp का मान 50 है।"
+      ],
+      "prerequisites": [
+        "chemistry.deltang_stoichiometry",
+        "chemistry.kp_kc_relation"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-alp-2018-s1-c37",
+      "exam": "RRB ALP 2018 Shift 1",
+      "pattern_ref": "pat-chem-sol-ph-calc",
+      "raw_type": "mcq",
+      "statement": "एक जलीय विलयन में हाइड्रोक्लोरिक अम्ल (HCl) की सांद्रता 0.001 M (10^-3 mol/L) है। 25°C पर इस विलयन का pH मान क्या होगा?",
+      "options": [
+        "3",
+        "11",
+        "1",
+        "4"
+      ],
+      "correct_answer": "3",
+      "difficulty": 1.5,
+      "source_solution_steps": [
+        "HCl एक प्रबल अम्ल है जो पूर्णतः आयनित होता है: HCl -> H+ + Cl-।",
+        "अतः [H+] = M = 0.001 M = 10^-3 mol/L।",
+        "pH की परिभाषा से: pH = -log10[H+] = -log10(10^-3) = -(-3) = 3।",
+        "अतः सही विकल्प (A) 3 है।"
+      ],
+      "prerequisites": [
+        "chemistry.acids_bases",
+        "chemistry.ph_scale"
+      ]
+    },
+    {
+      "source_id": "pyq-jee-main-2021-c09",
+      "exam": "JEE Main 2021 Session 1",
+      "pattern_ref": "pat-chem-sol-ph-calc",
+      "raw_type": "mcq",
+      "statement": "25°C पर 0.01 M सोडियम हाइड्रॉक्साइड (NaOH) के जलीय विलयन का pH मान क्या होगा? (जल का आयनिक गुणनफल Kw = 10^-14 लें)",
+      "options": [
+        "12",
+        "2",
+        "7",
+        "10"
+      ],
+      "correct_answer": "12",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "NaOH एक प्रबल क्षार है जो जलीय विलयन में पूर्णतः वियोजित होता है: NaOH -> Na+ + OH-।",
+        "अतः [OH-] = 0.01 M = 10^-2 mol/L।",
+        "pOH की गणना: pOH = -log10[OH-] = -log10(10^-2) = 2।",
+        "25°C पर संबंध: pH + pOH = 14 => pH = 14 - pOH = 14 - 2 = 12।",
+        "अतः सही विकल्प (A) 12 है।"
+      ],
+      "prerequisites": [
+        "chemistry.strong_bases",
+        "chemistry.poh_ph_relation"
+      ]
+    }
+  ]
+}
