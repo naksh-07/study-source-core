@@ -694,7 +694,10 @@ async function runAllTests() {
     await runTest('28. validateApkg verifies all media assets required by IO manifest exist in archive', async () => {
         const fixtureDir = path.join(SCRATCH_DIR, 'test_fixture_chapter');
         const apkgPath = path.join(fixtureDir, 'test_fixture_chapter_Anki.apkg');
-        const ioPath = path.join(fixtureDir, 'ImageOcclusion', 'test_fixture_chapter_ImageOcclusion.json');
+        let ioPath = path.join(fixtureDir, 'ImageOcclusion', 'test_fixture_chapter_ImageOcclusion.json');
+        if (!fs.existsSync(ioPath)) {
+            ioPath = path.join(fixtureDir, '.build', 'source-artifacts', 'ImageOcclusion', 'test_fixture_chapter_ImageOcclusion.json');
+        }
         const manifest = JSON.parse(fs.readFileSync(ioPath, 'utf8'));
 
         const valRes = await validateApkg(apkgPath, false, { manifest });

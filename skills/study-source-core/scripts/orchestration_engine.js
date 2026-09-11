@@ -775,6 +775,46 @@ function createSpecialistTaskDispatcher(context = {}) {
             return await executeReasoningSpecialistTask(task, enrichedContext);
         }
 
+        if (task.owner_agent === 'export_anki.js' || task.task_id === 'task-export-anki') {
+            const { exportChapterToAnki } = require('./export_anki');
+            const targetPath = task.target_path;
+            const chapterDir = targetPath ? path.dirname(targetPath) : resolveChapterDir(context.subject, context.chapter, context.customRoot);
+            const exportRes = await exportChapterToAnki(chapterDir, {
+                chapter: context.chapter,
+                subject: context.subject,
+                outputPath: targetPath,
+                cleanIntermediates: true
+            });
+            if (exportRes.suppressed) {
+                return {
+                    status: 'SUPPRESSED',
+                    agent: task.owner_agent,
+                    task_id: task.task_id,
+                    inputs_consumed: task.inputs || ['scratch/evidence-pack.md'],
+                    outputs_produced: [],
+                    output_paths: [],
+                    validation_result: { passed: true, suppressed: true },
+                    warnings: [exportRes.reason || 'SUPPRESSED'],
+                    errors: [],
+                    dependencies_satisfied: true,
+                    retry_count: retryCount
+                };
+            }
+            return {
+                status: 'SUCCESS',
+                agent: task.owner_agent,
+                task_id: task.task_id,
+                inputs_consumed: task.inputs || ['scratch/evidence-pack.md'],
+                outputs_produced: [exportRes.outputPath],
+                output_paths: [exportRes.outputPath],
+                validation_result: { passed: true, counts: exportRes.counts },
+                warnings: [],
+                errors: [],
+                dependencies_satisfied: true,
+                retry_count: retryCount
+            };
+        }
+
         if (context.fallbackExecutor) {
             return await context.fallbackExecutor(task, retryCount);
         }

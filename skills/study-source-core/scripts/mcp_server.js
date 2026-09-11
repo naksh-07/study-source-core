@@ -46,9 +46,10 @@ server.tool(
     "export_anki_package",
     "Packages Basic, Cloze, and Native Image Occlusion flashcards of a chapter into ONE unified Anki deck package (.apkg).",
     {
-        chapterDir: z.string().describe("Absolute path to the chapter directory containing Basic, Cloze, or ImageOcclusion artifacts.")
+        chapterDir: z.string().describe("Absolute path to the chapter directory containing Basic, Cloze, or ImageOcclusion artifacts."),
+        cleanIntermediates: z.boolean().optional().default(true).describe("Whether to clean temporary build TSVs after successful validation. Defaults to true.")
     },
-    async ({ chapterDir }) => {
+    async ({ chapterDir, cleanIntermediates = true }) => {
         try {
             if (!fs.existsSync(chapterDir)) {
                 return {
@@ -56,7 +57,7 @@ server.tool(
                     content: [{ type: "text", text: `[Error] Chapter directory does not exist: ${chapterDir}` }]
                 };
             }
-            const result = await exportChapterToAnki(path.resolve(chapterDir));
+            const result = await exportChapterToAnki(path.resolve(chapterDir), { cleanIntermediates });
             return {
                 content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
             };

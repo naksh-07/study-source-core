@@ -344,6 +344,24 @@ async function validateApkgContent(apkgBuffer, filePath = 'in-memory', options =
             });
         }
 
+        // Verification: ensure no card type is silently dropped or unexpected card type added
+        if (options.expectedCounts) {
+            const exp = options.expectedCounts;
+            if (typeof exp.basic === 'number' && stats.notesByType.Basic !== exp.basic) {
+                errors.push(`Note count mismatch for Basic: expected ${exp.basic}, got ${stats.notesByType.Basic}.`);
+            }
+            if (typeof exp.cloze === 'number' && stats.notesByType.Cloze !== exp.cloze) {
+                errors.push(`Note count mismatch for Cloze: expected ${exp.cloze}, got ${stats.notesByType.Cloze}.`);
+            }
+            if (typeof exp.io === 'number' && stats.notesByType.ImageOcclusion !== exp.io) {
+                errors.push(`Note count mismatch for ImageOcclusion: expected ${exp.io}, got ${stats.notesByType.ImageOcclusion}.`);
+            }
+        }
+
+        if (options.disallowEmptyDeck === true && stats.noteCount === 0) {
+            errors.push("Anki package contains 0 notes (empty deck rejected).");
+        }
+
         db.close();
     } catch (err) {
         errors.push(`Database query error during inspection: ${err.message}`);

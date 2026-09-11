@@ -385,6 +385,30 @@ function cleanPackagingIntermediates(chapterDir, options = {}) {
         }
     }
 
+    // 3b. Remove scoped loose temporary TSV / manifest files from user-facing chapter root
+    const looseCandidateNames = [
+        `${chapterName}_Basic.tsv`,
+        `${chapterName}_Cloze.tsv`,
+        `${chapterName}_ImageOcclusion.json`,
+        'basic.tsv',
+        'cloze.tsv',
+        'image-occlusion.tsv'
+    ];
+    for (const fName of looseCandidateNames) {
+        const loosePath = path.join(resolvedChapterDir, fName);
+        if (fs.existsSync(loosePath) && fs.statSync(loosePath).isFile()) {
+            if (options.archive !== false) {
+                const buildSourceDir = path.join(resolvedChapterDir, '.build', 'source-artifacts');
+                if (!fs.existsSync(buildSourceDir)) fs.mkdirSync(buildSourceDir, { recursive: true });
+                const destFile = path.join(buildSourceDir, fName);
+                fs.copyFileSync(loosePath, destFile);
+                archived.push(destFile);
+            }
+            fs.unlinkSync(loosePath);
+            removed.push(loosePath);
+        }
+    }
+
     // 4. Update manifest with packaging status
     if (manifest) {
         manifest.packaging = Object.assign(manifest.packaging || {}, {

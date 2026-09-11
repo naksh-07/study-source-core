@@ -231,26 +231,47 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     console.log(`Chapter Path: ${resolvedChapterDir}`);
     console.log(`====================================================\n`);
 
-    // 1. Locate artifacts (search chapter root first, then .build/source-artifacts fallback)
+    // 1. Locate artifacts (search chapter root first, then loose root files, then .build/source-artifacts fallback)
     let basicTsvPath = path.join(resolvedChapterDir, 'Basic', `${chapterName}_Basic.tsv`);
     if (!fs.existsSync(basicTsvPath)) {
+        const looseNamed = path.join(resolvedChapterDir, `${chapterName}_Basic.tsv`);
+        const looseGeneric = path.join(resolvedChapterDir, 'basic.tsv');
         const buildBasic = path.join(resolvedChapterDir, '.build', 'source-artifacts', 'Basic', `${chapterName}_Basic.tsv`);
-        if (fs.existsSync(buildBasic)) basicTsvPath = buildBasic;
+        const buildLoose = path.join(resolvedChapterDir, '.build', 'source-artifacts', `${chapterName}_Basic.tsv`);
+        if (fs.existsSync(looseNamed)) basicTsvPath = looseNamed;
+        else if (fs.existsSync(looseGeneric)) basicTsvPath = looseGeneric;
+        else if (fs.existsSync(buildBasic)) basicTsvPath = buildBasic;
+        else if (fs.existsSync(buildLoose)) basicTsvPath = buildLoose;
     }
 
     let clozeTsvPath = path.join(resolvedChapterDir, 'Cloze', `${chapterName}_Cloze.tsv`);
     if (!fs.existsSync(clozeTsvPath)) {
+        const looseNamed = path.join(resolvedChapterDir, `${chapterName}_Cloze.tsv`);
+        const looseGeneric = path.join(resolvedChapterDir, 'cloze.tsv');
         const buildCloze = path.join(resolvedChapterDir, '.build', 'source-artifacts', 'Cloze', `${chapterName}_Cloze.tsv`);
-        if (fs.existsSync(buildCloze)) clozeTsvPath = buildCloze;
+        const buildLoose = path.join(resolvedChapterDir, '.build', 'source-artifacts', `${chapterName}_Cloze.tsv`);
+        if (fs.existsSync(looseNamed)) clozeTsvPath = looseNamed;
+        else if (fs.existsSync(looseGeneric)) clozeTsvPath = looseGeneric;
+        else if (fs.existsSync(buildCloze)) clozeTsvPath = buildCloze;
+        else if (fs.existsSync(buildLoose)) clozeTsvPath = buildLoose;
     }
 
     let ioJsonPath = path.join(resolvedChapterDir, 'ImageOcclusion', `${chapterName}_ImageOcclusion.json`);
     let mediaDir = path.join(resolvedChapterDir, 'ImageOcclusion', 'media');
     if (!fs.existsSync(ioJsonPath)) {
+        const looseNamed = path.join(resolvedChapterDir, `${chapterName}_ImageOcclusion.json`);
         const buildIo = path.join(resolvedChapterDir, '.build', 'source-artifacts', 'ImageOcclusion', `${chapterName}_ImageOcclusion.json`);
-        if (fs.existsSync(buildIo)) {
+        const buildLoose = path.join(resolvedChapterDir, '.build', 'source-artifacts', `${chapterName}_ImageOcclusion.json`);
+        if (fs.existsSync(looseNamed)) {
+            ioJsonPath = looseNamed;
+            const looseMedia = path.join(resolvedChapterDir, 'media');
+            if (fs.existsSync(looseMedia)) mediaDir = looseMedia;
+        } else if (fs.existsSync(buildIo)) {
             ioJsonPath = buildIo;
             mediaDir = path.join(resolvedChapterDir, '.build', 'source-artifacts', 'ImageOcclusion', 'media');
+        } else if (fs.existsSync(buildLoose)) {
+            ioJsonPath = buildLoose;
+            mediaDir = path.join(resolvedChapterDir, '.build', 'source-artifacts', 'media');
         }
     }
 
@@ -488,7 +509,15 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     fs.writeFileSync(outputPath, apkgBuffer);
 
     // 13. Validate APKG immediately upon assembly before touching any source inputs
-    const valResult = await validateApkgContent(apkgBuffer, outputPath);
+    const expectedCounts = {
+        basic: basicRows.length,
+        cloze: clozeRows.length,
+        io: ioManifest && Array.isArray(ioManifest.cards) ? ioManifest.cards.length : 0
+    };
+    const valResult = await validateApkgContent(apkgBuffer, outputPath, {
+        expectedCounts,
+        disallowEmptyDeck: true
+    });
     if (!valResult.isValid) {
         throw new Error(`EXPORT FAIL: Assembled .apkg failed post-build validation: ${valResult.errors.join('; ')}`);
     }
@@ -504,9 +533,10 @@ async function exportChapterToAnki(chapterDir, options = {}) {
         });
     }
 
-    // 15. Optional intermediate packaging cleanup (only after successful validation)
+    // 15. Intermediate packaging cleanup (only after successful validation, defaults to true)
     let cleanupResult = null;
-    if (options.cleanIntermediates === true) {
+    const shouldClean = options.cleanIntermediates !== undefined ? options.cleanIntermediates : true;
+    if (shouldClean) {
         cleanupResult = cleanPackagingIntermediates(resolvedChapterDir, {
             chapter: chapterName,
             apkgPath: outputPath,
@@ -544,12 +574,14 @@ async function exportChapterToAnki(chapterDir, options = {}) {
 }
 
 if (require.main === module) {
-    const targetDir = process.argv[2];
+    const args = process.argv.slice(2);
+    const targetDir = args.find(a => !a.startsWith('--'));
     if (!targetDir) {
-        console.error("Usage: node export_anki.js <path_to_chapter_dir>");
+        console.error("Usage: node export_anki.js <path_to_chapter_dir> [--no-clean]");
         process.exit(1);
     }
-    exportChapterToAnki(targetDir).catch(err => {
+    const cleanIntermediates = !args.includes('--no-clean');
+    exportChapterToAnki(targetDir, { cleanIntermediates }).catch(err => {
         console.error("Export Error:", err.message);
         process.exit(1);
     });
