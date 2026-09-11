@@ -55,3 +55,28 @@ When a task qualifies for subagent delegation (satisfying the Mandatory Dispatch
 - **Audit Deficit Tagging**: If independent verification cannot run due to subagent unavailability, the final deliverable MUST explicitly include:
   `> [!WARNING] Independent Verification Unavailable: Completed via parent-only execution.`
 
+---
+
+## 6. Phase 7 Adaptive Retry Engine & Failure Classification
+
+To prevent blind loops, respect resource ceilings, and dynamically adapt prompts upon failure, the engine classifies failures into 11 canonical types and 4 retry classes via `scripts/retry_policy.js`:
+
+### 1. Failure Classes & Routing
+| Failure Class | Retry Class | Action & Adaptation Directive | Terminal? |
+| :--- | :--- | :--- | :--- |
+| `SECURITY_BOUNDARY_VIOLATION` | `CRITICAL` | Parent Self-Execution Ban or unauthorized write attempt. Zero retries permitted. | **YES** |
+| `SOURCE_PROVENANCE_FAILURE` | `CRITICAL` | SHA-256 hash mismatch or evidence tampering. Max 1 retry; re-extract evidence pack. | NO |
+| `CONTENT_VALIDATION_FAILURE` | `HIGH` | MCQ $< 4$ options, hint answer leakage, or math/physics error. Escalate to `STRONG` model class and inject exact diagnostic failure message. | NO |
+| `CONTRACT_VIOLATION` | `HIGH` | Missing required bilingual Hindi-first terms or handoff schema fields. Inject dual-language contract rules. | NO |
+| `SPECIALIST_FAILURE` | `HIGH` | General domain specialist exception. Re-dispatch with constrained error context. | NO |
+| `SCHEMA_VALIDATION_FAILURE` | `MEDIUM` | TSV column count or JSON schema violation. Inject exact delimiter rules and schema constraints. | NO |
+| `INCOMPLETE_OUTPUT` | `MEDIUM` | Expected deliverable file missing on disk. Assert disk flush and re-verify path. | NO |
+| `MODEL_OUTPUT_MALFORMED` | `MEDIUM` | SyntaxError or truncated JSON string. Enforce strict JSON output delimiters. | NO |
+| `TIMEOUT` | `MEDIUM` | Execution timed out. Extend timeout or shrink batch size. | NO |
+| `CONTEXT_OVERFLOW` | `LOW` | Token window exceeded. Switch context strategy to `FOCUSED` and minimize batch size. | NO |
+| `TRANSIENT_TOOL_FAILURE` | `LOW` | File system lock (`EBUSY`) or transient network drop. Exponential backoff retry. | NO |
+
+### 2. Hard Mission Resource Ceilings
+- **Max 4 Concurrent Workers**: Guaranteed at the orchestrator dispatch queue level.
+- **Max 10 Total Launches**: Hard cap across all tasks, retries, and phases in a single mission. Any further launch attempt fails closed with `RESOURCE_LIMIT_EXCEEDED`.
+

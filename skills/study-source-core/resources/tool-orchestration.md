@@ -68,4 +68,24 @@ When a task passes the Mandatory Dispatch Gate, the orchestrator MUST invoke the
 2. **Structured Handoff Barrier**: Parent waits for all dispatched specialist `HANDOFF REPORT` blocks before synthesizing.
 3. **Aggressive Collapse**: Terminate subagents as soon as their domain scope concludes.
 
+---
+
+## Model Routing & Context Planning Policy (Phase 7)
+
+To eliminate context bloat, control token economics, and optimize task-model capability matching:
+
+### 1. Capability Classes (`MODEL_CLASSES`)
+- **`CHEAP` (`flash_lite` / `flash`)**: Low-complexity atomic extraction tasks (`core-basic-anki`, `core-cloze-anki`, `core-image-occlusion`).
+- **`DEFAULT` (`inherit` / standard)**: Medium-complexity synthesis and visual architecture (`core-notes`, `core-mindmap`, `core-slide-deck`, `bm-graph`).
+- **`STRONG` (`pro`)**: High-complexity calculational problem solving, deduction DAGs, schema auditing, and independent adversarial validation (`math-apkg-author`, `physics-numerical-apkg-author`, `chemistry-numerical-apkg-author`, `reasoning-apkg-author`, `mold-gap-auditor`, `adversarial-apkg-reviewer`).
+
+### 2. Context Minimization & Provenance (`context_planner.js`)
+- **Task-Scoped Slicing**: Every specialist receives ONLY the evidence sections required for its specific deliverable, yielding 25%–60% context reduction.
+- **Cryptographic Provenance**: Context slices track `source_hash` and `slice_hash` (SHA-256) back to the canonical `evidence-pack.md`. Tampered slices or mismatched hashes fail closed (`CONTEXT_PROVENANCE_FAILURE`).
+- **Token Budget Tiers**: Slices are budgeted into `SMALL` ($\le 1,500$ tokens), `MEDIUM` ($\le 4,000$ tokens), and `LARGE` ($> 4,000$ tokens).
+
+### 3. Capability Moderation & Escalation
+- Tasks exceeding their normal context budget escalate model class (`CHEAP` $\to$ `DEFAULT`, `DEFAULT` $\to$ `STRONG`).
+- Subsequent retry attempts escalate model class to maximize recovery probability on complex domain failures.
+
 

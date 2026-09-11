@@ -41,6 +41,12 @@ The `subject-skill-manifest.json` acts exclusively as a metadata registry and ca
 **Artifact Registry:**
 Execution metadata for all artifacts is maintained in `resources/artifact-registry.json`. Core dynamically loads this registry to build the execution graph, resolve validators, construct file paths, and determine cleanup/archive behavior. Adding a new artifact requires updating the Artifact Registry entry and the respective Subject Policies (`runtime-policy.json` for each subject that should enable/disable it). Core routing, orchestration, policy resolution, path resolution, provenance, and cleanup all derive their behavior from the registry — no Core engine code changes are required.
 
+**Context Minimization, Model Routing & Adaptive Retry (Phase 7):**
+- **Task-Scoped Slicing & Provenance**: `scripts/context_planner.js` derives deterministic context slices per task (25%–60% token reduction) with SHA-256 provenance verification back to `scratch/evidence-pack.md`.
+- **Policy-Driven Model Routing**: `scripts/model_routing_policy.js` maps tasks to capability classes (`CHEAP`, `DEFAULT`, `STRONG`) based on complexity and context budget.
+- **Adaptive Retry & Hard Limits**: `scripts/retry_policy.js` classifies failures into 11 canonical failure modes and 4 retry classes (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), enforcing hard mission limits (max 4 concurrent, max 10 total launches) with targeted prompt adaptations.
+- **Execution State Checkpointing**: `scripts/execution_state.js` maintains persistent task status and decision trail in `scratch/execution-state.json`.
+
 ## 5. Agent Ownership (Single-Writer Rule)
 
 The authoritative artifact ownership, writer, validator, dependency, and execution metadata is defined in `resources/artifact-registry.json`.

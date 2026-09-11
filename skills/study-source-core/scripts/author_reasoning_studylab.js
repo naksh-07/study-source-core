@@ -431,8 +431,22 @@ async function executeReasoningSpecialistTask(task, context = {}) {
     const policy = resolveSubjectPolicy(subject);
     const proceduralMode = context.procedural_mode || policy.procedural_mode || 'markdown';
 
-    // 3. Resolve evidence input (Prioritizes Evidence Pack representation over raw source)
-    let evidenceInput = context.evidencePack || null;
+    // 3. Resolve evidence input (with Phase 7 task-scoped context slice support)
+    let evidenceInput = null;
+    if (context.contextSlice || task.contextSlice) {
+        const sliceManifest = task.contextPlan || context.contextPlan || null;
+        if (sliceManifest) {
+            const { verifyContextProvenance } = require('./context_planner');
+            verifyContextProvenance(sliceManifest, context.evidenceHash);
+        }
+        evidenceInput = context.contextSlice || task.contextSlice;
+        if (typeof evidenceInput === 'object' && evidenceInput.context_slice_content) {
+            evidenceInput = evidenceInput.context_slice_content;
+        }
+    }
+    if (!evidenceInput) {
+        evidenceInput = context.evidencePack || null;
+    }
     if (!evidenceInput && task.inputs && task.inputs[0] && fs.existsSync(task.inputs[0])) {
         evidenceInput = task.inputs[0];
     }
@@ -537,6 +551,33 @@ async function executeReasoningSpecialistTask(task, context = {}) {
                         retry_count: retryCount
                     };
                 }
+                outputsProduced.push(targetPath);
+            }
+            if (task.track_key === 'practiceQuestions' || (targetPath && targetPath.endsWith('_PracticeQuestions.json'))) {
+                const outDir = path.dirname(targetPath);
+                fs.mkdirSync(outDir, { recursive: true });
+                fs.writeFileSync(targetPath, JSON.stringify({
+                    schema_version: '1.0.0',
+                    domain: 'Reasoning',
+                    chapter,
+                    skill_id: canonicalQB.skill_id,
+                    language: 'hi',
+                    provenance: canonicalQB.provenance,
+                    questions: canonicalQB.questions
+                }, null, 2), 'utf8');
+                outputsProduced.push(targetPath);
+            }
+            if (task.track_key === 'problemPatterns' || (targetPath && targetPath.endsWith('_ProblemPatterns.json'))) {
+                const outDir = path.dirname(targetPath);
+                fs.mkdirSync(outDir, { recursive: true });
+                fs.writeFileSync(targetPath, JSON.stringify({
+                    schema_version: '1.0.0',
+                    domain: 'Reasoning',
+                    chapter,
+                    skill_id: canonicalQB.skill_id,
+                    language: 'hi',
+                    patterns: canonicalQB.patterns
+                }, null, 2), 'utf8');
                 outputsProduced.push(targetPath);
             }
         }

@@ -31,7 +31,6 @@ Define the extraction strategy based on the classification and [tool-orchestrati
 Generating the **Authorized Evidence Pack** is an **absolute, non-negotiable requirement** for EVERY study material request. This step MUST trigger automatically regardless of prompt length or source size, and must NEVER be skipped or treated as an optional enhancement.
 - Extract knowledge centrally to build the **Authorized Evidence Pack** (`scratch/evidence-pack-[section].md` or `scratch/evidence-pack.md`) before parallelizing.
 - **Optimized Visual Profiling (Finding 5)**: Formulate the **Transient Visual Profile** (`dominant_structures`, `visual_opportunities`, `deck_worthiness`, `io_worthiness`, `io_candidates`) ONLY when the source contains or warrants visual/spatial inspection. Skip expensive visual profiling when the source is deterministically non-visual.
-- **Phase 6 Visual Asset Discovery**: After visual profiling, if `io_worthiness >= threshold`, discover approved local assets from `Sources/Diagrams/{Subject}/` via `scripts/asset_discovery.js`. Evaluate asset eligibility via `scripts/occlusion_eligibility.js`. If no approved asset exists, suppress IO with `NO_APPROVED_ASSET`. NEVER fall back to web search, AI generation, or external sources.
 - The **Authorized Evidence Pack** preserves:
   1. Source identity
   2. Section/page/range boundaries
@@ -67,6 +66,23 @@ The orchestrator MUST invoke the **Subject Policy Resolver** (`scripts/subject_p
 - The `subject-skill-manifest.json` acts exclusively as a metadata registry/capability directory, not a policy source.
 
 The authoritative artifact ownership, writer, validator, dependency, and execution metadata is defined in `resources/artifact-registry.json`.
+
+### 4.2: Context Minimization & Provenance (`scripts/context_planner.js`)
+Before dispatching any specialist, the orchestrator generates a deterministic, task-scoped context slice:
+- Extracts only the sections required for the target artifact (achieving 25%–60% token reduction).
+- Calculates cryptographic SHA-256 provenance hashes (`source_hash` and `slice_hash`).
+- Asserts provenance integrity before specialist ingestion (`verifyContextProvenance`).
+
+### 4.3: Policy-Driven Model Routing (`scripts/model_routing_policy.js`)
+The orchestrator dynamically routes tasks to model capability classes based on complexity and context budget:
+- `CHEAP`: Atomic recall tasks within small token budgets (`core-basic-anki`, `core-cloze-anki`, `core-image-occlusion`).
+- `DEFAULT`: Standard conceptual and structural synthesis (`core-notes`, `core-mindmap`, `core-slide-deck`).
+- `STRONG`: Procedural problem solving, solution DAGs, mathematical reasoning, and adversarial validation (`math-apkg-author`, `physics-numerical-apkg-author`, `chemistry-numerical-apkg-author`, `reasoning-apkg-author`, `mold-gap-auditor`, `adversarial-apkg-reviewer`).
+
+### 4.4: Execution State Checkpointing (`scripts/execution_state.js`)
+- Initializes and persists workflow checkpoints to `scratch/execution-state.json`.
+- Records task transitions (`PLANNED` $\to$ `RUNNING` $\to$ `COMPLETED` / `RETRYING` / `FAILED`).
+- Enforces hard global mission limits (Max 4 concurrent workers, Max 10 total launches per mission).
 
 ## Phase 5: PARALLEL SPECIALIST DISPATCH & STRUCTURED HANDOFF BARRIER
 

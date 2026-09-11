@@ -47,6 +47,10 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `validate_studylab_levels_1_7.js` | `VALIDATION` | Node.js | Top-level execution harness for end-to-end Level 1–7 validation including compiled APKG. | `project_orchestrator` / Physical Gate | `ACTIVE` |
 | `validate_studylab_practice_questions.js` | `VALIDATION` | Node.js | Validates JSON syntax and pedagogical quality of authentic practice questions. | StudyLab Specialists | `ACTIVE` |
 | `validate_studylab_procedural.js` | `VALIDATION` | Node.js | Validates StudyLab procedural problem patterns against domain rules and schemas. | StudyLab Specialists | `ACTIVE` |
+| `context_planner.js` | `PROVENANCE` | Node.js | Generates task-scoped context slices with token budgeting and SHA-256 provenance verification. | Orchestrator (`orchestration_engine.js`) | `ACTIVE` |
+| `model_routing_policy.js` | `ROUTING` | Node.js | Dynamically routes tasks to CHEAP, DEFAULT, or STRONG capability classes based on complexity and context size. | Orchestrator (`orchestration_engine.js`) | `ACTIVE` |
+| `retry_policy.js` | `ROUTING` | Node.js | Classifies failures into 11 failure classes and 4 retry classes, enforcing mission ceilings and targeted adaptations. | Orchestrator (`orchestration_engine.js`) | `ACTIVE` |
+| `execution_state.js` | `UTILITY` | Node.js | Checkpoints task lifecycle states, model decisions, and completion records into `scratch/execution-state.json`. | Orchestrator (`orchestration_engine.js`) | `ACTIVE` |
 | `validate_studylab_procedural_apkg.js` | `VALIDATION` | Node.js | Deep validator for procedural SQLite schema, Anki Model 1600000004 fields, and options. | `adversarial-apkg-reviewer` | `ACTIVE` |
 | `validate_studylab_question_bank.js` | `VALIDATION` | Node.js | Validates canonical Question Bank JSON schemas and rendered Markdown Question Bank files. | Procedural Specialists / `orchestration_engine` | `ACTIVE` |
 | `validate_tsv.js` | `VALIDATION` | Node.js | Validates TSV structure, tab delimiters, and field counts for Basic and Cloze cards. | `core-basic-anki`, `core-cloze-anki` | `ACTIVE` |
@@ -68,6 +72,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `test_non_studylab_regression.js` | `scripts/test_non_studylab_regression.js` | Node.js | Regression suite for standard descriptive and non-procedural chapter runs. | CI Test Runner | `FROZEN` |
 | `test_orchestration.js` | `scripts/test_orchestration.js` | Node.js | Unit tests verifying adaptive orchestrator dispatch rules, gating, and concurrency limits. | CI Test Runner | `FROZEN` |
 | `test_phase40_canonical.js` | `scripts/test_phase40_canonical.js` | Node.js | Phase 40 canonical test suite asserting procedural execution across Math, Physics, Chem, Reasoning. | CI Test Runner | `FROZEN` |
+| `test_phase7_context_routing.js` | `scripts/test_phase7_context_routing.js` | Node.js | Phase 7 multi-tier test suite (20 tests) asserting context minimization, model routing, adaptive retry, state checkpointing, and resource limits. | CI Test Runner (`npm test`) | `ACTIVE` |
 | `test_regression.js` | `scripts/test_regression.js` | Node.js | High-level sanity regression runner for core pipeline components. | CI Test Runner | `FROZEN` |
 
 ---
