@@ -20,6 +20,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | Script Name | Category | Runner / Language | Purpose & Scope | Primary Invoker | Status |
 |---|---|---|---|---|---|
 | `artifact_provenance.js` | `PROVENANCE` | Node.js | Computes and verifies SHA-256 cryptographic hashes for all pipeline deliverables. | `project_orchestrator` / Physical Verification Gate | `ACTIVE` |
+| `author_math_studylab.js` | `SPECIALIST` | Node.js | Authors 17-dimension canonical procedural content from raw Math evidence, enforcing non-leaking hints and rendering/validating deliverables. | `math-apkg-author` (Wave 1) | `ACTIVE` |
 | `build_demo_apkg.js` | `UTILITY` | Node.js | Builds standalone demo APKG packages for pipeline smoke tests and visual checks. | CI Test Runner / Developer | `UTILITY` |
 | `cleanup_transients.js` | `UTILITY` | Node.js | Safely cleans up temporary build files while strictly preserving user deliverables. | `project_orchestrator` | `ACTIVE` |
 | `cross_artifact_checker.js` | `VALIDATION` | Node.js | Cross-checks factual consistency and structural alignment across Notes, Anki, Mindmap, Slides. | `bm-qa` | `ACTIVE` |
@@ -63,6 +64,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `test_final_audit_harness.js` | `scripts/test_final_audit_harness.js` | Node.js | Final audit harness verifying complete pipeline deliverable integrity and quality gates. | `bm-qa` / CI Test Runner | `FROZEN` |
 | `test_fresh_profile_simulation.js` | `scripts/test_fresh_profile_simulation.js` | Node.js | Simulates clean Anki profile import to prevent ID collisions and model conflicts. | CI Test Runner | `FROZEN` |
 | `test_l1_l7_proof_suite.js` | `scripts/test_l1_l7_proof_suite.js` | Node.js | Proof suite asserting anti-cheat and real Level 1 through Level 7 procedural compliance. | CI Test Runner | `FROZEN` |
+| `test_math_production_path.js` | `scripts/test_math_production_path.js` | Node.js | Master production path test asserting source -> evidence -> routing -> specialist -> render -> validation without hardcoded test questions. | CI Test Runner | `ACTIVE` |
 | `test_non_studylab_regression.js` | `scripts/test_non_studylab_regression.js` | Node.js | Regression suite for standard descriptive and non-procedural chapter runs. | CI Test Runner | `FROZEN` |
 | `test_orchestration.js` | `scripts/test_orchestration.js` | Node.js | Unit tests verifying adaptive orchestrator dispatch rules, gating, and concurrency limits. | CI Test Runner | `FROZEN` |
 | `test_phase40_canonical.js` | `scripts/test_phase40_canonical.js` | Node.js | Phase 40 canonical test suite asserting procedural execution across Math, Physics, Chem, Reasoning. | CI Test Runner | `FROZEN` |

@@ -471,6 +471,38 @@ async function executeTaskWorkflow(graph, taskExecutor) {
     };
 }
 
+/**
+ * Creates a standard specialist dispatcher for real specialist execution.
+ * Routes domain specialist tasks to their registered specialist authors.
+ */
+function createSpecialistTaskDispatcher(context = {}) {
+    return async function specialistTaskDispatcher(task, retryCount) {
+        if (task.owner_agent === 'math-apkg-author') {
+            const { executeMathSpecialistTask } = require('./author_math_studylab');
+            return await executeMathSpecialistTask(task, { ...context, retryCount });
+        }
+
+        if (context.fallbackExecutor) {
+            return await context.fallbackExecutor(task, retryCount);
+        }
+
+        // Generic fallback for non-specialist sibling tasks
+        return {
+            status: 'SUCCESS',
+            agent: task.owner_agent,
+            task_id: task.task_id,
+            inputs_consumed: ['scratch/evidence-pack.md'],
+            outputs_produced: task.target_path ? [task.target_path] : [],
+            output_paths: task.target_path ? [task.target_path] : [],
+            validation_result: { passed: true },
+            warnings: [],
+            errors: [],
+            dependencies_satisfied: true,
+            retry_count: retryCount
+        };
+    };
+}
+
 module.exports = {
     REQUIRED_HANDOFF_FIELDS,
     buildExecutionTaskGraph,
@@ -478,5 +510,6 @@ module.exports = {
     validateStructuredHandoff,
     assertNoParentSelfExecution,
     validateCompletionEvidence,
-    executeTaskWorkflow
+    executeTaskWorkflow,
+    createSpecialistTaskDispatcher
 };

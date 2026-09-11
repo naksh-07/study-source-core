@@ -1,0 +1,202 @@
+{
+  "chapter": "LCM-HCF",
+  "subject": "Math",
+  "domain": "Mathematics",
+  "topic": "Number System",
+  "skill_id": "math.number_system.lcm_hcf",
+  "source_provenance": {
+    "source_title": "RRB ALP & SSC Mathematics Master Reference: Number System (LCM-HCF)",
+    "edition": "2024-2025",
+    "exam_corpus": [
+      "RRB ALP 2018",
+      "SSC CGL 2020",
+      "RRB Group D 2018",
+      "RRB NTPC 2019"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Prime Factorization Method (अभाज्य गुणनखंडन विधि)",
+      "definition": "प्रत्येक संख्या को अभाज्य संख्याओं की घातों के गुणनफल के रूप में व्यक्त करना।",
+      "hcf_rule": "उभयनिष्ठ अभाज्य गुणनखंडों की न्यूनतम घातों का गुणनफल।",
+      "lcm_rule": "सभी अभाज्य गुणनखंडों की अधिकतम घातों का गुणनफल।"
+    },
+    {
+      "name": "Co-prime Numbers (सह-अभाज्य संख्याएँ)",
+      "definition": "वे संख्याएँ जिनका महत्तम समापवर्तक (HCF) केवल 1 होता है।"
+    }
+  ],
+  "master_formulas": [
+    {
+      "name": "Product Identity (गुणनफल सर्वसमिका)",
+      "formula": "LCM(a, b) \\times HCF(a, b) = a \\times b",
+      "scope": "केवल दो संख्याओं के लिए मान्य (Valid strictly for two numbers)."
+    },
+    {
+      "name": "Ratio & Common Factor Decomposition (अनुपात एवं उभयनिष्ठ गुणनखंड)",
+      "formula": "यदि a : b = x : y (सह-अभाज्य), तब a = HCF \\times x, b = HCF \\times y, LCM = HCF \\times x \\times y",
+      "scope": "दो संख्याओं के अनुपातिक विभाजन पर लागू।"
+    },
+    {
+      "name": "Equal Remainder with Smallest Divisible Number (समान शेषफल स्थिति)",
+      "formula": "संख्या = LCM(x, y, z) + r",
+      "scope": "जब दी गई संख्याओं से विभाजित करने पर प्रत्येक स्थिति में समान शेषफल r बचे।"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "pat-math-lcm-prime-factorization",
+      "family_id": "family.math.number_system.lcm_hcf.prime_factorization",
+      "title": "Prime Factorization & Divisibility with Remainder (अभाज्य गुणनखंडन एवं शेषफल नियम)",
+      "deep_structure": "संख्याओं के गुणनखंडन से LCM/HCF ज्ञात करना या न्यूनतम संख्या में शेषफल जोड़ना।",
+      "governing_method": "दी गई संख्याओं का अभाज्य गुणनखंडन कर अधिकतम/न्यूनतम घात नियम अथवा LCM + R नियम लागू करना।",
+      "decision_points": [
+        "जांचें कि प्रश्न में न्यूनतम संख्या (LCM) या अधिकतम संख्या (HCF) पूछी गई है",
+        "यदि शेषफल समान हो, तो LCM निकालकर उसमें शेषफल जोड़ें"
+      ],
+      "common_traps": [
+        "LCM में न्यूनतम घात लेना या HCF में सभी गुणनखंडों को शामिल कर लेना",
+        "समान शेषफल स्थिति में LCM में से शेषफल घटा देना"
+      ],
+      "error_categories": [
+        "ERR_01",
+        "ERR_02",
+        "ERR_06"
+      ]
+    },
+    {
+      "pattern_id": "pat-math-lcm-product-identity",
+      "family_id": "family.math.number_system.lcm_hcf.product_identity",
+      "title": "Product Identity & Coprime Ratio Factorization (गुणनफल सर्वसमिका एवं सह-अभाज्य अनुपात)",
+      "deep_structure": "दो संख्याओं का LCM, HCF और गुणनफल या अनुपात का परस्पर संबंध।",
+      "governing_method": "LCM * HCF = पहली संख्या * दूसरी संख्या, अथवा अनुपात a:b से a=HCF*x, b=HCF*y स्थापित करना।",
+      "decision_points": [
+        "पुष्टि करें कि संबंध केवल 2 संख्याओं का है",
+        "यदि अनुपात दिया है, तो अनुपात के पदों को सह-अभाज्य मानकर HCF का प्रयोग करें"
+      ],
+      "common_traps": [
+        "गुणनफल सूत्र को तीन संख्याओं पर लागू करने का प्रयास करना",
+        "अनुपात के पदों को बिना सह-अभाज्य जांचे सीधे जोड़ना"
+      ],
+      "error_categories": [
+        "ERR_01",
+        "ERR_03",
+        "ERR_05",
+        "ERR_06"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "pyq-rrb-alp-2018-s1-q14",
+      "exam": "RRB ALP 2018 Shift 1",
+      "pattern_ref": "pat-math-lcm-prime-factorization",
+      "statement": "संख्याओं 28, 42 और 56 का महत्तम समापवर्तक (HCF) और लघुत्तम समापवर्त्य (LCM) क्रमशः क्या होगा?",
+      "raw_type": "mcq",
+      "options": [
+        "14, 168",
+        "7, 336",
+        "14, 336",
+        "28, 168"
+      ],
+      "correct_answer": "14, 168",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "28 का अभाज्य गुणनखंडन = 2^2 × 7",
+        "42 का अभाज्य गुणनखंडन = 2 × 3 × 7",
+        "56 का अभाज्य गुणनखंडन = 2^3 × 7",
+        "HCF = उभयनिष्ठ गुणनखंडों की न्यूनतम घात = 2^1 × 7^1 = 14",
+        "LCM = सभी अभाज्य गुणनखंडों की अधिकतम घात = 2^3 × 3^1 × 7^1 = 8 × 3 × 7 = 168"
+      ],
+      "prerequisites": [
+        "math.arithmetic.prime_factors",
+        "math.factors.hcf_lcm_basics"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-groupd-2018-s3-q42",
+      "exam": "RRB Group D 2018 Shift 3",
+      "pattern_ref": "pat-math-lcm-prime-factorization",
+      "statement": "वह सबसे छोटी संख्या कौन-सी है जिसे 12, 15, 20 और 54 से विभाजित करने पर प्रत्येक स्थिति में शेषफल 8 बचता है?",
+      "raw_type": "mcq",
+      "options": [
+        "532",
+        "548",
+        "540",
+        "556"
+      ],
+      "correct_answer": "548",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "12 = 2^2 × 3, 15 = 3 × 5, 20 = 2^2 × 5, 54 = 2 × 3^3",
+        "LCM(12, 15, 20, 54) = 2^2 × 3^3 × 5 = 4 × 27 × 5 = 540",
+        "प्रत्येक स्थिति में समान शेषफल 8 बचने के लिए अभीष्ट संख्या = LCM + शेषफल = 540 + 8 = 548"
+      ],
+      "prerequisites": [
+        "math.factors.lcm_calculation",
+        "math.division.remainder_rule"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-alp-2018-s2-q09",
+      "exam": "RRB ALP 2018 Shift 2",
+      "pattern_ref": "pat-math-lcm-product-identity",
+      "statement": "दो संख्याओं का गुणनफल 2160 है तथा उनका महत्तम समापवर्तक (HCF) 12 है। उनका लघुत्तम समापवर्त्य (LCM) ज्ञात कीजिए।",
+      "raw_type": "numerical",
+      "correct_answer": "180",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "सूत्र: पहली संख्या × दूसरी संख्या = LCM × HCF",
+        "2160 = LCM × 12",
+        "LCM = 2160 / 12 = 180"
+      ],
+      "prerequisites": [
+        "math.algebra.basic_multiplication",
+        "math.factors.product_identity"
+      ]
+    },
+    {
+      "source_id": "pyq-ssc-cgl-2020-t1-q18",
+      "exam": "SSC CGL 2020 Tier-1",
+      "pattern_ref": "pat-math-lcm-product-identity",
+      "statement": "दो संख्याएं 3 : 4 के अनुपात में हैं और उनका लघुत्तम समापवर्त्य (LCM) 240 है। उनमें से छोटी संख्या का मान क्या होगा?",
+      "raw_type": "mcq",
+      "options": [
+        "60",
+        "80",
+        "40",
+        "120"
+      ],
+      "correct_answer": "60",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "माना संख्याएं 3x और 4x हैं जहाँ gcd(3, 4) = 1",
+        "इन संख्याओं का LCM = 3 × 4 × x = 12x",
+        "12x = 240 ⇒ x = 20",
+        "छोटी संख्या = 3x = 3 × 20 = 60 (और बड़ी संख्या = 4x = 80)"
+      ],
+      "prerequisites": [
+        "math.ratio.proportions",
+        "math.factors.coprime_lcm"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-ntpc-2019-s1-q33",
+      "exam": "RRB NTPC 2019 Stage 1",
+      "pattern_ref": "pat-math-lcm-product-identity",
+      "statement": "दो संख्याओं का महत्तम समापवर्तक (HCF) 11 है और उनका लघुत्तम समापवर्त्य (LCM) 693 है। यदि एक संख्या 77 है, तो दूसरी संख्या ज्ञात कीजिए।",
+      "raw_type": "numerical",
+      "correct_answer": "99",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "सूत्र: पहली संख्या × दूसरी संख्या = LCM × HCF",
+        "77 × N = 693 × 11",
+        "N = (693 × 11) / 77 = 693 / 7 = 99"
+      ],
+      "prerequisites": [
+        "math.factors.product_identity",
+        "math.arithmetic.division"
+      ]
+    }
+  ]
+}
