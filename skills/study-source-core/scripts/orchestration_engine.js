@@ -57,7 +57,18 @@ function buildExecutionTaskGraph(context = {}) {
 
     const routing = evaluateArtifactRouting(context);
     const paths = getCanonicalArtifactPaths(subject, chapter, customRoot);
-    const domainSpecialist = specialist_agent;
+    let domainSpecialist = specialist_agent;
+    if (!domainSpecialist) {
+        try {
+            const manifestPath = path.join(__dirname, '..', 'resources', 'subject-skill-manifest.json');
+            if (fs.existsSync(manifestPath)) {
+                const m = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+                if (m && m.subjects && m.subjects[subject]) {
+                    domainSpecialist = m.subjects[subject].specialist_agent;
+                }
+            }
+        } catch (e) {}
+    }
 
     const tasks = [];
     const singleWriterMap = new Map(); // filepath -> task_id
@@ -480,6 +491,11 @@ function createSpecialistTaskDispatcher(context = {}) {
         if (task.owner_agent === 'math-apkg-author') {
             const { executeMathSpecialistTask } = require('./author_math_studylab');
             return await executeMathSpecialistTask(task, { ...context, retryCount });
+        }
+
+        if (task.owner_agent === 'physics-numerical-apkg-author') {
+            const { executePhysicsSpecialistTask } = require('./author_physics_studylab');
+            return await executePhysicsSpecialistTask(task, { ...context, retryCount });
         }
 
         if (context.fallbackExecutor) {

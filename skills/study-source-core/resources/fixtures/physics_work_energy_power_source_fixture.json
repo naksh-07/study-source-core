@@ -1,0 +1,228 @@
+{
+  "chapter": "Work-Energy-Power",
+  "subject": "Physics",
+  "domain": "Physics",
+  "topic": "Mechanics",
+  "skill_id": "physics.mechanics.work_energy_power",
+  "source_provenance": {
+    "source_title": "Authentic Engineering & Railway Physics Compendium",
+    "edition": "2024-2025",
+    "exam_corpus": [
+      "RRB ALP 2018",
+      "RRB Group D 2018",
+      "RRB NTPC 2019",
+      "SSC CGL Tier-1 2020"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Work Done by a Constant Force (नियत बल द्वारा किया गया कार्य)",
+      "definition": "जब किसी वस्तु पर कोई बल लगाया जाता है और वस्तु बल की दिशा में विस्थापित होती है, तो बल द्वारा किया गया कार्य बल तथा विस्थापन के अदिश गुणनफल (Dot Product) के बराबर होता है: W = F * s * cos(theta)। कार्य एक अदिश राशि है तथा इसका SI मात्रक जूल (Joule, J) है।",
+      "conditions": "यह सूत्र केवल तभी मान्य है जब लगाया गया बल परिमाण और दिशा में नियत (Constant) हो तथा विस्थापन सरल रेखीय हो।",
+      "si_unit": "Joule (J)",
+      "dimensional_formula": "[M L^2 T^-2]"
+    },
+    {
+      "name": "Work-Energy Theorem (कार्य-ऊर्जा प्रमेय)",
+      "definition": "किसी वस्तु पर कार्यरत सभी बाह्य एवं आंतरिक बलों द्वारा किया गया कुल कार्य, उस वस्तु की गतिज ऊर्जा में परिवर्तन के बराबर होता है: W_net = Delta K = K_f - K_i = (1/2)m v_f^2 - (1/2)m v_i^2।",
+      "conditions": "यह प्रमेय जड़त्वीय तथा अजड़त्वीय दोनों निर्देश तंत्रों में मान्य है।",
+      "si_unit": "Joule (J)",
+      "dimensional_formula": "[M L^2 T^-2]"
+    },
+    {
+      "name": "Power & Rate of Energy Transfer (शक्ति एवं ऊर्जा स्थानांतरण की दर)",
+      "definition": "कार्य करने की समय दर अथवा ऊर्जा स्थानांतरण की दर को शक्ति (Power) कहते हैं। तात्कालिक शक्ति P = dW/dt = F * v * cos(theta) होती है। इसका SI मात्रक वाट (Watt, W = J/s) है।",
+      "conditions": "बल और वेग सदिशों के बीच का कोण theta ज्ञात होना चाहिए।",
+      "si_unit": "Watt (W)",
+      "dimensional_formula": "[M L^2 T^-3]"
+    }
+  ],
+  "master_formulas": [
+    {
+      "name": "Work Formula for Constant Force",
+      "formula": "W = F \\cdot s \\cdot \\cos(\\theta)",
+      "scope": "नियत बल के लिए मान्य। यदि theta = 0 deg तो W = Fs; यदि theta = 90 deg तो W = 0; यदि theta = 180 deg तो W = -Fs (जैसे गतिज घर्षण)।",
+      "units": "W in J, F in N, s in m, theta in degrees"
+    },
+    {
+      "name": "Kinetic Energy & Stopping Work Relation",
+      "formula": "W_{\\text{stop}} = -f_k \\cdot s = -\\frac{1}{2}m u^2 \\implies s = \\frac{m u^2}{2 f_k} = \\frac{u^2}{2 \\mu g}",
+      "scope": "केवल क्षैतिज खुरदरी सतह पर समरूप गतिज घर्षण के अधीन रुकने वाली वस्तु के लिए मान्य।",
+      "units": "s in m, u in m/s, mu is dimensionless, g in m/s^2"
+    },
+    {
+      "name": "Mechanical Power Equation",
+      "formula": "P = F \\cdot v",
+      "scope": "जब गति की दिशा में नियत अथवा तात्कालिक बल कार्यरत हो तथा तात्कालिक वेग v हो।",
+      "units": "P in W, F in N, v in m/s"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "pat-phys-wep-work-constant-force",
+      "family_id": "family.physics.mechanics.work_energy.constant_force",
+      "title": "Work Done by Constant Force with Component Resolution (नियत बल एवं घटक वियोजन द्वारा कार्य)",
+      "deep_structure": "जब किसी पिंड पर विस्थापन की दिशा से theta कोण पर नियत बल लगाया जाता है, तो कार्य W = (F cos theta) * s होता है। यदि विरोधी घर्षण भी हो तो W_net = W_applied - W_friction।",
+      "governing_method": "1. FBD बनाएं तथा बलों को विस्थापन के समांतर एवं लंबवत घटकों में वियोजित करें। 2. अभिलंब बल N ज्ञात करें। 3. W = F s cos(theta) लागू करें। 4. SI मात्रकों में उत्तर लिखें।",
+      "decision_points": [
+        "जांचें कि बल विस्थापन की दिशा में है (theta = 0) अथवा कोण पर (theta > 0)",
+        "सतह घर्षणयुक्त है या घर्षणहीन",
+        "घटक वियोजन में F*cos(theta) का सही प्रयोग"
+      ],
+      "common_traps": [
+        "कोण theta को लंबवत अक्ष से दिया होने पर भी सीधे cos(theta) ले लेना",
+        "घर्षण बल द्वारा किए गए ऋणात्मक कार्य में ऋण चिह्न (-ve sign) छोड़ देना",
+        "विस्थापन को सेंटीमीटर (cm) से मीटर (m) में बदलना भूल जाना"
+      ],
+      "error_categories": [
+        "ERR_PHYS_VECTOR_COMPONENT",
+        "ERR_PHYS_SIGN_CONVENTION",
+        "ERR_PHYS_UNIT_CONVERSION"
+      ]
+    },
+    {
+      "pattern_id": "pat-phys-wep-work-energy-theorem",
+      "family_id": "family.physics.mechanics.work_energy.work_energy_theorem",
+      "title": "Work-Energy Theorem & Stopping Dynamics (कार्य-ऊर्जा प्रमेय एवं निरोधी गतिकी)",
+      "deep_structure": "पिंड पर किए गए कुल कार्य का गतिज ऊर्जा में परिवर्तन से संबंध: W_net = K_f - K_i = (1/2)m(v^2 - u^2)। जब कोई अवरोधी बल वस्तु को s दूरी में रोकता है, तो -F_resist * s = - (1/2)m u^2।",
+      "governing_method": "1. प्रारंभिक एवं अंतिम गतिज ऊर्जा (K_i, K_f) चिन्हित करें। 2. W_net = Delta K समीकरण स्थापित करें। 3. अज्ञात राशि का मान हल करें। 4. विमीय संतुलन एवं भौतिक सार्थकता (Sanity Check) सत्यापित करें।",
+      "decision_points": [
+        "यदि वस्तु अंत में रुक जाती है, तो K_f = 0 रखें",
+        "वेग km/h में होने पर तुरंत 5/18 से गुणा कर m/s में बदलें",
+        "अवरोधी बल गति के विपरीत होने के कारण कार्य ऋणात्मक होता है"
+      ],
+      "common_traps": [
+        "वेग का वर्ग करने के बजाय (v - u)^2 ले लेना जबकि सही व्यंजक (v^2 - u^2) होता है",
+        "वाहन के वेग को km/h से m/s में बदले बिना गणना करना",
+        "प्रतिरोधी बल के ऋणात्मक कार्य में चिन्ह को अनदेखा कर दूरी ऋणात्मक निकाल देना"
+      ],
+      "error_categories": [
+        "ERR_PHYS_UNIT_CONVERSION",
+        "ERR_PHYS_ALGEBRAIC_EXECUTION",
+        "ERR_PHYS_SIGN_CONVENTION"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "pyq-rrb-alp-2018-s1-p08",
+      "exam": "RRB ALP 2018 Shift 1",
+      "pattern_ref": "pat-phys-wep-work-constant-force",
+      "raw_type": "mcq",
+      "statement": "एक कुली जमीन से 20 kg का सामान उठाता है और उसे जमीन से 2 मीटर ऊपर अपने सिर पर रखता है। सामान पर कुली द्वारा गुरुत्वाकर्षण बल के विरुद्ध किया गया कार्य क्या होगा? (g = 10 m/s^2 लें)",
+      "options": [
+        "400 J",
+        "200 J",
+        "40 J",
+        "100 J"
+      ],
+      "correct_answer": "400 J",
+      "difficulty": 1.5,
+      "source_solution_steps": [
+        "द्रव्यमान m = 20 kg, ऊँचाई h = 2 m, g = 10 m/s^2 दिया गया है।",
+        "कुली द्वारा गुरुत्वाकर्षण के विरुद्ध लगाया गया न्यूनतम बल F = mg = 20 kg * 10 m/s^2 = 200 N (ऊपर की ओर)।",
+        "विस्थापन s = h = 2 m (ऊपर की ओर), अतः बल और विस्थापन की दिशा समान है (theta = 0 deg)।",
+        "किया गया कार्य W = F * s * cos(0) = 200 N * 2 m * 1 = 400 J।",
+        "अतः सही विकल्प (A) 400 J है।"
+      ],
+      "prerequisites": [
+        "physics.force_mass_gravity",
+        "physics.work_definition_si"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-groupd-2018-s2-p19",
+      "exam": "RRB Group D 2018 Shift 2",
+      "pattern_ref": "pat-phys-wep-work-constant-force",
+      "raw_type": "numerical",
+      "statement": "एक क्षैतिज चिकने फर्श पर रखे 10 kg के ब्लॉक पर क्षैतिज से 60° के कोण पर 50 N का नियत खिंचाव बल लगाया जाता है। यदि ब्लॉक क्षैतिज दिशा में 6 मीटर विस्थापित होता है, तो लगाए गए बल द्वारा किया गया कार्य जूल में ज्ञात कीजिए।",
+      "correct_answer": "150 J",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "दिया गया है: बल F = 50 N, विस्थापन s = 6 m, क्षैतिज और बल के बीच कोण theta = 60 deg।",
+        "विस्थापन की दिशा में बल का प्रभावी घटक F_x = F * cos(60 deg) = 50 * 0.5 = 25 N।",
+        "किया गया कार्य W = F * s * cos(theta) = 50 N * 6 m * cos(60 deg) = 300 * 0.5 = 150 J।",
+        "अतः बल द्वारा किया गया कार्य 150 J है।"
+      ],
+      "prerequisites": [
+        "physics.vector_resolution",
+        "physics.work_definition_si"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-alp-2018-s3-p44",
+      "exam": "RRB ALP 2018 Shift 3",
+      "pattern_ref": "pat-phys-wep-work-energy-theorem",
+      "raw_type": "mcq",
+      "statement": "एक 800 kg द्रव्यमान की कार 54 km/h की चाल से चल रही है। ब्रेक लगाने पर यह कुछ दूरी चलकर रुक जाती है। ब्रेक द्वारा कार को रोकने में किया गया कार्य कितना होगा?",
+      "options": [
+        "-90 kJ",
+        "-180 kJ",
+        "90 kJ",
+        "-45 kJ"
+      ],
+      "correct_answer": "-90 kJ",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "द्रव्यमान m = 800 kg, प्रारंभिक वेग u = 54 km/h = 54 * (5/18) = 15 m/s।",
+        "कार अंततः रुक जाती है, अतः अंतिम वेग v = 0 m/s।",
+        "प्रारंभिक गतिज ऊर्जा K_i = (1/2) * m * u^2 = (1/2) * 800 * (15)^2 = 400 * 225 = 90,000 J = 90 kJ।",
+        "अंतिम गतिज ऊर्जा K_f = 0 J।",
+        "कार्य-ऊर्जा प्रमेय से, ब्रेक द्वारा किया गया कुल कार्य W = Delta K = K_f - K_i = 0 - 90 kJ = -90 kJ।",
+        "अतः सही विकल्प (A) -90 kJ है।"
+      ],
+      "prerequisites": [
+        "physics.unit_conversion_speed",
+        "physics.kinetic_energy_formula",
+        "physics.work_energy_theorem"
+      ]
+    },
+    {
+      "source_id": "pyq-ssc-cgl-2020-t1-p31",
+      "exam": "SSC CGL 2020 Tier 1",
+      "pattern_ref": "pat-phys-wep-work-energy-theorem",
+      "raw_type": "mcq",
+      "statement": "एक 20 ग्राम (0.02 kg) द्रव्यमान की गोली 400 m/s के वेग से एक स्थिर लकड़ी के गुटके से टकराती है और गुटके के अंदर 20 cm (0.2 m) धंसने के बाद विराम में आ जाती है। गुटके द्वारा गोली पर लगाया गया औसत प्रतिरोधी बल ज्ञात कीजिए।",
+      "options": [
+        "8000 N",
+        "4000 N",
+        "16000 N",
+        "800 N"
+      ],
+      "correct_answer": "8000 N",
+      "difficulty": 2.5,
+      "source_solution_steps": [
+        "द्रव्यमान m = 20 g = 0.02 kg, प्रारंभिक वेग u = 400 m/s, विस्थापन s = 20 cm = 0.2 m, अंतिम वेग v = 0 m/s।",
+        "प्रारंभिक गतिज ऊर्जा K_i = (1/2) * m * u^2 = (1/2) * 0.02 * (400)^2 = 0.01 * 160,000 = 1600 J।",
+        "कार्य-ऊर्जा प्रमेय से: W = Delta K = 0 - 1600 J = -1600 J।",
+        "लकड़ी के गुटके द्वारा किया गया कार्य W = -F_avg * s = -1600 J।",
+        "अतः F_avg * 0.2 = 1600 => F_avg = 1600 / 0.2 = 8000 N।",
+        "अतः सही विकल्प (A) 8000 N है।"
+      ],
+      "prerequisites": [
+        "physics.unit_conversion_mass_length",
+        "physics.work_energy_theorem",
+        "physics.average_force"
+      ]
+    },
+    {
+      "source_id": "pyq-rrb-ntpc-2019-s1-p12",
+      "exam": "RRB NTPC 2019 Shift 1",
+      "pattern_ref": "pat-phys-wep-work-energy-theorem",
+      "raw_type": "numerical",
+      "statement": "एक 1500 kg की क्रेन 30 सेकंड में 1000 kg के भार को 15 मीटर की ऊँचाई तक एकसमान गति से उठाती है। क्रेन द्वारा व्यय की गई उपयोगी शक्ति किलोवाट (kW) में कितनी होगी? (g = 10 m/s^2 लें)",
+      "correct_answer": "5 kW",
+      "difficulty": 2,
+      "source_solution_steps": [
+        "उठाया गया भार द्रव्यमान m = 1000 kg, ऊँचाई h = 15 m, समय t = 30 s, g = 10 m/s^2।",
+        "भार को उठाने में किया गया उपयोगी कार्य W = m * g * h = 1000 kg * 10 m/s^2 * 15 m = 150,000 J।",
+        "उपयोगी शक्ति P = W / t = 150,000 J / 30 s = 5000 W = 5 kW।",
+        "अतः उपयोगी शक्ति 5 kW है।"
+      ],
+      "prerequisites": [
+        "physics.gravitational_potential_work",
+        "physics.power_definition_si"
+      ]
+    }
+  ]
+}
