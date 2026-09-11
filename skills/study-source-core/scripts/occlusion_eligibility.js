@@ -9,6 +9,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 // Load subject visual rules for subject-aware eligibility
 const rulesPath = path.join(__dirname, '..', 'resources', 'subject-visual-rules.json');
@@ -68,7 +69,7 @@ function evaluateOcclusionEligibility(asset, options = {}) {
     // 1. Asset existence
     checks.asset_exists = !!asset && typeof asset === 'object';
     if (!checks.asset_exists) {
-        return { eligible: false, reason: 'NO_ASSET_PROVIDED', checks };
+        return { eligible: false, reason: 'NO_ASSET_PROVIDED', checks, failures: ['NO_ASSET_PROVIDED'] };
     }
 
     // 2. Provenance check
@@ -111,18 +112,39 @@ function evaluateOcclusionEligibility(asset, options = {}) {
         failures.push('MISSING_FILE_PATH');
     }
 
-    // 8. Hash integrity
+    // 8. Hash integrity (Hard Gate in Phase 6)
     checks.has_hash = !!asset.sha256 && typeof asset.sha256 === 'string' && /^[a-f0-9]{64}$/.test(asset.sha256);
     if (!checks.has_hash) {
-        // Warning, not hard failure — hash is strongly recommended but not blocking
-        checks.hash_warning = 'SHA256_HASH_MISSING_OR_INVALID';
+        if (options.legacyMode || options.allowMissingHash) {
+            checks.hash_warning = 'SHA256_HASH_MISSING_OR_INVALID';
+        } else {
+            failures.push('MISSING_OR_INVALID_SHA256_HASH');
+        }
+    } else if (asset.absolute_path && fs.existsSync(asset.absolute_path)) {
+        try {
+            const buf = fs.readFileSync(asset.absolute_path);
+            const diskHash = crypto.createHash('sha256').update(buf).digest('hex');
+            if (diskHash !== asset.sha256) {
+                checks.hash_matches = false;
+                failures.push(`SHA256_HASH_MISMATCH: expected ${asset.sha256}, got ${diskHash}`);
+            } else {
+                checks.hash_matches = true;
+            }
+        } catch (e) {
+            failures.push(`DISK_HASH_CHECK_FAILED: ${e.message}`);
+        }
     }
 
     // 9. Target regions check (if provided)
     if (targetRegions !== undefined) {
         checks.has_target_regions = Array.isArray(targetRegions) && targetRegions.length > 0;
         if (!checks.has_target_regions) {
-            failures.push('NO_MEANINGFUL_TARGET_REGIONS');
+            failures.push('NO_VALID_OCCLUSION_TARGETS');
+        } else {
+            const hasValidTargets = targetRegions.some(r => r && (r.answer || r.label || r.target_type || r.occlusion_target_type));
+            if (!hasValidTargets) {
+                failures.push('NO_VALID_OCCLUSION_TARGETS');
+            }
         }
     }
 
@@ -179,11 +201,26 @@ function isValidTargetType(targetType) {
     return VALID_TARGET_TYPES.has(targetType);
 }
 
+/**
+ * Evaluates occlusion eligibility and applies the result directly to the asset object.
+ * Transforms DISCOVERED -> ELIGIBLE or DISCOVERED -> REJECTED.
+ */
+function applyEligibilityToAsset(asset, options = {}) {
+    const result = evaluateOcclusionEligibility(asset, options);
+    if (asset && typeof asset === 'object') {
+        asset.occlusion_eligible = result.eligible;
+        asset.rejection_reason = result.eligible ? null : result.reason;
+    }
+    return result;
+}
+
 module.exports = {
     evaluateOcclusionEligibility,
+    applyEligibilityToAsset,
     isOcclusionAppropriate,
     isValidTargetType,
     VALID_PROVENANCE,
     VALID_TARGET_TYPES,
     MIN_DIMENSION
 };
+

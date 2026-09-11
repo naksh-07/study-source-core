@@ -53,7 +53,7 @@ const KEYWORD_CATEGORY_MAP = [
     // Cycle
     { pattern: /\b(cycle|cyclic|water\s*cycle|carbon\s*cycle|nitrogen\s*cycle|krebs|calvin|rock\s*cycle|life\s*cycle)\b/i, category: 'cycle' },
     // Map
-    { pattern: /\b(map|continent|country|state|district|boundary|border|territory|region|atlas|cartograph)\b/i, category: 'map' },
+    { pattern: /\b(map|continent|country|district|boundary|border|borders|territory|region|atlas|cartograph|state\s+(?:boundary|boundaries|borders?|map|territory))\b/i, category: 'map' },
     // Geographical feature
     { pattern: /\b(mountain|river|valley|plateau|plain|desert|coast|island|strait|peninsula|delta|glacier|volcano|ocean|sea|lake|relief)\b/i, category: 'geographical_feature' },
     // Scientific apparatus
@@ -65,13 +65,13 @@ const KEYWORD_CATEGORY_MAP = [
     // Ray diagram
     { pattern: /\b(ray\s*diagram|refraction|reflection|lens|mirror|prism|optic|focal\s*point|image\s*formation|concave|convex)\b/i, category: 'ray_diagram' },
     // Circuit
-    { pattern: /\b(circuit|resistor|capacitor|inductor|diode|transistor|ohm|series|parallel|voltage|current|battery|switch|LED)\b/i, category: 'circuit' },
+    { pattern: /\b(circuit|resistor|capacitor|inductor|diode|transistor|ohm|series\s+circuit|parallel\s+circuit|circuit\s+diagram|circuit\s+board|electric\s+circuit|battery|switch|LED)\b/i, category: 'circuit' },
     // Chemical structure
     { pattern: /\b(molecular\s*structure|structural\s*formula|benzene|methane|ethanol|isomer|functional\s*group|bond\s*angle|hybridization|orbital|electron\s*config)\b/i, category: 'chemical_structure' },
     // Reaction scheme
     { pattern: /\b(reaction\s*scheme|reaction\s*mechanism|SN[12]|E[12]|addition|elimination|substitution|oxidation|reduction|electrolysis|catalysis|equilibrium)\b/i, category: 'reaction_scheme' },
     // Classification diagram
-    { pattern: /\b(classification|taxonomy|hierarchy|kingdom|phylum|class|order|family|genus|species|periodic\s*table|group|category)\b/i, category: 'classification_diagram' },
+    { pattern: /\b(classification|taxonomy|taxonomic|hierarchy|hierarchical\s+classification|kingdom|phylum|taxonomic\s+class|genus|species|periodic\s*table|functional\s+group|periodic\s+group|classification\s+group)\b/i, category: 'classification_diagram' },
     // Timeline
     { pattern: /\b(timeline|chronolog|era|period|century|decade|dynasty|reign|epoch|historic\s*event)\b/i, category: 'timeline' },
     // Flowchart

@@ -21,7 +21,7 @@ const SCRATCH = path.join(SCRIPTS, 'scratch', 'test_visual_pipeline');
 // Modules under test
 const { discoverVisualNeeds, classifyVisualNeed, isValidVisualCategory, VISUAL_NEED_CATEGORIES } = require('./visual_need_discovery');
 const { discoverAssets, verifyAssetIntegrity, buildManifest, scanForImages, computeMatchScore, hashFile, getMimeType, getImageDimensions, SUPPORTED_IMAGE_EXTENSIONS } = require('./asset_discovery');
-const { evaluateOcclusionEligibility, isOcclusionAppropriate, isValidTargetType, VALID_PROVENANCE, VALID_TARGET_TYPES, MIN_DIMENSION } = require('./occlusion_eligibility');
+const { evaluateOcclusionEligibility, applyEligibilityToAsset, isOcclusionAppropriate, isValidTargetType, VALID_PROVENANCE, VALID_TARGET_TYPES, MIN_DIMENSION } = require('./occlusion_eligibility');
 const { resolveVisualAsset, resolveApprovedAsset, resolveVisualAssetLegacy, normalizeAsset, createProgrammaticSvg, calculateSha256, VALID_PROVENANCE_CLASSES, LEGACY_PROVENANCE_MAP } = require('./resolve_visual_asset');
 const { validateImageOcclusionContent, VALID_MODES, VALID_SHAPES, VALID_SOURCE_TYPES, VALID_OCCLUSION_TARGET_TYPES } = require('./validate_image_occlusion');
 const { evaluateArtifactRouting } = require('./routing_engine');
@@ -636,8 +636,8 @@ console.log('\n--- NEGATIVE / ADVERSARIAL TESTS ---\n');
         aiGeneratedData: Buffer.from('fake ai image'),
         externalSpec: { buffer: Buffer.from('fake external'), source: 'web' }
     });
-    assert(result.success === false && result.status === 'NO_APPROVED_ASSET',
-        53, 'Negative: Phase 6 resolveVisualAsset ignores AI + external data and returns NO_APPROVED_ASSET');
+    assert(result.success === false && result.status === 'NO_AI_FALLBACK',
+        53, 'Negative: Phase 6 resolveVisualAsset rejects AI data and returns NO_AI_FALLBACK');
 }
 
 // 54. No AI generation fallback enforcement
@@ -646,8 +646,8 @@ console.log('\n--- NEGATIVE / ADVERSARIAL TESTS ---\n');
         targetMediaDir: path.join(SCRATCH, 'neg_54'),
         aiGeneratedData: Buffer.from('fake ai image')
     });
-    assert(result.success === false && result.status === 'NO_APPROVED_ASSET',
-        54, 'Negative: resolveApprovedAsset never uses AI data, returns NO_APPROVED_ASSET');
+    assert(result.success === false && result.status === 'NO_AI_FALLBACK',
+        54, 'Negative: resolveApprovedAsset never uses AI data, returns NO_AI_FALLBACK');
 }
 
 // 55. No random local file fallback
@@ -794,6 +794,296 @@ console.log('\n--- SCHEMA VALIDATION TESTS ---\n');
         valid = valid && schema.properties.cards.items.properties.asset.properties.sha256;
     } catch (e) {}
     assert(valid, 68, 'Schema: image-occlusion-schema.json includes Phase 6 provenance types and sha256 field');
+}
+
+// ═══════════════════════════════════════════════════════════
+// PHASE 6.1 BOUNDARY HARDENING TESTS (69–88)
+// ═══════════════════════════════════════════════════════════
+
+console.log('\n--- PHASE 6.1 BOUNDARY HARDENING TESTS ---\n');
+
+// 69. Resolver: External input in Phase 6 returns NO_EXTERNAL_FALLBACK
+{
+    const result = resolveApprovedAsset({
+        targetMediaDir: path.join(SCRATCH, 'neg_69'),
+        externalSpec: { buffer: Buffer.from('external image'), source: 'web' }
+    });
+    assert(result.success === false && result.status === 'NO_EXTERNAL_FALLBACK',
+        69, 'Phase 6.1 Resolver: External asset input fails closed with NO_EXTERNAL_FALLBACK');
+}
+
+// 70. Resolver: Programmatic input in Phase 6 returns NO_PROGRAMMATIC_FALLBACK
+{
+    const result = resolveApprovedAsset({
+        targetMediaDir: path.join(SCRATCH, 'neg_70'),
+        programmaticSpec: { title: 'Programmatic Diagram', width: 800, height: 600 }
+    });
+    assert(result.success === false && result.status === 'NO_PROGRAMMATIC_FALLBACK',
+        70, 'Phase 6.1 Resolver: Programmatic spec fails closed with NO_PROGRAMMATIC_FALLBACK');
+}
+
+// 71. Resolver: resolveVisualAsset({ phase6: false }) without legacy flag fails closed
+{
+    const result = resolveVisualAsset({
+        phase6: false,
+        targetMediaDir: path.join(SCRATCH, 'neg_71'),
+        candidate: { target_title: 'Unapproved diagram' }
+    });
+    assert(result.success === false && result.status === 'NO_APPROVED_ASSET',
+        71, 'Phase 6.1 Resolver: phase6: false does not silently enable legacy fallback');
+}
+
+// 72. Approval vs Eligibility: discoverAssets initializes occlusion_eligible to false
+{
+    const result = discoverAssets({
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        diagramsRoot: fixtures.diagramsRoot
+    });
+    assert(result.status === 'ASSETS_DISCOVERED' && result.assets.length > 0 && result.assets[0].occlusion_eligible === false && result.assets[0].status === 'approved',
+        72, 'Phase 6.1 Approval vs Eligibility: Discovered asset is approved in drop folder but occlusion_eligible is false');
+}
+
+// 73. Approval vs Eligibility: applyEligibilityToAsset sets occlusion_eligible to true after passing checks
+{
+    const validAsset = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 400,
+        height: 300,
+        local_path: 'Biology/cell_structure_mitosis.png',
+        absolute_path: path.join(fixtures.diagramsRoot, 'Biology', 'cell_structure_mitosis.png'),
+        sha256: hashFile(path.join(fixtures.diagramsRoot, 'Biology', 'cell_structure_mitosis.png')),
+        status: 'approved',
+        asset_type: 'image/png',
+        occlusion_eligible: false
+    };
+    const eligResult = applyEligibilityToAsset(validAsset, { subject: 'Biology', chapter: 'Cell Structure' });
+    assert(eligResult.eligible === true && validAsset.occlusion_eligible === true && validAsset.rejection_reason === null,
+        73, 'Phase 6.1 Approval vs Eligibility: Eligibility engine confirms occlusion_eligible: true');
+}
+
+// 74. Approval vs Eligibility: Low-res asset in approved drop folder is rejected by eligibility
+{
+    const lowResAsset = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 50,
+        height: 50,
+        local_path: 'Biology/tiny_icon.png',
+        absolute_path: path.join(fixtures.diagramsRoot, 'Biology', 'tiny_icon.png'),
+        sha256: hashFile(path.join(fixtures.diagramsRoot, 'Biology', 'tiny_icon.png')),
+        status: 'approved',
+        asset_type: 'image/png',
+        occlusion_eligible: false
+    };
+    const eligResult = applyEligibilityToAsset(lowResAsset, { subject: 'Biology', chapter: 'Cell Structure' });
+    assert(eligResult.eligible === false && lowResAsset.occlusion_eligible === false && lowResAsset.rejection_reason.includes('INADEQUATE_RESOLUTION'),
+        74, 'Phase 6.1 Approval vs Eligibility: Low-res asset in approved folder remains occlusion_eligible: false');
+}
+
+// 75. Hash Integrity: Missing SHA-256 is a hard failure in canonical Phase 6
+{
+    const assetWithoutHash = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 400,
+        height: 300,
+        local_path: 'Biology/cell.png',
+        status: 'approved',
+        asset_type: 'image/png'
+    };
+    const elig = evaluateOcclusionEligibility(assetWithoutHash, { subject: 'Biology', chapter: 'Cell Structure' });
+    assert(elig.eligible === false && elig.failures.includes('MISSING_OR_INVALID_SHA256_HASH'),
+        75, 'Phase 6.1 Hash Gate: Missing SHA-256 hash fails closed with MISSING_OR_INVALID_SHA256_HASH');
+}
+
+// 76. Hash Integrity: Invalid SHA-256 format is a hard failure
+{
+    const assetWithBadHash = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 400,
+        height: 300,
+        local_path: 'Biology/cell.png',
+        sha256: 'not-a-valid-64-char-hex-hash',
+        status: 'approved',
+        asset_type: 'image/png'
+    };
+    const elig = evaluateOcclusionEligibility(assetWithBadHash, { subject: 'Biology', chapter: 'Cell Structure' });
+    assert(elig.eligible === false && elig.failures.includes('MISSING_OR_INVALID_SHA256_HASH'),
+        76, 'Phase 6.1 Hash Gate: Invalid SHA-256 format fails closed');
+}
+
+// 77. Hash Integrity: SHA-256 mismatch against disk content fails closed
+{
+    const diskFile = path.join(fixtures.diagramsRoot, 'Biology', 'cell_structure_mitosis.png');
+    const assetWithMismatch = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 400,
+        height: 300,
+        local_path: 'Biology/cell_structure_mitosis.png',
+        absolute_path: diskFile,
+        sha256: '0'.repeat(64), // Deliberately incorrect hash
+        status: 'approved',
+        asset_type: 'image/png'
+    };
+    const elig = evaluateOcclusionEligibility(assetWithMismatch, { subject: 'Biology', chapter: 'Cell Structure' });
+    assert(elig.eligible === false && elig.failures.some(f => f.includes('SHA256_HASH_MISMATCH')),
+        77, 'Phase 6.1 Hash Gate: SHA-256 hash mismatch against disk file fails closed');
+}
+
+// 78. Chapter Scoping: Generic term "system" alone does not match Math / Number System
+{
+    const score = computeMatchScore('digestive_system.png', 'Number System');
+    assert(score === 0,
+        78, 'Phase 6.1 Chapter Scoping: digestive_system.png does not match Math/Number System on generic "system"');
+}
+
+// 79. Chapter Scoping: Generic "voltage.png" does not match Physics / Current Electricity without concept
+{
+    const score = computeMatchScore('voltage.png', 'Current Electricity');
+    assert(score === 0,
+        79, 'Phase 6.1 Chapter Scoping: voltage.png does not match Current Electricity without concept relation');
+}
+
+// 80. Chapter Scoping: "voltage.png" matches Current Electricity when concept is explicitly "voltage"
+{
+    const score = computeMatchScore('voltage.png', 'Current Electricity', 'voltage');
+    assert(score > 0,
+        80, 'Phase 6.1 Chapter Scoping: voltage.png matches Current Electricity when concept is explicitly voltage');
+}
+
+// 81. Chapter Scoping: discoverAssets for Math/Number System rejects non-distinctive asset
+{
+    // Write an unrelated "operating_system.png" into Math directory
+    const mathDir = path.join(fixtures.diagramsRoot, 'Math');
+    fs.writeFileSync(path.join(mathDir, 'operating_system.png'), fixtures.highResPng);
+
+    const discovery = discoverAssets({
+        subject: 'Math',
+        chapter: 'Number System',
+        diagramsRoot: fixtures.diagramsRoot
+    });
+    // Should be NO_APPROVED_ASSET because operating_system only has generic "system"
+    assert(discovery.status === 'NO_APPROVED_ASSET' && discovery.assets.length === 0,
+        81, 'Phase 6.1 Chapter Scoping: discoverAssets ignores operating_system.png for Number System');
+}
+
+// 82. Visual Need False Positives: History text with "working class" does NOT discover classification_diagram
+{
+    const result = discoverVisualNeeds({
+        subject: 'History',
+        chapter: 'Industrial Revolution',
+        evidenceContent: 'The rise of the working class and the middle class transformed 19th-century British society.'
+    });
+    const hasClassification = result.visual_needs.some(n => n.category === 'classification_diagram');
+    assert(hasClassification === false,
+        82, 'Phase 6.1 Visual Need: History text with "working class" does NOT discover classification_diagram');
+}
+
+// 83. Visual Need False Positives: Political Science text with "welfare state" does NOT discover map
+{
+    const result = discoverVisualNeeds({
+        subject: 'Political Science',
+        chapter: 'Theories of State',
+        evidenceContent: 'The welfare state provides comprehensive social security and public services to all citizens.'
+    });
+    const hasMap = result.visual_needs.some(n => n.category === 'map');
+    assert(hasMap === false,
+        83, 'Phase 6.1 Visual Need: Political Science text with "welfare state" does NOT discover map');
+}
+
+// 84. Visual Need False Positives: Physics text with "voltage difference" without circuit does NOT discover circuit
+{
+    const result = discoverVisualNeeds({
+        subject: 'Physics',
+        chapter: 'Electrostatics',
+        evidenceContent: 'The electric potential and voltage difference between two parallel conducting plates in equilibrium.'
+    });
+    const hasCircuit = result.visual_needs.some(n => n.category === 'circuit');
+    assert(hasCircuit === false,
+        84, 'Phase 6.1 Visual Need: Physics electrostatic text with voltage does NOT discover circuit');
+}
+
+// 85. Visual Need False Positives: Chemistry text with "study group" does NOT discover classification_diagram
+{
+    const result = discoverVisualNeeds({
+        subject: 'Chemistry',
+        chapter: 'Introduction',
+        evidenceContent: 'Students formed a study group to discuss laboratory safety rules and procedures.'
+    });
+    const hasClassification = result.visual_needs.some(n => n.category === 'classification_diagram');
+    assert(hasClassification === false,
+        85, 'Phase 6.1 Visual Need: Chemistry text with "study group" does NOT discover classification_diagram');
+}
+
+// 86. Source-Grounded Invariant: Ambiguous text without matching approved asset yields NO_APPROVED_ASSET
+{
+    const needs = discoverVisualNeeds({
+        subject: 'History',
+        chapter: 'World War I',
+        evidenceContent: 'The boundary and territory of European empires in the early 20th century.'
+    });
+    // Visual need for map might be discovered, but no approved asset exists in History
+    const discovery = discoverAssets({
+        subject: 'History',
+        chapter: 'World War I',
+        diagramsRoot: fixtures.diagramsRoot,
+        visualNeeds: needs.visual_needs
+    });
+    assert(discovery.status === 'NO_APPROVED_ASSET',
+        86, 'Phase 6.1 Source-Grounded: Discovered visual need without approved asset strictly yields NO_APPROVED_ASSET');
+}
+
+// 87. Target Semantics: Empty target regions array returns NO_VALID_OCCLUSION_TARGETS
+{
+    const asset = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 400,
+        height: 300,
+        local_path: 'Biology/cell.png',
+        sha256: 'a'.repeat(64),
+        status: 'approved',
+        asset_type: 'image/png'
+    };
+    const elig = evaluateOcclusionEligibility(asset, {
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        targetRegions: []
+    });
+    assert(elig.eligible === false && elig.failures.includes('NO_VALID_OCCLUSION_TARGETS'),
+        87, 'Phase 6.1 Target Semantics: Empty target regions returns NO_VALID_OCCLUSION_TARGETS');
+}
+
+// 88. Target Semantics: Regions lacking semantic targets returns NO_VALID_OCCLUSION_TARGETS
+{
+    const asset = {
+        source_provenance: 'approved_local',
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        width: 400,
+        height: 300,
+        local_path: 'Biology/cell.png',
+        sha256: 'a'.repeat(64),
+        status: 'approved',
+        asset_type: 'image/png'
+    };
+    const elig = evaluateOcclusionEligibility(asset, {
+        subject: 'Biology',
+        chapter: 'Cell Structure',
+        targetRegions: [{ id: 'r1', shape: 'rectangle', coordinates: [0, 0, 10, 10] }] // No answer/label/target_type
+    });
+    assert(elig.eligible === false && elig.failures.includes('NO_VALID_OCCLUSION_TARGETS'),
+        88, 'Phase 6.1 Target Semantics: Regions lacking valid targets returns NO_VALID_OCCLUSION_TARGETS');
 }
 
 // ═══════════════════════════════════════════════════════════

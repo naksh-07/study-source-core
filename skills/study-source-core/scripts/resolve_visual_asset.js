@@ -184,28 +184,73 @@ function normalizeAsset({
 
 /**
  * Phase 6 CANONICAL Pipeline — Approved-local-asset-only.
- * NEVER falls back to AI/web/external. Fails closed with NO_APPROVED_ASSET.
+ * NEVER falls back to AI/web/external. Fails closed with NO_APPROVED_ASSET,
+ * NO_AI_FALLBACK, NO_EXTERNAL_FALLBACK, or NO_PROGRAMMATIC_FALLBACK.
  */
-function resolveApprovedAsset(options) {
+function resolveApprovedAsset(options = {}) {
     const { targetMediaDir, candidate = {}, sourceAssetPath } = options;
+
+    // Hard fail-closed invariants against forbidden fallbacks
+    if (options.aiGeneratedData) {
+        return {
+            success: false,
+            suppressed: true,
+            tier: 3,
+            strategy: 'ai_generated',
+            status: 'NO_AI_FALLBACK',
+            reason: "AI visual generation fallback is strictly prohibited in Phase 6 production pipeline."
+        };
+    }
+
+    if (options.externalSpec) {
+        return {
+            success: false,
+            suppressed: true,
+            tier: 4,
+            strategy: 'external',
+            status: 'NO_EXTERNAL_FALLBACK',
+            reason: "External visual asset fallback is strictly prohibited in Phase 6 production pipeline."
+        };
+    }
+
+    if (options.programmaticSpec) {
+        return {
+            success: false,
+            suppressed: true,
+            tier: 2,
+            strategy: 'programmatic',
+            status: 'NO_PROGRAMMATIC_FALLBACK',
+            reason: "Programmatic visual asset fallback is strictly prohibited in Phase 6 production pipeline."
+        };
+    }
 
     if (sourceAssetPath && fs.existsSync(sourceAssetPath)) {
         try {
             const asset = normalizeAsset({
-                sourcePath: sourceAssetPath, targetMediaDir,
+                sourcePath: sourceAssetPath,
+                targetMediaDir,
                 filename: path.basename(sourceAssetPath),
                 sourceType: 'approved_local',
                 provenanceNote: candidate.provenance_note || `Approved local diagram: ${path.basename(sourceAssetPath)}`
             });
             return { success: true, asset, tier: 1, strategy: 'approved_local', status: 'ASSET_RESOLVED' };
         } catch (err) {
-            return { success: false, suppressed: true, tier: 1, strategy: 'approved_local',
-                status: 'NO_APPROVED_ASSET', reason: `Failed to process: ${err.message}` };
+            return {
+                success: false,
+                suppressed: true,
+                tier: 1,
+                strategy: 'approved_local',
+                status: 'NO_APPROVED_ASSET',
+                reason: `Failed to process: ${err.message}`
+            };
         }
     }
 
     return {
-        success: false, suppressed: true, tier: 5, strategy: 'no_approved_asset',
+        success: false,
+        suppressed: true,
+        tier: 5,
+        strategy: 'no_approved_asset',
         status: 'NO_APPROVED_ASSET',
         reason: candidate.target_title
             ? `No approved local asset for '${candidate.target_title}'. IO suppressed.`
@@ -214,28 +259,25 @@ function resolveApprovedAsset(options) {
 }
 
 /**
- * Universal Asset Resolver:
- * Dispatches to resolveApprovedAsset when in Phase 6 / approved-only mode,
- * or handles legacy 5-tier cascade when legacy specs are passed.
+ * Isolated Legacy Compatibility Pipeline.
+ * Only callable explicitly via resolveVisualAssetLegacy or when allowLegacyFallback is authorized.
  */
-function resolveVisualAsset(options = {}) {
-    if (options.phase6 || options.strictPhase6) {
-        return resolveApprovedAsset(options);
-    }
-
+function resolveVisualAssetLegacy(options = {}) {
     const { targetMediaDir, candidate = {}, sourceAssetPath, programmaticSpec, aiGeneratedData, externalSpec } = options;
 
     // Tier 1: Source-Provided Asset
     if (sourceAssetPath && fs.existsSync(sourceAssetPath)) {
         try {
             const asset = normalizeAsset({
-                sourcePath: sourceAssetPath, targetMediaDir,
-                filename: path.basename(sourceAssetPath), sourceType: 'source_provided',
+                sourcePath: sourceAssetPath,
+                targetMediaDir,
+                filename: path.basename(sourceAssetPath),
+                sourceType: 'source_provided',
                 provenanceNote: candidate.provenance_note || `Source-provided diagram: ${path.basename(sourceAssetPath)}`
             });
             return { success: true, asset, tier: 1, strategy: 'source_provided', status: 'ASSET_RESOLVED' };
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 1 failed: ${err.message}`);
+            console.warn(`[AssetEngine] Legacy Tier 1 failed: ${err.message}`);
         }
     }
 
@@ -246,33 +288,41 @@ function resolveVisualAsset(options = {}) {
             const svgContent = createProgrammaticSvg(programmaticSpec.title, w, h, programmaticSpec.regions || []);
             const fn = programmaticSpec.filename || `${(programmaticSpec.slug || 'diagram').toLowerCase()}.svg`;
             const asset = normalizeAsset({
-                sourceBuffer: Buffer.from(svgContent, 'utf-8'), targetMediaDir, filename: fn,
+                sourceBuffer: Buffer.from(svgContent, 'utf-8'),
+                targetMediaDir,
+                filename: fn,
                 sourceType: 'programmatic',
                 provenanceNote: programmaticSpec.provenance_note || `Programmatically generated visual diagram (${w}x${h})`,
-                widthOverride: w, heightOverride: h
+                widthOverride: w,
+                heightOverride: h
             });
             return { success: true, asset, tier: 2, strategy: 'programmatic' };
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 2 failed: ${err.message}`);
+            console.warn(`[AssetEngine] Legacy Tier 2 failed: ${err.message}`);
         }
     }
 
     // Tier 3: AI-Generated (Legacy fallback)
     if (aiGeneratedData) {
         try {
-            const buffer = Buffer.isBuffer(aiGeneratedData) ? aiGeneratedData
-                : (typeof aiGeneratedData === 'string' && fs.existsSync(aiGeneratedData) ? fs.readFileSync(aiGeneratedData) : null);
+            const buffer = Buffer.isBuffer(aiGeneratedData)
+                ? aiGeneratedData
+                : (typeof aiGeneratedData === 'string' && fs.existsSync(aiGeneratedData)
+                    ? fs.readFileSync(aiGeneratedData)
+                    : null);
             if (buffer) {
                 const fn = candidate.filename || `ai_pedagogical_${Date.now()}.png`;
                 const asset = normalizeAsset({
-                    sourceBuffer: buffer, targetMediaDir, filename: fn,
+                    sourceBuffer: buffer,
+                    targetMediaDir,
+                    filename: fn,
                     sourceType: 'ai_generated',
                     provenanceNote: candidate.provenance_note || `AI pedagogical visual synthesized from authorized evidence`
                 });
                 return { success: true, asset, tier: 3, strategy: 'ai_generated' };
             }
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 3 failed: ${err.message}`);
+            console.warn(`[AssetEngine] Legacy Tier 3 failed: ${err.message}`);
         }
     }
 
@@ -283,18 +333,25 @@ function resolveVisualAsset(options = {}) {
             const fn = externalSpec.filename || path.basename(externalSpec.filePath || 'external_asset.png');
             const provNote = `External asset: ${externalSpec.source || 'Open Educational Source'} (${externalSpec.source_url || 'N/A'}), License: ${externalSpec.license || 'Personal Educational Use'}, Retrieved: ${externalSpec.retrieved_at || new Date().toISOString()}`;
             const asset = normalizeAsset({
-                sourceBuffer: buffer, targetMediaDir, filename: fn,
-                sourceType: 'external', provenanceNote: provNote
+                sourceBuffer: buffer,
+                targetMediaDir,
+                filename: fn,
+                sourceType: 'external',
+                provenanceNote: provNote
             });
             return { success: true, asset, tier: 4, strategy: 'external' };
         } catch (err) {
-            console.warn(`[AssetEngine] Tier 4 failed: ${err.message}`);
+            console.warn(`[AssetEngine] Legacy Tier 4 failed: ${err.message}`);
         }
     }
 
     // Tier 5: Graceful Suppression
     return {
-        success: false, suppressed: true, tier: 5, strategy: 'suppress', status: 'NO_APPROVED_ASSET',
+        success: false,
+        suppressed: true,
+        tier: 5,
+        strategy: 'suppress',
+        status: 'NO_APPROVED_ASSET',
         reason: candidate.target_title
             ? `No reliable visual substrate could be resolved for target '${candidate.target_title}'. IO gracefully suppressed.`
             : "No visual asset provided or resolvable. Image Occlusion suppressed."
@@ -302,10 +359,35 @@ function resolveVisualAsset(options = {}) {
 }
 
 /**
- * Explicit legacy alias.
+ * Universal Asset Resolver:
+ * In Phase 6, delegates strictly to resolveApprovedAsset.
+ * For explicit legacy callers or compatibility tests, requires allowLegacyFallback or routes to resolveVisualAssetLegacy.
+ * Accidental fallback with phase6: false is prohibited and fails closed.
  */
-function resolveVisualAssetLegacy(options) {
-    return resolveVisualAsset(options);
+function resolveVisualAsset(options = {}) {
+    if (options.phase6 || options.strictPhase6) {
+        return resolveApprovedAsset(options);
+    }
+
+    // Guard against silent phase6: false bypass
+    if (options.phase6 === false && !options.allowLegacyFallback && !options.legacy) {
+        return {
+            success: false,
+            suppressed: true,
+            tier: 5,
+            strategy: 'suppress',
+            status: 'NO_APPROVED_ASSET',
+            reason: "Setting phase6: false does not bypass Phase 6 safety without explicit legacy compatibility authorization."
+        };
+    }
+
+    // Explicit legacy compatibility authorization
+    if (options.allowLegacyFallback || options.legacy) {
+        return resolveVisualAssetLegacy(options);
+    }
+
+    // If legacy spec objects or unflagged legacy contract callers invoke this, route to isolated legacy pipeline
+    return resolveVisualAssetLegacy(options);
 }
 
 module.exports = {

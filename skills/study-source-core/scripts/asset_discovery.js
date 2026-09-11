@@ -16,6 +16,40 @@ const crypto = require('crypto');
 const SUPPORTED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.svg', '.webp', '.bmp', '.gif']);
 
 /**
+ * Generic domain terms that appear across many subjects and chapters.
+ * A match on these terms alone is insufficient to bind an asset to a chapter.
+ */
+const GENERIC_CHAPTER_TERMS = new Set([
+    'system',
+    'theory',
+    'structure',
+    'structures',
+    'types',
+    'principles',
+    'fundamentals',
+    'basics',
+    'introduction',
+    'overview',
+    'elements',
+    'properties',
+    'functions',
+    'applications',
+    'general',
+    'methods',
+    'processes',
+    'diagram',
+    'diagrams',
+    'chart',
+    'charts',
+    'figure',
+    'figures',
+    'model',
+    'models',
+    'analysis',
+    'notes'
+]);
+
+/**
  * Calculates SHA-256 hash of a file.
  */
 function hashFile(filePath) {
@@ -93,7 +127,14 @@ function scanForImages(dirPath) {
 
 /**
  * Computes semantic match score between an asset filename and a chapter/concept.
- * Simple deterministic matching — no LLM inference.
+ * Deterministic matching hardened against generic coincidences.
+ * 
+ * Rules:
+ * 1. Exact chapter match (score += 50)
+ * 2. Distinctive non-generic chapter words (score += 15 each)
+ * 3. Generic terms alone give 0 score unless accompanied by distinctive terms or exact match
+ * 4. Distinctive concept match (score += 30 exact, +10 word)
+ * 5. Standalone generic terms like "voltage.png" without concept or chapter relationship yield 0
  */
 function computeMatchScore(filename, chapter, concept = '') {
     const name = path.basename(filename, path.extname(filename)).toLowerCase().replace(/[_\-\.]/g, ' ');
@@ -101,25 +142,62 @@ function computeMatchScore(filename, chapter, concept = '') {
     const conceptLower = (concept || '').toLowerCase().replace(/[_\-\.]/g, ' ');
 
     let score = 0;
+    let hasDistinctiveMatch = false;
 
-    // Exact chapter match
-    if (name.includes(chapterLower) && chapterLower.length > 2) score += 50;
+    // Exact chapter match (multi-word exact match is highly distinctive)
+    if (chapterLower.length > 2 && name.includes(chapterLower)) {
+        score += 50;
+        hasDistinctiveMatch = true;
+    }
 
-    // Partial chapter word match
+    // Chapter word matching with generic term suppression
+    const nameTokens = new Set(name.split(/\s+/).filter(w => w.length > 0));
     const chapterWords = chapterLower.split(/\s+/).filter(w => w.length > 2);
+    
+    let matchedDistinctiveWords = 0;
+    let matchedGenericWords = 0;
+
     for (const word of chapterWords) {
-        if (name.includes(word)) score += 15;
+        if (nameTokens.has(word) || name.includes(word)) {
+            if (GENERIC_CHAPTER_TERMS.has(word)) {
+                matchedGenericWords++;
+            } else {
+                matchedDistinctiveWords++;
+                score += 15;
+                hasDistinctiveMatch = true;
+            }
+        }
+    }
+
+    // If only generic words matched and no distinctive word or exact chapter match occurred, reject
+    if (!hasDistinctiveMatch && matchedGenericWords > 0) {
+        return 0;
+    }
+
+    // Add score for generic terms only if distinctive terms already matched
+    if (hasDistinctiveMatch && matchedGenericWords > 0) {
+        score += Math.min(matchedGenericWords * 5, 10);
     }
 
     // Concept match
-    if (conceptLower && name.includes(conceptLower) && conceptLower.length > 2) score += 30;
-
-    const conceptWords = conceptLower.split(/\s+/).filter(w => w.length > 2);
-    for (const word of conceptWords) {
-        if (name.includes(word)) score += 10;
+    if (conceptLower && conceptLower.length > 2) {
+        if (name.includes(conceptLower)) {
+            score += 30;
+            hasDistinctiveMatch = true;
+        } else {
+            const conceptWords = conceptLower.split(/\s+/).filter(w => w.length > 2);
+            for (const word of conceptWords) {
+                if (nameTokens.has(word) || name.includes(word)) {
+                    if (!GENERIC_CHAPTER_TERMS.has(word)) {
+                        score += 10;
+                        hasDistinctiveMatch = true;
+                    }
+                }
+            }
+        }
     }
 
-    return Math.min(score, 100);
+    return hasDistinctiveMatch ? Math.min(score, 100) : 0;
 }
 
 /**
@@ -196,8 +274,8 @@ function discoverAssets(options = {}) {
                 sha256,
                 width: dims.width,
                 height: dims.height,
-                occlusion_eligible: true, // Will be refined by eligibility engine
-                rejection_reason: null,
+                occlusion_eligible: false, // Discovered in approved drop folder, but eligibility requires evaluation
+                rejection_reason: 'PENDING_ELIGIBILITY_EVALUATION',
                 matched_visual_need: null,
                 match_score: score
             });
