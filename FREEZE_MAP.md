@@ -51,6 +51,8 @@ Assets in this tier represent foundational data contracts, database schemas, tes
 | `.agents/skills/study-source-core/scripts/shared_anki_utils.js` | Shared SQLite schema utilities and Anki zip packaging. | Collection database structure is immutable. |
 | `.agents/skills/study-source-core/package.json` | NPM package configuration and dependency definitions. | Dependency versions and test commands preserved. |
 | `.agents/skills/study-source-core/package-lock.json` | NPM lockfile for reproducible builds. | Lockfile integrity preserved. |
+| `PRODUCT.md` | Authoritative Product Charter and 10 Immutable Principles. | Inviolable product laws; zero fabrication. |
+| `docs/LEARNING_PRINCIPLES.md` | Authoritative Cognitive Learning Principles. | 4-stage procedural progression, 17 dimensions, 3-tier hints. |
 
 ---
 
@@ -59,6 +61,8 @@ Assets in this tier represent active production code and configurations. Modific
 
 | Component Path Pattern | Component Rationale | Change Protocol & Invariant |
 |---|---|---|
+| `ARCHITECTURE.md` | Canonical 6-Tier Architecture & Contract Ownership Matrix. | Must reflect system layers, pipeline flow, and ownership. |
+| `ROADMAP.md` | Master 11-Phase Implementation Roadmap (Phases 0–10). | Governed phase progression, entry dependencies, exit criteria. |
 | `.agents/agents/*.md` | 14 canonical agent definitions. | Standardize to 14-section template without removing core responsibilities. |
 | `.agents/skills/study-source-core/SKILL.md` | Master orchestration skill. | Preserves single source of truth, hard resource limits, and gating rules. |
 | `.agents/skills/study-source-core/subject-skills/*/SKILL.md` | 9 subject specialized skills. | Preserves domain DNA, formulas, and subject validation hooks. |
@@ -77,7 +81,7 @@ High-level control-plane documentation, registries, decision records, and diagno
 | `.agents/DATA_FLOW.md` | End-to-end data transformation pipeline. | Documents complete lifecycle from Source to Final Deliverables. |
 | `.agents/EXECUTION_LIFECYCLE.md` | Parent vs Subagent lifecycle and 3-wave execution. | Preserves hard resource limits (max 4 concurrent, max 10 launches). |
 | `.agents/FREEZE_MAP.md` | Component freeze classification manual. | Harmonized with `freeze-map.json`. |
-| `.agents/DECISIONS.md` | Consolidated ADR-01 through ADR-10 records. | Historical decision rationales preserved. |
+| `.agents/DECISIONS.md` | Consolidated ADR-01 through ADR-17 records. | Historical decision rationales preserved. |
 | `.agents/TROUBLESHOOTING.md` | Evidence-driven diagnostic decision trees. | Covers all 8 failure classes with exact recovery steps. |
 | `.agents/{SKILLS,AGENTS,SCRIPTS,RESOURCES}.md` | Master component registries. | 100% component coverage across all active modules. |
 

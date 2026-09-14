@@ -1,14 +1,21 @@
-﻿# StudySourceCore — Autonomous Study Asset Orchestration Engine
+# StudySourceCore — Autonomous Study Asset Orchestration Engine
 
-> **Version**: v1.1 Stable  
-> **Status**: Active / Production  
-> **Architecture**: 14-Agent Multi-Agent System with 3-Wave Pipeline
+> **Canonical Architecture**: [`ARCHITECTURE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ARCHITECTURE.md)  
+> **Product Charter**: [`PRODUCT.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/PRODUCT.md)  
+> **Implementation Roadmap**: [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md)  
+> **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/LEARNING_PRINCIPLES.md)  
+> **Version**: v1.0 Production Baseline  
+> **Status**: Active / Production Baseline  
+> **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution
 
 ---
 
 ## What is this?
 
 **StudySourceCore** is a production-grade, deterministic multi-agent orchestration engine that ingests authorized study sources (PDFs, textbook chapters, exam papers) and synthesizes a complete ecosystem of high-yield study deliverables in parallel — automatically.
+
+It operates on the canonical six-tier architecture:
+`AUTHORIZED SOURCE → EVIDENCE PACK → SEMANTIC LEARNING IR → PEDAGOGICAL COMPILER → RENDERERS → INDEPENDENT CERTIFICATION`.
 
 One source in → seven parallel artifacts out.
 
@@ -71,7 +78,7 @@ STANDARD TRACK                    STUDYLAB TRACK
 ├── DATA_FLOW.md                    ← End-to-End Pipeline & Message Schemas
 ├── EXECUTION_LIFECYCLE.md          ← 3-Wave Protocol, Concurrency Caps, Timeouts
 ├── FREEZE_MAP.md                   ← 5-Tier Component Governance
-├── DECISIONS.md                    ← Architectural Decision Records (ADR-01–ADR-10)
+├── DECISIONS.md                    ← Architectural Decision Records (ADR-01–ADR-17)
 ├── TROUBLESHOOTING.md              ← Diagnostic Trees for 8 Failure Classes
 ├── SKILLS.md                       ← Skills Registry
 ├── RESOURCES.md                    ← Schemas & Contracts Index
