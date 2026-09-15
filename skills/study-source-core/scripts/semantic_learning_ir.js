@@ -502,9 +502,12 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
             };
         } else {
             hints = {
-                tier_1_conceptual: hints.tier_1_conceptual || hints.tier1 || 'Identify the core principle.',
-                tier_2_method: hints.tier_2_method || hints.tier2 || 'Set up the governing method.',
-                tier_3_setup: hints.tier_3_setup || hints.tier3 || 'Substitute the values into setup.'
+                tier_1_conceptual: hints.tier_1_conceptual || hints.tier_1 || hints.tier1 || 'Identify the core principle.',
+                tier_2_method: hints.tier_2_method || hints.tier_2 || hints.tier2 || 'Set up the governing method.',
+                tier_3_setup: hints.tier_3_setup || hints.tier_3 || hints.tier3 || 'Substitute the values into setup.',
+                tier_1: hints.tier_1 || hints.tier_1_conceptual || hints.tier1 || 'Identify the core principle.',
+                tier_2: hints.tier_2 || hints.tier_2_method || hints.tier2 || 'Set up the governing method.',
+                tier_3: hints.tier_3 || hints.tier_3_setup || hints.tier3 || 'Substitute the values into setup.'
             };
         }
 

@@ -360,9 +360,9 @@ function validateHintSemantics(hints, terminalAnswer, options = [], context = {}
         };
     } else if (hints && typeof hints === 'object') {
         normalized = {
-            tier_1_conceptual: hints.tier_1_conceptual || hints.tier1 || '',
-            tier_2_method: hints.tier_2_method || hints.tier2 || '',
-            tier_3_setup: hints.tier_3_setup || hints.tier3 || ''
+            tier_1_conceptual: hints.tier_1_conceptual || hints.tier_1 || hints.tier1 || '',
+            tier_2_method: hints.tier_2_method || hints.tier_2 || hints.tier2 || '',
+            tier_3_setup: hints.tier_3_setup || hints.tier_3 || hints.tier3 || ''
         };
     } else {
         errors.push('HINT_STRUCTURE_MISSING: Hints must be provided as a 3-tier object or array');

@@ -14,13 +14,48 @@
 const fs = require('fs');
 const path = require('path');
 
-function validateTsvContent(fileContent, filePath = 'in-memory') {
+function validateTsvContent(fileContent, filePath = 'in-memory', optionsOrType = {}) {
     const errors = [];
     const warnings = [];
+
+    const options = typeof optionsOrType === 'object' && optionsOrType !== null ? optionsOrType : {};
+
+    // GAP-09: Standardize suppression code handling
+    // If status === "SUPPRESSED" and reason === "ZERO_BASIC_CANDIDATES" / "ZERO_CLOZE_CANDIDATES", validator returns PASS with zero cards
+    if (options.status === 'SUPPRESSED' || options.suppressed === true) {
+        const reason = options.reason || options.suppressionReason || 'ZERO_BASIC_CANDIDATES';
+        if (reason === 'ZERO_BASIC_CANDIDATES' || reason === 'ZERO_CLOZE_CANDIDATES') {
+            return { isValid: true, status: 'SUPPRESSED', reason, errors: [], warnings: [] };
+        }
+    }
+
+    if (typeof fileContent === 'object' && fileContent !== null) {
+        if (fileContent.status === 'SUPPRESSED' && (fileContent.reason === 'ZERO_BASIC_CANDIDATES' || fileContent.reason === 'ZERO_CLOZE_CANDIDATES')) {
+            return { isValid: true, status: 'SUPPRESSED', reason: fileContent.reason, errors: [], warnings: [] };
+        }
+    }
 
     if (typeof fileContent !== 'string') {
         errors.push("TSV content must be a string.");
         return { isValid: false, errors, warnings };
+    }
+
+    // Check if string is a JSON suppression payload
+    if (fileContent.trim().startsWith('{') && fileContent.trim().endsWith('}')) {
+        try {
+            const parsed = JSON.parse(fileContent);
+            if (parsed.status === 'SUPPRESSED' && (parsed.reason === 'ZERO_BASIC_CANDIDATES' || parsed.reason === 'ZERO_CLOZE_CANDIDATES')) {
+                return { isValid: true, status: 'SUPPRESSED', reason: parsed.reason, errors: [], warnings: [] };
+            }
+        } catch (e) {
+            // Not JSON, proceed with TSV parsing
+        }
+    }
+
+    // Check for suppression comment directive in TSV header
+    if (fileContent.startsWith('#') && (fileContent.includes('ZERO_BASIC_CANDIDATES') || fileContent.includes('ZERO_CLOZE_CANDIDATES'))) {
+        const reason = fileContent.includes('ZERO_BASIC_CANDIDATES') ? 'ZERO_BASIC_CANDIDATES' : 'ZERO_CLOZE_CANDIDATES';
+        return { isValid: true, status: 'SUPPRESSED', reason, errors: [], warnings: [] };
     }
 
     // Check for empty or whitespace-only file
@@ -57,6 +92,9 @@ function validateTsvContent(fileContent, filePath = 'in-memory') {
 
     // Header-only TSV (0 data rows) is a valid 0-card artifact
     if (lines.length === 1) {
+        if (options.reason === 'ZERO_BASIC_CANDIDATES' || options.reason === 'ZERO_CLOZE_CANDIDATES' || options.status === 'SUPPRESSED') {
+            return { isValid: true, status: 'SUPPRESSED', reason: options.reason || 'ZERO_BASIC_CANDIDATES', errors: [], warnings: [] };
+        }
         warnings.push("TSV is header-only (0 cards). Valid zero-card artifact.");
         return { isValid: true, errors, warnings };
     }
@@ -105,7 +143,7 @@ function validateTsvContent(fileContent, filePath = 'in-memory') {
     };
 }
 
-function validateTsv(filePath, shouldExit = true) {
+function validateTsv(filePath, shouldExit = true, optionsOrType = {}) {
     console.log(`Validating TSV at: ${filePath}`);
     if (!fs.existsSync(filePath)) {
         console.error(`Error: File not found: ${filePath}`);
@@ -114,7 +152,7 @@ function validateTsv(filePath, shouldExit = true) {
     }
 
     const fileContent = fs.readFileSync(filePath, 'utf-8');
-    const result = validateTsvContent(fileContent, filePath);
+    const result = validateTsvContent(fileContent, filePath, optionsOrType);
 
     if (!result.isValid) {
         console.log("\n[FAIL] TSV Validation Errors:");

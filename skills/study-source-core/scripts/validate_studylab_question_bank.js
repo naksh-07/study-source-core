@@ -54,10 +54,10 @@ function hintLeaksAnswer(hintText, answer) {
 
     // Check for explicit declaration of answer in Hindi or English
     const explicitPatterns = [
-        new RegExp(`(?:answer|उत्तर|correct\\s*option|सही\\s*विकल्प|ans|result|परिणाम)\\s*(?:is|है|होगा|:|=|था)?\\s*${escapeRegex(ansStr)}`, 'i'),
-        new RegExp(`(?:final\\s*answer|अंतिम\\s*उत्तर)\\s*(?:is|होगा|है|:|=)?\\s*${escapeRegex(ansStr)}`, 'i'),
+        new RegExp(`(?:final\\s+)?(?:answer|उत्तर|correct\\s*option|सही\\s*विकल्प|ans|result|परिणाम)\\s*(?:is|है|होगा|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}`, 'i'),
+        new RegExp(`(?:final\\s*answer|अंतिम\\s*उत्तर)\\s*(?:is|होगा|है|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}`, 'i'),
         new RegExp(`=\\s*${escapeRegex(ansStr)}(?:\\s|[.,;!?)]|$)`, 'm'),
-        new RegExp(`(?:yields|gives|equals|बराबर|प्राप्त\\s*होता\\s*है|प्राप्त\\s*होगा)\\s*${escapeRegex(ansStr)}`, 'i')
+        new RegExp(`(?:yields|gives|equals|बराबर|प्राप्त\\s*होता\\s*है|प्राप्त\\s*होगा)\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}`, 'i')
     ];
 
     for (const pat of explicitPatterns) {
@@ -256,10 +256,10 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
             if (!/artifact:\s*"?proceduralQuestionBank"?/i.test(fmText)) {
                 errors.push(`[INVALID_FRONTMATTER] Frontmatter must specify 'artifact: proceduralQuestionBank' in '${filePath}'`);
             }
-            if (!/subject:\s*"?\w+"?/i.test(fmText)) {
+            if (!/subject:\s*["']?[\w\s-]+["']?/i.test(fmText)) {
                 errors.push(`[INVALID_FRONTMATTER] Frontmatter missing 'subject' in '${filePath}'`);
             }
-            if (!/chapter:\s*"?\w+"?/i.test(fmText)) {
+            if (!/chapter:\s*["']?[\w\s-]+["']?/i.test(fmText)) {
                 errors.push(`[INVALID_FRONTMATTER] Frontmatter missing 'chapter' in '${filePath}'`);
             }
         }

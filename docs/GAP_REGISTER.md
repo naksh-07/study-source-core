@@ -21,14 +21,14 @@ Every identified gap is tracked with:
 | Gap ID | Category | Severity | Title | Target Phase | Status |
 |---|---|---|---|---|---|
 | **GAP-01** | Architecture / IR | **P1 Critical** | Semantic Learning IR Intermediate Storage Layer Missing | Phase 1 | Active |
-| **GAP-02** | Architecture / Render | **P1 Critical** | `Questions.md` Authoring Coupling (Non-Projection) | Phase 7 | Active |
+| **GAP-02** | Architecture / Render | **P1 Critical** | `Questions.md` Authoring Coupling (Non-Projection) | Phase 7 | **Resolved** (Milestone 3) |
 | **GAP-03** | Packaging / Anki | **P2 High** | Dual APKG (v1.0) vs Unified APKG (v1.1) Packaging | Phase 8 / v1.1 | Active |
 | **GAP-04** | Schemas / StudyLab | **P1 Critical** | Hint Structure Schema Drift (Flat vs Nested 3-Tier) | Phase 1 | Active |
 | **GAP-05** | Testing / Harness | **P1 Critical** | Adversarial Test Suite Import Reference Bug | Phase 9 | Active |
 | **GAP-06** | Configuration / Subject | **P2 High** | Subject Keying Discrepancy (`Math` vs `Maths`) | Phase 3 | Active |
 | **GAP-07** | Tooling / Runtime | **P2 High** | Dynamic Artifact Output Directory Isolation | Phase 10 | Active |
 | **GAP-08** | Validation / Release | **P2 High** | Missing Completion-Evidence File Validator Enforcement | Phase 9 | Active |
-| **GAP-09** | Validation / Flashcards | **P3 Medium** | Basic Card Non-Zero Candidate Threshold Drift | Phase 5 | Active |
+| **GAP-09** | Validation / Flashcards | **P3 Medium** | Basic Card Non-Zero Candidate Threshold Drift | Phase 5 | **Resolved** (Milestone 3) |
 | **GAP-10** | Provenance / Data | **P1 Critical** | 11-Field Content Lineage Record (CLR) Persistence | Phase 2 | Active |
 | **GAP-11** | Tooling / Adapter | **P2 High** | Antigravity Native Subagent Registration Adapter | Phase 10 | Active |
 | **GAP-12** | Certification / CI | **P1 Critical** | ADV-01..15 Independent Certification Pipeline Integration | Phase 9 | Active |
@@ -73,6 +73,8 @@ Every identified gap is tracked with:
   - Specialist agents author the Semantic Learning IR; a deterministic renderer (`renderQuestionsMarkdown`) generates `Questions.md` from the IR.
   - Governed by ADR-02 and `docs/RENDERING_PIPELINE.md`.
 - **Target Phase**: **Phase 7: StudyLab Procedural Compilers & Markdown Question Banks**
+- **Status**: **Resolved** (Milestone 3)
+- **Resolution Details**: Decoupled authoring from Markdown formatting via `render_studylab_question_bank.js` (`renderQuestionBankToMarkdown`). Canonical `PracticeQuestions.json` remains the sole source of truth; specialist agents emit semantic JSON while `Questions.md` is strictly generated as a read-only Markdown view. Verified by `test_milestone3_learning_outputs.js` (TEST-3.3, OUT-13) and `test_studylab_question_bank.js`.
 - **Verification Method**:
   - Test asserting zero manual edits allowed in `Questions.md`; output is 100% deterministically generated from `PracticeQuestions.json`.
 
@@ -200,6 +202,8 @@ Every identified gap is tracked with:
   - Standardize suppression code handling: If `status === "SUPPRESSED"` and `reason === "ZERO_BASIC_CANDIDATES"`, validator returns `PASS` with zero cards.
   - Governed by ADR-08 and `docs/SUBJECT_POLICIES.md`.
 - **Target Phase**: **Phase 5: Declarative Renderers (Notes, TSVs, MindMap, Slides)**
+- **Status**: **Resolved** (Milestone 3)
+- **Resolution Details**: Updated `validate_tsv.js` to recognize `status: "SUPPRESSED"` and `reason: "ZERO_BASIC_CANDIDATES"` / `"ZERO_CLOZE_CANDIDATES"` across options, JSON suppression payloads, and file header comment directives (`# status: SUPPRESSED`). Suppressed zero-card header-only TSVs pass cleanly with 0 errors and 0 warnings. Verified by `test_milestone3_learning_outputs.js` (TEST-1.7, OUT-12).
 - **Verification Method**:
   - Test verifying suppressed basic deck returns clean passing validation.
 

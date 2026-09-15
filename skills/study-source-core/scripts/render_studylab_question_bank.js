@@ -121,16 +121,19 @@ function normalizeQuestionItem(q, patternMap = {}) {
     }
 
     // 12-14. Hints (Tiers 1, 2, 3)
-    let hints = { tier_1: '', tier_2: '', tier_3: '' };
+    let hints = { tier_1: '', tier_2: '', tier_3: '', tier_1_conceptual: '', tier_2_method: '', tier_3_setup: '' };
     if (q.hints && typeof q.hints === 'object') {
-        hints.tier_1 = q.hints.tier_1 || q.hints.principle || q.hint_tier_1 || '';
-        hints.tier_2 = q.hints.tier_2 || q.hints.operation || q.hint_tier_2 || '';
-        hints.tier_3 = q.hints.tier_3 || q.hints.intermediate || q.hint_tier_3 || '';
+        hints.tier_1 = q.hints.tier_1 || q.hints.tier_1_conceptual || q.hints.principle || q.hints.hint_principle || q.hint_tier_1 || '';
+        hints.tier_2 = q.hints.tier_2 || q.hints.tier_2_method || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
+        hints.tier_3 = q.hints.tier_3 || q.hints.tier_3_setup || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
     } else {
         hints.tier_1 = q.hint_tier_1 || 'अवधारणा और समस्या के संरचनात्मक घटकों की पहचान करें।';
         hints.tier_2 = q.hint_tier_2 || 'मानक सूत्र और समीकरण संबंध स्थापित करें।';
         hints.tier_3 = q.hint_tier_3 || 'चरणबद्ध गणना और बीजगणितीय सरलीकरण निष्पादित करें।';
     }
+    hints.tier_1_conceptual = hints.tier_1;
+    hints.tier_2_method = hints.tier_2;
+    hints.tier_3_setup = hints.tier_3;
 
     // 15. Solution
     const solution = q.solution || q.explanation || 'चरणबद्ध हल उपलब्ध नहीं है।';
@@ -338,8 +341,15 @@ function compileCanonicalQuestionBank(practiceQuestions, problemPatterns = null,
     const chapter = metadata.chapter || (pqData && pqData.chapter) || (ppData && ppData.chapter) || 'Overview';
     const skill_id = metadata.skill_id || (pqData && pqData.skill_id) || (ppData && ppData.skill_id);
 
-    const questions = (pqData && Array.isArray(pqData.questions)) ? pqData.questions : [];
+    const rawQuestions = (pqData && Array.isArray(pqData.questions)) ? pqData.questions : [];
     const patterns = (ppData && Array.isArray(ppData.patterns)) ? ppData.patterns : [];
+
+    const patternMap = {};
+    for (const p of patterns) {
+        if (p && p.id) patternMap[p.id] = p;
+    }
+
+    const questions = rawQuestions.map(q => normalizeQuestionItem(q, patternMap));
 
     return {
         schema_version: '1.0.0',
