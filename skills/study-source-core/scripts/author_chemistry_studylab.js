@@ -55,12 +55,16 @@ function parseChemistryEvidence(evidenceInput) {
 
     // 4. Raw text content
     if (typeof evidenceInput === 'string') {
-        try {
-            const parsed = JSON.parse(evidenceInput);
-            return normalizeRawSourceData(parsed);
-        } catch (e) {
-            return parseMarkdownEvidencePackText(evidenceInput);
+        const trimmed = evidenceInput.trim();
+        if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                return normalizeRawSourceData(parsed);
+            } catch (e) {
+                throw new Error(`MALFORMED_JSON_EVIDENCE: Input appears to be JSON but failed to parse: ${e.message}`);
+            }
         }
+        return parseMarkdownEvidencePackText(evidenceInput);
     }
 
     throw new Error('UNSUPPORTED_EVIDENCE_FORMAT: Could not parse Chemistry evidence input');

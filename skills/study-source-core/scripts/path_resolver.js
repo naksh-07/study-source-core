@@ -39,6 +39,8 @@ function getVaultRoot(startDir = __dirname) {
     let current = path.resolve(startDir);
     while (true) {
         if (fs.existsSync(path.join(current, '.agents')) || 
+            fs.existsSync(path.join(current, 'agents')) ||
+            (fs.existsSync(path.join(current, '.git')) && fs.existsSync(path.join(current, 'skills'))) ||
             (fs.existsSync(path.join(current, 'Study Materials')) && fs.existsSync(path.join(current, 'Sources')))) {
             return current;
         }

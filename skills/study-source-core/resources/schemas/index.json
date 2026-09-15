@@ -4,6 +4,13 @@
   "description": "Consolidated schema index for StudyLab Content Authoring and APKG generation.",
   "version": "2.0.0-phase40-canonical",
   "schemas": {
+    "semantic_learning_ir": {
+      "file": "semantic-learning-ir.schema.json",
+      "classification": "CANONICAL",
+      "source_of_truth": "ARCHITECTURE.md: Tier 3 & docs/KNOWLEDGE_UNITS.md",
+      "consumer": "SemanticLearningIR & validate_semantic_ir",
+      "description": "Canonical schema for medium-neutral, typed Semantic Learning Intermediate Representation (IR)."
+    },
     "apkg_anchor": {
       "file": "studylab-apkg-schema.json",
       "classification": "CANONICAL",

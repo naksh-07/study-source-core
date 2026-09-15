@@ -1,0 +1,433 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SemanticLearningIR",
+  "description": "Canonical schema for StudySourceCore Semantic Learning Intermediate Representation (IR).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ir_id",
+    "context",
+    "evidence_pack_reference",
+    "knowledge_units",
+    "relationships",
+    "practice_items",
+    "metadata"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"],
+      "description": "Explicit schema versioning."
+    },
+    "ir_id": {
+      "type": "string",
+      "pattern": "^ir\\.[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",
+      "description": "Deterministic canonical IR identifier."
+    },
+    "context": {
+      "type": "object",
+      "required": ["subject", "domain", "chapter"],
+      "properties": {
+        "subject": { "type": "string" },
+        "domain": {
+          "type": "string",
+          "enum": [
+            "stem_procedural",
+            "humanities_factual",
+            "linguistic_relational",
+            "cartographic_visual",
+            "biological_taxonomic"
+          ]
+        },
+        "chapter": { "type": "string" },
+        "topic": { "type": "string" },
+        "curriculum": { "type": "string" },
+        "language": {
+          "type": "string",
+          "default": "bilingual_hi_en"
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence_pack_reference": {
+      "type": "object",
+      "required": [
+        "evidence_pack_id",
+        "evidence_hash",
+        "source_id",
+        "source_hash"
+      ],
+      "properties": {
+        "evidence_pack_id": { "type": "string" },
+        "evidence_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of canonical evidence pack."
+        },
+        "source_id": { "type": "string" },
+        "source_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of raw source material."
+        }
+      },
+      "additionalProperties": false
+    },
+    "knowledge_units": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/KnowledgeUnit" },
+      "description": "Discrete, atomic Knowledge Units (KUs)."
+    },
+    "relationships": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/KURelationship" },
+      "description": "Directed semantic relationships between KUs."
+    },
+    "problem_patterns": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/ProblemPattern" },
+      "description": "Procedural problem patterns authored for STEM domains."
+    },
+    "practice_items": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/PracticeItem" },
+      "description": "Authentic and derived practice items grounded in evidence."
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["created_at", "generator"],
+      "properties": {
+        "created_at": { "type": "string" },
+        "generator": {
+          "type": "object",
+          "required": ["engine", "version"],
+          "properties": {
+            "engine": { "type": "string" },
+            "version": { "type": "string" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "ContentLineageRecord": {
+      "type": "object",
+      "description": "Canonical 11-field Content Lineage Record (CLR).",
+      "required": [
+        "source_id",
+        "source_coordinates",
+        "source_chunk_hash",
+        "evidence_pack_id",
+        "ku_id",
+        "origin_tier",
+        "generator_metadata",
+        "model_and_prompt",
+        "transformation_history",
+        "renderer_target",
+        "certification_state"
+      ],
+      "properties": {
+        "source_id": { "type": "string" },
+        "source_coordinates": {
+          "type": "object",
+          "required": ["section"],
+          "properties": {
+            "page_start": { "type": ["integer", "null"] },
+            "page_end": { "type": ["integer", "null"] },
+            "section": { "type": "string" },
+            "paragraph": { "type": ["integer", "null"] },
+            "line_start": { "type": ["integer", "null"] },
+            "line_end": { "type": ["integer", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "source_chunk_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Immutable SHA-256 fingerprint of the source text chunk."
+        },
+        "evidence_pack_id": { "type": "string" },
+        "ku_id": { "type": "string" },
+        "origin_tier": {
+          "type": "string",
+          "enum": ["AUTHENTIC", "CURATED", "DERIVED", "SYNTHETIC"]
+        },
+        "generator_metadata": {
+          "type": "object",
+          "required": ["engine_version", "timestamp"],
+          "properties": {
+            "engine_version": { "type": "string" },
+            "timestamp": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "model_and_prompt": {
+          "type": "object",
+          "required": ["model", "prompt_version"],
+          "properties": {
+            "model": { "type": "string" },
+            "temperature": { "type": ["number", "null"] },
+            "prompt_version": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "transformation_history": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered log of mutations applied."
+        },
+        "renderer_target": {
+          "type": "object",
+          "required": ["file_path"],
+          "properties": {
+            "file_path": { "type": "string" },
+            "anchor": { "type": ["string", "null"] },
+            "line": { "type": ["integer", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "certification_state": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["PENDING", "CERTIFIED", "REJECTED"]
+            },
+            "auditor": { "type": ["string", "null"] },
+            "signature": { "type": ["string", "null"] },
+            "verified_at": { "type": ["string", "null"] },
+            "adv_token": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "KnowledgeUnit": {
+      "type": "object",
+      "required": ["id", "ku_type", "title", "definition", "clr"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ku\\.[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$"
+        },
+        "ku_type": {
+          "type": "string",
+          "enum": [
+            "conceptual",
+            "law_formula",
+            "factual_proposition",
+            "topological_spatial",
+            "procedural_family"
+          ]
+        },
+        "title": { "type": "string" },
+        "definition": { "type": "string" },
+        "bilingual": {
+          "type": "object",
+          "properties": {
+            "hi": { "type": "string" },
+            "en": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "propositions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "formulas": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "latex"],
+            "properties": {
+              "name": { "type": "string" },
+              "latex": { "type": "string" },
+              "scope": { "type": "string" },
+              "variables": {
+                "type": "object",
+                "additionalProperties": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "clr": { "$ref": "#/definitions/ContentLineageRecord" }
+      },
+      "additionalProperties": false
+    },
+    "KURelationship": {
+      "type": "object",
+      "required": ["id", "source_ku_id", "target_ku_id", "relation_type"],
+      "properties": {
+        "id": { "type": "string" },
+        "source_ku_id": { "type": "string" },
+        "target_ku_id": { "type": "string" },
+        "relation_type": {
+          "type": "string",
+          "enum": [
+            "prerequisite",
+            "specializes",
+            "derives_from",
+            "associates_with"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "ProblemPattern": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "domain",
+        "problem_family",
+        "deep_structure",
+        "governing_method"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "domain": { "type": "string" },
+        "problem_family": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "deep_structure": { "type": "string" },
+        "recognition_signals": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "governing_method": {
+          "type": ["object", "string"],
+          "properties": {
+            "standard_algorithm": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "formula": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "decision_points": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "common_traps": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "error_categories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "verification_formulas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "parameter_domains": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "min": { "type": "number" },
+              "max": { "type": "number" },
+              "domain_rule": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "scaffolding_progression": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "PracticeItem": {
+      "type": "object",
+      "required": [
+        "id",
+        "pattern_id",
+        "question_type",
+        "stem",
+        "hints",
+        "clr"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "pattern_id": { "type": "string" },
+        "question_type": {
+          "type": "string",
+          "enum": ["mcq", "numerical", "structured"]
+        },
+        "stem": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "For MCQ, must contain at least 4 options."
+        },
+        "correct_option": { "type": ["string", "integer"] },
+        "answer": { "type": ["number", "string"] },
+        "tolerance": { "type": "number" },
+        "explanation": { "type": "string" },
+        "solution_dag": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step_id", "description"],
+            "properties": {
+              "step_id": { "type": "string" },
+              "description": { "type": "string" },
+              "operation": { "type": "string" },
+              "intermediate_result": { "type": "string" },
+              "prerequisite_steps": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "hints": {
+          "type": "object",
+          "required": [
+            "tier_1_conceptual",
+            "tier_2_method",
+            "tier_3_setup"
+          ],
+          "properties": {
+            "tier_1_conceptual": { "type": "string" },
+            "tier_2_method": { "type": "string" },
+            "tier_3_setup": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "traps_and_checks": {
+          "type": "object",
+          "properties": {
+            "common_traps": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "verification_check": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "clr": { "$ref": "#/definitions/ContentLineageRecord" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

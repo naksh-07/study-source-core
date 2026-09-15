@@ -1,9 +1,66 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "StudyLabContentProvenance",
-  "description": "Schema for content lineage, exam source grounding, and generator versioning.",
+  "description": "Schema for content lineage, 11-field Content Lineage Records (CLR), exam source grounding, and generator versioning.",
   "type": "object",
   "properties": {
+    "source_id": { "type": "string" },
+    "source_coordinates": {
+      "type": "object",
+      "properties": {
+        "page_start": { "type": ["integer", "null"] },
+        "page_end": { "type": ["integer", "null"] },
+        "section": { "type": "string" },
+        "paragraph": { "type": ["integer", "null"] },
+        "line_start": { "type": ["integer", "null"] },
+        "line_end": { "type": ["integer", "null"] }
+      }
+    },
+    "source_chunk_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evidence_pack_id": { "type": "string" },
+    "ku_id": { "type": "string" },
+    "origin_tier": {
+      "type": "string",
+      "enum": ["AUTHENTIC", "CURATED", "DERIVED", "SYNTHETIC"]
+    },
+    "generator_metadata": {
+      "type": "object",
+      "properties": {
+        "engine_version": { "type": "string" },
+        "timestamp": { "type": "string" }
+      }
+    },
+    "model_and_prompt": {
+      "type": "object",
+      "properties": {
+        "model": { "type": "string" },
+        "temperature": { "type": ["number", "null"] },
+        "prompt_version": { "type": "string" }
+      }
+    },
+    "transformation_history": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "renderer_target": {
+      "type": ["object", "string"]
+    },
+    "certification_state": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "CERTIFIED", "REJECTED"]
+        },
+        "auditor": { "type": ["string", "null"] },
+        "signature": { "type": ["string", "null"] },
+        "verified_at": { "type": ["string", "null"] },
+        "adv_token": { "type": ["string", "null"] }
+      }
+    },
     "source_pyq_id": { "type": ["string", "null"] },
     "source_version": { "type": "integer", "default": 1 },
     "generator_version": { "type": "integer", "default": 1 },
