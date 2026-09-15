@@ -1,11 +1,15 @@
-# StudySourceCore vNext: Unified Orchestration & Execution Architecture
+---
+title: StudySourceCore vNext Orchestration Specification
+status: TARGET_ARCHITECTURE
+authority: Target Architecture Specification
+version: 2.0-proposal
+---
+
+# StudySourceCore vNext Orchestration Specification
 
 > [!IMPORTANT]
-> **Epistemic Classification: TARGET_ARCHITECTURE**  
-> **Authority Dimension**: Forward Target Architecture Specification  
-> **Canonical Target Spec**: [`docs/target_architecture/VNEXT_ORCHESTRATION_SPEC.md`](target_architecture/VNEXT_ORCHESTRATION_SPEC.md)  
-> **Retention Notice**: Retained at this exact path for backward-compatibility with test assertions (`test_vnext_orchestration.js` TEST-14 and `test_fresh_agent_simulation.js`).
-> Planned future capabilities (vNext worker pools, work stealing, distributed execution) MUST NOT be described as current v1.0 baseline.
+> **Epistemic Classification: TARGET_ARCHITECTURE**
+> This document specifies the target architecture for vNext distributed orchestration, dynamic worker pools, work stealing, and advanced runtime scheduling. It represents planned future architecture and MUST NOT be confused with the current v1.0 baseline.
 
 **Document ID**: `DOC-STUDYSOURCECORE-VNEXT-001`  
 **Status**: CANONICAL PRODUCTION ARCHITECTURE  

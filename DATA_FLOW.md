@@ -1,8 +1,8 @@
 # StudySourceCore — End-to-End Data Flow & Schema Contracts
 
-> **Canonical Architecture**: [`ARCHITECTURE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ARCHITECTURE.md)  
-> **Product Charter**: [`PRODUCT.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/PRODUCT.md)  
-> **Implementation Roadmap**: [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md)  
+> **Canonical Architecture**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
+> **Product Charter**: [`PRODUCT.md`](../PRODUCT.md)  
+> **Implementation Roadmap**: [`ROADMAP.md`](../ROADMAP.md)  
 > **Canonical Path**: `.agents/DATA_FLOW.md`  
 > **Architecture**: 6-Stage Deterministic Data Transformation Pipeline  
 > **Status**: AUTHORITATIVE / ENFORCED

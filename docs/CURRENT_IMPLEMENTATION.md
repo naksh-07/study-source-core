@@ -11,7 +11,7 @@ It details the code, scripts, schemas, subagent definitions, and tests that are 
 - **Primary Runtime Engine**: Node.js v18+ (ES modules and CommonJS interop).
 - **Core Dependencies**: `ajv` (JSON Schema validation), `jszip` (zip packaging), `sql.js` (pure WebAssembly/JS SQLite engine), `@modelcontextprotocol/sdk` (MCP server integration).
 - **Active Packaging Standard**: **Dual APKG (v1.0)** emitting `<Chapter>_Anki.apkg` (Models 1600000001–1600000003) and `StudyLab/<Chapter>_StudyLab_Procedural.apkg` (Model 1600000004).
-- **Known Deficiencies**: Cataloged in [`docs/GAP_REGISTER.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/GAP_REGISTER.md).
+- **Known Deficiencies**: Cataloged in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md).
 
 ---
 
@@ -38,9 +38,10 @@ AI Notes/
 │   ├── ANKI_INTEGRATION.md          # Dual APKG v1.0, Model IDs 1600000001–1600000004
 │   ├── SECURITY_AND_TRUST.md        # Zero-trust model, path traversal, injection defenses
 │   ├── GOVERNANCE.md                # Authority hierarchy, ADR protocol, single-rule ownership
-│   ├── GAP_REGISTER.md              # Authoritative register of known P0-P3 gaps
-│   ├── CURRENT_IMPLEMENTATION.md    # This document: active baseline assessment
-│   └── STUDYSOURCECORE_*            # Tier 3: Preserved historical research and audits
+│   ├── audits/                      # Historical audit reports & verification proofs (11 files)
+│   ├── archive/                     # Retired drafts & archive indexes (README.md)
+│   ├── target_architecture/         # Forward-looking target architecture (VNEXT_ORCHESTRATION_SPEC.md)
+│   └── STUDYSOURCECORE_*            # Test-retained legacy specifications with epistemic annotations
 │
 ├── .agents/                         # Tier 2 Machine Governance & Subagent Definitions
 │   ├── AGENTS.md                    # Master Subagent Registry & 14-Section Template
@@ -165,7 +166,7 @@ npm test
 
 > [!NOTE]
 > **Implementation Baseline Verification vs Target Architecture**:  
-> Passing `npm test` (18 of 18 test files) proves that the **current implementation baseline** is structurally stable and regression-free. It does NOT indicate that target architecture components (such as the Semantic Learning IR, Content Lineage Records, or Unified Single APKG) have already been implemented. Those capabilities are scheduled for Phases 1 through 10 in [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md).
+> Passing `npm test` (18 of 18 test files) proves that the **current implementation baseline** is structurally stable and regression-free. It does NOT indicate that target architecture components (such as the Semantic Learning IR, Content Lineage Records, or Unified Single APKG) have already been implemented. Those capabilities are scheduled for Phases 1 through 10 in [`ROADMAP.md`](../ROADMAP.md).
 >
 > **Fresh-Agent Simulation Scope**:  
 > Running `node scripts/test_fresh_agent_simulation.js` verifies comprehension across a **hardcoded 14-document canonical subset** (`.agents/README.md`, `.agents/OWNERSHIP.md`, `.agents/DATA_FLOW.md`, `.agents/EXECUTION_LIFECYCLE.md`, `.agents/FREEZE_MAP.md`, `.agents/DECISIONS.md`, `.agents/TROUBLESHOOTING.md`, and 7 `docs/STUDYSOURCECORE_*` files). It serves as a historical core comprehension check and does not evaluate the full expanded Tier 0 and Tier 1 documentation tree.
@@ -185,5 +186,5 @@ Defined in `.agents/skills/study-source-core/package.json`:
 ## 7. Next Actions & Roadmap Transition
 
 With Phase 0 complete and the authoritative documentation set established, implementation proceeds under strict phase governance:
-- Refer to [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md) for the execution sequence of Phases 1 through 10.
-- Refer to [`docs/GAP_REGISTER.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/GAP_REGISTER.md) for the active list of gaps to be resolved in Phase 1.
+- Refer to [`ROADMAP.md`](../ROADMAP.md) for the execution sequence of Phases 1 through 10.
+- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the active list of gaps to be resolved in Phase 1.

@@ -11,9 +11,9 @@ Before writing code, submitting pull requests, or updating agent definitions, pl
 StudySourceCore is built on strict pedagogical foundations and hard software invariants. We prioritize correctness, cognitive durability, and source-grounded truth over rapid generation of generic summaries.
 
 Before contributing, you **must read** the following Tier 0 master architectural documents:
-1. [`PRODUCT.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/PRODUCT.md) — Product identity, the 4 chronic problems solved, the 10 Immutable Principles, and non-goals.
-2. [`ARCHITECTURE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ARCHITECTURE.md) — The 6-Tier Pipeline, Contract Ownership Matrix, and system invariants.
-3. [`docs/GOVERNANCE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/GOVERNANCE.md) — The documentation hierarchy, Single-Rule Ownership, and ADR protocol.
+1. [`PRODUCT.md`](./PRODUCT.md) — Product identity, the 4 chronic problems solved, the 10 Immutable Principles, and non-goals.
+2. [`ARCHITECTURE.md`](./ARCHITECTURE.md) — The 6-Tier Pipeline, Contract Ownership Matrix, and system invariants.
+3. [`docs/GOVERNANCE.md`](./docs/GOVERNANCE.md) — The documentation hierarchy, Single-Rule Ownership, and ADR protocol.
 
 ### Core Non-Negotiable Invariants:
 - **Parent Self-Execution Ban**: The orchestrator coordinates and audits; it never generates chapter deliverables directly.
@@ -47,7 +47,7 @@ npm ci
 ## 3. Standard Development Workflow
 
 1. **Check the Roadmap and Gap Register**:
-   Review [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md) and [`docs/GAP_REGISTER.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/GAP_REGISTER.md) to ensure your planned work aligns with the active implementation phase.
+   Review [`ROADMAP.md`](./ROADMAP.md) and [`docs/GAP_REGISTER.md`](./docs/GAP_REGISTER.md) to ensure your planned work aligns with the active implementation phase.
 2. **Create a Feature Branch**:
    ```bash
    git checkout -b feature/phase1-semantic-ir-schema
@@ -70,7 +70,7 @@ npm ci
 
 ### 4.1 How to Add or Modify a Subject Policy
 Subject policies govern which artifacts are generated for a given academic domain.
-1. Consult [`docs/SUBJECT_POLICIES.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/SUBJECT_POLICIES.md) for the authoritative policy rules.
+1. Consult [`docs/SUBJECT_POLICIES.md`](./docs/SUBJECT_POLICIES.md) for the authoritative policy rules.
 2. Edit `skills/study-source-core/scripts/subject_policy_resolver.js` to update the policy map or aliases.
 3. If adding a new domain, create `skills/study-source-core/subject-skills/<Subject>/SKILL.md` detailing its domain DNA.
 4. Run policy resolver tests:
@@ -80,8 +80,8 @@ Subject policies govern which artifacts are generated for a given academic domai
 
 ### 4.2 How to Update JSON Schemas & Machine Contracts
 Schemas under `skills/study-source-core/resources/*.json` define system data contracts.
-1. Check [`docs/GOVERNANCE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/GOVERNANCE.md) for schema evolution rules (SemVer, backward compatibility).
-2. If the change is breaking (renaming/removing fields or tightening validation), propose an ADR in [`.agents/DECISIONS.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/DECISIONS.md).
+1. Check [`docs/GOVERNANCE.md`](./docs/GOVERNANCE.md) for schema evolution rules (SemVer, backward compatibility).
+2. If the change is breaking (renaming/removing fields or tightening validation), propose an ADR in [`.agents/DECISIONS.md`](.agents/DECISIONS.md).
 3. Update the JSON Schema file.
 4. Update or add test fixtures in `resources/fixtures/`.
 5. Run contract tests:
@@ -91,7 +91,7 @@ Schemas under `skills/study-source-core/resources/*.json` define system data con
 
 ### 4.3 How to Add or Modify a Specialist Subagent
 Subagent prompts are located under `.agents/agents/*.md`.
-1. Every agent file **must strictly follow the 14-section template** defined in [`.agents/AGENTS.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/AGENTS.md):
+1. Every agent file **must strictly follow the 14-section template** defined in [`.agents/AGENTS.md`](.agents/AGENTS.md):
    - `## 1. ROLE`
    - `## 2. WHY THIS AGENT EXISTS`
    - `## 3. OWNS`

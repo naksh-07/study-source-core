@@ -1,5 +1,12 @@
 # StudySourceCore: Computation Deduplication, Efficiency & Caching
 
+> [!NOTE]
+> **Epistemic Classification: HISTORICAL_EVIDENCE / SUPERSEDED BASELINE**  
+> **Authority Dimension**: Historical Specification  
+> **Living Canonical Owner**: `docs/CURRENT_IMPLEMENTATION.md & .agents/FREEZE_MAP.md`  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## 1. Computation Deduplication & Ledger
 
 To maximize execution speed and eliminate token waste, StudySourceCore classifies all pipeline operations and audits any repeated executions across 11 core computational steps.
@@ -33,4 +40,4 @@ $$\text{Source PDF} \xrightarrow[\text{1 Time}]{\text{Ingest}} \text{Evidence Pa
 
 ### 3. Hash-Based Idempotency Guard
 Before recompiling an APKG, `artifact_provenance.js` compares the current evidence pack hash with the recorded hash in `.build/artifact-manifest.json`. If the hash and configuration match, regeneration is skipped.
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.

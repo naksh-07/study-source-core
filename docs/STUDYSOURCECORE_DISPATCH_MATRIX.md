@@ -1,5 +1,12 @@
 # StudySourceCore: Canonical Dispatch Matrix
 
+> [!NOTE]
+> **Epistemic Classification: HISTORICAL_EVIDENCE / SUPERSEDED BASELINE**  
+> **Authority Dimension**: Historical Specification  
+> **Living Canonical Owner**: `.agents/AGENTS.md & .agents/EXECUTION_LIFECYCLE.md`  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## 1. Single Source of Truth for Dispatch
 
 This matrix defines the exact deterministic trigger, selected agent, priority, execution mode, input requirements, deliverable expectations, completion conditions, and suppression rules across all StudySourceCore capabilities.
@@ -47,4 +54,4 @@ WAVE 3: POST-PACKAGING AUDIT & VERIFICATION
 │    (validate_tsv, validate_apkg, etc.)   │     (Cross-Artifact Semantic Check)      │
 └──────────────────────────────────────────┴──────────────────────────────────────────┘
 ```
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.

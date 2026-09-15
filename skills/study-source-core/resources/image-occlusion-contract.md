@@ -28,7 +28,7 @@ Image Occlusion is a **first-class, governed sibling artifact** of Basic and Clo
 
 ## 2. Image Occlusion Eligibility & Suppression Rules
 
-Universal IO eligibility, worthy spatial learning triggers, and strict suppression rules are authoritatively defined in [visual-learning-contract.md](file:///.agents/skills/study-source-core/resources/visual-learning-contract.md#5-image-occlusion-eligibility--routing-rules).
+Universal IO eligibility, worthy spatial learning triggers, and strict suppression rules are authoritatively defined in [visual-learning-contract.md](./visual-learning-contract.md#5-image-occlusion-eligibility--routing-rules).
 
 > **Governing Principle**: *Presence of an image is NOT sufficient reason to create an IO card. The learning target itself must benefit from spatial or visual recall.*
 

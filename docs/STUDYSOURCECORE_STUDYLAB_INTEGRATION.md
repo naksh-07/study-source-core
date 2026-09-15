@@ -1,5 +1,12 @@
 # StudySourceCore: StudyLab First-Class Integration & Content Invariants
 
+> [!NOTE]
+> **Epistemic Classification: HISTORICAL_EVIDENCE / SUPERSEDED BASELINE**  
+> **Authority Dimension**: Historical Specification  
+> **Living Canonical Owner**: `docs/STUDYLAB_SPECIFICATION.md`  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## 1. First-Class Architectural Boundary
 
 **StudyLab Procedural Packaging is a native first-class branch of StudySourceCore.**
@@ -65,4 +72,4 @@ For any question with modality `mcq` or `multiple_choice`:
   - Model ID: `1600000004` (`StudyLab Procedural Anchor`).
   - Deck Namespace: `<Subject>::<Chapter>::StudyLab Procedural`.
   - Classification: `SELF_CONTAINED_PORTABLE` (contains all schemas, hints, and parameter domains inline).
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.

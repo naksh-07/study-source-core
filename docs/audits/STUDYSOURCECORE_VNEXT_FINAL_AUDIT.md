@@ -241,13 +241,13 @@ The fresh-agent comprehension test (`scripts/test_fresh_agent_simulation.js`) ex
 
 All 7 machine-readable JSON reports are generated and persisted in `artifacts_qa/studysourcecore_vnext/`:
 
-1. [`execution-plan.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/execution-plan.json): Full Task Graph DAG with status, wave, owner, and fingerprints.
-2. [`dispatch-trace.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/dispatch-trace.json): Chronological dispatch log proving real subagent dispatches.
-3. [`ownership-trace.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/ownership-trace.json): Verified 1-to-1 mapping of deliverables to single designated writers.
-4. [`handoff-trace.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/handoff-trace.json): Structured 11-field handoff receipt log.
-5. [`duplicate-work-audit.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/duplicate-work-audit.json): Deduplication audit proving source-read-once and zero redundant calls.
-6. [`efficiency-audit.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/efficiency-audit.json): Resource metrics proving execution within 4-worker and 10-launch budget.
-7. [`completion-evidence.json`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/artifacts_qa/studysourcecore_vnext/completion-evidence.json): Physical 4-point verification records with disk byte counts.
+1. [`execution-plan.json`](../../artifacts_qa/studysourcecore_vnext/execution-plan.json): Full Task Graph DAG with status, wave, owner, and fingerprints.
+2. [`dispatch-trace.json`](../../artifacts_qa/studysourcecore_vnext/dispatch-trace.json): Chronological dispatch log proving real subagent dispatches.
+3. [`ownership-trace.json`](../../artifacts_qa/studysourcecore_vnext/ownership-trace.json): Verified 1-to-1 mapping of deliverables to single designated writers.
+4. [`handoff-trace.json`](../../artifacts_qa/studysourcecore_vnext/handoff-trace.json): Structured 11-field handoff receipt log.
+5. [`duplicate-work-audit.json`](../../artifacts_qa/studysourcecore_vnext/duplicate-work-audit.json): Deduplication audit proving source-read-once and zero redundant calls.
+6. [`efficiency-audit.json`](../../artifacts_qa/studysourcecore_vnext/efficiency-audit.json): Resource metrics proving execution within 4-worker and 10-launch budget.
+7. [`completion-evidence.json`](../../artifacts_qa/studysourcecore_vnext/completion-evidence.json): Physical 4-point verification records with disk byte counts.
 
 ---
 

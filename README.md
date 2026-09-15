@@ -1,9 +1,9 @@
 # StudySourceCore — Autonomous Study Asset Orchestration Engine
 
-> **Canonical Architecture**: [`ARCHITECTURE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ARCHITECTURE.md)  
-> **Product Charter**: [`PRODUCT.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/PRODUCT.md)  
-> **Implementation Roadmap**: [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md)  
-> **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/LEARNING_PRINCIPLES.md)  
+> **Canonical Architecture**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
+> **Product Charter**: [`PRODUCT.md`](../PRODUCT.md)  
+> **Implementation Roadmap**: [`ROADMAP.md`](../ROADMAP.md)  
+> **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](../docs/LEARNING_PRINCIPLES.md)  
 > **Version**: v1.0 Production Baseline  
 > **Status**: Active / Production Baseline  
 > **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution

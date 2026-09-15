@@ -13,8 +13,8 @@ Reasoning puzzles depend on rigorous constraint satisfaction, truth table evalua
 
 ## 3. OWNS
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Reasoning_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Reasoning_Procedural.manifest.json` (when APKG mode is active)
 - Constraint classification, definite anchors, possibility trees, and deductive steps.
@@ -52,8 +52,8 @@ Reasoning puzzles depend on rigorous constraint satisfaction, truth table evalua
 
 ## 9. OUTPUT
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Reasoning_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Reasoning_Procedural.manifest.json` (when APKG mode is active)
 

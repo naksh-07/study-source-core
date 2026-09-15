@@ -13,8 +13,8 @@ Mathematical mastery requires active problem-solving across procedural archetype
 
 ## 3. OWNS
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Math_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Math_Procedural.manifest.json` (when APKG mode is active)
 - Mathematical parameter domains, constraints, stepwise derivations, and 3-tier progressive hints.
@@ -51,8 +51,8 @@ Mathematical mastery requires active problem-solving across procedural archetype
 
 ## 9. OUTPUT
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Math_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Math_Procedural.manifest.json` (when APKG mode is active)
 

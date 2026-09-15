@@ -1,5 +1,12 @@
 # StudySourceCore: Canonical Agent Responsibility Map
 
+> [!NOTE]
+> **Epistemic Classification: NORMATIVE_INVARIANT**  
+> **Authority Dimension**: Semantic / Conceptual Specification  
+> **Operational Living Owner**: [`.agents/AGENTS.md`](../.agents/AGENTS.md) and [`.agents/OWNERSHIP.md`](../.agents/OWNERSHIP.md)  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## 1. Authoritative Agent Responsibility Matrix
 
 This matrix establishes the non-overlapping ownership boundaries, explicit triggers, inputs, outputs, and negative boundaries across all 14 specialist subagents.
@@ -28,4 +35,4 @@ This matrix establishes the non-overlapping ownership boundaries, explicit trigg
 1. **Strict Non-Interference**: A specialist must only write to its designated directory scope. Under no circumstances may `core-notes` modify Anki TSVs, nor may `math-apkg-author` edit `Notes/<Chapter>_Notes.md`.
 2. **Single Ingestion Point**: No specialist is permitted to re-read or independently re-parse the raw source PDF. All specialists consume `scratch/evidence-pack.md`.
 3. **Parent Synthesis & Gating**: The parent orchestrator evaluates routing gates and initiates dispatches. Specialists do not recursively spawn other specialists without parent authorization.
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.

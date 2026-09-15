@@ -153,10 +153,10 @@ Every system capability, data structure, and file deliverable has exactly one au
 
 | System Layer / Deliverable | Authoritative Spec / Contract | Primary Owner Agent / Script | Release Validator |
 |---|---|---|---|
-| **Product Principles & Scope** | [`PRODUCT.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/PRODUCT.md) | Governance Board | Independent Audit |
-| **System Architecture** | [`ARCHITECTURE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ARCHITECTURE.md) | Systems Architect | Fresh-Agent Simulation |
-| **Pedagogical Principles** | [`docs/LEARNING_PRINCIPLES.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/LEARNING_PRINCIPLES.md) | Pedagogy Architect | `bm-qa` |
-| **Architectural Decisions** | [`.agents/DECISIONS.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/DECISIONS.md) | Systems Architect | ADR-01..17 Invariants |
+| **Product Principles & Scope** | [`PRODUCT.md`](./PRODUCT.md) | Governance Board | Independent Audit |
+| **System Architecture** | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Systems Architect | Fresh-Agent Simulation |
+| **Pedagogical Principles** | [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md) | Pedagogy Architect | `bm-qa` |
+| **Architectural Decisions** | [`.agents/DECISIONS.md`](.agents/DECISIONS.md) | Systems Architect | ADR-01..17 Invariants |
 | **Artifact Registry** | `.agents/skills/study-source-core/resources/artifact-registry.json` | Orchestrator Engine | `test_artifact_registry.js` |
 | **Subject Policies** | `resources/subject-skill-manifest.json` & `docs/SUBJECT_POLICIES.md` | Subject Skills | `subject_policy_resolver.js` |
 | **Evidence Pack** | `resources/source-policy.md` | Parent Orchestrator | Lineage Audit (`artifact_provenance.js`) |

@@ -13,7 +13,7 @@ The 14 agents are categorized into three operational classes:
 
 ## 2. Master Agent Index
 
-The authoritative artifact ownership, writer, validator, dependency, and execution metadata is defined in `resources/artifact-registry.json`.
+The authoritative artifact ownership, writer, validator, dependency, and execution metadata is defined in `skills/study-source-core/resources/artifact-registry.json`.
 
 | # | Agent ID | Agent File Link | Category | Primary Role |
 |---|---|---|---|---|
@@ -36,7 +36,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 
 ## 3. Detailed Agent Profiles
 
-> **Note**: Artifact ownership, output paths, and validation scripts are canonically defined in `resources/artifact-registry.json`.
+> **Note**: Artifact ownership, output paths, and validation scripts are canonically defined in `skills/study-source-core/resources/artifact-registry.json`.
 
 
 ### 1. `core-notes` — Knowledge Notes Architect
@@ -49,7 +49,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: Invoked when eligible according to the Subject Artifact Policy in Wave 1 parallel generation.
 - **Process**: Read evidence pack $\to$ construct frontmatter $\to$ synthesize single H1 and mandatory sections $\to$ add optional justified sections $\to$ AST self-audit $\to$ write `Notes/<Chapter>_Notes.md` $\to$ return handoff.
 - **Failure Conditions**: Missing frontmatter fields, broken heading hierarchy, multiple H1s, English-only prose, hallucinations.
-- **Duplication Guard**: Evaluates evidence SHA-256 hash before re-authoring; points to `.agents/resources/note-architecture.md`.
+- **Duplication Guard**: Evaluates evidence SHA-256 hash before re-authoring; points to `skills/study-source-core/resources/note-architecture.md`.
 
 ### 2. `core-basic-anki` — Basic Flashcard Specialist
 - **Definition File**: `.agents/agents/core-basic-anki.md`
@@ -61,7 +61,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: Subject Artifact Policy; suppressed if deemed unnecessary by the Subject Skill.
 - **Process**: Extract atomic candidate facts $\to$ format 3-column TSV $\to$ escape inner tabs/newlines $\to$ write `Basic/<Chapter>_Basic.tsv` $\to$ return handoff.
 - **Failure Conditions**: 2-column or 4-column TSV rows, unescaped raw newlines, English-only explanations, empty cards.
-- **Duplication Guard**: Suppresses output with `ZERO_BASIC_CANDIDATES` rather than creating empty files; points to `.agents/resources/anki-core-rules.md`.
+- **Duplication Guard**: Suppresses output with `ZERO_BASIC_CANDIDATES` rather than creating empty files; points to `skills/study-source-core/resources/anki-core-rules.md`.
 
 ### 3. `core-cloze-anki` — Cloze Flashcard Specialist
 - **Definition File**: `.agents/agents/core-cloze-anki.md`
@@ -73,7 +73,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: Subject Artifact Policy; suppressed if deemed unnecessary by the Subject Skill.
 - **Process**: Extract declarative statements $\to$ apply `{{c1::target::hint}}` syntax $\to$ add pedagogical notes in Extra column $\to$ write `Cloze/<Chapter>_Cloze.tsv` $\to$ return handoff.
 - **Failure Conditions**: Missing `{{c1::}}` markers, over-clozing entire sentences, broken TSV delimiters.
-- **Duplication Guard**: Suppresses output with `ZERO_CLOZE_CANDIDATES`; points to `.agents/resources/anki-core-rules.md`.
+- **Duplication Guard**: Suppresses output with `ZERO_CLOZE_CANDIDATES`; points to `skills/study-source-core/resources/anki-core-rules.md`.
 
 ### 4. `core-image-occlusion` — Image Occlusion Specialist
 - **Definition File**: `.agents/agents/core-image-occlusion.md`
@@ -85,7 +85,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: Subject Artifact Policy; suppressed if deemed unnecessary by the Subject Skill.
 - **Process**: Discover diagrams $\to$ calculate normalized $[x, y, w, h]$ bounding boxes $\to$ define Hindi-first labels $\to$ author JSON manifest $\to$ write files $\to$ return handoff.
 - **Failure Conditions**: Coordinates outside $[0..100]$ bounds, missing media files, $> 15$ regions (cognitive overload).
-- **Duplication Guard**: Suppresses with `NO_IO_CANDIDATES` or `IO_WORTHINESS_BELOW_THRESHOLD`; points to `.agents/resources/image-occlusion-contract.md`.
+- **Duplication Guard**: Suppresses with `NO_IO_CANDIDATES` or `IO_WORTHINESS_BELOW_THRESHOLD`; points to `skills/study-source-core/resources/image-occlusion-contract.md`.
 
 ### 5. `core-mindmap` — MindMap Specialist
 - **Definition File**: `.agents/agents/core-mindmap.md`
@@ -97,7 +97,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: Source contains multi-branch relational topology (depth $\ge 2$); suppressed with `NO_RELATIONAL_TOPOLOGY`.
 - **Process**: Extract taxonomy tree $\to$ construct root node and child branches $\to$ add cross-links $\to$ write deliverable $\to$ return handoff.
 - **Failure Conditions**: Flat single-level tree (depth $< 2$), syntax errors, missing root node.
-- **Duplication Guard**: Suppresses generation with `NO_RELATIONAL_TOPOLOGY` when linear; points to `.agents/resources/map-schema.md`.
+- **Duplication Guard**: Suppresses generation with `NO_RELATIONAL_TOPOLOGY` when linear; points to `skills/study-source-core/resources/map-schema.md`.
 
 ### 6. `core-slide-deck` — SlideDeck Specialist
 - **Definition File**: `.agents/agents/core-slide-deck.md`
@@ -109,7 +109,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: `deck_worthiness >= threshold`; suppressed with `DECK_WORTHINESS_BELOW_THRESHOLD`.
 - **Process**: Determine narrative pacing $\to$ author 12 mandatory sections $\to$ enforce 5–15 slide budget $\to$ write deliverable $\to$ return handoff.
 - **Failure Conditions**: Missing mandatory sections, slide budget $< 5$ or $> 15$, text overflow ($> 8$ bullets per slide).
-- **Duplication Guard**: Suppresses run with `DECK_WORTHINESS_BELOW_THRESHOLD`; points to `.agents/resources/slide-deck-core-rules.md`.
+- **Duplication Guard**: Suppresses run with `DECK_WORTHINESS_BELOW_THRESHOLD`; points to `skills/study-source-core/resources/slide-deck-core-rules.md`.
 
 ### 7. `bm-graph` — Graph Linker Specialist
 - **Definition File**: `.agents/agents/bm-graph.md`
@@ -133,7 +133,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Invocation Trigger**: Wave 3 post-packaging; content exceeds complexity threshold.
 - **Process**: Ingest all sibling deliverables $\to$ cross-check formulas, numbers, and dates against evidence pack $\to$ run checkers $\to$ compile report $\to$ return handoff.
 - **Failure Conditions**: Contradictions between sibling files, hallucinations, unverified claims.
-- **Duplication Guard**: Suppresses run with `TRIVIAL_CONTENT_BELOW_QA_THRESHOLD`; points to `.agents/resources/validation-rules.md`.
+- **Duplication Guard**: Suppresses run with `TRIVIAL_CONTENT_BELOW_QA_THRESHOLD`; points to `skills/study-source-core/resources/validation-rules.md`.
 
 ### 9. `math-apkg-author` — Track B Mathematics APKG Author
 - **Definition File**: `.agents/agents/math-apkg-author.md`
@@ -188,12 +188,12 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Role**: Audits procedural contract registries against topics, enforcing strict Reuse vs Extend vs Create boundaries and standalone portability.
 - **Why Exists**: Prevents schema explosion and accidental mutation of frozen contracts while asserting zero pre-seeding standalone portability.
 - **Does Not Own**: Authoring study notes, compiling APKGs, modifying production schemas directly.
-- **Input**: `resources/schemas/studylab-canonical-contracts.json` and chapter practice deliverables.
+- **Input**: `skills/study-source-core/resources/schemas/studylab-canonical-contracts.json` and chapter practice deliverables.
 - **Required Context**: `skills/study-source-core/resources/studylab/manifest-spec.md`, `skills/study-source-core/resources/studylab/domain-boundaries.md`.
 - **Invocation Trigger**: Wave 1 complex chapter classification OR Wave 3 pre-release contract registry audit.
 - **Process**: Match proposed contracts against canonical registry $\to$ classify `REUSE`/`EXTEND`/`CREATE` $\to$ verify parameter domain bounds $\to$ compile report $\to$ return handoff.
 - **Failure Conditions**: Unbounded parameter domains (division by zero possible), redundant novel schema creation, missing step nodes.
-- **Duplication Guard**: Enforces schema reuse to prevent duplicate contracts; points to `.agents/resources/studylab/manifest-spec.md`.
+- **Duplication Guard**: Enforces schema reuse to prevent duplicate contracts; points to `skills/study-source-core/resources/studylab/manifest-spec.md`.
 
 ### 14. `adversarial-apkg-reviewer` — Independent Adversarial Reviewer
 - **Definition File**: `.agents/agents/adversarial-apkg-reviewer.md`

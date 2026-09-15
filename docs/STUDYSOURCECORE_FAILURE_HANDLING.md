@@ -1,5 +1,12 @@
 # StudySourceCore: Failure Propagation, Recovery & Blast Radius Isolation
 
+> [!NOTE]
+> **Epistemic Classification: NORMATIVE_INVARIANT**  
+> **Authority Dimension**: Semantic / Conceptual Specification  
+> **Operational Living Owner**: [`.agents/TROUBLESHOOTING.md`](../.agents/TROUBLESHOOTING.md)  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## 1. Core Failure Handling Philosophy
 
 StudySourceCore enforces **blast radius containment without false success**:

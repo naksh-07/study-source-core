@@ -13,8 +13,8 @@ Physics calculation errors arise from missing Free Body Diagrams (FBDs), coordin
 
 ## 3. OWNS
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Physics_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Physics_Procedural.manifest.json` (when APKG mode is active)
 - 6-stage numerical pipelines (FBD, Coordinate System, Governing Law, Algebraic Solve, Numerical Substitution with SI Units, Physical Sanity Check).
@@ -54,8 +54,8 @@ Physics calculation errors arise from missing Free Body Diagrams (FBDs), coordin
 
 ## 9. OUTPUT
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Physics_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Physics_Procedural.manifest.json` (when APKG mode is active)
 

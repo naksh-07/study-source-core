@@ -1,9 +1,16 @@
 # StudySourceCore: System Architecture & Capability Model
 
-> **Authoritative Specification**: [`ARCHITECTURE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ARCHITECTURE.md)  
-> **Product Charter**: [`PRODUCT.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/PRODUCT.md)  
-> **Roadmap**: [`ROADMAP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/ROADMAP.md)  
-> **Pedagogy Principles**: [`docs/LEARNING_PRINCIPLES.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/docs/LEARNING_PRINCIPLES.md)  
+> [!NOTE]
+> **Epistemic Classification: HISTORICAL_EVIDENCE / SUPERSEDED BASELINE**  
+> **Authority Dimension**: Historical Specification  
+> **Living Canonical Owner**: `ARCHITECTURE.md (root)`  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
+> **Authoritative Specification**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
+> **Product Charter**: [`PRODUCT.md`](../PRODUCT.md)  
+> **Roadmap**: [`ROADMAP.md`](../ROADMAP.md)  
+> **Pedagogy Principles**: [`docs/LEARNING_PRINCIPLES.md`](./LEARNING_PRINCIPLES.md)  
 > **Status**: HARMONIZED WITH v1.0 BASELINE  
 
 ---
@@ -238,4 +245,4 @@ Every capability in the system fulfills an explicit educational or architectural
    - Multiple distinct source questions under a single family maintain independent identities and card anchors.
 3. **Language Boundary**:
    - Hindi-first for all conceptual explanations, step justifications, and hints. Standard English technical terms in parentheses `( )`.
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.

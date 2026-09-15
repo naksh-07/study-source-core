@@ -30,11 +30,11 @@ StudySourceCore is the master orchestration engine that transforms raw education
 | **2** | Sequential | Packaging tools compile APKGs (`export_anki_package` / `export_studylab_procedural_package` or CLI `export_anki.js`) |
 | **3** | Post-packaging | QA audits (`bm-qa`, `bm-graph`, `adversarial-apkg-reviewer`) and physical validation (`validate_artifact`) |
 
-> Full specification → [`resources/workflow.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/resources/workflow.md)
+> Full specification → [`resources/workflow.md`](./resources/workflow.md)
 
 ## 4. Routing & Dispatch
 
-`study-source-core` strictly complies with **Adaptive Orchestrator v4 Foundation**. The MANDATORY DISPATCH GATE and artifact eligibility matrix are defined in [`resources/workflow.md#phase-45`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/resources/workflow.md). Routing decisions are strictly governed by the deterministic, machine-readable `runtime-policy.json` provided by each Subject Skill. The policy is loaded and validated by `scripts/subject_policy_resolver.js` and consumed by `scripts/routing_engine.js`. Core routes based *only* on this resolved policy and strictly fails closed when the policy is missing, malformed, or invalid. Core MUST NOT invent, infer, or fallback to default policies.
+`study-source-core` strictly complies with **Adaptive Orchestrator v4 Foundation**. The MANDATORY DISPATCH GATE and artifact eligibility matrix are defined in [`resources/workflow.md#phase-45`](./resources/workflow.md). Routing decisions are strictly governed by the deterministic, machine-readable `runtime-policy.json` provided by each Subject Skill. The policy is loaded and validated by `scripts/subject_policy_resolver.js` and consumed by `scripts/routing_engine.js`. Core routes based *only* on this resolved policy and strictly fails closed when the policy is missing, malformed, or invalid. Core MUST NOT invent, infer, or fallback to default policies.
 
 The `subject-skill-manifest.json` acts exclusively as a metadata registry and capability directory, not a policy layer. Artifact policy is uniquely and entirely owned by the individual Subject Skills via their respective `runtime-policy.json` files. The LLM Subject Agent is no longer responsible for dynamically synthesizing this policy.
 
@@ -51,34 +51,34 @@ Execution metadata for all artifacts is maintained in `resources/artifact-regist
 
 The authoritative artifact ownership, writer, validator, dependency, and execution metadata is defined in `resources/artifact-registry.json`.
 
-> Full ownership matrix explanation → [`OWNERSHIP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md)
+> Full ownership matrix explanation → [`OWNERSHIP.md`](../../OWNERSHIP.md)
 
 ## 6. Evidence & Context Rules
 
 - **Single Source Parse**: Read source once → extract to `scratch/evidence-pack.md`. No multiple PDF parsing.
 - **SOURCE_ONLY default**: Zero web searches or model memory injections unless explicitly requested.
-- **Hindi-first language contract** → [`RESOURCES.md#universal-language-contract`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/RESOURCES.md#universal-language-contract)
+- **Hindi-first language contract** → [`RESOURCES.md#universal-language-contract`](../../RESOURCES.md#universal-language-contract)
 
 ## 7. Completion & Failure Gates
 
 - **Completion**: Physical disk inspection — every expected artifact exists, size > 0, conforms to schema, passes validation.
 - **Failure**: Missing files, 0-byte outputs, schema errors, or invariant violations prevent PASS.
-- **HANDOFF REPORT contract** → [`EXECUTION_LIFECYCLE.md#structured-handoff-schema`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/EXECUTION_LIFECYCLE.md#structured-handoff-schema)
-- **Validation scripts** → [`resources/workflow.md` Phase 6](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/resources/workflow.md)
+- **HANDOFF REPORT contract** → [`EXECUTION_LIFECYCLE.md#structured-handoff-schema`](../../EXECUTION_LIFECYCLE.md#structured-handoff-schema)
+- **Validation scripts** → [`resources/workflow.md` Phase 6](./resources/workflow.md)
 
 ## 8. Canonical References
 
 | Domain | Canonical Source |
 |--------|-----------------|
-| Full workflow (11 phases) | [`resources/workflow.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/resources/workflow.md) |
-| Ownership & Single-Writer Rule | [`OWNERSHIP.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md) |
-| Execution lifecycle & handoff | [`EXECUTION_LIFECYCLE.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/EXECUTION_LIFECYCLE.md) |
-| Agent registry (14 agents) | [`AGENTS.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/AGENTS.md) |
-| Resource & schema registry | [`RESOURCES.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/RESOURCES.md) |
-| Anki core rules & model IDs | [`resources/anki-core-rules.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/resources/anki-core-rules.md) |
+| Full workflow (11 phases) | [`resources/workflow.md`](./resources/workflow.md) |
+| Ownership & Single-Writer Rule | [`OWNERSHIP.md`](../../OWNERSHIP.md) |
+| Execution lifecycle & handoff | [`EXECUTION_LIFECYCLE.md`](../../EXECUTION_LIFECYCLE.md) |
+| Agent registry (14 agents) | [`AGENTS.md`](../../AGENTS.md) |
+| Resource & schema registry | [`RESOURCES.md`](../../RESOURCES.md) |
+| Anki core rules & model IDs | [`resources/anki-core-rules.md`](./resources/anki-core-rules.md) |
 
-| Note architecture | [`resources/note-architecture.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/resources/note-architecture.md) |
-| Subject domain knowledge | [`subject-skills/<Subject>/SKILL.md`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/.agents/skills/study-source-core/subject-skills/) |
+| Note architecture | [`resources/note-architecture.md`](./resources/note-architecture.md) |
+| Subject domain knowledge | [`subject-skills/<Subject>/SKILL.md`](./subject-skills) |
 
 ## 9. Stop Rules
 

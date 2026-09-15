@@ -22,7 +22,7 @@ Based on the inventory, classify the source complexity into one or more executio
 - **DIFFICULT**: Corrupted files or password protection requiring targeted recovery.
 
 ## Phase 3: SOURCE PLAN & RETRIEVAL PLAN (Sequential)
-Define the extraction strategy based on the classification and [tool-orchestration.md](file:///.agents/skills/study-source-core/resources/tool-orchestration.md).
+Define the extraction strategy based on the classification and [tool-orchestration.md](./tool-orchestration.md).
 - **Adaptive Retrieval**: Use full-context/native retrieval when practical and safe. Use chunking (batching) when source size/complexity makes wholesale processing inefficient or unsafe. Do NOT blindly chunk everything, and do NOT force full-context processing if it exceeds the model's reliability limits.
 - **Execution State tracking**: For Medium/Large/Multi-File sources, maintain a deterministic, machine-readable JSON state file (`scratch/execution-state.json`) to track `pending`, `complete`, or `failed` sections. 
   - **Resume Rule**: If resuming from an interruption, skip `complete` sections. Only process `pending` or `failed` sections. Do NOT rely on LLM conversational memory to track large batch coverage.
@@ -94,7 +94,7 @@ The exact subagents to invoke, their expected outputs, and eligibility condition
 - **Subagent Contract**: Every invoked subagent MUST be seeded with: exact evidence boundary, `SOURCE_ONLY` instruction, Hindi-first contract, relevant Subject Skill path, expected output path, validation requirements, and the explicit rule "do not research outside supplied evidence".
 
 ### 2. Structured Handoff Barrier & Synthesis
-Every specialist returns the canonical structured handoff block defined in [`EXECUTION_LIFECYCLE.md#structured-handoff-schema`](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/EXECUTION_LIFECYCLE.md#structured-handoff-schema).
+Every specialist returns the canonical structured handoff block defined in [`EXECUTION_LIFECYCLE.md#structured-handoff-schema`](../../../EXECUTION_LIFECYCLE.md#structured-handoff-schema).
 
 ### 3. Single-Writer Rule & Workforce Collapse
 - **Single Controlled Writer**: The parent (or designated single writer) resolves any inter-artifact references and coordinates final writes.

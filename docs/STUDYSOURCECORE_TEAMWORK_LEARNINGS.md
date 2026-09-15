@@ -1,5 +1,12 @@
 # StudySourceCore: Teamwork Reverse-Engineering & Multi-Agent Learnings
 
+> [!NOTE]
+> **Epistemic Classification: HISTORICAL_EVIDENCE / SUPERSEDED BASELINE**  
+> **Authority Dimension**: Historical Specification  
+> **Living Canonical Owner**: `docs/ORCHESTRATION_AND_EXECUTION.md`  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## Executive Overview
 
 This document presents the reverse-engineering analysis of the official **Teamwork Preview / Adaptive Orchestrator v4 Foundation** multi-agent orchestration patterns and documents their systematic application to **StudySourceCore**.
@@ -87,4 +94,4 @@ The following items are cataloged for future research but are strictly out of sc
 - Real-time collaborative canvas rendering for MindMaps in web browser runtime.
 - Multi-modal audio flashcard export using neural text-to-speech models.
 - Cross-vault knowledge graph semantic clustering across multiple separate subjects.
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.

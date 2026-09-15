@@ -13,8 +13,8 @@ Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, N
 
 ## 3. OWNS
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Chemistry_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Chemistry_Procedural.manifest.json` (when APKG mode is active)
 - Stoichiometric balances, ICE tables, equilibrium constant calculations, and reaction coordinate graphs.
@@ -54,8 +54,8 @@ Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, N
 
 ## 9. OUTPUT
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
-- `PracticeQuestions/PracticeQuestions.json`
-- `Procedural/ProceduralPatterns.json`
+- `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
+- `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - `StudyLab/Chemistry_Procedural.apkg` (when APKG mode is active)
 - `StudyLab/Chemistry_Procedural.manifest.json` (when APKG mode is active)
 

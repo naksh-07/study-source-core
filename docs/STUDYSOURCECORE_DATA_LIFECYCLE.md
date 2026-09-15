@@ -1,5 +1,12 @@
 # StudySourceCore: Canonical Data Lifecycle & Lineage
 
+> [!NOTE]
+> **Epistemic Classification: NORMATIVE_INVARIANT**  
+> **Authority Dimension**: Semantic / Conceptual Specification  
+> **Operational Living Owner**: [`.agents/DATA_FLOW.md`](../.agents/DATA_FLOW.md)  
+> **Retention Notice**: Retained at this exact path (> 2,000 bytes) for backward-compatibility with `test_final_audit_harness.js` Stage 5.1.
+
+
 ## 1. The 6-Stage End-to-End Data Flow
 
 The StudySourceCore data pipeline transforms raw learning inputs into permanent study artifacts through 6 strictly sequenced stages:
@@ -95,4 +102,4 @@ The StudySourceCore data pipeline transforms raw learning inputs into permanent 
   }
   ```
 - **Completion Check**: Missing expected artifacts trigger an immediate build `FAIL`.
-> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](file:///c:/Users/Suraj/Pictures/Books/Acadmey/ALP/Prompts/AI%20Notes/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
+> **Canonical Terminology**: See [OWNERSHIP.md#1-architectural-principles-of-ownership](../.agents/OWNERSHIP.md#1-architectural-principles-of-ownership) for the authoritative Single-Writer Rule, Parent Self-Execution Ban, and dispatch terminology definitions.
