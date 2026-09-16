@@ -3,7 +3,8 @@
  * 
  * Provides deterministic, machine-readable task graph management, single-writer enforcement,
  * parent self-execution prevention, dependency barriers, failure isolation, targeted retries,
- * and physical completion evidence generation.
+ * bounded concurrency (MAX=4), atomic checkpointing, crash-resilient recovery, and
+ * physical completion evidence generation.
  */
 
 const fs = require('fs');
@@ -19,12 +20,16 @@ const { classifyFailure, canRetryTask, getTargetedRetryPlan, GLOBAL_RESOURCE_LIM
 const { 
     initExecutionState, 
     saveExecutionState, 
+    loadExecutionState,
     updateTaskState,
     checkpointTaskStart,
     checkpointTaskComplete,
     checkpointTaskRetry,
-    checkpointTaskFail
+    checkpointTaskFail,
+    validateStateTransition,
+    CURRENT_PIPELINE_VERSION
 } = require('./execution_state');
+const { AntigravityHostAdapter } = require('./antigravity_adapter');
 
 /**
  * Standard required fields in specialist handoff contract.
@@ -67,8 +72,12 @@ function buildExecutionTaskGraph(context = {}) {
         throw new Error('MISSING_REQUIRED_CONTEXT: subject and chapter must be provided');
     }
 
+    // GAP-07: Dynamic Artifact Output Directory Isolation
+    const outputDirEnv = process.env.STUDYSOURCE_OUTPUT_DIR;
+    const effectiveCustomRoot = customRoot || context.outputDir || (outputDirEnv ? path.resolve(outputDirEnv) : null);
+
     const routing = evaluateArtifactRouting(context);
-    const paths = getCanonicalArtifactPaths(subject, chapter, customRoot);
+    const paths = getCanonicalArtifactPaths(subject, chapter, effectiveCustomRoot);
     let domainSpecialist = specialist_agent;
     if (!domainSpecialist) {
         try {
@@ -125,19 +134,20 @@ function buildExecutionTaskGraph(context = {}) {
             return depTrack && routing[depTrack] === true;
         });
 
-            let defaultEvidencePath = 'scratch/evidence-pack.md';
-            if (customRoot) {
-                const cand1 = path.join(customRoot, 'evidence-pack.md');
-                const cand2 = path.join(customRoot, 'scratch', 'evidence-pack.md');
-                if (fs.existsSync(cand1)) {
-                    defaultEvidencePath = cand1;
-                } else if (fs.existsSync(cand2)) {
-                    defaultEvidencePath = cand2;
-                } else {
-                    defaultEvidencePath = cand2;
-                }
+        let defaultEvidencePath = 'scratch/evidence-pack.md';
+        if (effectiveCustomRoot) {
+            const cand1 = path.join(effectiveCustomRoot, 'evidence-pack.md');
+            const cand2 = path.join(effectiveCustomRoot, 'scratch', 'evidence-pack.md');
+            if (fs.existsSync(cand1)) {
+                defaultEvidencePath = cand1;
+            } else if (fs.existsSync(cand2)) {
+                defaultEvidencePath = cand2;
+            } else {
+                defaultEvidencePath = cand2;
             }
-            tasks.push({
+        }
+
+        tasks.push({
             task_id: taskDef.task_id,
             track_key: trackKey,
             artifactKey: taskDef.artifactKey || trackKey,
@@ -170,7 +180,10 @@ function buildExecutionTaskGraph(context = {}) {
         subject,
         evidenceHash,
         compatibilityMode,
-        context,
+        context: {
+            ...context,
+            customRoot: effectiveCustomRoot
+        },
         tasks,
         singleWriterMap: Object.fromEntries(singleWriterMap),
         waveBreakdown: {
@@ -220,7 +233,7 @@ function validateStructuredHandoff(handoff) {
  * Asserts that the parent orchestrator is NOT generating specialist-owned artifacts.
  */
 function assertNoParentSelfExecution(task, writerAgent) {
-    const parentIdentities = ['parent', 'study-source-core', 'orchestrator', 'parent-orchestrator'];
+    const parentIdentities = ['parent', 'study-source-core', 'orchestrator', 'parent-orchestrator', 'adaptive-orchestrator'];
     const isSpecialistTask = task.owner_agent !== 'parent' && task.owner_agent !== 'orchestrator';
 
     if (isSpecialistTask && parentIdentities.includes(String(writerAgent).toLowerCase().trim())) {
@@ -319,14 +332,53 @@ async function validateCompletionEvidence(task, handoff = null, customRoot = nul
 }
 
 /**
- * Executes a simulated or real task workflow with explicit dependency barriers,
- * failure isolation, and 1-retry budget.
+ * Executes a function with a hard timeout cap.
+ */
+function executeWithTimeout(fn, timeoutMs, taskId) {
+    if (!timeoutMs || timeoutMs <= 0 || timeoutMs === Infinity) {
+        return fn();
+    }
+
+    return new Promise((resolve, reject) => {
+        let settled = false;
+        const timer = setTimeout(() => {
+            if (!settled) {
+                settled = true;
+                reject(new Error(`[TASK_TIMEOUT] Task '${taskId}' timed out after ${timeoutMs}ms`));
+            }
+        }, timeoutMs);
+
+        Promise.resolve()
+            .then(fn)
+            .then(
+                res => {
+                    if (!settled) {
+                        settled = true;
+                        clearTimeout(timer);
+                        resolve(res);
+                    }
+                },
+                err => {
+                    if (!settled) {
+                        settled = true;
+                        clearTimeout(timer);
+                        reject(err);
+                    }
+                }
+            );
+    });
+}
+
+/**
+ * Executes a simulated or real task workflow with bounded concurrency (MAX=4),
+ * explicit dependency barriers, failure isolation, and 1-retry budget.
  * 
  * @param {Object} graph - Task Graph built by buildExecutionTaskGraph
  * @param {Function} taskExecutor - Async function (task, retryCount) => handoffObject
+ * @param {Object} options - Runtime options (resume, taskTimeoutMs, maxConcurrentWorkers)
  * @returns {Object} Complete workflow execution summary and observable traces
  */
-async function executeTaskWorkflow(graph, taskExecutor) {
+async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
     const traces = {
         executionPlan: [],
         dispatchTrace: [],
@@ -334,8 +386,13 @@ async function executeTaskWorkflow(graph, taskExecutor) {
         handoffTrace: [],
         duplicateWorkAudit: [],
         completionEvidence: [],
+        taskTimestamps: {},
         efficiencyAudit: {}
     };
+
+    const hostAdapter = new AntigravityHostAdapter({
+        missionId: (graph.context && graph.context.missionId) || `mission_${Date.now()}`
+    });
 
     let storageDir = null;
     if (graph.context && graph.context.customRoot) {
@@ -343,12 +400,9 @@ async function executeTaskWorkflow(graph, taskExecutor) {
     } else if (graph.context && graph.context.storage_dir) {
         storageDir = graph.context.storage_dir;
     }
-    const executionState = initExecutionState({
-        chapter: graph.chapter,
-        subject: graph.subject,
-        evidenceHash: graph.evidenceHash,
-        storage_dir: storageDir
-    });
+
+    const isResume = (options && options.resume === true) || (graph.context && graph.context.resume === true);
+    let executionState = null;
 
     const taskStatusMap = new Map();
     let totalInvocations = 0;
@@ -358,44 +412,480 @@ async function executeTaskWorkflow(graph, taskExecutor) {
     let failedCount = 0;
     let blockedCount = 0;
 
-    // Initialize statuses
-    for (const task of graph.tasks) {
-        taskStatusMap.set(task.task_id, task.status);
-        updateTaskState(executionState, task.task_id, {
-            status: task.status,
-            task_name: task.task_name,
-            wave: task.wave,
-            owner_agent: task.owner_agent,
-            writer_agent: task.writer_agent,
-            target_path: task.target_path,
-            suppression_reason: task.suppression_reason
+    if (isResume) {
+        executionState = loadExecutionState(storageDir, { failClosed: true, validate: true });
+        if (!executionState) {
+            throw new Error('[RESUME_FAILED] No valid existing checkpoint found to resume from.');
+        }
+
+        if (executionState.chapter !== graph.chapter || executionState.subject !== graph.subject) {
+            throw new Error(`[RESUME_MISMATCH] Checkpoint subject/chapter (${executionState.subject}/${executionState.chapter}) does not match current run (${graph.subject}/${graph.chapter})`);
+        }
+
+        if (graph.evidenceHash && executionState.evidenceHash && executionState.evidenceHash !== graph.evidenceHash &&
+            executionState.evidenceHash !== '0000000000000000000000000000000000000000000000000000000000000000') {
+            throw new Error(`[RESUME_PROVENANCE_MISMATCH] Checkpoint evidence hash does not match current source`);
+        }
+
+        if (executionState.pipeline_version !== CURRENT_PIPELINE_VERSION) {
+            throw new Error(`[CHECKPOINT_VERSION_MISMATCH] Pipeline version mismatch: checkpoint ${executionState.pipeline_version}, engine ${CURRENT_PIPELINE_VERSION}`);
+        }
+
+        totalInvocations = executionState.metrics.total_launches || 0;
+    } else {
+        executionState = initExecutionState({
+            chapter: graph.chapter,
+            subject: graph.subject,
+            evidenceHash: graph.evidenceHash,
+            storage_dir: storageDir
         });
+    }
+
+    // Initialize/Reconstruct statuses
+    for (const task of graph.tasks) {
+        let initialStatus = task.status;
+
+        if (isResume && executionState.tasks[task.task_id]) {
+            const saved = executionState.tasks[task.task_id];
+            // If completed, verify physical artifact still exists on disk
+            if (saved.status === 'COMPLETED' || saved.status === 'SUCCEEDED') {
+                if (task.target_path && fs.existsSync(task.target_path) && fs.statSync(task.target_path).size > 0) {
+                    initialStatus = 'COMPLETED';
+                    completedCount++;
+                    traces.completionEvidence.push({
+                        task_id: task.task_id,
+                        target_path: task.target_path,
+                        bytes: fs.statSync(task.target_path).size,
+                        status: 'VERIFIED_ON_DISK_RESUMED'
+                    });
+                } else {
+                    initialStatus = 'PLANNED'; // Re-queue if artifact missing
+                }
+            } else if (saved.status === 'SKIPPED') {
+                initialStatus = 'SKIPPED';
+                skippedCount++;
+            } else {
+                // If interrupted mid-flight (RUNNING / RETRYING)
+                initialStatus = 'PLANNED';
+            }
+
+            // Restore retry counts (never reset on resume!)
+            if (executionState.retry_counts && executionState.retry_counts[task.task_id]) {
+                task.current_retries = executionState.retry_counts[task.task_id];
+            }
+        }
+
+        taskStatusMap.set(task.task_id, initialStatus);
+        if (!isResume) {
+            updateTaskState(executionState, task.task_id, {
+                status: task.status,
+                task_name: task.task_name,
+                wave: task.wave,
+                owner_agent: task.owner_agent,
+                writer_agent: task.writer_agent,
+                target_path: task.target_path,
+                suppression_reason: task.suppression_reason
+            });
+        }
+
         traces.executionPlan.push({
             task_id: task.task_id,
             name: task.task_name,
             wave: task.wave,
             owner: task.owner_agent,
-            initial_status: task.status,
+            initial_status: initialStatus,
             suppression_reason: task.suppression_reason
         });
     }
 
-    // Process tasks based on dependency resolution rather than hardcoded waves
-    let pendingTasks = [...graph.tasks];
+    // Concurrency parameters
+    const MAX_CONCURRENT = Math.min(
+        GLOBAL_RESOURCE_LIMITS.MAX_CONCURRENT_WORKERS,
+        options.maxConcurrentWorkers || 4
+    );
+    const taskTimeoutMs = (options && options.taskTimeoutMs) || (graph.context && graph.context.taskTimeoutMs) || 180000;
+    const maxTotalLaunches = (options && options.maxTotalLaunches) || GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES;
 
-    while (pendingTasks.length > 0) {
-        const readyTasks = pendingTasks.filter(task => {
+    let pendingTasks = graph.tasks.filter(t => {
+        const s = taskStatusMap.get(t.task_id);
+        return s !== 'COMPLETED' && s !== 'SKIPPED';
+    });
+
+    const runningTasks = new Map(); // taskId -> Promise
+    let peakObservedConcurrency = 0;
+    let schedulerError = null;
+
+    /**
+     * Executes a single task instance within the worker pool with retries.
+     */
+    async function executeSingleTask(task) {
+        traces.taskTimestamps[task.task_id] = {
+            start_time: Date.now()
+        };
+
+        // Enforce Parent Self-Execution Ban before dispatch
+        assertNoParentSelfExecution(task, task.writer_agent);
+        traces.ownershipTrace.push({
+            task_id: task.task_id,
+            target_path: task.target_path,
+            designated_owner: task.owner_agent,
+            designated_writer: task.writer_agent,
+            status: 'OWNERSHIP_VERIFIED'
+        });
+
+        // Context Planning Layer
+        let contextPlan = null;
+        try {
+            let evidenceSource = (graph.context && graph.context.evidencePack) || task.evidencePack;
+            if (!evidenceSource && graph.context && graph.context.customRoot) {
+                const candidateDirect = path.join(graph.context.customRoot, 'evidence-pack.md');
+                const candidateScratch = path.join(graph.context.customRoot, 'scratch', 'evidence-pack.md');
+                if (fs.existsSync(candidateDirect)) {
+                    evidenceSource = candidateDirect;
+                } else if (fs.existsSync(candidateScratch)) {
+                    evidenceSource = candidateScratch;
+                }
+            }
+            if (!evidenceSource && task.inputs && task.inputs[0] && fs.existsSync(task.inputs[0])) {
+                evidenceSource = task.inputs[0];
+            }
+            if (!evidenceSource) {
+                evidenceSource = 'scratch/evidence-pack.md';
+            }
+            const evidenceHash = (graph.context && graph.context.evidenceHash) || task.evidenceHash || graph.evidenceHash;
+            contextPlan = planContextSlice({
+                subject: graph.subject,
+                chapter: graph.chapter,
+                artifactKey: task.artifactKey || task.track_key,
+                specialist: task.owner_agent,
+                evidencePack: evidenceSource,
+                evidenceHash: evidenceHash,
+                strategy: 'TASK_SCOPED',
+                compatibilityMode: graph.compatibilityMode === true
+            });
+            task.contextSlice = contextPlan.context_slice_content;
+            task.contextPlan = contextPlan;
+            traces.contextPlans = traces.contextPlans || [];
+            traces.contextPlans.push({
+                task_id: task.task_id,
+                strategy: contextPlan.context_strategy,
+                budget_tier: contextPlan.estimated_context_size.budget_tier,
+                estimated_tokens: contextPlan.estimated_context_size.estimated_tokens,
+                reduction_ratio: contextPlan.estimated_context_size.reduction_ratio,
+                slice_hash: contextPlan.slice_hash
+            });
+        } catch (planErr) {
+            if (planErr.message && planErr.message.includes('CONTEXT_PROVENANCE_FAILURE')) {
+                throw planErr; // Fail closed on provenance corruption!
+            }
+        }
+
+        // Policy-Driven Model Routing Layer
+        let modelRouting = resolveModelRouting({
+            artifactKey: task.artifactKey || task.track_key,
+            specialist: task.owner_agent,
+            subject: graph.subject,
+            contextBudget: (contextPlan && contextPlan.estimated_context_size && contextPlan.estimated_context_size.budget_tier) || 'MEDIUM',
+            attempt: (task.current_retries || 0) + 1
+        });
+        task.modelRouting = modelRouting;
+        traces.modelRoutings = traces.modelRoutings || [];
+        traces.modelRoutings.push({
+            task_id: task.task_id,
+            attempt: (task.current_retries || 0) + 1,
+            model_class: modelRouting.model_class,
+            task_complexity: modelRouting.task_complexity,
+            reason: modelRouting.reason
+        });
+
+        let executionSuccess = false;
+        let currentAttempt = task.current_retries || 0;
+        let handoff = null;
+        let lastFailureClass = null;
+
+        while (!executionSuccess) {
+            // Enforce Global Launch Ceiling (max 10 launches mission-wide by default)
+            const maxTotalLaunches = (options && options.maxTotalLaunches) || GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES;
+            if (totalInvocations >= maxTotalLaunches) {
+                const limitMsg = `RESOURCE_LIMIT_EXCEEDED: Global launch limit (${maxTotalLaunches}) exhausted`;
+                taskStatusMap.set(task.task_id, 'FAILED');
+                checkpointTaskFail(executionState, task.task_id, new Error(limitMsg));
+                failedCount++;
+                traces.completionEvidence.push({
+                    task_id: task.task_id,
+                    target_path: task.target_path,
+                    status: 'FAILED',
+                    errors: [limitMsg]
+                });
+                break;
+            }
+
+            totalInvocations++;
+            executionState.metrics.total_launches = totalInvocations;
+
+            // Bind worker via Host Adapter
+            const workerState = hostAdapter.bindWorkerToTask({
+                logicalTaskId: task.task_id,
+                ownerAgent: task.owner_agent,
+                writerAgent: task.writer_agent,
+                waveId: task.wave,
+                attempt: currentAttempt + 1,
+                callerIdentity: 'orchestrator'
+            });
+            hostAdapter.recordWorkerStart(workerState.worker_id);
+
+            // Escalate model routing if retry attempt > 0
+            if (currentAttempt > 0) {
+                modelRouting = resolveModelRouting({
+                    artifactKey: task.artifactKey || task.track_key,
+                    specialist: task.owner_agent,
+                    subject: graph.subject,
+                    contextBudget: (contextPlan && contextPlan.estimated_context_size && contextPlan.estimated_context_size.budget_tier) || 'MEDIUM',
+                    attempt: currentAttempt + 1,
+                    lastFailureClass
+                });
+                task.modelRouting = modelRouting;
+                traces.modelRoutings.push({
+                    task_id: task.task_id,
+                    attempt: currentAttempt + 1,
+                    model_class: modelRouting.model_class,
+                    task_complexity: modelRouting.task_complexity,
+                    reason: modelRouting.reason
+                });
+            }
+
+            checkpointTaskStart(executionState, task, modelRouting.model_class, (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED');
+
+            traces.dispatchTrace.push({
+                task_id: task.task_id,
+                worker_id: workerState.worker_id,
+                agent: task.owner_agent,
+                action: currentAttempt === 0 ? 'DISPATCH' : 'RETRY_DISPATCH',
+                attempt: currentAttempt + 1,
+                model_class: modelRouting.model_class,
+                context_strategy: (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
+                timestamp: new Date().toISOString()
+            });
+
+            try {
+                // Execute worker with hard timeout cap
+                handoff = await executeWithTimeout(
+                    () => taskExecutor(task, currentAttempt),
+                    taskTimeoutMs,
+                    task.task_id
+                );
+
+                const handoffVal = validateStructuredHandoff(handoff);
+                if (!handoffVal.isValid) {
+                    throw new Error(`[HANDOFF_SCHEMA_ERROR] ${handoffVal.errors.join('; ')}`);
+                }
+
+                traces.handoffTrace.push({
+                    task_id: task.task_id,
+                    worker_id: workerState.worker_id,
+                    agent: handoff.agent,
+                    status: handoff.status,
+                    output_paths: handoff.output_paths,
+                    attempt: currentAttempt + 1
+                });
+
+                // Physical Completion Evidence Check
+                const completionVal = await validateCompletionEvidence(task, handoff);
+                if (completionVal.isValid) {
+                    executionSuccess = true;
+                    const isSuppressed = (handoff && handoff.status === 'SUPPRESSED') || completionVal.status === 'SKIPPED';
+                    const statusToSet = isSuppressed ? 'SKIPPED' : 'COMPLETED';
+                    taskStatusMap.set(task.task_id, statusToSet);
+
+                    if (isSuppressed) {
+                        skippedCount++;
+                        updateTaskState(executionState, task.task_id, {
+                            status: 'SKIPPED',
+                            suppression_reason: (handoff && handoff.warnings && handoff.warnings[0]) || 'SUPPRESSED'
+                        });
+                    } else {
+                        completedCount++;
+                        checkpointTaskComplete(executionState, task.task_id, {
+                            output_paths: handoff.output_paths,
+                            validator: task.validation_rule,
+                            validator_result: completionVal,
+                            attempt: currentAttempt + 1
+                        });
+                    }
+
+                    traces.completionEvidence.push({
+                        task_id: task.task_id,
+                        target_path: task.target_path,
+                        bytes: completionVal.fileSize || 0,
+                        status: isSuppressed ? 'SKIPPED' : 'VERIFIED_ON_DISK'
+                    });
+
+                    // Auditable Decision Trail
+                    traces.decisionTrail = traces.decisionTrail || [];
+                    traces.decisionTrail.push({
+                        task_id: task.task_id,
+                        source_hash: (contextPlan && contextPlan.source_hash) || graph.evidenceHash,
+                        context_strategy: (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
+                        selected_evidence: (contextPlan && contextPlan.selected_evidence_ids) || [],
+                        context_size: (contextPlan && contextPlan.estimated_context_size) || {},
+                        model_class: modelRouting.model_class,
+                        specialist: task.owner_agent,
+                        attempt: currentAttempt + 1,
+                        validator: task.validation_rule,
+                        result: 'PASS'
+                    });
+
+                    hostAdapter.collapseWorker(workerState.worker_id, 'SUCCEEDED');
+                } else {
+                    throw new Error(`[COMPLETION_EVIDENCE_ERROR] ${completionVal.errors.join('; ')}`);
+                }
+            } catch (err) {
+                currentAttempt++;
+                task.current_retries = currentAttempt;
+                hostAdapter.collapseWorker(workerState.worker_id, 'FAILED');
+
+                // Classify failure & evaluate retry policy
+                const classification = classifyFailure(err);
+                lastFailureClass = classification.failure_class;
+
+                const effectiveMaxRetries = (options && options.maxRetriesPerTask !== undefined)
+                    ? options.maxRetriesPerTask
+                    : (GLOBAL_RESOURCE_LIMITS.MAX_RETRIES_PER_TASK !== undefined ? GLOBAL_RESOURCE_LIMITS.MAX_RETRIES_PER_TASK : 1);
+                const retryDecision = canRetryTask(task, classification, currentAttempt, totalInvocations, { maxRetriesPerTask: effectiveMaxRetries });
+
+                traces.retryTrace = traces.retryTrace || [];
+                traces.retryTrace.push({
+                    task_id: task.task_id,
+                    attempt: currentAttempt,
+                    failure_class: classification.failure_class,
+                    retry_class: classification.retry_class,
+                    can_retry: retryDecision.canRetry,
+                    reason: retryDecision.reason,
+                    error: err.message
+                });
+
+                if (retryDecision.canRetry) {
+                    const adaptation = getTargetedRetryPlan(task, classification, currentAttempt + 1, contextPlan || {});
+                    task.promptConstraints = adaptation.prompt_constraints;
+
+                    checkpointTaskRetry(executionState, task.task_id, {
+                        attempt: currentAttempt,
+                        failure_class: classification.failure_class,
+                        retry_class: classification.retry_class,
+                        reason: retryDecision.reason,
+                        error: err.message,
+                        model_class: modelRouting.model_class,
+                        context_strategy: adaptation.context_strategy || (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
+                        adaptation_directives: adaptation.adaptation_directives,
+                        adaptation_reason: adaptation.adaptation_reason
+                    });
+
+                    if (adaptation.context_strategy === 'FOCUSED' && contextPlan) {
+                        try {
+                            const evidenceSource = (graph.context && graph.context.evidencePack) || 'scratch/evidence-pack.md';
+                            contextPlan = planContextSlice({
+                                subject: graph.subject,
+                                chapter: graph.chapter,
+                                artifactKey: task.artifactKey || task.track_key,
+                                specialist: task.owner_agent,
+                                evidencePack: evidenceSource,
+                                evidenceHash: graph.evidenceHash,
+                                strategy: 'FOCUSED',
+                                compatibilityMode: graph.compatibilityMode === true
+                            });
+                            task.contextSlice = contextPlan.context_slice_content;
+                            task.contextPlan = contextPlan;
+                        } catch (e) {}
+                    }
+                } else {
+                    taskStatusMap.set(task.task_id, 'FAILED');
+                    checkpointTaskFail(executionState, task.task_id, err);
+                    failedCount++;
+                    traces.completionEvidence.push({
+                        task_id: task.task_id,
+                        target_path: task.target_path,
+                        status: 'FAILED',
+                        errors: [err.message, retryDecision.reason]
+                    });
+                    break;
+                }
+            }
+        }
+
+        traces.taskTimestamps[task.task_id].end_time = Date.now();
+        traces.taskTimestamps[task.task_id].duration_ms = traces.taskTimestamps[task.task_id].end_time - traces.taskTimestamps[task.task_id].start_time;
+    }
+
+    // =========================================================================
+    // BOUNDED CONCURRENCY POOL SCHEDULER LOOP (MAX_CONCURRENT <= 4)
+    // =========================================================================
+    while (pendingTasks.length > 0 || runningTasks.size > 0) {
+        // 1. Check for tasks blocked by failed dependencies
+        const tasksToBlock = [];
+        for (const task of pendingTasks) {
+            const hasFailedDep = (task.dependencies || []).some(depId => {
+                const s = taskStatusMap.get(depId);
+                return s === 'FAILED' || s === 'BLOCKED';
+            });
+            if (hasFailedDep) {
+                tasksToBlock.push(task);
+            }
+        }
+
+        for (const task of tasksToBlock) {
+            pendingTasks = pendingTasks.filter(t => t.task_id !== task.task_id);
+            taskStatusMap.set(task.task_id, 'BLOCKED');
+            updateTaskState(executionState, task.task_id, { status: 'BLOCKED', unmet_dependency: 'FAILED_PREREQUISITE' });
+            blockedCount++;
+            traces.dispatchTrace.push({
+                task_id: task.task_id,
+                agent: task.owner_agent,
+                action: 'BLOCKED',
+                unmet_dependency: 'FAILED_PREREQUISITE'
+            });
+        }
+
+        // 2. Identify runnable tasks whose dependencies are completed or skipped
+        const runnableTasks = pendingTasks.filter(task => {
             if (taskStatusMap.get(task.task_id) === 'SKIPPED') return true;
-            
-            // Task is ready if ALL its dependencies have a final status
             return (task.dependencies || []).every(depId => {
                 const depStatus = taskStatusMap.get(depId);
-                return depStatus === 'COMPLETED' || depStatus === 'SKIPPED' || depStatus === 'FAILED' || depStatus === 'BLOCKED';
+                return depStatus === 'COMPLETED' || depStatus === 'SKIPPED';
             });
         });
 
-        if (readyTasks.length === 0) {
-            // Unresolvable dependencies (circular or missing)
+        // 3. Launch ready tasks into available concurrency slots
+        while (runnableTasks.length > 0 && runningTasks.size < MAX_CONCURRENT) {
+            const taskToRun = runnableTasks.shift();
+            pendingTasks = pendingTasks.filter(t => t.task_id !== taskToRun.task_id);
+
+            // If task was statically skipped, bypass execution
+            if (taskStatusMap.get(taskToRun.task_id) === 'SKIPPED') {
+                updateTaskState(executionState, taskToRun.task_id, { status: 'SKIPPED', suppression_reason: taskToRun.suppression_reason });
+                skippedCount++;
+                traces.dispatchTrace.push({
+                    task_id: taskToRun.task_id,
+                    agent: taskToRun.owner_agent,
+                    action: 'SKIPPED',
+                    reason: taskToRun.suppression_reason
+                });
+                continue;
+            }
+
+            // Launch worker promise
+            const promise = executeSingleTask(taskToRun).finally(() => {
+                runningTasks.delete(taskToRun.task_id);
+            });
+
+            runningTasks.set(taskToRun.task_id, promise);
+            peakObservedConcurrency = Math.max(peakObservedConcurrency, runningTasks.size);
+        }
+
+        // 4. Wait for at least one worker to complete before scheduling next slot
+        if (runningTasks.size > 0) {
+            await Promise.race(runningTasks.values());
+        } else if (pendingTasks.length > 0) {
+            // No workers running and no runnable tasks found -> Unresolvable graph/cycle
             for (const task of pendingTasks) {
                 taskStatusMap.set(task.task_id, 'BLOCKED');
                 updateTaskState(executionState, task.task_id, { status: 'BLOCKED', unmet_dependency: 'UNRESOLVABLE_GRAPH' });
@@ -407,312 +897,12 @@ async function executeTaskWorkflow(graph, taskExecutor) {
                     unmet_dependency: 'UNRESOLVABLE_GRAPH'
                 });
             }
+            pendingTasks = [];
             break;
-        }
-
-        // Execute ready tasks
-        for (const task of readyTasks) {
-            pendingTasks = pendingTasks.filter(t => t.task_id !== task.task_id);
-
-            if (taskStatusMap.get(task.task_id) === 'SKIPPED') {
-                updateTaskState(executionState, task.task_id, { status: 'SKIPPED', suppression_reason: task.suppression_reason });
-                skippedCount++;
-                traces.dispatchTrace.push({
-                    task_id: task.task_id,
-                    agent: task.owner_agent,
-                    action: 'SKIPPED',
-                    reason: task.suppression_reason
-                });
-                continue;
-            }
-
-            // Check dependencies: if any active dependency failed/blocked, mark this task BLOCKED
-            const unmetDependency = task.dependencies.find(depId => {
-                const depStatus = taskStatusMap.get(depId);
-                return depStatus === 'FAILED' || depStatus === 'BLOCKED';
-            });
-
-            if (unmetDependency) {
-                taskStatusMap.set(task.task_id, 'BLOCKED');
-                updateTaskState(executionState, task.task_id, { status: 'BLOCKED', unmet_dependency: unmetDependency });
-                blockedCount++;
-                traces.dispatchTrace.push({
-                    task_id: task.task_id,
-                    agent: task.owner_agent,
-                    action: 'BLOCKED',
-                    unmet_dependency: unmetDependency
-                });
-                continue;
-            }
-
-            // Pre-dispatch Ownership & Single-Writer Assertion
-            assertNoParentSelfExecution(task, task.writer_agent);
-            traces.ownershipTrace.push({
-                task_id: task.task_id,
-                target_path: task.target_path,
-                designated_owner: task.owner_agent,
-                designated_writer: task.writer_agent,
-                status: 'OWNERSHIP_VERIFIED'
-            });
-
-            // Phase 7: Deterministic Context Planning Layer
-            let contextPlan = null;
-            try {
-                let evidenceSource = (graph.context && graph.context.evidencePack) || task.evidencePack;
-                if (!evidenceSource && graph.context && graph.context.customRoot) {
-                    const candidateDirect = path.join(graph.context.customRoot, 'evidence-pack.md');
-                    const candidateScratch = path.join(graph.context.customRoot, 'scratch', 'evidence-pack.md');
-                    if (fs.existsSync(candidateDirect)) {
-                        evidenceSource = candidateDirect;
-                    } else if (fs.existsSync(candidateScratch)) {
-                        evidenceSource = candidateScratch;
-                    }
-                }
-                if (!evidenceSource && task.inputs && task.inputs[0] && fs.existsSync(task.inputs[0])) {
-                    evidenceSource = task.inputs[0];
-                }
-                if (!evidenceSource) {
-                    evidenceSource = 'scratch/evidence-pack.md';
-                }
-                const evidenceHash = (graph.context && graph.context.evidenceHash) || task.evidenceHash || graph.evidenceHash;
-                contextPlan = planContextSlice({
-                    subject: graph.subject,
-                    chapter: graph.chapter,
-                    artifactKey: task.artifactKey || task.track_key,
-                    specialist: task.owner_agent,
-                    evidencePack: evidenceSource,
-                    evidenceHash: evidenceHash,
-                    strategy: 'TASK_SCOPED',
-                    compatibilityMode: graph.compatibilityMode === true
-                });
-                task.contextSlice = contextPlan.context_slice_content;
-                task.contextPlan = contextPlan;
-                traces.contextPlans = traces.contextPlans || [];
-                traces.contextPlans.push({
-                    task_id: task.task_id,
-                    strategy: contextPlan.context_strategy,
-                    budget_tier: contextPlan.estimated_context_size.budget_tier,
-                    estimated_tokens: contextPlan.estimated_context_size.estimated_tokens,
-                    reduction_ratio: contextPlan.estimated_context_size.reduction_ratio,
-                    slice_hash: contextPlan.slice_hash
-                });
-            } catch (planErr) {
-                if (planErr.message && planErr.message.includes('CONTEXT_PROVENANCE_FAILURE')) {
-                    throw planErr; // Non-negotiable: fail closed on provenance loss!
-                }
-            }
-
-            // Phase 7: Policy-Driven Model Routing Layer
-            let modelRouting = resolveModelRouting({
-                artifactKey: task.artifactKey || task.track_key,
-                specialist: task.owner_agent,
-                subject: graph.subject,
-                contextBudget: (contextPlan && contextPlan.estimated_context_size && contextPlan.estimated_context_size.budget_tier) || 'MEDIUM',
-                attempt: 1
-            });
-            task.modelRouting = modelRouting;
-            traces.modelRoutings = traces.modelRoutings || [];
-            traces.modelRoutings.push({
-                task_id: task.task_id,
-                attempt: 1,
-                model_class: modelRouting.model_class,
-                task_complexity: modelRouting.task_complexity,
-                reason: modelRouting.reason
-            });
-
-            // Dispatch Task to Executor
-            let executionSuccess = false;
-            let currentAttempt = 0;
-            let handoff = null;
-            let lastFailureClass = null;
-
-            while (!executionSuccess) {
-                // Enforce Global Launch Ceiling (max 10 launches mission-wide)
-                if (totalInvocations >= GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES) {
-                    const limitMsg = `RESOURCE_LIMIT_EXCEEDED: Global launch limit (${GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES}) exhausted`;
-                    taskStatusMap.set(task.task_id, 'FAILED');
-                    checkpointTaskFail(executionState, task.task_id, new Error(limitMsg));
-                    failedCount++;
-                    traces.completionEvidence.push({
-                        task_id: task.task_id,
-                        target_path: task.target_path,
-                        status: 'FAILED',
-                        errors: [limitMsg]
-                    });
-                    break;
-                }
-
-                totalInvocations++;
-                executionState.metrics.total_launches = totalInvocations;
-
-                // If retry attempt > 0, update model routing with recovery escalation
-                if (currentAttempt > 0) {
-                    modelRouting = resolveModelRouting({
-                        artifactKey: task.artifactKey || task.track_key,
-                        specialist: task.owner_agent,
-                        subject: graph.subject,
-                        contextBudget: (contextPlan && contextPlan.estimated_context_size && contextPlan.estimated_context_size.budget_tier) || 'MEDIUM',
-                        attempt: currentAttempt + 1,
-                        lastFailureClass
-                    });
-                    task.modelRouting = modelRouting;
-                    traces.modelRoutings.push({
-                        task_id: task.task_id,
-                        attempt: currentAttempt + 1,
-                        model_class: modelRouting.model_class,
-                        task_complexity: modelRouting.task_complexity,
-                        reason: modelRouting.reason
-                    });
-                }
-
-                if (currentAttempt === 0) {
-                    checkpointTaskStart(executionState, task, modelRouting.model_class, (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED');
-                }
-
-                traces.dispatchTrace.push({
-                    task_id: task.task_id,
-                    agent: task.owner_agent,
-                    action: currentAttempt === 0 ? 'DISPATCH' : 'RETRY_DISPATCH',
-                    attempt: currentAttempt + 1,
-                    model_class: modelRouting.model_class,
-                    context_strategy: (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
-                    timestamp: new Date().toISOString()
-                });
-
-                try {
-                    handoff = await taskExecutor(task, currentAttempt);
-                    const handoffVal = validateStructuredHandoff(handoff);
-
-                    if (!handoffVal.isValid) {
-                        throw new Error(`[HANDOFF_SCHEMA_ERROR] ${handoffVal.errors.join('; ')}`);
-                    }
-
-                    traces.handoffTrace.push({
-                        task_id: task.task_id,
-                        agent: handoff.agent,
-                        status: handoff.status,
-                        output_paths: handoff.output_paths,
-                        attempt: currentAttempt + 1
-                    });
-
-                    // Validate physical completion evidence
-                    const completionVal = await validateCompletionEvidence(task, handoff);
-                    if (completionVal.isValid) {
-                        executionSuccess = true;
-                        const isSuppressed = (handoff && handoff.status === 'SUPPRESSED') || completionVal.status === 'SKIPPED';
-                        const statusToSet = isSuppressed ? 'SKIPPED' : 'COMPLETED';
-                        taskStatusMap.set(task.task_id, statusToSet);
-                        if (isSuppressed) {
-                            skippedCount++;
-                            updateTaskState(executionState, task.task_id, {
-                                status: 'SKIPPED',
-                                suppression_reason: (handoff && handoff.warnings && handoff.warnings[0]) || 'SUPPRESSED'
-                            });
-                        } else {
-                            completedCount++;
-                            checkpointTaskComplete(executionState, task.task_id, {
-                                output_paths: handoff.output_paths,
-                                validator: task.validation_rule,
-                                validator_result: completionVal,
-                                attempt: currentAttempt + 1
-                            });
-                        }
-                        traces.completionEvidence.push({
-                            task_id: task.task_id,
-                            target_path: task.target_path,
-                            bytes: completionVal.fileSize || 0,
-                            status: isSuppressed ? 'SKIPPED' : 'VERIFIED_ON_DISK'
-                        });
-
-                        // Auditable Decision Trail
-                        traces.decisionTrail = traces.decisionTrail || [];
-                        traces.decisionTrail.push({
-                            task_id: task.task_id,
-                            source_hash: (contextPlan && contextPlan.source_hash) || graph.evidenceHash,
-                            context_strategy: (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
-                            selected_evidence: (contextPlan && contextPlan.selected_evidence_ids) || [],
-                            context_size: (contextPlan && contextPlan.estimated_context_size) || {},
-                            model_class: modelRouting.model_class,
-                            specialist: task.owner_agent,
-                            attempt: currentAttempt + 1,
-                            validator: task.validation_rule,
-                            result: 'PASS'
-                        });
-                    } else {
-                        throw new Error(`[COMPLETION_EVIDENCE_ERROR] ${completionVal.errors.join('; ')}`);
-                    }
-                } catch (err) {
-                    currentAttempt++;
-                    // Phase 7: Failure Classification & Adaptive Retry Policy
-                    const classification = classifyFailure(err);
-                    lastFailureClass = classification.failure_class;
-
-                    const retryDecision = canRetryTask(task, classification, currentAttempt, totalInvocations);
-
-                    traces.retryTrace = traces.retryTrace || [];
-                    traces.retryTrace.push({
-                        task_id: task.task_id,
-                        attempt: currentAttempt,
-                        failure_class: classification.failure_class,
-                        retry_class: classification.retry_class,
-                        can_retry: retryDecision.canRetry,
-                        reason: retryDecision.reason,
-                        error: err.message
-                    });
-
-                    if (retryDecision.canRetry) {
-                        // Compute targeted retry adaptation
-                        const adaptation = getTargetedRetryPlan(task, classification, currentAttempt + 1, contextPlan);
-                        task.promptConstraints = adaptation.prompt_constraints;
-
-                        checkpointTaskRetry(executionState, task.task_id, {
-                            attempt: currentAttempt,
-                            failure_class: classification.failure_class,
-                            retry_class: classification.retry_class,
-                            reason: retryDecision.reason,
-                            error: err.message,
-                            model_class: modelRouting.model_class,
-                            context_strategy: adaptation.context_strategy || (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
-                            adaptation_directives: adaptation.adaptation_directives,
-                            adaptation_reason: adaptation.adaptation_reason
-                        });
-
-                        // Adapt context if needed (e.g. FOCUSED strategy on overflow)
-                        if (adaptation.context_strategy === 'FOCUSED' && contextPlan) {
-                            try {
-                                const evidenceSource = (graph.context && graph.context.evidencePack) || 'scratch/evidence-pack.md';
-                                contextPlan = planContextSlice({
-                                    subject: graph.subject,
-                                    chapter: graph.chapter,
-                                    artifactKey: task.artifactKey || task.track_key,
-                                    specialist: task.owner_agent,
-                                    evidencePack: evidenceSource,
-                                    evidenceHash: graph.evidenceHash,
-                                    strategy: 'FOCUSED',
-                                    compatibilityMode: graph.compatibilityMode === true
-                                });
-                                task.contextSlice = contextPlan.context_slice_content;
-                                task.contextPlan = contextPlan;
-                            } catch (e) {}
-                        }
-                    } else {
-                        taskStatusMap.set(task.task_id, 'FAILED');
-                        checkpointTaskFail(executionState, task.task_id, err);
-                        failedCount++;
-                        traces.completionEvidence.push({
-                            task_id: task.task_id,
-                            target_path: task.target_path,
-                            status: 'FAILED',
-                            errors: [err.message, retryDecision.reason]
-                        });
-                        break;
-                    }
-                }
-            }
         }
     }
 
-    // Calculate efficiency metrics
+    // Clean workforce collapse: all workers terminal
     traces.efficiencyAudit = {
         total_tasks: graph.tasks.length,
         total_subagent_invocations: totalInvocations,
@@ -721,9 +911,11 @@ async function executeTaskWorkflow(graph, taskExecutor) {
         skipped_tasks: skippedCount,
         blocked_tasks: blockedCount,
         failed_tasks: failedCount,
-        max_concurrent_workers: 4,
-        max_total_launches_cap: 10,
-        within_resource_budget: totalInvocations <= 10
+        max_concurrent_workers: MAX_CONCURRENT,
+        max_observed_concurrency: peakObservedConcurrency,
+        within_concurrency_bound: peakObservedConcurrency <= MAX_CONCURRENT,
+        max_total_launches_cap: maxTotalLaunches,
+        within_resource_budget: totalInvocations <= maxTotalLaunches
     };
 
     const overallVerdict = failedCount === 0 && blockedCount === 0 ? 'SUCCESS' : (completedCount > 0 ? 'PARTIAL_SUCCESS' : 'FAILED');
@@ -767,6 +959,7 @@ async function executeTaskWorkflow(graph, taskExecutor) {
     } else if (storageDir) {
         evidenceTargetDir = storageDir;
     }
+
     if (evidenceTargetDir && fs.existsSync(evidenceTargetDir)) {
         try {
             fs.writeFileSync(
@@ -894,6 +1087,7 @@ module.exports = {
     validateStructuredHandoff,
     assertNoParentSelfExecution,
     validateCompletionEvidence,
+    executeWithTimeout,
     executeTaskWorkflow,
     createSpecialistTaskDispatcher
 };

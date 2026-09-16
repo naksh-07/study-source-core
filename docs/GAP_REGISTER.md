@@ -26,11 +26,11 @@ Every identified gap is tracked with:
 | **GAP-04** | Schemas / StudyLab | **P1 Critical** | Hint Structure Schema Drift (Flat vs Nested 3-Tier) | Phase 1 | Active |
 | **GAP-05** | Testing / Harness | **P1 Critical** | Adversarial Test Suite Import Reference Bug | Phase 9 | **Resolved** (Milestone 4) |
 | **GAP-06** | Configuration / Subject | **P2 High** | Subject Keying Discrepancy (`Math` vs `Maths`) | Phase 3 | Active |
-| **GAP-07** | Tooling / Runtime | **P2 High** | Dynamic Artifact Output Directory Isolation | Phase 10 | Active |
+| **GAP-07** | Tooling / Runtime | **P2 High** | Dynamic Artifact Output Directory Isolation | Phase 10 | **Resolved** (Phase 10) |
 | **GAP-08** | Validation / Release | **P2 High** | Missing Completion-Evidence File Validator Enforcement | Phase 9 | **Resolved** (Milestone 4) |
 | **GAP-09** | Validation / Flashcards | **P3 Medium** | Basic Card Non-Zero Candidate Threshold Drift | Phase 5 | **Resolved** (Milestone 3) |
 | **GAP-10** | Provenance / Data | **P1 Critical** | 11-Field Content Lineage Record (CLR) Persistence | Phase 2 | Active |
-| **GAP-11** | Tooling / Adapter | **P2 High** | Antigravity Native Subagent Registration Adapter | Phase 10 | Active |
+| **GAP-11** | Tooling / Adapter | **P2 High** | Antigravity Native Subagent Registration Adapter | Phase 10 | **Resolved** (Phase 10) |
 | **GAP-12** | Certification / CI | **P1 Critical** | ADV-01..15 Independent Certification Pipeline Integration | Phase 9 | **Resolved** (Milestone 4) |
 
 ---
@@ -169,8 +169,10 @@ Every identified gap is tracked with:
   - Fall back safely to repository workspace root if unspecified.
   - Governed by ADR-15 and `docs/SECURITY_AND_TRUST.md`.
 - **Target Phase**: **Phase 10: Antigravity Host Adapter, Concurrency & Checkpoint Recovery**
+- **Status**: **Resolved** (Phase 10)
+- **Resolution Details**: Implemented dynamic artifact output directory resolution in `orchestration_engine.js` and `antigravity_adapter.js` supporting both CLI argument `--output-dir <path>` and environment variable `STUDYSOURCE_OUTPUT_DIR`, safely falling back to workspace root when unspecified. Verified artifact directory isolation, atomic directory creation, clean writes, and verification across custom paths in `test_phase10_runtime_adversarial.js` (RT-14) and `test_phase10_concurrency_and_recovery.js`.
 - **Verification Method**:
-  - Test running end-to-end generation with `--output-dir` pointed to an arbitrary temporary directory.
+  - Test running end-to-end generation with `--output-dir` and `STUDYSOURCE_OUTPUT_DIR` pointed to arbitrary sandboxed directories. Verified via RT-14 in `test_phase10_runtime_adversarial.js`.
 
 ---
 
@@ -242,8 +244,10 @@ Every identified gap is tracked with:
   - Create a lightweight adapter script (`scripts/register_antigravity_subagents.js`) that reads `.agents/agents/*.md` and generates Antigravity-compatible subagent registration manifests.
   - Governed by ADR-14 and `ARCHITECTURE.md`.
 - **Target Phase**: **Phase 10: Antigravity Host Adapter, Concurrency & Checkpoint Recovery**
+- **Status**: **Resolved** (Phase 10)
+- **Resolution Details**: Created `scripts/register_antigravity_subagents.js` which parses all 14 specialist subagents from `.agents/agents/*.md`, extracts YAML frontmatter, validates against the standard 14-section agent template, and compiles Antigravity-compatible tool definitions (`define_subagent` specifications) with model class mappings (`CHEAP` $\to$ `flash_lite`, `DEFAULT` $\to$ `inherit`, `STRONG` $\to$ `pro`), capability flags, and tool bindings. Created `antigravity_adapter.js` implementing Antigravity task dispatching, concurrency clamping, single-writer exclusivity, and parent self-execution enforcement.
 - **Verification Method**:
-  - Adapter script parses all 14 agent definition files and emits valid registration payloads matching Antigravity schema.
+  - Adapter script parses all 14 agent definition files and emits valid registration payloads matching Antigravity schema. Verified via programmatic inspection and RT-01..RT-18 in `test_phase10_runtime_adversarial.js`.
 
 ---
 

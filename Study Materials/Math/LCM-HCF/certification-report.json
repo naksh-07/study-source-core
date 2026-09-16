@@ -1,0 +1,73 @@
+{
+  "certification_id": "cert-math-lcm-hcf-1789543580487",
+  "chapter": "LCM-HCF",
+  "subject": "Math",
+  "chapter_dir": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF",
+  "certified_at": "2026-09-16T07:26:20.487Z",
+  "release_verdict": "PASS",
+  "summary": {
+    "total_gates": 4,
+    "passed_gates": 4,
+    "failed_gates": 0,
+    "total_errors": 0,
+    "total_warnings": 0
+  },
+  "gates": {
+    "gate_1_completion_evidence": {
+      "gate": "GATE_1_COMPLETION_EVIDENCE",
+      "name": "Physical Completion Evidence Release Gate (GAP-08)",
+      "status": "PASS",
+      "errors": [],
+      "warnings": [],
+      "stats": {
+        "evidencePath": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\.completion-evidence.json",
+        "overallVerdict": "SUCCESS",
+        "totalDeclared": 3,
+        "verifiedOnDisk": 3,
+        "skippedCount": 0,
+        "mismatches": 0
+      }
+    },
+    "gate_2_adversarial_matrix": {
+      "gate": "GATE_2_ADVERSARIAL_MATRIX",
+      "name": "Adversarial Attack & Semantic Depth Harness (ADV-01..15)",
+      "status": "PASS",
+      "errors": [],
+      "warnings": [],
+      "checksRun": [
+        {
+          "name": "ADV-L1-L7 Multi-Tier StudyLab Verification",
+          "status": "PASS"
+        }
+      ]
+    },
+    "gate_3_binary_integrity": {
+      "gate": "GATE_3_BINARY_INTEGRITY",
+      "name": "Binary Packaging Integrity & Model Isolation (PKG-01..15)",
+      "status": "PASS",
+      "errors": [],
+      "warnings": [],
+      "checks": [
+        {
+          "check": "PKG-DECL-INTEGRITY",
+          "status": "PASS"
+        },
+        {
+          "check": "PKG-PROC-INTEGRITY",
+          "status": "PASS"
+        },
+        {
+          "check": "PKG-14-DUAL-DECK-COEXISTENCE",
+          "status": "PASS"
+        }
+      ]
+    },
+    "gate_4_cross_artifact_consistency": {
+      "gate": "GATE_4_CROSS_ARTIFACT_CONSISTENCY",
+      "name": "Cross-Artifact Consistency & Semantic Audit",
+      "status": "PASS",
+      "errors": [],
+      "warnings": []
+    }
+  }
+}

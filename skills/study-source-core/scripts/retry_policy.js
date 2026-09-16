@@ -51,7 +51,8 @@ const FAILURE_TO_RETRY_CLASS_MAP = {
 
 const GLOBAL_RESOURCE_LIMITS = {
     MAX_CONCURRENT_WORKERS: 4,
-    MAX_TOTAL_LAUNCHES: 10
+    MAX_TOTAL_LAUNCHES: 10,
+    MAX_RETRIES_PER_TASK: 1
 };
 
 /**
@@ -245,7 +246,7 @@ function classifyFailure(errorOrErrors) {
  * @param {number} totalInvocationsSoFar - Mission-wide launch counter
  * @returns {Object} { canRetry, maxRetriesAllowed, reason }
  */
-function canRetryTask(task, classification, attemptCount, totalInvocationsSoFar) {
+function canRetryTask(task, classification, attemptCount, totalInvocationsSoFar, options = {}) {
     // 1. Check Global Mission Launch Limit (Hard Invariant: max 10 launches total)
     if (totalInvocationsSoFar >= GLOBAL_RESOURCE_LIMITS.MAX_TOTAL_LAUNCHES) {
         return {
@@ -271,6 +272,8 @@ function canRetryTask(task, classification, attemptCount, totalInvocationsSoFar)
     // Respect custom task-specific retry budget if defined lower
     if (task && typeof task.retry_budget === 'number') {
         allowedRetries = Math.min(allowedRetries, task.retry_budget);
+    } else if (typeof options.maxRetriesPerTask === 'number') {
+        allowedRetries = Math.min(allowedRetries, options.maxRetriesPerTask);
     }
 
     // Check if attempt limit reached (attemptCount = 1 means 0 retries so far; retries = attemptCount - 1)
@@ -305,7 +308,7 @@ function getTargetedRetryPlan(task, classification, nextAttemptNumber, currentCo
         failure_class: classification.failure_class,
         retry_class: classification.retry_class,
         model_class: 'STRONG', // Default to STRONG on retried complex errors
-        context_strategy: currentContextPlan.context_strategy || 'TASK_SCOPED',
+        context_strategy: (currentContextPlan && currentContextPlan.context_strategy) || 'TASK_SCOPED',
         prompt_constraints: [],
         reason: '',
         adaptation_reason: ''
