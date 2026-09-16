@@ -85,7 +85,8 @@ const QA_CHECK_IDS = Object.freeze({
     MCQ_CARDINALITY: 'QA-KU-09',
     KU_ID_FORMAT: 'QA-KU-10',
     SOURCE_GROUNDING: 'QA-KU-11',
-    COMPREHENSIVE_AUDIT: 'QA-KU-12'
+    COMPREHENSIVE_AUDIT: 'QA-KU-12',
+    FACTUAL_RECONCILIATION: 'QA-KU-13'
 });
 
 /**
@@ -626,11 +627,11 @@ function checkSourceGrounding(kus) {
     for (const ku of kus) {
         const kuId = ku.ku_id || ku.id || ku.title || 'unknown';
 
-        if (!ku.source_chunk_hash || typeof ku.source_chunk_hash !== 'string' || ku.source_chunk_hash.length !== 64) {
+        if (!ku.clr || !ku.clr.source_chunk_hash || typeof ku.clr.source_chunk_hash !== 'string' || ku.clr.source_chunk_hash.length !== 64) {
             violations.push(`MISSING_SOURCE_HASH: KU "${kuId}" lacks valid 64-char SHA-256 source_chunk_hash`);
         }
 
-        if (!ku.evidence_pack_id || typeof ku.evidence_pack_id !== 'string' || !ku.evidence_pack_id.trim()) {
+        if (!ku.clr || !ku.clr.evidence_pack_id || typeof ku.clr.evidence_pack_id !== 'string' || !ku.clr.evidence_pack_id.trim()) {
             violations.push(`MISSING_EVIDENCE_PACK_ID: KU "${kuId}" lacks evidence_pack_id`);
         }
     }
@@ -642,6 +643,61 @@ function checkSourceGrounding(kus) {
         passed ? QA_SEVERITY.INFO : QA_SEVERITY.CRITICAL,
         passed
             ? [`${kus.length} KU(s) validated — all grounded to source evidence with SHA-256 hashes`]
+            : violations
+    );
+}
+
+
+/**
+ * QA-KU-13: Factual Reconciliation Guard
+ *
+ * Validates that KUs flagging factual discrepancies preserve source provenance
+ * and provide appropriate advisory notes without destroying raw evidence traceability.
+ *
+ * @param {Array} kus - Knowledge Units to check
+ * @returns {Object} Check result
+ */
+function checkFactualReconciliation(kus) {
+    if (!Array.isArray(kus) || kus.length === 0) {
+        return createCheckResult(
+            QA_CHECK_IDS.FACTUAL_RECONCILIATION,
+            true,
+            QA_SEVERITY.INFO,
+            ['No KUs to check for factual reconciliation']
+        );
+    }
+
+    const violations = [];
+    let checkedCount = 0;
+
+    for (const ku of kus) {
+        if (ku.factual_discrepancy && ku.factual_discrepancy.detected) {
+            checkedCount++;
+            const kuId = ku.ku_id || ku.id || ku.title || 'unknown';
+
+            // Must preserve source provenance strictly
+            if (!ku.clr || !ku.clr.source_chunk_hash || typeof ku.clr.source_chunk_hash !== 'string' || ku.clr.source_chunk_hash.length !== 64) {
+                violations.push(`PROVENANCE_DESTROYED: KU "${kuId}" flagged a discrepancy but destroyed source_chunk_hash`);
+            }
+
+            if (!ku.clr || !ku.clr.evidence_pack_id || typeof ku.clr.evidence_pack_id !== 'string' || !ku.clr.evidence_pack_id.trim()) {
+                violations.push(`PROVENANCE_DESTROYED: KU "${kuId}" flagged a discrepancy but destroyed evidence_pack_id`);
+            }
+
+            // Must have an advisory note explaining the discrepancy
+            if (!ku.factual_discrepancy.advisory_note || typeof ku.factual_discrepancy.advisory_note !== 'string' || !ku.factual_discrepancy.advisory_note.trim()) {
+                violations.push(`MISSING_ADVISORY: KU "${kuId}" flagged a discrepancy but lacks a descriptive advisory_note`);
+            }
+        }
+    }
+
+    const passed = violations.length === 0;
+    return createCheckResult(
+        QA_CHECK_IDS.FACTUAL_RECONCILIATION,
+        passed,
+        passed ? QA_SEVERITY.INFO : QA_SEVERITY.CRITICAL,
+        passed
+            ? [`${checkedCount} KU(s) with factual discrepancies validated — source provenance preserved and advisories present`]
             : violations
     );
 }
@@ -700,6 +756,11 @@ function runComprehensiveAudit(params = {}) {
     // QA-KU-11: Source Grounding
     if (Array.isArray(kus) && kus.length > 0) {
         results.push(checkSourceGrounding(kus));
+    }
+
+    // QA-KU-13: Factual Reconciliation
+    if (Array.isArray(kus) && kus.length > 0) {
+        results.push(checkFactualReconciliation(kus));
     }
 
     // QA-KU-02: Semantic Deduplication
@@ -814,5 +875,6 @@ module.exports = {
     checkMcqCardinality,
     checkKuIdFormat,
     checkSourceGrounding,
+    checkFactualReconciliation,
     runComprehensiveAudit
 };

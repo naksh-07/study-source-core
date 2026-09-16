@@ -426,7 +426,7 @@ console.log('\n─── A.7: Semantic QA Engine ───');
 
 test('A7.1 — QA check IDs are defined', () => {
     assert.ok(QA_CHECK_IDS.COMPREHENSIVE_AUDIT === 'QA-KU-12');
-    assert.ok(Object.keys(QA_CHECK_IDS).length === 12);
+    assert.ok(Object.keys(QA_CHECK_IDS).length === 13);
 });
 
 test('A7.2 — KU ID format check passes valid IDs', () => {
@@ -457,6 +457,60 @@ test('A7.5 — MCQ cardinality check catches < 4 options', () => {
     assert.ok(!result.passed);
     assert.strictEqual(result.severity, QA_SEVERITY.CRITICAL);
 });
+
+test('A7.6 — Factual Reconciliation Guard validates provenance and advisories', () => {
+    const { checkFactualReconciliation } = require('./semantic_qa_engine');
+
+    // Case 1: No discrepancy, should pass
+    const validKu1 = {
+        id: 'ku.test.1',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' }
+    };
+    const res1 = checkFactualReconciliation([validKu1]);
+    assert.strictEqual(res1.passed, true);
+
+    // Case 2: Discrepancy present and well-formed, should pass
+    const validKu2 = {
+        id: 'ku.test.2',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: {
+            detected: true,
+            flagged_claim: "The moon is made of cheese",
+            discrepancy_type: "external_contradiction",
+            advisory_note: "Modern science indicates the moon is rock",
+            reconciliation_action: "ADVISORY_NOTE"
+        }
+    };
+    const res2 = checkFactualReconciliation([validKu2]);
+    assert.strictEqual(res2.passed, true);
+
+    // Case 3: Discrepancy present but missing provenance, should fail
+    const invalidKu1 = {
+        id: 'ku.test.3',
+        clr: { evidence_pack_id: 'ep.123' }, // missing chunk hash
+        factual_discrepancy: {
+            detected: true,
+            advisory_note: "Warning"
+        }
+    };
+    const res3 = checkFactualReconciliation([invalidKu1]);
+    assert.strictEqual(res3.passed, false);
+    assert.ok(res3.findings.some(f => f.includes('PROVENANCE_DESTROYED')));
+
+    // Case 4: Discrepancy present but missing advisory note, should fail
+    const invalidKu2 = {
+        id: 'ku.test.4',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: {
+            detected: true
+            // missing advisory_note
+        }
+    };
+    const res4 = checkFactualReconciliation([invalidKu2]);
+    assert.strictEqual(res4.passed, false);
+    assert.ok(res4.findings.some(f => f.includes('MISSING_ADVISORY')));
+});
+
 
 // ═════════════════════════════════════════════════════════════
 // SECTION B: MULTI-DOMAIN CONTRACT TESTS
