@@ -247,9 +247,9 @@ function buildProgressiveHints(prob, pattern, answer) {
     }
 
     return {
-        tier_1: tier1,
-        tier_2: tier2,
-        tier_3: tier3
+        tier1_conceptual: tier1,
+        tier2_strategic: tier2,
+        tier3_next_step: tier3
     };
 }
 

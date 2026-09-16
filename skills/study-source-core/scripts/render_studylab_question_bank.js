@@ -121,19 +121,19 @@ function normalizeQuestionItem(q, patternMap = {}) {
     }
 
     // 12-14. Hints (Tiers 1, 2, 3)
-    let hints = { tier_1: '', tier_2: '', tier_3: '', tier_1_conceptual: '', tier_2_method: '', tier_3_setup: '' };
+    let hints = { tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '', tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '' };
     if (q.hints && typeof q.hints === 'object') {
-        hints.tier_1 = q.hints.tier_1 || q.hints.tier_1_conceptual || q.hints.principle || q.hints.hint_principle || q.hint_tier_1 || '';
-        hints.tier_2 = q.hints.tier_2 || q.hints.tier_2_method || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
-        hints.tier_3 = q.hints.tier_3 || q.hints.tier_3_setup || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
+        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.tier1_conceptual || q.hints.principle || q.hints.hint_principle || q.tier1_conceptual || '';
+        hints.tier2_strategic = q.hints.tier2_strategic || q.hints.tier2_strategic_method || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
+        hints.tier3_next_step = q.hints.tier3_next_step || q.hints.tier3_next_step_setup || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
     } else {
-        hints.tier_1 = q.hint_tier_1 || 'अवधारणा और समस्या के संरचनात्मक घटकों की पहचान करें।';
-        hints.tier_2 = q.hint_tier_2 || 'मानक सूत्र और समीकरण संबंध स्थापित करें।';
-        hints.tier_3 = q.hint_tier_3 || 'चरणबद्ध गणना और बीजगणितीय सरलीकरण निष्पादित करें।';
+        hints.tier1_conceptual = q.tier1_conceptual || 'अवधारणा और समस्या के संरचनात्मक घटकों की पहचान करें।';
+        hints.tier2_strategic = q.hint_tier_2 || 'मानक सूत्र और समीकरण संबंध स्थापित करें।';
+        hints.tier3_next_step = q.hint_tier_3 || 'चरणबद्ध गणना और बीजगणितीय सरलीकरण निष्पादित करें।';
     }
-    hints.tier_1_conceptual = hints.tier_1;
-    hints.tier_2_method = hints.tier_2;
-    hints.tier_3_setup = hints.tier_3;
+    hints.tier1_conceptual = hints.tier1_conceptual;
+    hints.tier2_strategic_method = hints.tier2_strategic;
+    hints.tier3_next_step_setup = hints.tier3_next_step;
 
     // 15. Solution
     const solution = q.solution || q.explanation || 'चरणबद्ध हल उपलब्ध नहीं है।';
@@ -286,15 +286,15 @@ function renderQuestionBankToMarkdown(data) {
         block.push('### Progressive Hints');
         block.push([
             '> [!tip]- Tier 1: Conceptual Approach',
-            `> ${q.hints.tier_1.trim()}`
+            `> ${q.hints.tier1_conceptual.trim()}`
         ].join('\n'));
         block.push([
             '> [!tip]- Tier 2: Strategy & Setup',
-            `> ${q.hints.tier_2.trim()}`
+            `> ${q.hints.tier2_strategic.trim()}`
         ].join('\n'));
         block.push([
             '> [!tip]- Tier 3: Step-by-Step Method',
-            `> ${q.hints.tier_3.trim()}`
+            `> ${q.hints.tier3_next_step.trim()}`
         ].join('\n'));
 
         // Solution

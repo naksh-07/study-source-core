@@ -136,9 +136,9 @@ async function main() {
             for (const dim of REQUIRED_DIMENSIONS) {
                 assert(q[dim] !== undefined && q[dim] !== null, `Question '${q.id}' missing required dimension '${dim}'`);
             }
-            assert(q.hints.tier_1, 'Missing Hint Tier 1');
-            assert(q.hints.tier_2, 'Missing Hint Tier 2');
-            assert(q.hints.tier_3, 'Missing Hint Tier 3');
+            assert(q.hints.tier1_conceptual, 'Missing Hint Tier 1');
+            assert(q.hints.tier2_strategic, 'Missing Hint Tier 2');
+            assert(q.hints.tier3_next_step, 'Missing Hint Tier 3');
             assert(Array.isArray(q.recognition_signals) && q.recognition_signals.length > 0);
             assert(Array.isArray(q.decision_points) && q.decision_points.length > 0);
             assert(Array.isArray(q.error_category) && q.error_category.length > 0);
@@ -152,8 +152,8 @@ async function main() {
         const canonical = authorMathProceduralContent(FIXTURE_PATH);
         for (const q of canonical.questions) {
             const answer = q.correct_answer;
-            assert.strictEqual(hintLeaksAnswer(q.hints.tier_1, answer), false, `Tier 1 hint for '${q.id}' leaks answer '${answer}'`);
-            assert.strictEqual(hintLeaksAnswer(q.hints.tier_2, answer), false, `Tier 2 hint for '${q.id}' leaks answer '${answer}'`);
+            assert.strictEqual(hintLeaksAnswer(q.hints.tier1_conceptual, answer), false, `Tier 1 hint for '${q.id}' leaks answer '${answer}'`);
+            assert.strictEqual(hintLeaksAnswer(q.hints.tier2_strategic, answer), false, `Tier 2 hint for '${q.id}' leaks answer '${answer}'`);
         }
     });
 
@@ -513,7 +513,7 @@ async function main() {
     await runTest('SEC-6', 'TEST-6.3', 'Fail-Closed: Hint answer leakage caught and rejected by validator', () => {
         const leakingQb = authorMathProceduralContent(FIXTURE_PATH);
         // Deliberately tamper with hint to leak the answer
-        leakingQb.questions[0].hints.tier_1 = `The final answer is ${leakingQb.questions[0].correct_answer}.`;
+        leakingQb.questions[0].hints.tier1_conceptual = `The final answer is ${leakingQb.questions[0].correct_answer}.`;
 
         const valRes = validateQuestionBankContent(leakingQb);
         assert.strictEqual(valRes.isValid, false);
@@ -540,7 +540,7 @@ async function main() {
 
     await runTest('SEC-6', 'TEST-6.6', 'Fail-Closed: Missing hints (Tier 1/2/3) caught and rejected by validator', () => {
         const noHintQb = authorMathProceduralContent(FIXTURE_PATH);
-        delete noHintQb.questions[0].hints.tier_1;
+        delete noHintQb.questions[0].hints.tier1_conceptual;
 
         const valRes = validateQuestionBankContent(noHintQb);
         assert.strictEqual(valRes.isValid, false);

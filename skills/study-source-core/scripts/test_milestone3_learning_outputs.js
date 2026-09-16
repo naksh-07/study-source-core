@@ -465,16 +465,16 @@ runTest('SEC-3', 'TEST-3.1', 'normalizeQuestionItem harmonizes flat (tier_1) and
         answer: 50,
         units: 'J',
         hints: {
-            tier_1: 'कार्य का मूलभूत सूत्र स्मरण करें।',
-            tier_2: 'सूत्र लागू करें: W = F * d।',
-            tier_3: 'मान रखें: W = 10 * 5।'
+            tier1_conceptual: 'कार्य का मूलभूत सूत्र स्मरण करें।',
+            tier2_strategic: 'सूत्र लागू करें: W = F * d।',
+            tier3_next_step: 'मान रखें: W = 10 * 5।'
         }
     };
     const normFlat = normalizeQuestionItem(flatQ, {});
-    assert.strictEqual(normFlat.hints.tier_1, 'कार्य का मूलभूत सूत्र स्मरण करें।');
-    assert.strictEqual(normFlat.hints.tier_1_conceptual, 'कार्य का मूलभूत सूत्र स्मरण करें।');
-    assert.strictEqual(normFlat.hints.tier_2, 'सूत्र लागू करें: W = F * d।');
-    assert.strictEqual(normFlat.hints.tier_2_method, 'सूत्र लागू करें: W = F * d।');
+    assert.strictEqual(normFlat.hints.tier1_conceptual, 'कार्य का मूलभूत सूत्र स्मरण करें।');
+    assert.strictEqual(normFlat.hints.tier1_conceptual, 'कार्य का मूलभूत सूत्र स्मरण करें।');
+    assert.strictEqual(normFlat.hints.tier2_strategic, 'सूत्र लागू करें: W = F * d।');
+    assert.strictEqual(normFlat.hints.tier2_strategic_method, 'सूत्र लागू करें: W = F * d।');
 
     // Case B: Nested / semantic schema
     const nestedQ = {
@@ -484,16 +484,16 @@ runTest('SEC-3', 'TEST-3.1', 'normalizeQuestionItem harmonizes flat (tier_1) and
         answer: 40,
         units: 'J',
         hints: {
-            tier_1_conceptual: 'कार्य की संकल्पना पहचानें।',
-            tier_2_method: 'कार्य समीकरण का चयन करें।',
-            tier_3_setup: 'W = 20 * 2 की गणना करें।'
+            tier1_conceptual: 'कार्य की संकल्पना पहचानें।',
+            tier2_strategic: 'कार्य समीकरण का चयन करें।',
+            tier3_next_step: 'W = 20 * 2 की गणना करें।'
         }
     };
     const normNested = normalizeQuestionItem(nestedQ, {});
-    assert.strictEqual(normNested.hints.tier_1, 'कार्य की संकल्पना पहचानें।');
-    assert.strictEqual(normNested.hints.tier_1_conceptual, 'कार्य की संकल्पना पहचानें।');
-    assert.strictEqual(normNested.hints.tier_3, 'W = 20 * 2 की गणना करें।');
-    assert.strictEqual(normNested.hints.tier_3_setup, 'W = 20 * 2 की गणना करें।');
+    assert.strictEqual(normNested.hints.tier1_conceptual, 'कार्य की संकल्पना पहचानें।');
+    assert.strictEqual(normNested.hints.tier1_conceptual, 'कार्य की संकल्पना पहचानें।');
+    assert.strictEqual(normNested.hints.tier3_next_step, 'W = 20 * 2 की गणना करें।');
+    assert.strictEqual(normNested.hints.tier3_next_step_setup, 'W = 20 * 2 की गणना करें।');
 });
 
 // TEST 3.2: Math Author UTF-8 Devanagari Hindi Repair Verification
@@ -535,9 +535,9 @@ runTest('SEC-3', 'TEST-3.3', 'GAP-02: renderQuestionBankToMarkdown produces dete
                 trap: 'Squaring mass unnecessarily',
                 error_category: 'ERR_PHYS_FORMULA_CONFUSION',
                 hints: {
-                    tier_1: 'Identify whether force is constant or variable.',
-                    tier_2: 'Use standard scalar work formula: W = F * d * cos(theta).',
-                    tier_3: 'Substitute F = 10 N and d = 5 m with theta = 0.'
+                    tier1_conceptual: 'Identify whether force is constant or variable.',
+                    tier2_strategic: 'Use standard scalar work formula: W = F * d * cos(theta).',
+                    tier3_next_step: 'Substitute F = 10 N and d = 5 m with theta = 0.'
                 },
                 solution: 'Work done = F * d = 10 N * 5 m = 50 Joules.',
                 verification: 'Verify dimensions: [M L^2 T^-2] matches Joules.',
@@ -579,7 +579,7 @@ runTest('SEC-3', 'TEST-3.4', 'compileCanonicalQuestionBank normalizes incoming r
     assert(compiled && Array.isArray(compiled.questions), 'Compiled must have questions array');
     const q0 = compiled.questions[0];
     assert.strictEqual(q0.id, 'raw-q-01');
-    assert(q0.hints && q0.hints.tier_1 && q0.hints.tier_1_conceptual, 'Hints must be normalized across all tiers');
+    assert(q0.hints && q0.hints.tier1_conceptual && q0.hints.tier1_conceptual, 'Hints must be normalized across all tiers');
     assert(q0.verification, 'Verification must be populated');
 });
 

@@ -331,7 +331,7 @@ function detectHintLeak(hintText, terminalAnswer, options = [], correctOption = 
  * Validates the full 3-tier progressive hint structure according to ADV-11 and ADV-KU-09.
  * 
  * Enforces:
- * - Presence of all 3 distinct tiers: tier_1_conceptual, tier_2_method, tier_3_setup.
+ * - Presence of all 3 distinct tiers: tier1_conceptual, tier2_strategic, tier3_next_step.
  * - Anti-leak invariance on Tier 1 and Tier 2 (terminal answer immunity).
  * - Anti-leak on Tier 3 (Tier 3 sets up formula substitution but must NOT state terminal evaluation).
  * - Anti-boilerplate invariant (ADV-KU-09) on all tiers.
@@ -354,15 +354,15 @@ function validateHintSemantics(hints, terminalAnswer, options = [], context = {}
             errors.push(`HINT_INCOMPLETE_TIERS: Hints array must have at least 3 tiers, found ${hints.length}`);
         }
         normalized = {
-            tier_1_conceptual: hints[0] || '',
-            tier_2_method: hints[1] || '',
-            tier_3_setup: hints[2] || ''
+            tier1_conceptual: hints[0] || '',
+            tier2_strategic: hints[1] || '',
+            tier3_next_step: hints[2] || ''
         };
     } else if (hints && typeof hints === 'object') {
         normalized = {
-            tier_1_conceptual: hints.tier_1_conceptual || hints.tier_1 || hints.tier1 || '',
-            tier_2_method: hints.tier_2_method || hints.tier_2 || hints.tier2 || '',
-            tier_3_setup: hints.tier_3_setup || hints.tier_3 || hints.tier3 || ''
+            tier1_conceptual: hints.tier1_conceptual || hints.tier1_conceptual || hints.tier1 || '',
+            tier2_strategic: hints.tier2_strategic_method || hints.tier2_strategic || hints.tier2 || '',
+            tier3_next_step: hints.tier3_next_step_setup || hints.tier3_next_step || hints.tier3 || ''
         };
     } else {
         errors.push('HINT_STRUCTURE_MISSING: Hints must be provided as a 3-tier object or array');
@@ -370,9 +370,9 @@ function validateHintSemantics(hints, terminalAnswer, options = [], context = {}
     }
 
     const tierKeys = [
-        { key: 'tier_1_conceptual', name: 'Tier 1 (Conceptual/Schema)', allowsSetupNumbers: false },
-        { key: 'tier_2_method', name: 'Tier 2 (Method/Formula)', allowsSetupNumbers: false },
-        { key: 'tier_3_setup', name: 'Tier 3 (Structural Setup)', allowsSetupNumbers: true }
+        { key: 'tier1_conceptual', name: 'Tier 1 (Conceptual/Schema)', allowsSetupNumbers: false },
+        { key: 'tier2_strategic', name: 'Tier 2 (Method/Formula)', allowsSetupNumbers: false },
+        { key: 'tier3_next_step', name: 'Tier 3 (Structural Setup)', allowsSetupNumbers: true }
     ];
 
     const tierTexts = [];

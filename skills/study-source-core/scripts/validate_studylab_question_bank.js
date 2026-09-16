@@ -178,9 +178,9 @@ function validateQuestionBankContent(data, filePath = 'in-memory') {
         if (!q.hints || typeof q.hints !== 'object') {
             errors.push(`[MISSING_HINTS] '${tag}' is missing required 'hints' object with tier_1, tier_2, tier_3.`);
         } else {
-            const t1 = q.hints.tier_1 || q.hints.principle || q.hint_tier_1;
-            const t2 = q.hints.tier_2 || q.hints.operation || q.hint_tier_2;
-            const t3 = q.hints.tier_3 || q.hints.intermediate || q.hint_tier_3;
+            const t1 = q.hints.tier1_conceptual || q.hints.principle || q.tier1_conceptual;
+            const t2 = q.hints.tier2_strategic || q.hints.operation || q.hint_tier_2;
+            const t3 = q.hints.tier3_next_step || q.hints.intermediate || q.hint_tier_3;
 
             if (!t1 || typeof t1 !== 'string' || t1.trim() === '') {
                 errors.push(`[MISSING_HINTS] '${tag}' is missing Hint Tier 1 (Conceptual Approach).`);

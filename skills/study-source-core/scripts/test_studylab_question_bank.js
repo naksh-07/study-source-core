@@ -166,9 +166,9 @@ const sampleValidCanonical = {
             trap: 'गुणनफल को HCF के वर्ग से विभाजित करना।',
             error_category: ['ERR_01', 'ERR_06'],
             hints: {
-                tier_1: 'दो संख्याओं के LCM और HCF के गुणनफल का मौलिक संबंध स्मरण करें।',
-                tier_2: 'सूत्र: LCM = (संख्याओं का गुणनफल) / HCF स्थापित करें।',
-                tier_3: '2160 को 12 से विभाजित करें।'
+                tier1_conceptual: 'दो संख्याओं के LCM और HCF के गुणनफल का मौलिक संबंध स्मरण करें।',
+                tier2_strategic: 'सूत्र: LCM = (संख्याओं का गुणनफल) / HCF स्थापित करें।',
+                tier3_next_step: '2160 को 12 से विभाजित करें।'
             },
             solution: 'सूत्रानुसार:\nLCM × HCF = दो संख्याओं का गुणनफल\nLCM × 12 = 2160\nLCM = 2160 / 12 = 180.',
             verification: 'जांच: 180 × 12 = 2160 (सत्यापित)।',
@@ -193,9 +193,9 @@ const sampleValidCanonical = {
             trap: 'LCM निकालने के बाद शेषफल घटा देना या केवल संख्याओं को जोड़ना।',
             error_category: ['ERR_02'],
             hints: {
-                tier_1: 'सबसे छोटी उभयनिष्ठ विभाज्य संख्या (LCM) की अवधारणा लागू करें।',
-                tier_2: '12, 15, 20 का LCM ज्ञात करके उसमें अभीष्ट शेषफल जोड़ें।',
-                tier_3: 'LCM(12, 15, 20) = 60; अब 60 में 4 जोड़ें।'
+                tier1_conceptual: 'सबसे छोटी उभयनिष्ठ विभाज्य संख्या (LCM) की अवधारणा लागू करें।',
+                tier2_strategic: '12, 15, 20 का LCM ज्ञात करके उसमें अभीष्ट शेषफल जोड़ें।',
+                tier3_next_step: 'LCM(12, 15, 20) = 60; अब 60 में 4 जोड़ें।'
             },
             solution: '12, 15, 20 का LCM = 60\nअभीष्ट संख्या = LCM + 4 = 60 + 4 = 64.',
             verification: 'जांच: 64/12 = भागफल 5 शेष 4; 64/15 = भागफल 4 शेष 4; 64/20 = भागफल 3 शेष 4 (सत्यापित)।',
@@ -307,7 +307,7 @@ runTest('Validator rejects missing hints object', () => {
 
 runTest('Validator rejects missing Hint Tier 1', () => {
     const noT1 = JSON.parse(JSON.stringify(sampleValidCanonical));
-    noT1.questions[0].hints.tier_1 = '';
+    noT1.questions[0].hints.tier1_conceptual = '';
     const res = validateQuestionBankContent(noT1);
     assert.strictEqual(res.isValid, false);
     assert(res.errors.some(e => e.includes('missing Hint Tier 1')), 'Should detect missing Tier 1');
@@ -315,7 +315,7 @@ runTest('Validator rejects missing Hint Tier 1', () => {
 
 runTest('Validator rejects missing Hint Tier 2', () => {
     const noT2 = JSON.parse(JSON.stringify(sampleValidCanonical));
-    noT2.questions[0].hints.tier_2 = '';
+    noT2.questions[0].hints.tier2_strategic = '';
     const res = validateQuestionBankContent(noT2);
     assert.strictEqual(res.isValid, false);
     assert(res.errors.some(e => e.includes('missing Hint Tier 2')), 'Should detect missing Tier 2');
@@ -323,7 +323,7 @@ runTest('Validator rejects missing Hint Tier 2', () => {
 
 runTest('Validator rejects missing Hint Tier 3', () => {
     const noT3 = JSON.parse(JSON.stringify(sampleValidCanonical));
-    noT3.questions[0].hints.tier_3 = '';
+    noT3.questions[0].hints.tier3_next_step = '';
     const res = validateQuestionBankContent(noT3);
     assert.strictEqual(res.isValid, false);
     assert(res.errors.some(e => e.includes('missing Hint Tier 3')), 'Should detect missing Tier 3');
@@ -337,7 +337,7 @@ console.log('\n--- 8. Answer Leakage in Hints ---');
 runTest('Validator rejects Tier 1 hint leaking the final answer', () => {
     const leakT1 = JSON.parse(JSON.stringify(sampleValidCanonical));
     leakT1.questions[0].correct_answer = '180';
-    leakT1.questions[0].hints.tier_1 = 'इस प्रश्न का सही उत्तर 180 है, सूत्र लगाएं।';
+    leakT1.questions[0].hints.tier1_conceptual = 'इस प्रश्न का सही उत्तर 180 है, सूत्र लगाएं।';
     const res = validateQuestionBankContent(leakT1);
     assert.strictEqual(res.isValid, false);
     assert(res.errors.some(e => e.includes('[HINT_ANSWER_LEAKAGE]')), 'Should detect HINT_ANSWER_LEAKAGE in Tier 1');
@@ -346,7 +346,7 @@ runTest('Validator rejects Tier 1 hint leaking the final answer', () => {
 runTest('Validator rejects Tier 2 hint leaking the final answer', () => {
     const leakT2 = JSON.parse(JSON.stringify(sampleValidCanonical));
     leakT2.questions[0].correct_answer = '180';
-    leakT2.questions[0].hints.tier_2 = 'सूत्र: LCM = 2160 / 12 = 180 प्राप्त होगा।';
+    leakT2.questions[0].hints.tier2_strategic = 'सूत्र: LCM = 2160 / 12 = 180 प्राप्त होगा।';
     const res = validateQuestionBankContent(leakT2);
     assert.strictEqual(res.isValid, false);
     assert(res.errors.some(e => e.includes('[HINT_ANSWER_LEAKAGE]')), 'Should detect HINT_ANSWER_LEAKAGE in Tier 2');

@@ -511,9 +511,9 @@ async function runAllTests() {
             options: ['10', '20', '30', '40'],
             correct_option: '30',
             hints: {
-                tier_1_conceptual: 'The answer is definitely 30 because of arithmetic balance.', // LEAK
-                tier_2_method: 'Apply the equation.',
-                tier_3_setup: 'Simplify the equation.'
+                tier1_conceptual: 'The answer is definitely 30 because of arithmetic balance.', // LEAK
+                tier2_strategic: 'Apply the equation.',
+                tier3_next_step: 'Simplify the equation.'
             },
             clr
         });
@@ -544,9 +544,9 @@ async function runAllTests() {
             options: ['10 m/s', '20 m/s'], // Only 2 options! Violates >= 4 rule
             correct_option: '10 m/s',
             hints: {
-                tier_1_conceptual: 'Recall speed formula.',
-                tier_2_method: 'v = d / t',
-                tier_3_setup: 'Divide 100 by 10.'
+                tier1_conceptual: 'Recall speed formula.',
+                tier2_strategic: 'v = d / t',
+                tier3_next_step: 'Divide 100 by 10.'
             },
             clr
         });

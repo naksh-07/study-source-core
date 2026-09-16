@@ -104,12 +104,12 @@
           "hints": {
             "type": "object",
             "properties": {
-              "tier_1": { "type": "string" },
-              "tier_2": { "type": "string" },
-              "tier_3": { "type": "string" },
-              "tier_1_conceptual": { "type": "string" },
-              "tier_2_method": { "type": "string" },
-              "tier_3_setup": { "type": "string" }
+              "tier1_conceptual": { "type": "string" },
+              "tier2_strategic": { "type": "string" },
+              "tier3_next_step": { "type": "string" },
+              "tier1_conceptual": { "type": "string" },
+              "tier2_strategic": { "type": "string" },
+              "tier3_next_step": { "type": "string" }
             },
             "additionalProperties": true
           },

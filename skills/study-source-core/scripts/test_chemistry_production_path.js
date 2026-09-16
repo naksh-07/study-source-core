@@ -244,7 +244,7 @@ async function main() {
             assert(Array.isArray(q.decision_points) && q.decision_points.length > 0, '9. decision_points');
             assert(q.trap && q.trap.length > 5, '10. trap');
             assert(Array.isArray(q.error_category) && q.error_category.length > 0, '11. error_category');
-            assert(q.hints && q.hints.tier_1 && q.hints.tier_2 && q.hints.tier_3, '12-14. 3-tier hints');
+            assert(q.hints && q.hints.tier1_conceptual && q.hints.tier2_strategic && q.hints.tier3_next_step, '12-14. 3-tier hints');
             assert(q.solution && q.solution.length > 10, '15. solution');
             assert(q.verification && q.verification.length > 10, '16. verification');
             assert(Array.isArray(q.prerequisites) && q.prerequisites.length > 0, '17. prerequisites');
@@ -296,8 +296,8 @@ async function main() {
     await runTest('SEC-4', 'TEST-4.5', 'COMPONENT', 'Progressive hints do NOT leak answers across Tier 1 and Tier 2', () => {
         for (const q of authoredQB.questions) {
             const ans = q.correct_answer;
-            assert(!hintLeaksAnswer(q.hints.tier_1, ans), `Tier 1 hint for ${q.id} leaks answer '${ans}'`);
-            assert(!hintLeaksAnswer(q.hints.tier_2, ans), `Tier 2 hint for ${q.id} leaks answer '${ans}'`);
+            assert(!hintLeaksAnswer(q.hints.tier1_conceptual, ans), `Tier 1 hint for ${q.id} leaks answer '${ans}'`);
+            assert(!hintLeaksAnswer(q.hints.tier2_strategic, ans), `Tier 2 hint for ${q.id} leaks answer '${ans}'`);
         }
     });
 
@@ -616,7 +616,7 @@ async function main() {
 
     await runTest('SEC-9', 'TEST-9.6', 'NEGATIVE / ADVERSARIAL', 'Fail-Closed: Missing hints (Tier 1/2/3) caught and rejected by validator', () => {
         const corruptedQB = JSON.parse(JSON.stringify(authoredQB));
-        corruptedQB.questions[0].hints.tier_2 = '';
+        corruptedQB.questions[0].hints.tier2_strategic = '';
         const val = validateQuestionBankContent(corruptedQB);
         assert.strictEqual(val.isValid, false);
         assert(val.errors.some(e => e.includes('MISSING_HINTS')));
@@ -628,7 +628,7 @@ async function main() {
         assert.strictEqual(hintLeaksAnswer(leakingHint, ans), true);
 
         const corruptedQB = JSON.parse(JSON.stringify(authoredQB));
-        corruptedQB.questions[0].hints.tier_1 = leakingHint;
+        corruptedQB.questions[0].hints.tier1_conceptual = leakingHint;
         const val = validateQuestionBankContent(corruptedQB);
         assert.strictEqual(val.isValid, false);
         assert(val.errors.some(e => e.includes('HINT_ANSWER_LEAKAGE')));

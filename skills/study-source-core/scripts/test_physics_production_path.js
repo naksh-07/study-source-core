@@ -228,9 +228,9 @@ async function main() {
             for (const dim of REQUIRED_DIMENSIONS) {
                 assert(q[dim] !== undefined && q[dim] !== null, `Question '${q.id}' missing required dimension '${dim}'`);
             }
-            assert(q.hints.tier_1, 'Missing Hint Tier 1');
-            assert(q.hints.tier_2, 'Missing Hint Tier 2');
-            assert(q.hints.tier_3, 'Missing Hint Tier 3');
+            assert(q.hints.tier1_conceptual, 'Missing Hint Tier 1');
+            assert(q.hints.tier2_strategic, 'Missing Hint Tier 2');
+            assert(q.hints.tier3_next_step, 'Missing Hint Tier 3');
             assert(Array.isArray(q.recognition_signals) && q.recognition_signals.length > 0);
             assert(Array.isArray(q.decision_points) && q.decision_points.length > 0);
             assert(Array.isArray(q.error_category) && q.error_category.length > 0);
@@ -306,8 +306,8 @@ async function main() {
         const canonicalQB = authorPhysicsProceduralContent(FIXTURE_PATH);
         for (const q of canonicalQB.questions) {
             const ans = q.correct_answer;
-            const t1Leaks = hintLeaksAnswer(q.hints.tier_1, ans);
-            const t2Leaks = hintLeaksAnswer(q.hints.tier_2, ans);
+            const t1Leaks = hintLeaksAnswer(q.hints.tier1_conceptual, ans);
+            const t2Leaks = hintLeaksAnswer(q.hints.tier2_strategic, ans);
             assert.strictEqual(t1Leaks, false, `Hint Tier 1 in '${q.id}' must NOT leak answer '${ans}'`);
             assert.strictEqual(t2Leaks, false, `Hint Tier 2 in '${q.id}' must NOT leak answer '${ans}'`);
         }
@@ -657,7 +657,7 @@ async function main() {
                 question_type: 'numerical',
                 question: 'कार्य ज्ञात कीजिए',
                 correct_answer: '100 J',
-                hints: { tier_1: 'A', tier_2: 'B', tier_3: 'C' },
+                hints: { tier1_conceptual: 'A', tier2_strategic: 'B', tier3_next_step: 'C' },
                 solution: 'हल',
                 verification: 'जांच',
                 prerequisites: ['physics.wep']
@@ -680,7 +680,7 @@ async function main() {
                     question_type: 'numerical',
                     question: 'Q1',
                     correct_answer: '10 J',
-                    hints: { tier_1: 'A', tier_2: 'B', tier_3: 'C' },
+                    hints: { tier1_conceptual: 'A', tier2_strategic: 'B', tier3_next_step: 'C' },
                     solution: 'S1',
                     verification: 'V1',
                     prerequisites: ['p1']
@@ -692,7 +692,7 @@ async function main() {
                     question_type: 'numerical',
                     question: 'Q2',
                     correct_answer: '20 J',
-                    hints: { tier_1: 'A', tier_2: 'B', tier_3: 'C' },
+                    hints: { tier1_conceptual: 'A', tier2_strategic: 'B', tier3_next_step: 'C' },
                     solution: 'S2',
                     verification: 'V2',
                     prerequisites: ['p1']
@@ -715,7 +715,7 @@ async function main() {
                 question_type: 'invalid_fantasy_type',
                 question: 'Q',
                 correct_answer: '50 J',
-                hints: { tier_1: 'T1', tier_2: 'T2', tier_3: 'T3' },
+                hints: { tier1_conceptual: 'T1', tier2_strategic: 'T2', tier3_next_step: 'T3' },
                 solution: 'S',
                 verification: 'V',
                 prerequisites: ['p1']
@@ -755,7 +755,7 @@ async function main() {
                 question_type: 'numerical',
                 question: 'Q',
                 correct_answer: '50 J',
-                hints: { tier_1: 'T1', tier_2: 'T2' }, // missing tier_3!
+                hints: { tier1_conceptual: 'T1', tier2_strategic: 'T2' }, // missing tier_3!
                 solution: 'S',
                 verification: 'V',
                 prerequisites: ['p1']
@@ -778,9 +778,9 @@ async function main() {
                 question: 'कार्य ज्ञात कीजिए',
                 correct_answer: '400 J',
                 hints: {
-                    tier_1: 'उत्तर 400 J होगा।', // Answer leak!
-                    tier_2: 'सूत्र लगाएं।',
-                    tier_3: 'हल करें।'
+                    tier1_conceptual: 'उत्तर 400 J होगा।', // Answer leak!
+                    tier2_strategic: 'सूत्र लगाएं।',
+                    tier3_next_step: 'हल करें।'
                 },
                 solution: 'हल: W = 400 J।',
                 verification: 'सत्यापित: 400 J।',
@@ -803,7 +803,7 @@ async function main() {
                 question_type: 'numerical',
                 question: 'कार्य ज्ञात कीजिए',
                 correct_answer: '400', // Missing J / Joules!
-                hints: { tier_1: 'T1', tier_2: 'T2', tier_3: 'T3' },
+                hints: { tier1_conceptual: 'T1', tier2_strategic: 'T2', tier3_next_step: 'T3' },
                 solution: 'S',
                 verification: 'V',
                 prerequisites: ['p1']

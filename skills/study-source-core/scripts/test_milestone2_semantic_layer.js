@@ -345,9 +345,9 @@ console.log('\n─── A.5: Hint & Distractor Semantics ───');
 
 test('A5.1 — Valid 3-tier hints pass validation', () => {
     const result = validateHintSemantics({
-        tier_1_conceptual: 'LCM requires identifying the prime factors of each number and taking the highest power of each',
-        tier_2_method: 'Use prime factorization: decompose both numbers into primes, then multiply the highest powers',
-        tier_3_setup: 'For 12 and 15: 12 = 2² × 3 and 15 = 3 × 5. Now take max powers of each prime factor'
+        tier1_conceptual: 'LCM requires identifying the prime factors of each number and taking the highest power of each',
+        tier2_strategic: 'Use prime factorization: decompose both numbers into primes, then multiply the highest powers',
+        tier3_next_step: 'For 12 and 15: 12 = 2² × 3 and 15 = 3 × 5. Now take max powers of each prime factor'
     }, '60', ['45', '60', '120', '180']);
     assert.ok(result.isValid, `Expected valid hints, got: ${result.errors.join('; ')}`);
 });
@@ -470,9 +470,9 @@ const DOMAIN_TEST_CASES = {
             formulas: ['LCM(a,b) = (a × b) / HCF(a,b)'], answer: '60',
             options: ['30', '60', '120', '180'],
             hints: {
-                tier_1_conceptual: 'LCM uses the highest power of each prime factor present across all numbers',
-                tier_2_method: 'Prime factorize each number: find powers of 2, 3, and 5 separately',
-                tier_3_setup: '12 = 2² × 3, 15 = 3 × 5, 20 = 2² × 5. Take max of each prime power'
+                tier1_conceptual: 'LCM uses the highest power of each prime factor present across all numbers',
+                tier2_strategic: 'Prime factorize each number: find powers of 2, 3, and 5 separately',
+                tier3_next_step: '12 = 2² × 3, 15 = 3 × 5, 20 = 2² × 5. Take max of each prime power'
             }
         }),
         coreArtifacts: ['notes', 'proceduralQuestionBank'],
@@ -484,9 +484,9 @@ const DOMAIN_TEST_CASES = {
             formulas: ['v = u + at', 's = ut + ½at²'], answer: '20',
             options: ['10', '20', '40', '5'],
             hints: {
-                tier_1_conceptual: 'Uniform acceleration means constant rate of change of velocity along straight line',
-                tier_2_method: 'Apply first equation of motion v = u + at where u is initial velocity',
-                tier_3_setup: 'u = 0 (from rest), a = 2 m/s², t = 10 s. Substitute into v = u + at'
+                tier1_conceptual: 'Uniform acceleration means constant rate of change of velocity along straight line',
+                tier2_strategic: 'Apply first equation of motion v = u + at where u is initial velocity',
+                tier3_next_step: 'u = 0 (from rest), a = 2 m/s², t = 10 s. Substitute into v = u + at'
             }
         }),
         coreArtifacts: ['notes', 'proceduralQuestionBank'],
@@ -498,9 +498,9 @@ const DOMAIN_TEST_CASES = {
             formulas: ['Kc = [SO₃]² / ([SO₂]² × [O₂])'], answer: '4.0',
             options: ['2.0', '4.0', '8.0', '0.5'],
             hints: {
-                tier_1_conceptual: 'Equilibrium constant Kc relates product concentrations to reactant concentrations at equilibrium',
-                tier_2_method: 'Write Kc expression: products over reactants, each raised to stoichiometric coefficient',
-                tier_3_setup: 'Kc = [SO₃]² / ([SO₂]² × [O₂]). Substitute the given equilibrium molar concentrations'
+                tier1_conceptual: 'Equilibrium constant Kc relates product concentrations to reactant concentrations at equilibrium',
+                tier2_strategic: 'Write Kc expression: products over reactants, each raised to stoichiometric coefficient',
+                tier3_next_step: 'Kc = [SO₃]² / ([SO₂]² × [O₂]). Substitute the given equilibrium molar concentrations'
             }
         }),
         coreArtifacts: ['notes', 'proceduralQuestionBank'],
@@ -513,9 +513,9 @@ const DOMAIN_TEST_CASES = {
             options: ['B sits opposite to A', 'E sits opposite to B', 'C sits opposite to F', 'D sits opposite to A'],
             ku_type: 'procedural',
             hints: {
-                tier_1_conceptual: 'In circular arrangement facing center, opposite means directly across with 2 persons between',
-                tier_2_method: 'Fix one person first, then place others using constraints: opposite, immediate left/right',
-                tier_3_setup: 'Place A at 12 o\'clock. D is opposite at 6 o\'clock. B is at 11 o\'clock position (immediate left of A)'
+                tier1_conceptual: 'In circular arrangement facing center, opposite means directly across with 2 persons between',
+                tier2_strategic: 'Fix one person first, then place others using constraints: opposite, immediate left/right',
+                tier3_next_step: 'Place A at 12 o\'clock. D is opposite at 6 o\'clock. B is at 11 o\'clock position (immediate left of A)'
             }
         }),
         coreArtifacts: ['notes', 'proceduralQuestionBank'],
@@ -641,9 +641,9 @@ test('ADV-KU-07 — Missing source_chunk_hash fails source grounding', () => {
 
 test('ADV-KU-08 — Hint leaks terminal answer via exact match', () => {
     const result = validateHintSemantics({
-        tier_1_conceptual: 'The answer to the LCM problem is 60, which is the smallest common multiple',
-        tier_2_method: 'Use prime factorization to find the LCM',
-        tier_3_setup: 'Decompose 12 = 2² × 3 and 15 = 3 × 5'
+        tier1_conceptual: 'The answer to the LCM problem is 60, which is the smallest common multiple',
+        tier2_strategic: 'Use prime factorization to find the LCM',
+        tier3_next_step: 'Decompose 12 = 2² × 3 and 15 = 3 × 5'
     }, '60');
     assert.ok(!result.isValid);
     assert.ok(result.errors.some(e => e.includes('LEAKAGE') || e.includes('LEAK')));
@@ -651,9 +651,9 @@ test('ADV-KU-08 — Hint leaks terminal answer via exact match', () => {
 
 test('ADV-KU-09 — Boilerplate hints rejected', () => {
     const result = validateHintSemantics({
-        tier_1_conceptual: 'Think carefully about the problem',
-        tier_2_method: 'Apply the formula to find the answer',
-        tier_3_setup: 'Use logic and solve step by step carefully'
+        tier1_conceptual: 'Think carefully about the problem',
+        tier2_strategic: 'Apply the formula to find the answer',
+        tier3_next_step: 'Use logic and solve step by step carefully'
     }, '42');
     assert.ok(!result.isValid);
     assert.ok(result.errors.some(e => e.includes('BOILERPLATE')));
@@ -680,9 +680,9 @@ test('ADV-KU-12 — Comprehensive audit catches multiple violations simultaneous
             { id: 'mcq-bad', stem: 'Bad MCQ', options: ['A', 'B'] }
         ],
         hints: {
-            tier_1_conceptual: 'Think carefully',
-            tier_2_method: 'Use the formula',
-            tier_3_setup: 'Just do it and follow the steps'
+            tier1_conceptual: 'Think carefully',
+            tier2_strategic: 'Use the formula',
+            tier3_next_step: 'Just do it and follow the steps'
         },
         terminalAnswer: '42'
     });
@@ -703,9 +703,9 @@ test('D.1 — Clean comprehensive audit passes all checks', () => {
         answer: '60',
         options: ['30', '60', '120', '180'],
         hints: {
-            tier_1_conceptual: 'LCM uses the highest power of each prime factor present across all numbers',
-            tier_2_method: 'Prime factorize each number: find powers of 2, 3, and 5 separately for both numbers',
-            tier_3_setup: 'For the given numbers: 12 = 2² × 3 and 15 = 3 × 5. Take maximum power of each prime'
+            tier1_conceptual: 'LCM uses the highest power of each prime factor present across all numbers',
+            tier2_strategic: 'Prime factorize each number: find powers of 2, 3, and 5 separately for both numbers',
+            tier3_next_step: 'For the given numbers: 12 = 2² × 3 and 15 = 3 × 5. Take maximum power of each prime'
         }
     });
 

@@ -403,14 +403,14 @@
         "hints": {
           "type": "object",
           "required": [
-            "tier_1_conceptual",
-            "tier_2_method",
-            "tier_3_setup"
+            "tier1_conceptual",
+            "tier2_strategic",
+            "tier3_next_step"
           ],
           "properties": {
-            "tier_1_conceptual": { "type": "string" },
-            "tier_2_method": { "type": "string" },
-            "tier_3_setup": { "type": "string" }
+            "tier1_conceptual": { "type": "string" },
+            "tier2_strategic": { "type": "string" },
+            "tier3_next_step": { "type": "string" }
           },
           "additionalProperties": false
         },

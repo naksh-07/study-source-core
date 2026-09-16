@@ -184,7 +184,7 @@ function buildSemanticLearningIR(params) {
         if (!item.hints || typeof item.hints !== 'object') {
             throw new Error(`IR_CONSTRUCTION_ERROR: Practice item "${id}" must contain 3-tier hints object`);
         }
-        if (!item.hints.tier_1_conceptual || !item.hints.tier_2_method || !item.hints.tier_3_setup) {
+        if (!item.hints.tier1_conceptual || !item.hints.tier2_strategic_method || !item.hints.tier3_next_step_setup) {
             throw new Error(`IR_CONSTRUCTION_ERROR: Practice item "${id}" hints must contain tier_1_conceptual, tier_2_method, and tier_3_setup`);
         }
 
@@ -490,24 +490,24 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
         let hints = prob.hints;
         if (Array.isArray(hints)) {
             hints = {
-                tier_1_conceptual: hints[0] || 'Identify the core principle governing this problem.',
-                tier_2_method: hints[1] || 'Set up the governing algebraic or physical equation.',
-                tier_3_setup: hints[2] || 'Substitute the given values into the equation and simplify.'
+                tier1_conceptual: hints[0] || 'Identify the core principle governing this problem.',
+                tier2_strategic: hints[1] || 'Set up the governing algebraic or physical equation.',
+                tier3_next_step: hints[2] || 'Substitute the given values into the equation and simplify.'
             };
         } else if (!hints || typeof hints !== 'object') {
             hints = {
-                tier_1_conceptual: 'Identify the core principle governing this problem.',
-                tier_2_method: 'Set up the governing algebraic or physical equation.',
-                tier_3_setup: 'Substitute the given values into the equation and simplify.'
+                tier1_conceptual: 'Identify the core principle governing this problem.',
+                tier2_strategic: 'Set up the governing algebraic or physical equation.',
+                tier3_next_step: 'Substitute the given values into the equation and simplify.'
             };
         } else {
             hints = {
-                tier_1_conceptual: hints.tier_1_conceptual || hints.tier_1 || hints.tier1 || 'Identify the core principle.',
-                tier_2_method: hints.tier_2_method || hints.tier_2 || hints.tier2 || 'Set up the governing method.',
-                tier_3_setup: hints.tier_3_setup || hints.tier_3 || hints.tier3 || 'Substitute the values into setup.',
-                tier_1: hints.tier_1 || hints.tier_1_conceptual || hints.tier1 || 'Identify the core principle.',
-                tier_2: hints.tier_2 || hints.tier_2_method || hints.tier2 || 'Set up the governing method.',
-                tier_3: hints.tier_3 || hints.tier_3_setup || hints.tier3 || 'Substitute the values into setup.'
+                tier1_conceptual: hints.tier1_conceptual || hints.tier1_conceptual || hints.tier1 || 'Identify the core principle.',
+                tier2_strategic: hints.tier2_strategic_method || hints.tier2_strategic || hints.tier2 || 'Set up the governing method.',
+                tier3_next_step: hints.tier3_next_step_setup || hints.tier3_next_step || hints.tier3 || 'Substitute the values into setup.',
+                tier1_conceptual: hints.tier1_conceptual || hints.tier1_conceptual || hints.tier1 || 'Identify the core principle.',
+                tier2_strategic: hints.tier2_strategic || hints.tier2_strategic_method || hints.tier2 || 'Set up the governing method.',
+                tier3_next_step: hints.tier3_next_step || hints.tier3_next_step_setup || hints.tier3 || 'Substitute the values into setup.'
             };
         }
 

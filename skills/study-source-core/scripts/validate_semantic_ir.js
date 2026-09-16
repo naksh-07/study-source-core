@@ -145,10 +145,10 @@ function validateSemanticIR(ir, options = {}) {
                 ].filter(Boolean);
 
                 for (const target of terminalAnswers) {
-                    if (hintLeaksTerminalAnswer(item.hints.tier_1_conceptual, target)) {
+                    if (hintLeaksTerminalAnswer(item.hints.tier1_conceptual, target)) {
                         errors.push(`HINT_ANSWER_LEAKAGE: Practice item "${item.id}" Tier 1 hint leaks answer "${target}"`);
                     }
-                    if (hintLeaksTerminalAnswer(item.hints.tier_2_method, target)) {
+                    if (hintLeaksTerminalAnswer(item.hints.tier2_strategic, target)) {
                         errors.push(`HINT_ANSWER_LEAKAGE: Practice item "${item.id}" Tier 2 hint leaks answer "${target}"`);
                     }
                 }

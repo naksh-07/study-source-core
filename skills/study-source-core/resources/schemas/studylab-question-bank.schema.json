@@ -136,11 +136,11 @@
           },
           "hints": {
             "type": "object",
-            "required": ["tier_1", "tier_2", "tier_3"],
+            "required": ["tier1_conceptual", "tier2_strategic", "tier3_next_step"],
             "properties": {
-              "tier_1": { "type": "string", "minLength": 1 },
-              "tier_2": { "type": "string", "minLength": 1 },
-              "tier_3": { "type": "string", "minLength": 1 }
+              "tier1_conceptual": { "type": "string", "minLength": 1 },
+              "tier2_strategic": { "type": "string", "minLength": 1 },
+              "tier3_next_step": { "type": "string", "minLength": 1 }
             },
             "additionalProperties": true
           },
