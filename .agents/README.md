@@ -208,7 +208,7 @@ npm test
 
 ## Key Design Decisions
 
-See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record log (ADR-01 to ADR-10).
+See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record log (ADR-01 to ADR-17).
 
 | ADR | Decision |
 |---|---|

@@ -36,7 +36,7 @@ Before contributing, you **must read** the following Tier 0 master architectural
 Clone the repository and install dependencies in the core skill directory:
 ```bash
 # Navigate to the core skill package
-cd .agents/skills/study-source-core
+cd skills/study-source-core
 
 # Install exact locked dependencies
 npm ci
@@ -57,7 +57,7 @@ npm ci
 4. **Implement Code or Contracts**:
    Maintain temporal labeling (`[CURRENT]` vs `[TARGET]`) and adhere to Single-Writer and Parent Self-Execution rules.
 5. **Run the Verification Suite**:
-   Ensure all 18 core tests pass with zero regressions:
+   Ensure all 27 core test suites pass with zero regressions:
    ```bash
    npm test
    ```
@@ -121,18 +121,34 @@ All contributions must pass the verification suite before merging.
 
 ### Running Core Tests
 ```bash
-cd .agents/skills/study-source-core
+cd skills/study-source-core
 npm test
 ```
-The test command runs all 18 standard verification scripts:
-- Subject policy resolution
-- Subagent routing and orchestration DAGs
+The test command runs all 27 standard verification test suites:
+- Draft-07 Semantic Learning IR, CLRs, and evidence pack chunking
+- Subject policy resolution and domain boundary enforcement
+- Subagent routing and orchestration DAGs with bounded concurrency
 - Artifact registry schema validation
 - Change isolation and freeze boundary compliance
 - Backward compatibility regressions
 - Track B (Math), Track C (Reasoning), Track D (Physics), Track E (Chemistry) procedural paths
 - Markdown Question Bank rendering and parsing
-- Independent verification and packaging prototypes
+- Closed-boundary model isolation (Models 1600000001–3 vs 1600000004)
+- 4-point Physical Verification Protocol release gate (`.completion-evidence.json`)
+- 15-point independent adversarial attack harness (ADV-01 through ADV-15)
+- Runtime adversarial matrix and crash-resilient atomic checkpoint recovery
+
+### Running Additional Verification Suites
+```bash
+# Packaging and Closed-Boundary Model Isolation Suite
+npm run test:milestone4
+
+# Antigravity Host Adapter, Concurrency & Recovery Suite
+npm run test:phase10
+
+# Standalone 4-Gate Adversarial Certification CLI on a target chapter
+npm run certify -- "Study Materials/Math/LCM-HCF"
+```
 
 ### Running Targeted Track Tests
 ```bash
@@ -162,7 +178,7 @@ Use standard conventional commit messages:
 
 ### PR Review Checklist
 Every PR will be reviewed against:
-- [ ] No regression in `npm test` (all 18 tests pass).
+- [ ] No regression in `npm test` (all 27 test suites pass).
 - [ ] No violation of the Single-Writer Rule or Parent Self-Execution Ban.
 - [ ] Any architectural change has a corresponding accepted ADR.
 - [ ] New/updated files use explicit temporal labeling (`[CURRENT]`, `[TARGET]`, `[DEFERRED]`).

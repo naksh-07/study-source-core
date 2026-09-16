@@ -5,7 +5,7 @@ Execute a high-confidence architectural consistency and boundary-alignment missi
 
 ## 🔒 My Identity
 - Archetype: sentinel
-- Working directory: c:\Users\Suraj\Pictures\Books\Acadmey\ALP\Prompts\AI Notes\.agents
+- Working directory: .agents
 - Orchestrator: a306e396-8c42-47cf-8a3e-0a05634fabe8
 - Victory Auditor: [to be spawned on victory claim]
 - Cron 1 (Progress): task-19
@@ -15,7 +15,7 @@ Execute a high-confidence architectural consistency and boundary-alignment missi
 - No technical decisions — relay only
 - Victory Audit is MANDATORY before reporting completion
 - Route selected: General (teamwork_preview_orchestrator)
-- Working directory: c:\Users\Suraj\Pictures\Books\Acadmey\ALP\Prompts\AI Notes
+- Working directory: . (StudySourceCore root)
 
 ## User Context
 - **Last user request**: Architectural consistency and boundary-alignment mission on StudySourceCore.

@@ -42,15 +42,15 @@ Assets in this tier represent foundational data contracts, database schemas, tes
 
 | Component Path Pattern | Component Rationale | Inviolable Invariant |
 |---|---|---|
-| `.agents/skills/study-source-core/resources/schemas/*.json` | Canonical Draft-07 JSON schemas validating practice questions, procedural DAGs, manifests, and provenance. | Zero schema deletion or breaking field removals. |
-| `.agents/skills/study-source-core/resources/image-occlusion-schema.json` | Schema for Image Occlusion masks and coordinates. | Coordinate normalization bounds `[0..100]` remain fixed. |
-| `.agents/skills/study-source-core/resources/studylab-practice-questions-schema.json` | Schema governing authentic practice items. | MCQ minimum 4 options invariant strictly preserved. |
-| `.agents/skills/study-source-core/resources/studylab-procedural-schema.json` | Schema governing procedural pattern archetypes. | DAG structure and step schemas remain intact. |
-| `.agents/skills/study-source-core/scripts/test_*.js` | Master test suites (111 contracts, adversarial auditor, L1-L7 proof suite, orchestration tests). | Must never be deleted or altered to weaken assertions. |
-| `.agents/skills/study-source-core/scripts/export_studylab_procedural_anki.js` | Low-level Anki Model `1600000004` SQLite compilation engine. | SQLite schema and Anki model field layouts are immutable. |
-| `.agents/skills/study-source-core/scripts/shared_anki_utils.js` | Shared SQLite schema utilities and Anki zip packaging. | Collection database structure is immutable. |
-| `.agents/skills/study-source-core/package.json` | NPM package configuration and dependency definitions. | Dependency versions and test commands preserved. |
-| `.agents/skills/study-source-core/package-lock.json` | NPM lockfile for reproducible builds. | Lockfile integrity preserved. |
+| `skills/study-source-core/resources/schemas/*.json` | Canonical Draft-07 JSON schemas validating practice questions, procedural DAGs, manifests, and provenance. | Zero schema deletion or breaking field removals. |
+| `skills/study-source-core/resources/image-occlusion-schema.json` | Schema for Image Occlusion masks and coordinates. | Coordinate normalization bounds `[0..100]` remain fixed. |
+| `skills/study-source-core/resources/studylab-practice-questions-schema.json` | Schema governing authentic practice items. | MCQ minimum 4 options invariant strictly preserved. |
+| `skills/study-source-core/resources/studylab-procedural-schema.json` | Schema governing procedural pattern archetypes. | DAG structure and step schemas remain intact. |
+| `skills/study-source-core/scripts/test_*.js` | Master test suites (111 contracts, adversarial auditor, L1-L7 proof suite, orchestration tests). | Must never be deleted or altered to weaken assertions. |
+| `skills/study-source-core/scripts/export_studylab_procedural_anki.js` | Low-level Anki Model `1600000004` SQLite compilation engine. | SQLite schema and Anki model field layouts are immutable. |
+| `skills/study-source-core/scripts/shared_anki_utils.js` | Shared SQLite schema utilities and Anki zip packaging. | Collection database structure is immutable. |
+| `skills/study-source-core/package.json` | NPM package configuration and dependency definitions. | Dependency versions and test commands preserved. |
+| `skills/study-source-core/package-lock.json` | NPM lockfile for reproducible builds. | Lockfile integrity preserved. |
 | `PRODUCT.md` | Authoritative Product Charter and 10 Immutable Principles. | Inviolable product laws; zero fabrication. |
 | `docs/LEARNING_PRINCIPLES.md` | Authoritative Cognitive Learning Principles. | 4-stage procedural progression, 17 dimensions, 3-tier hints. |
 
@@ -64,10 +64,10 @@ Assets in this tier represent active production code and configurations. Modific
 | `ARCHITECTURE.md` | Canonical 6-Tier Architecture & Contract Ownership Matrix. | Must reflect system layers, pipeline flow, and ownership. |
 | `ROADMAP.md` | Master 11-Phase Implementation Roadmap (Phases 0–10). | Governed phase progression, entry dependencies, exit criteria. |
 | `.agents/agents/*.md` | 14 canonical agent definitions. | Standardize to 14-section template without removing core responsibilities. |
-| `.agents/skills/study-source-core/SKILL.md` | Master orchestration skill. | Preserves single source of truth, hard resource limits, and gating rules. |
-| `.agents/skills/study-source-core/subject-skills/*/SKILL.md` | 9 subject specialized skills. | Preserves domain DNA, formulas, and subject validation hooks. |
-| `.agents/skills/study-source-core/resources/*.md` | 23 markdown resource rulebooks and contracts. | Consolidated into canonical single sources of truth. |
-| `.agents/skills/study-source-core/scripts/*.js` | 30 operational, validation, and routing scripts. | No deletion of working scripts; CLI interfaces preserved. |
+| `skills/study-source-core/SKILL.md` | Master orchestration skill. | Preserves single source of truth, hard resource limits, and gating rules. |
+| `skills/study-source-core/subject-skills/*/SKILL.md` | 9 subject specialized skills. | Preserves domain DNA, formulas, and subject validation hooks. |
+| `skills/study-source-core/resources/*.md` | 23 markdown resource rulebooks and contracts. | Consolidated into canonical single sources of truth. |
+| `skills/study-source-core/scripts/*.js` | 30 operational, validation, and routing scripts. | No deletion of working scripts; CLI interfaces preserved. |
 
 ---
 
@@ -103,7 +103,7 @@ Transient scratch files, test fixture dumps, and subagent working directories.
 
 | Component Path Pattern | Component Rationale | Retention Policy |
 |---|---|---|
-| `.agents/skills/study-source-core/scripts/scratch/*` | Test fixtures, mock outputs, and sample `.apkg` files. | Safe to purge without affecting production operations. |
+| `skills/study-source-core/scripts/scratch/*` | Test fixtures, mock outputs, and sample `.apkg` files. | Safe to purge without affecting production operations. |
 | `.agents/m*_*/*` | Agent working memory and dispatch metadata. | Confined to `.agents/` working folder; ephemeral. |
 
 ---
