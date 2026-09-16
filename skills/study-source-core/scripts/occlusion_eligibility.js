@@ -178,9 +178,13 @@ function evaluateOcclusionEligibility(asset, options = {}) {
  * 
  * @param {string} category - Visual need category
  * @param {string} subject - Subject name
- * @returns {Object} { appropriate: boolean, is_preferred: boolean }
+ * @param {Object} [options] - Additional options
+ * @param {boolean|string} [options.hasPedagogicalValue] - If truthy, overrides suppression
+ * @param {boolean|string} [options.pedagogicalJustification] - If truthy, overrides suppression
+ * @param {boolean|string} [options.allowAbstract] - If truthy, overrides suppression
+ * @returns {Object} { appropriate: boolean, is_preferred: boolean, reason: string }
  */
-function isOcclusionAppropriate(category, subject) {
+function isOcclusionAppropriate(category, subject, options = {}) {
     const rules = subjectVisualRules[subject] || {};
     const preferred = rules.preferred_visual_categories || [];
     const isPreferred = preferred.includes(category);
@@ -188,6 +192,10 @@ function isOcclusionAppropriate(category, subject) {
     // IO-suppressed categories (abstract, text-only)
     const suppressed = new Set(['timeline', 'flowchart']); // These are typically better as text
     if (suppressed.has(category) && !isPreferred) {
+        const isPedagogicallyJustified = options.hasPedagogicalValue || options.pedagogicalJustification || options.allowAbstract;
+        if (isPedagogicallyJustified) {
+            return { appropriate: true, is_preferred: isPreferred, reason: 'PEDAGOGICALLY_JUSTIFIED' };
+        }
         return { appropriate: false, is_preferred: false, reason: 'CATEGORY_NOT_IO_SUITABLE' };
     }
 
