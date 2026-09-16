@@ -178,9 +178,12 @@ function evaluateOcclusionEligibility(asset, options = {}) {
  * 
  * @param {string} category - Visual need category
  * @param {string} subject - Subject name
- * @returns {Object} { appropriate: boolean, is_preferred: boolean }
+ * @param {Object} [options] - Additional options
+ * @param {string} [options.pedagogicalJustification] - Must be substantive (min 15 chars) to override abstract suppression
+ * @param {Array} [options.targetRegions] - Proposed occlusion target regions for structural suitability
+ * @returns {Object} { appropriate: boolean, is_preferred: boolean, reason: string }
  */
-function isOcclusionAppropriate(category, subject) {
+function isOcclusionAppropriate(category, subject, options = {}) {
     const rules = subjectVisualRules[subject] || {};
     const preferred = rules.preferred_visual_categories || [];
     const isPreferred = preferred.includes(category);
@@ -188,6 +191,20 @@ function isOcclusionAppropriate(category, subject) {
     // IO-suppressed categories (abstract, text-only)
     const suppressed = new Set(['timeline', 'flowchart']); // These are typically better as text
     if (suppressed.has(category) && !isPreferred) {
+        const hasJustification = typeof options.pedagogicalJustification === 'string' && options.pedagogicalJustification.trim().length >= 15;
+
+        let hasStructuralSuitability = false;
+        if (Array.isArray(options.targetRegions) && options.targetRegions.length > 0) {
+            hasStructuralSuitability = options.targetRegions.some(region => {
+                const type = region.target_type || region.occlusion_target_type;
+                return type === 'process_stages' || type === 'relationships' || type === 'sequence_steps';
+            });
+        }
+
+        if (hasJustification && hasStructuralSuitability) {
+            return { appropriate: true, is_preferred: isPreferred, reason: 'PEDAGOGICALLY_JUSTIFIED' };
+        }
+
         return { appropriate: false, is_preferred: false, reason: 'CATEGORY_NOT_IO_SUITABLE' };
     }
 
