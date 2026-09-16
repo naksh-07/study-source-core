@@ -85,7 +85,8 @@ const QA_CHECK_IDS = Object.freeze({
     MCQ_CARDINALITY: 'QA-KU-09',
     KU_ID_FORMAT: 'QA-KU-10',
     SOURCE_GROUNDING: 'QA-KU-11',
-    COMPREHENSIVE_AUDIT: 'QA-KU-12'
+    COMPREHENSIVE_AUDIT: 'QA-KU-12',
+    FACTUAL_RECONCILIATION: 'QA-KU-13'
 });
 
 /**
@@ -626,11 +627,13 @@ function checkSourceGrounding(kus) {
     for (const ku of kus) {
         const kuId = ku.ku_id || ku.id || ku.title || 'unknown';
 
-        if (!ku.source_chunk_hash || typeof ku.source_chunk_hash !== 'string' || ku.source_chunk_hash.length !== 64) {
+        const chunkHash = (ku.clr && ku.clr.source_chunk_hash) || ku.source_chunk_hash;
+        if (!chunkHash || typeof chunkHash !== 'string' || chunkHash.length !== 64) {
             violations.push(`MISSING_SOURCE_HASH: KU "${kuId}" lacks valid 64-char SHA-256 source_chunk_hash`);
         }
 
-        if (!ku.evidence_pack_id || typeof ku.evidence_pack_id !== 'string' || !ku.evidence_pack_id.trim()) {
+        const packId = (ku.clr && ku.clr.evidence_pack_id) || ku.evidence_pack_id;
+        if (!packId || typeof packId !== 'string' || !packId.trim()) {
             violations.push(`MISSING_EVIDENCE_PACK_ID: KU "${kuId}" lacks evidence_pack_id`);
         }
     }
@@ -642,6 +645,114 @@ function checkSourceGrounding(kus) {
         passed ? QA_SEVERITY.INFO : QA_SEVERITY.CRITICAL,
         passed
             ? [`${kus.length} KU(s) validated — all grounded to source evidence with SHA-256 hashes`]
+            : violations
+    );
+}
+
+
+/**
+ * QA-KU-13: Factual Reconciliation Guard
+ *
+ * Actively detects internal and cross-KU factual discrepancies.
+ * Validates that KUs flagging factual discrepancies preserve source provenance
+ * and provide appropriate advisory notes without destroying raw evidence traceability.
+ *
+ * @param {Array} kus - Knowledge Units to check
+ * @returns {Object} Check result
+ */
+function checkFactualReconciliation(kus) {
+    if (!Array.isArray(kus) || kus.length === 0) {
+        return createCheckResult(
+            QA_CHECK_IDS.FACTUAL_RECONCILIATION,
+            true,
+            QA_SEVERITY.INFO,
+            ['No KUs to check for factual reconciliation']
+        );
+    }
+
+    const violations = [];
+    let checkedCount = 0;
+
+    // 1. Cross-KU Contradiction Detection (Basic active heuristic)
+    // Build a registry of extracted claims from propositions to detect collisions
+    const claimRegistry = new Map();
+
+    for (const ku of kus) {
+        const kuId = ku.ku_id || ku.id || ku.title || 'unknown';
+        const isFlagged = ku.factual_discrepancy && ku.factual_discrepancy.detected;
+        let detectedInternalContradiction = false;
+
+        // Simple heuristic for internal proposition contradictions
+        // In a real implementation this might use a more sophisticated NLP semantic checker.
+        // For this issue, we will check if an explicit "disputed" or "contradicts" marker is in the text
+        const combinedText = [
+            ku.title || '',
+            ku.definition || '',
+            ...(ku.propositions || [])
+        ].join(' ').toLowerCase();
+
+        // 1. Active detection: look for common unresolved conflict tags
+        if (combinedText.includes('[unreconciled]') || combinedText.includes('[disputed]') || combinedText.includes('[conflict]')) {
+            detectedInternalContradiction = true;
+        }
+
+        // 2. Cross-KU collision check (same entity, different numbers/years)
+        // Similar to cross_artifact_checker logic, look for simple number patterns
+        const numberPattern = /([a-z]{3,})\s+(\d+)/gi;
+        let match;
+        while ((match = numberPattern.exec(combinedText)) !== null) {
+            const entity = match[1].toLowerCase();
+            const value = match[2];
+            // Skip common non-fact words
+            if (['page', 'year', 'chapter', 'section'].includes(entity)) continue;
+
+            if (claimRegistry.has(entity)) {
+                const prev = claimRegistry.get(entity);
+                if (prev.value !== value && prev.kuId !== kuId) {
+                    // Contradiction detected!
+                    detectedInternalContradiction = true;
+                    // Tag the previous one as well if it wasn't already flagged
+                    if (!prev.isFlagged) {
+                        violations.push(`UNRECONCILED_FACTUAL_CONTRADICTION: Cross-KU contradiction detected for entity '${entity}' ('${prev.value}' in ${prev.kuId} vs '${value}' in ${kuId}) without advisory note in ${prev.kuId}`);
+                    }
+                }
+            } else {
+                claimRegistry.set(entity, { value, kuId, isFlagged });
+            }
+        }
+
+        if (detectedInternalContradiction && !isFlagged) {
+            violations.push(`UNRECONCILED_FACTUAL_CONTRADICTION: KU "${kuId}" contains contradictory claims or unresolved discrepancy markers but lacks a factual_discrepancy advisory block`);
+        }
+
+        if (isFlagged) {
+            checkedCount++;
+
+            // Must preserve source provenance strictly
+            const chunkHash = (ku.clr && ku.clr.source_chunk_hash) || ku.source_chunk_hash;
+            if (!chunkHash || typeof chunkHash !== 'string' || chunkHash.length !== 64) {
+                violations.push(`PROVENANCE_DESTROYED: KU "${kuId}" flagged a discrepancy but destroyed source_chunk_hash`);
+            }
+
+            const packId = (ku.clr && ku.clr.evidence_pack_id) || ku.evidence_pack_id;
+            if (!packId || typeof packId !== 'string' || !packId.trim()) {
+                violations.push(`PROVENANCE_DESTROYED: KU "${kuId}" flagged a discrepancy but destroyed evidence_pack_id`);
+            }
+
+            // Must have an advisory note explaining the discrepancy
+            if (!ku.factual_discrepancy.advisory_note || typeof ku.factual_discrepancy.advisory_note !== 'string' || !ku.factual_discrepancy.advisory_note.trim()) {
+                violations.push(`MISSING_ADVISORY: KU "${kuId}" flagged a discrepancy but lacks a descriptive advisory_note`);
+            }
+        }
+    }
+
+    const passed = violations.length === 0;
+    return createCheckResult(
+        QA_CHECK_IDS.FACTUAL_RECONCILIATION,
+        passed,
+        passed ? QA_SEVERITY.INFO : QA_SEVERITY.CRITICAL,
+        passed
+            ? [`${checkedCount} KU(s) with factual discrepancies validated — source provenance preserved and advisories present`]
             : violations
     );
 }
@@ -700,6 +811,11 @@ function runComprehensiveAudit(params = {}) {
     // QA-KU-11: Source Grounding
     if (Array.isArray(kus) && kus.length > 0) {
         results.push(checkSourceGrounding(kus));
+    }
+
+    // QA-KU-13: Factual Reconciliation
+    if (Array.isArray(kus) && kus.length > 0) {
+        results.push(checkFactualReconciliation(kus));
     }
 
     // QA-KU-02: Semantic Deduplication
@@ -814,5 +930,6 @@ module.exports = {
     checkMcqCardinality,
     checkKuIdFormat,
     checkSourceGrounding,
+    checkFactualReconciliation,
     runComprehensiveAudit
 };

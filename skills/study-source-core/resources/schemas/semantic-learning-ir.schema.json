@@ -260,7 +260,18 @@
           "type": "array",
           "items": { "type": "string" }
         },
-        "clr": { "$ref": "#/definitions/ContentLineageRecord" }
+        "clr": { "$ref": "#/definitions/ContentLineageRecord" },
+        "factual_discrepancy": {
+          "type": "object",
+          "properties": {
+            "detected": { "type": "boolean" },
+            "flagged_claim": { "type": "string" },
+            "discrepancy_type": { "type": "string" },
+            "advisory_note": { "type": "string" },
+            "reconciliation_action": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

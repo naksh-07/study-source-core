@@ -426,7 +426,7 @@ console.log('\n─── A.7: Semantic QA Engine ───');
 
 test('A7.1 — QA check IDs are defined', () => {
     assert.ok(QA_CHECK_IDS.COMPREHENSIVE_AUDIT === 'QA-KU-12');
-    assert.ok(Object.keys(QA_CHECK_IDS).length === 12);
+    assert.ok(Object.keys(QA_CHECK_IDS).length === 13);
 });
 
 test('A7.2 — KU ID format check passes valid IDs', () => {
@@ -457,6 +457,94 @@ test('A7.5 — MCQ cardinality check catches < 4 options', () => {
     assert.ok(!result.passed);
     assert.strictEqual(result.severity, QA_SEVERITY.CRITICAL);
 });
+
+test('A7.6 — Factual Reconciliation Guard validates provenance and advisories', () => {
+    const { checkFactualReconciliation } = require('./semantic_qa_engine');
+
+    // Case 1: No discrepancy, should pass
+    const validKu1 = {
+        id: 'ku.test.1',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' }
+    };
+    const res1 = checkFactualReconciliation([validKu1]);
+    assert.strictEqual(res1.passed, true);
+
+    // Case 2: Discrepancy present and well-formed, should pass
+    const validKu2 = {
+        id: 'ku.test.2',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: {
+            detected: true,
+            flagged_claim: "The moon is made of cheese",
+            discrepancy_type: "external_contradiction",
+            advisory_note: "Modern science indicates the moon is rock",
+            reconciliation_action: "ADVISORY_NOTE"
+        }
+    };
+    const res2 = checkFactualReconciliation([validKu2]);
+    assert.strictEqual(res2.passed, true);
+
+    // Case 3: Discrepancy present but missing provenance, should fail
+    const invalidKu1 = {
+        id: 'ku.test.3',
+        clr: { evidence_pack_id: 'ep.123' }, // missing chunk hash
+        factual_discrepancy: {
+            detected: true,
+            advisory_note: "Warning"
+        }
+    };
+    const res3 = checkFactualReconciliation([invalidKu1]);
+    assert.strictEqual(res3.passed, false);
+    assert.ok(res3.findings.some(f => f.includes('PROVENANCE_DESTROYED')));
+
+    // Case 4: Discrepancy present but missing advisory note, should fail
+    const invalidKu2 = {
+        id: 'ku.test.4',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: {
+            detected: true
+            // missing advisory_note
+        }
+    };
+    const res4 = checkFactualReconciliation([invalidKu2]);
+    assert.strictEqual(res4.passed, false);
+    assert.ok(res4.findings.some(f => f.includes('MISSING_ADVISORY')));
+
+    // Case 5: Contradictory propositions across KUs without advisory note
+    const crossKu1 = { id: 'ku.cross.1', title: 'Mount Everest height 8848' };
+    const crossKu2 = { id: 'ku.cross.2', title: 'Mount Everest height 8850' };
+    const res5 = checkFactualReconciliation([crossKu1, crossKu2]);
+    assert.strictEqual(res5.passed, false);
+    assert.ok(res5.findings.some(f => f.includes('UNRECONCILED_FACTUAL_CONTRADICTION')));
+
+    // Case 6: Contradictory propositions WITH advisory note and provenance
+    const crossKu3 = {
+        id: 'ku.cross.3',
+        title: 'Mount Everest height 8848',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: { detected: true, advisory_note: 'Source says 8848 but consensus is 8848.86m' }
+    };
+    const crossKu4 = {
+        id: 'ku.cross.4',
+        title: 'Mount Everest height 8850',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: { detected: true, advisory_note: 'Source says 8850' }
+    };
+    const res6 = checkFactualReconciliation([crossKu3, crossKu4]);
+    assert.strictEqual(res6.passed, true);
+
+    // Case 7: Top-level source_chunk_hash backwards compatibility (checked in source grounding too)
+    const { checkSourceGrounding } = require('./semantic_qa_engine');
+    const legacyKu = {
+        id: 'ku.legacy.1',
+        source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234',
+        evidence_pack_id: 'ep.123'
+    };
+    const res7 = checkSourceGrounding([legacyKu]);
+    assert.strictEqual(res7.passed, true);
+
+});
+
 
 // ═════════════════════════════════════════════════════════════
 // SECTION B: MULTI-DOMAIN CONTRACT TESTS
