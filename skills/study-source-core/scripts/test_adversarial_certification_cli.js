@@ -1,4 +1,4 @@
-﻿/**
+/**
  * StudySourceCore Adversarial Certification CLI Test Suite
  * (`test_adversarial_certification_cli.js`)
  * 
@@ -82,7 +82,10 @@ async function main() {
             }
         ]
     };
-    fs.writeFileSync(path.join(mathDir, '.completion-evidence.json'), JSON.stringify(validEvidence, null, 2), 'utf8');
+    const mathEvidencePath = path.join(mathDir, '.completion-evidence.json');
+    if (!fs.existsSync(mathEvidencePath)) {
+        fs.writeFileSync(mathEvidencePath, JSON.stringify(validEvidence, null, 2), 'utf8');
+    }
 
     // ----------------------------------------------------
     // TEST 1: Programmatic Certification of Valid Chapter

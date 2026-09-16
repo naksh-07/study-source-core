@@ -844,7 +844,7 @@ async function runAllTests() {
     // ----------------------------------------------------
     await runTest('35. End-to-End Real Fixture Europe creates valid unified .apkg with Basic + Cloze + Native IO', async () => {
         const europeDir = resolveChapterDir('Map', 'Europe');
-        const exportRes = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map" });
+        const exportRes = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map", outputDir: path.join(SCRATCH_DIR, 'test35_europe'), cleanIntermediates: false });
 
         assert.strictEqual(exportRes.success, true);
         assert(exportRes.counts.basicNotes >= 90, `Expected >=90 basic notes, got ${exportRes.counts.basicNotes}`);
@@ -865,7 +865,7 @@ async function runAllTests() {
     // ----------------------------------------------------
     await runTest('36. End-to-End Real Fixture LCM-HCF suppresses IO and exports pure Basic + Cloze .apkg', async () => {
         const lcmDir = resolveChapterDir('Math', 'LCM-HCF');
-        const exportRes = await exportChapterToAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math" });
+        const exportRes = await exportChapterToAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math", outputDir: path.join(SCRATCH_DIR, 'test36_lcm'), cleanIntermediates: false });
 
         assert.strictEqual(exportRes.success, true);
         assert(exportRes.counts.basicNotes >= 1);
@@ -1449,13 +1449,13 @@ async function runAllTests() {
     await runTest('56. Phase 2: Full pipeline non-regression (Basic + Cloze + Native IO + Unified APKG) remains 100% green', async () => {
         // Run full export on Europe (visual with Native IO)
         const europeDir = resolveChapterDir('Map', 'Europe');
-        const europeExport = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map" });
+        const europeExport = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map", outputDir: path.join(SCRATCH_DIR, 'test56_europe'), cleanIntermediates: false });
         assert.strictEqual(europeExport.success, true);
         assert.strictEqual(europeExport.counts.ioNotes, 1);
 
         // Run full export on LCM-HCF (non-visual with IO suppressed)
         const lcmDir = resolveChapterDir('Math', 'LCM-HCF');
-        const lcmExport = await exportChapterToAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math" });
+        const lcmExport = await exportChapterToAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math", outputDir: path.join(SCRATCH_DIR, 'test56_lcm'), cleanIntermediates: false });
         assert.strictEqual(lcmExport.success, true);
         assert.strictEqual(lcmExport.counts.ioNotes, 0);
         assert(lcmExport.counts.basicNotes >= 1);
@@ -1541,7 +1541,8 @@ async function runAllTests() {
         const lcmDir = resolveChapterDir('Math', 'LCM-HCF');
         const exportRes = await exportStudyLabProceduralAnki(lcmDir, {
             chapter: 'LCM-HCF',
-            subject: 'Math'
+            subject: 'Math',
+            outputDir: path.join(SCRATCH_DIR, 'test59_proc')
         });
 
         assert.strictEqual(exportRes.success, true);
@@ -1640,8 +1641,9 @@ async function runAllTests() {
     // ----------------------------------------------------
     await runTest('64. Phase 3: Duplicate anchor protection & deterministic GUID generation across repeat exports', async () => {
         const lcmDir = resolveChapterDir('Math', 'LCM-HCF');
-        const export1 = await exportStudyLabProceduralAnki(lcmDir, { chapter: 'LCM-HCF', subject: 'Math' });
-        const export2 = await exportStudyLabProceduralAnki(lcmDir, { chapter: 'LCM-HCF', subject: 'Math' });
+        const scratch64 = path.join(SCRATCH_DIR, 'test64_lcm');
+        const export1 = await exportStudyLabProceduralAnki(lcmDir, { chapter: 'LCM-HCF', subject: 'Math', outputDir: scratch64, outputFilename: 'exp1.apkg', manifestFilename: 'exp1.manifest.json' });
+        const export2 = await exportStudyLabProceduralAnki(lcmDir, { chapter: 'LCM-HCF', subject: 'Math', outputDir: scratch64, outputFilename: 'exp2.apkg', manifestFilename: 'exp2.manifest.json' });
 
         assert.strictEqual(export1.anchors.length, export2.anchors.length);
         for (let i = 0; i < export1.anchors.length; i++) {
@@ -1829,18 +1831,18 @@ async function runAllTests() {
     await runTest('70. Phase 3: Master full pipeline non-regression (Basic + Cloze + Native IO + Unified APKG + Procedural APKG) remains 100% green', async () => {
         // Europe (Visual Chapter)
         const europeDir = resolveChapterDir('Map', 'Europe');
-        const europeNormal = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map" });
+        const europeNormal = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map", outputDir: path.join(SCRATCH_DIR, 'test70_europe'), cleanIntermediates: false });
         assert.strictEqual(europeNormal.success, true);
         assert.strictEqual(europeNormal.counts.ioNotes, 1);
 
         // LCM-HCF (Non-visual chapter + Procedural practice questions)
         const lcmDir = resolveChapterDir('Math', 'LCM-HCF');
-        const lcmNormal = await exportChapterToAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math" });
+        const lcmNormal = await exportChapterToAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math", outputDir: path.join(SCRATCH_DIR, 'test70_lcm'), cleanIntermediates: false });
         assert.strictEqual(lcmNormal.success, true);
         assert(lcmNormal.counts.basicNotes >= 1);
         assert(lcmNormal.counts.clozeNotes >= 1);
 
-        const lcmProc = await exportStudyLabProceduralAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math" });
+        const lcmProc = await exportStudyLabProceduralAnki(lcmDir, { chapter: "LCM-HCF", subject: "Math", outputDir: path.join(SCRATCH_DIR, 'test70_proc') });
         assert.strictEqual(lcmProc.success, true);
         assert(lcmProc.counts.totalNotes >= 7);
     });
@@ -3098,7 +3100,8 @@ aliases:
         const lcmDir = resolveChapterDir('Math', 'LCM-HCF');
         const exportRes = await exportStudyLabProceduralAnki(lcmDir, {
             chapter: 'LCM-HCF',
-            subject: 'Math'
+            subject: 'Math',
+            outputDir: path.join(SCRATCH_DIR, 'test102_lcm')
         });
 
         assert.strictEqual(exportRes.success, true);

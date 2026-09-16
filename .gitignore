@@ -8,22 +8,13 @@ node_modules/
 *.log
 *.tmp
 
-# Test output logs (ephemeral)
+# Test output & artifacts (ephemeral)
+scratch/
 scripts/scratch/
-skills/study-source-core/test_output.log
-skills/study-source-core/old_test_output.log
-skills/study-source-core/scripts/test_output.log
 skills/study-source-core/scripts/scratch/
-skills/study-source-core/fix_bio.js
-skills/study-source-core/fix_math.js
-skills/study-source-core/fix_math2.js
-skills/study-source-core/fix_math4.js
+artifacts_qa/
 
 # OS files
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Scratch / transient files
-handoff.md
-fix.js

@@ -1,4 +1,4 @@
-﻿const assert = require('assert');
+const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const initSqlJs = require('sql.js');
@@ -56,7 +56,8 @@ async function main() {
             chapter: 'Europe',
             subject: 'Map',
             outputPath: outPath,
-            skipProvenanceCheck: true
+            skipProvenanceCheck: true,
+            cleanIntermediates: false
         });
         assert(res.success, 'Declarative export should succeed');
 

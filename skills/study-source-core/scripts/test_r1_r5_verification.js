@@ -300,7 +300,10 @@ async function runMasterVerificationSuite() {
             const json = JSON.parse(fs.readFileSync(ioPath, 'utf8'));
             const res = validateImageOcclusionContent(json);
             assert.strictEqual(res.isValid, true, `IO validation failed: ${res.errors.join('; ')}`);
-            const mediaSvg = path.join(VAULT_ROOT, 'Study Materials/Map/Europe/ImageOcclusion/media/europe_physical_map.svg');
+            const mediaRel = (json.cards && json.cards[0] && json.cards[0].asset && json.cards[0].asset.path) || 'media/europe_map.svg';
+            const mediaSvg = fs.existsSync(path.join(VAULT_ROOT, 'Study Materials/Map/Europe/ImageOcclusion/media/europe_physical_map.svg'))
+                ? path.join(VAULT_ROOT, 'Study Materials/Map/Europe/ImageOcclusion/media/europe_physical_map.svg')
+                : path.join(VAULT_ROOT, 'Study Materials/Map/Europe/ImageOcclusion', mediaRel);
             assert(fs.existsSync(mediaSvg), 'Referenced SVG media file must exist on disk');
         }
     });

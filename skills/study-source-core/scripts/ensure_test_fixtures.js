@@ -12,6 +12,12 @@ const fs = require('fs');
 const path = require('path');
 const { getVaultRoot, resolveChapterDir, getCanonicalArtifactPaths } = require('./path_resolver');
 
+function writeIfMissing(filePath, content, encoding = 'utf8') {
+    if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, content, encoding);
+    }
+}
+
 async function ensureAllTestFixtures() {
     const vaultRoot = getVaultRoot(__dirname);
     const studyMaterialsDir = path.join(vaultRoot, 'Study Materials');
@@ -213,7 +219,7 @@ async function ensureAllTestFixtures() {
         ]
     };
 
-    fs.writeFileSync(
+    writeIfMissing(
         path.join(mathOptional, 'LCM-HCF_ProblemPatterns.json'),
         JSON.stringify(mathPatterns, null, 2),
         'utf8'
@@ -254,7 +260,7 @@ domain: Math
 ## 8. Consecutive Co-prime Products
 - Pattern ID: \`pat-lcm-hcf-008\`
 `;
-    fs.writeFileSync(path.join(mathOptional, 'LCM-HCF_ProblemPatterns.md'), mathPatternsMd, 'utf8');
+    writeIfMissing(path.join(mathOptional, 'LCM-HCF_ProblemPatterns.md'), mathPatternsMd, 'utf8');
 
     // 8 practice questions covering all 8 patterns 100%
     const mathQuestions = {
@@ -892,7 +898,7 @@ domain: Math
         ]
     };
 
-    fs.writeFileSync(
+    writeIfMissing(
         path.join(mathOptional, 'LCM-HCF_PracticeQuestions.json'),
         JSON.stringify(mathQuestions, null, 2),
         'utf8'
@@ -920,18 +926,21 @@ $$LCM(a, b) \\times HCF(a, b) = a \\times b$$
 2. भिन्नों का $HCF = \\frac{HCF(\\text{अंश})}{LCM(\\text{हर})}$
 3. समान शेषफल स्थिति: $\\text{संख्या} = LCM(x, y, z) + r$
 `;
-    fs.writeFileSync(path.join(mathNotes, 'LCM-HCF_Notes.md'), mathNotesMd, 'utf8');
+    writeIfMissing(path.join(mathNotes, 'LCM-HCF_Notes.md'), mathNotesMd, 'utf8');
 
     const mathBasicTsv = "Front\tBack\tTags\nदो संख्याओं का गुणनफल किसके बराबर होता है?\tLCM \\times HCF\tMath::LCM\nभिन्नों का LCM निकालने का सूत्र क्या है?\tLCM(अंश) / HCF(हर)\tMath::LCM\n";
-    fs.writeFileSync(path.join(mathBasic, 'LCM-HCF_Basic.tsv'), mathBasicTsv, 'utf8');
+    writeIfMissing(path.join(mathBasic, 'LCM-HCF_Basic.tsv'), mathBasicTsv, 'utf8');
 
     const mathClozeTsv = "Text\tExtra\tTags\nदो संख्याओं का गुणनफल {{c1::LCM \\times HCF}} के बराबर होता है।\tगुणनफल सर्वसमिका\tMath::LCM\nसह-अभाज्य संख्याओं का HCF सदैव {{c1::1}} होता है।\tपरिभाषा\tMath::LCM\n";
-    fs.writeFileSync(path.join(mathCloze, 'LCM-HCF_Cloze.tsv'), mathClozeTsv, 'utf8');
+    writeIfMissing(path.join(mathCloze, 'LCM-HCF_Cloze.tsv'), mathClozeTsv, 'utf8');
 
-    // Compile Math APKG if export scripts are available
+    // Compile Math APKG if export scripts are available and package does not already exist
     try {
-        const { exportChapterToAnki } = require('./export_anki');
-        await exportChapterToAnki(mathDir, { chapter: 'LCM-HCF', subject: 'Math', skipProvenanceCheck: true, cleanIntermediates: false });
+        const mathDeclApkg = path.join(mathDir, 'LCM-HCF_Anki.apkg');
+        if (!fs.existsSync(mathDeclApkg) || fs.statSync(mathDeclApkg).size === 0) {
+            const { exportChapterToAnki } = require('./export_anki');
+            await exportChapterToAnki(mathDir, { chapter: 'LCM-HCF', subject: 'Math', skipProvenanceCheck: true, cleanIntermediates: false });
+        }
     } catch (e) {
         if (!fs.existsSync(path.join(mathDir, 'LCM-HCF_Anki.apkg'))) {
             fs.writeFileSync(path.join(mathDir, 'LCM-HCF_Anki.apkg'), Buffer.from('DUMMY_APKG'));
@@ -939,14 +948,17 @@ $$LCM(a, b) \\times HCF(a, b) = a \\times b$$
     }
 
     try {
-        const { exportStudyLabProceduralAnki } = require('./export_studylab_procedural_anki');
-        await exportStudyLabProceduralAnki(path.join(mathOptional, 'LCM-HCF_PracticeQuestions.json'), {
-            chapter: 'LCM-HCF',
-            subject: 'Math',
-            outputDir: mathStudyLab,
-            outputFilename: 'LCM-HCF_StudyLab_Procedural.apkg',
-            manifestFilename: 'LCM-HCF_StudyLab_Procedural.manifest.json'
-        });
+        const mathProcApkg = path.join(mathStudyLab, 'LCM-HCF_StudyLab_Procedural.apkg');
+        if (!fs.existsSync(mathProcApkg) || fs.statSync(mathProcApkg).size === 0) {
+            const { exportStudyLabProceduralAnki } = require('./export_studylab_procedural_anki');
+            await exportStudyLabProceduralAnki(path.join(mathOptional, 'LCM-HCF_PracticeQuestions.json'), {
+                chapter: 'LCM-HCF',
+                subject: 'Math',
+                outputDir: mathStudyLab,
+                outputFilename: 'LCM-HCF_StudyLab_Procedural.apkg',
+                manifestFilename: 'LCM-HCF_StudyLab_Procedural.manifest.json'
+            });
+        }
     } catch (e) {
         if (!fs.existsSync(path.join(mathStudyLab, 'LCM-HCF_StudyLab_Procedural.apkg'))) {
             fs.writeFileSync(path.join(mathStudyLab, 'LCM-HCF_StudyLab_Procedural.apkg'), Buffer.from('DUMMY_PROC_APKG'));
@@ -1045,7 +1057,7 @@ $$LCM(a, b) \\times HCF(a, b) = a \\times b$$
         ]
     };
 
-    fs.writeFileSync(
+    writeIfMissing(
         path.join(physOptional, 'Newton-Laws-Friction_ProblemPatterns.json'),
         JSON.stringify(physPatterns, null, 2),
         'utf8'
@@ -1067,7 +1079,7 @@ domain: Physics
 - Pattern ID: \`pat-phys-work-002\`
 - Equation: $W_{\\text{net}} = \\Delta K$
 `;
-    fs.writeFileSync(path.join(physOptional, 'Newton-Laws-Friction_ProblemPatterns.md'), physPatternsMd, 'utf8');
+    writeIfMissing(path.join(physOptional, 'Newton-Laws-Friction_ProblemPatterns.md'), physPatternsMd, 'utf8');
 
     // 10 practice questions for Newton-Laws-Friction (satisfies Test 94 >= 10 questions)
     const physQuestionsList = [];
@@ -1106,7 +1118,7 @@ domain: Physics
         questions: physQuestionsList
     };
 
-    fs.writeFileSync(
+    writeIfMissing(
         path.join(physOptional, 'Newton-Laws-Friction_PracticeQuestions.json'),
         JSON.stringify(physQuestions, null, 2),
         'utf8'
@@ -1128,7 +1140,7 @@ $$\\vec{F}_{\\text{net}} = m\\vec{a}$$
 सीमांत स्थैतिक घर्षण: $f_s \\le \\mu_s N$
 गतिज घर्षण: $f_k = \\mu_k N$
 `;
-    fs.writeFileSync(path.join(physNotes, 'Newton-Laws-Friction_Notes.md'), physNotesMd, 'utf8');
+    writeIfMissing(path.join(physNotes, 'Newton-Laws-Friction_Notes.md'), physNotesMd, 'utf8');
 
     // ----------------------------------------------------
     // 3. Map / Europe Fixture (Declarative + IO)
@@ -1160,21 +1172,21 @@ tags: [Geography, Map, Europe]
 ## 2. प्रमुख नदियाँ (Major Rivers)
 डेन्यूब नदी (Danube River) यूरोप की दूसरी सबसे लंबी नदी है जो 10 देशों से होकर बहती है।
 `;
-    fs.writeFileSync(path.join(mapNotes, 'Europe_Notes.md'), europeNotesMd, 'utf8');
+    writeIfMissing(path.join(mapNotes, 'Europe_Notes.md'), europeNotesMd, 'utf8');
 
     // Generate 95 Basic notes for Europe
     let europeBasicTsv = "Front\tBack\tTags\n";
     for (let i = 1; i <= 95; i++) {
         europeBasicTsv += `यूरोप तथ्य प्रश्न ${i} का उत्तर क्या है?\tउत्तर विवरण ${i}\tMap::Europe\n`;
     }
-    fs.writeFileSync(path.join(mapBasic, 'Europe_Basic.tsv'), europeBasicTsv, 'utf8');
+    writeIfMissing(path.join(mapBasic, 'Europe_Basic.tsv'), europeBasicTsv, 'utf8');
 
     // Generate 45 Cloze notes for Europe
     let europeClozeTsv = "Text\tExtra\tTags\n";
     for (let i = 1; i <= 45; i++) {
         europeClozeTsv += `यूरोप का मुख्य भौगोलिक बिंदु {{c1::तथ्य ${i}}} है।\tविवरण ${i}\tMap::Europe\n`;
     }
-    fs.writeFileSync(path.join(mapCloze, 'Europe_Cloze.tsv'), europeClozeTsv, 'utf8');
+    writeIfMissing(path.join(mapCloze, 'Europe_Cloze.tsv'), europeClozeTsv, 'utf8');
 
     // SVG media asset in both mapMedia and mapIOMedia
     const europeSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
@@ -1182,8 +1194,8 @@ tags: [Geography, Map, Europe]
   <path d="M 150 100 L 650 100 L 600 500 L 200 450 Z" fill="#bbf7d0" stroke="#15803d" stroke-width="2"/>
   <text x="350" y="300" font-family="Arial" font-size="24" fill="#1e3a8a">Europe Map</text>
 </svg>`;
-    fs.writeFileSync(path.join(mapMedia, 'europe_map.svg'), europeSvg, 'utf8');
-    fs.writeFileSync(path.join(mapIOMedia, 'europe_map.svg'), europeSvg, 'utf8');
+    writeIfMissing(path.join(mapMedia, 'europe_map.svg'), europeSvg, 'utf8');
+    writeIfMissing(path.join(mapIOMedia, 'europe_map.svg'), europeSvg, 'utf8');
 
     // Create IO manifest with 15 regions (giving 15 cards -> 95 + 45 + 15 = 155 cards >= 150)
     const regions = [];
@@ -1217,12 +1229,15 @@ tags: [Geography, Map, Europe]
             }
         ]
     };
-    fs.writeFileSync(path.join(mapIO, 'Europe_ImageOcclusion.json'), JSON.stringify(europeIO, null, 2), 'utf8');
+    writeIfMissing(path.join(mapIO, 'Europe_ImageOcclusion.json'), JSON.stringify(europeIO, null, 2), 'utf8');
 
-    // Build Europe APKG
+    // Build Europe APKG if not already present
     try {
-        const { exportChapterToAnki } = require('./export_anki');
-        await exportChapterToAnki(mapDir, { chapter: 'Europe', subject: 'Map', skipProvenanceCheck: true, cleanIntermediates: false });
+        const europeApkg = path.join(mapDir, 'Europe_Anki.apkg');
+        if (!fs.existsSync(europeApkg) || fs.statSync(europeApkg).size === 0) {
+            const { exportChapterToAnki } = require('./export_anki');
+            await exportChapterToAnki(mapDir, { chapter: 'Europe', subject: 'Map', skipProvenanceCheck: true, cleanIntermediates: false });
+        }
     } catch (e) {
         if (!fs.existsSync(path.join(mapDir, 'Europe_Anki.apkg'))) {
             fs.writeFileSync(path.join(mapDir, 'Europe_Anki.apkg'), Buffer.from('DUMMY_EUROPE_APKG'));
