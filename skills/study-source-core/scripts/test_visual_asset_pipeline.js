@@ -1093,11 +1093,14 @@ console.log('\n--- PHASE 6.1 BOUNDARY HARDENING TESTS ---\n');
         89, 'Phase 6.1 Abstract gating: Unjustified abstract visuals remain blocked (timeline in Math)');
 }
 
-// 90. Abstract visuals are permitted when pedagogically justified
+// 90. Abstract visuals are permitted when pedagogically justified and structurally suitable
 {
-    const res = isOcclusionAppropriate('timeline', 'Math', { hasPedagogicalValue: true });
+    const res = isOcclusionAppropriate('timeline', 'Math', {
+        pedagogicalJustification: 'This is a substantive justification with enough characters',
+        targetRegions: [{ target_type: 'process_stages' }]
+    });
     assert(res.appropriate === true && res.reason === 'PEDAGOGICALLY_JUSTIFIED',
-        90, 'Phase 6.1 Abstract gating: Pedagogically justified abstract visuals are permitted (timeline in Math)');
+        90, 'Phase 6.1 Abstract gating: Pedagogically justified and structurally suitable abstract visuals are permitted');
 }
 
 // 91. Existing subject preferred categories continue working unchanged
@@ -1105,6 +1108,35 @@ console.log('\n--- PHASE 6.1 BOUNDARY HARDENING TESTS ---\n');
     const res = isOcclusionAppropriate('map', 'History');
     assert(res.appropriate === true && res.reason === 'SUBJECT_PREFERRED',
         91, 'Phase 6.1 Abstract gating: Subject preferred categories continue working unchanged (map in History)');
+}
+
+// 92. Bare boolean flags fail to bypass gating
+{
+    const res1 = isOcclusionAppropriate('timeline', 'Math', { hasPedagogicalValue: true });
+    // Use Geography since Math actually prefers flowchart
+    const res2 = isOcclusionAppropriate('flowchart', 'Geography', { allowAbstract: true });
+    assert(res1.appropriate === false && res2.appropriate === false,
+        92, 'Phase 6.1 Abstract gating: Bare boolean flags fail to bypass gating');
+}
+
+// 93. Short justification string fails to bypass gating
+{
+    const res = isOcclusionAppropriate('timeline', 'Math', {
+        pedagogicalJustification: 'too short',
+        targetRegions: [{ target_type: 'process_stages' }]
+    });
+    assert(res.appropriate === false && res.reason === 'CATEGORY_NOT_IO_SUITABLE',
+        93, 'Phase 6.1 Abstract gating: Short justification string fails to bypass gating');
+}
+
+// 94. Missing structural suitability fails to bypass gating
+{
+    const res = isOcclusionAppropriate('timeline', 'Math', {
+        pedagogicalJustification: 'This is a substantive justification with enough characters',
+        targetRegions: [{ target_type: 'labels' }] // Not one of the accepted structural types
+    });
+    assert(res.appropriate === false && res.reason === 'CATEGORY_NOT_IO_SUITABLE',
+        94, 'Phase 6.1 Abstract gating: Missing structural suitability fails to bypass gating');
 }
 
 
