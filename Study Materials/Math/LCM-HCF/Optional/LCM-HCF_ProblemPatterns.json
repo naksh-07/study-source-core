@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "id": "proc-math-lcm-hcf-01",
+  "title": "LCM and HCF Problem Patterns",
+  "domain": "Math",
+  "chapter": "LCM-HCF",
+  "provenance": {
+    "source": "RRB ALP & SSC Mathematics Master Reference",
+    "generator_version": "study-source-core v2.0",
+    "verification_status": "VERIFIED"
+  },
+  "decision_trees": [
+    {
+      "id": "tree-lcm-method",
+      "name": "Method Selection for Divisibility Problems",
+      "rules": [
+        {
+          "condition": "न्यूनतम संख्या (Smallest Number)",
+          "action": "LCM निकालें"
+        },
+        {
+          "condition": "अधिकतम संख्या (Largest Number)",
+          "action": "HCF निकालें"
+        }
+      ]
+    }
+  ],
+  "error_log_taxonomy": [
+    {
+      "code": "ERR_01",
+      "category": "Formula Recall",
+      "description": "Formula Recall Error",
+      "correction_rule": "Review product identity formula"
+    },
+    {
+      "code": "ERR_02",
+      "category": "Remainder Calculation",
+      "description": "Remainder Calculation Error",
+      "correction_rule": "Differentiate positive vs negative remainder"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "pat-lcm-hcf-001",
+      "domain": "Math",
+      "problem_type": "Prime Factorization Method",
+      "problem_family": "lcm_hcf_basic",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "अभाज्य गुणनखंडन द्वारा अधिकतम घातों से LCM तथा न्यूनतम घातों से HCF ज्ञात करना।",
+      "recognition_signals": [
+        "अभाज्य गुणनखंड",
+        "LCM",
+        "HCF"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "संख्याओं का अभाज्य गुणनखंडन कीजिए",
+          "उभयनिष्ठ गुणनखंडों की न्यूनतम घात से HCF ज्ञात करें",
+          "समस्त गुणनखंडों की अधिकतम घात से LCM ज्ञात करें"
+        ]
+      },
+      "common_traps": [
+        "LCM में न्यूनतम घात चुनना",
+        "HCF में गैर-उभयनिष्ठ गुणनखंड शामिल करना"
+      ],
+      "difficulty": "Easy",
+      "pyq_references": [
+        {
+          "exam": "RRB ALP",
+          "year": 2018,
+          "question_id": "Q1"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-002",
+      "domain": "Math",
+      "problem_type": "Product Identity",
+      "problem_family": "lcm_hcf_relation",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "LCM(a, b) * HCF(a, b) = a * b संबंध का अनुप्रयोग।",
+      "recognition_signals": [
+        "दो संख्याओं का गुणनफल",
+        "LCM और HCF संबंध"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "सर्वसमिका लिखिए: LCM * HCF = N1 * N2",
+          "दिए गए मान प्रतिस्थापित करें",
+          "अज्ञात मान की गणना करें"
+        ]
+      },
+      "common_traps": [
+        "यह नियम तीन संख्याओं पर लागू करना जो अमान्य है"
+      ],
+      "difficulty": "Medium",
+      "pyq_references": [
+        {
+          "exam": "SSC CGL",
+          "year": 2020,
+          "question_id": "Q2"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-003",
+      "domain": "Math",
+      "problem_type": "Equal Remainder with Smallest Divisible",
+      "problem_family": "lcm_hcf_remainder",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "संख्या = LCM(x, y, z) + r",
+      "recognition_signals": [
+        "प्रत्येक स्थिति में समान शेषफल r बचे",
+        "न्यूनतम संख्या"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "दी गई संख्याओं x, y, z का LCM निकालें",
+          "LCM में शेषफल r जोड़ें"
+        ]
+      },
+      "common_traps": [
+        "LCM में से शेषफल घटाना"
+      ],
+      "difficulty": "Medium",
+      "pyq_references": [
+        {
+          "exam": "RRB Group D",
+          "year": 2018,
+          "question_id": "Q3"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-004",
+      "domain": "Math",
+      "problem_type": "Ratio & Common Factor Decomposition",
+      "problem_family": "lcm_hcf_ratio",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "संख्याएँ = HCF * x तथा HCF * y जहाँ x : y सह-अभाज्य हैं।",
+      "recognition_signals": [
+        "दो संख्याओं का अनुपात",
+        "म.स.प."
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "संख्याओं को H*x और H*y मानिए",
+          "LCM = H * x * y का प्रयोग करें"
+        ]
+      },
+      "common_traps": [
+        "अनुपात पदों को सह-अभाज्य न मानना"
+      ],
+      "difficulty": "Medium",
+      "pyq_references": [
+        {
+          "exam": "RRB NTPC",
+          "year": 2019,
+          "question_id": "Q4"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-005",
+      "domain": "Math",
+      "problem_type": "Fraction LCM & HCF",
+      "problem_family": "lcm_hcf_fractions",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "LCM = LCM(अंश) / HCF(हर), HCF = HCF(अंश) / LCM(हर)",
+      "recognition_signals": [
+        "भिन्नों का ल.स.प.",
+        "भिन्नों का म.स.प."
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "भिन्नों को सरलतम रूप में लाएँ",
+          "अंशों व हरों के संबंधित मान निकालें"
+        ]
+      },
+      "common_traps": [
+        "अंश और हर के नियमों को परस्पर बदल देना"
+      ],
+      "difficulty": "Easy",
+      "pyq_references": [
+        {
+          "exam": "SSC CHSL",
+          "year": 2021,
+          "question_id": "Q5"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-006",
+      "domain": "Math",
+      "problem_type": "Bells Ringing & Circular Motion Intervals",
+      "problem_family": "lcm_hcf_intervals",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "एक साथ पुनः मिलने का समय = समय अंतरालों का LCM।",
+      "recognition_signals": [
+        "घंटियाँ एक साथ बजती हैं",
+        "धावक एक साथ मिलते हैं"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "समस्त अंतरालों को समान इकाई में बदलें",
+          "अंतरालों का LCM ज्ञात करें"
+        ]
+      },
+      "common_traps": [
+        "इकाइयों को परिवर्तित करना भूल जाना (मिनट vs सेकंड)"
+      ],
+      "difficulty": "Medium",
+      "pyq_references": [
+        {
+          "exam": "RRB ALP",
+          "year": 2018,
+          "question_id": "Q6"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-007",
+      "domain": "Math",
+      "problem_type": "Greatest Number Leaving Equal Remainder",
+      "problem_family": "lcm_hcf_hcf_remainder",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "HCF(|a - b|, |b - c|, |c - a|)",
+      "recognition_signals": [
+        "वह सबसे बड़ी संख्या जिससे भाग देने पर समान शेष बचे"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "संख्याओं के आपसी अंतर निकालें",
+          "प्राप्त अंतरों का HCF ज्ञात करें"
+        ]
+      },
+      "common_traps": [
+        "सीधे संख्याओं का HCF निकालने का प्रयास करना"
+      ],
+      "difficulty": "Difficult",
+      "pyq_references": [
+        {
+          "exam": "SSC CGL",
+          "year": 2019,
+          "question_id": "Q7"
+        }
+      ]
+    },
+    {
+      "id": "pat-lcm-hcf-008",
+      "domain": "Math",
+      "problem_type": "Consecutive Co-prime Products",
+      "problem_family": "lcm_hcf_coprime",
+      "skill_id": "math.number_system.lcm_hcf",
+      "deep_structure": "सह-अभाज्य संख्याओं का HCF सदैव 1 होता है तथा LCM उनका गुणनफल होता है।",
+      "recognition_signals": [
+        "सह-अभाज्य संख्याएँ",
+        "Co-prime"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "सह-अभाज्य गुणधर्म लागू करें: HCF = 1",
+          "LCM = a * b संबंध स्थापित करें"
+        ]
+      },
+      "common_traps": [
+        "सह-अभाज्य संख्याओं में कोई उभयनिष्ठ भाजक मानना"
+      ],
+      "difficulty": "Easy",
+      "pyq_references": [
+        {
+          "exam": "RRB Group D",
+          "year": 2022,
+          "question_id": "Q8"
+        }
+      ]
+    }
+  ]
+}

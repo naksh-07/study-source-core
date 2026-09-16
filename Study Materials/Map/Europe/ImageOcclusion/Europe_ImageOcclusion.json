@@ -1,0 +1,206 @@
+{
+  "id": "io-europe-map-01",
+  "title": "Europe Physical Map Occlusion",
+  "subject": "Map",
+  "chapter": "Europe",
+  "cards": [
+    {
+      "id": "card-europe-01",
+      "source": {
+        "chapter": "Europe",
+        "evidence_ids": [
+          "ev-europe-01"
+        ]
+      },
+      "asset": {
+        "path": "media/europe_map.svg",
+        "width": 800,
+        "height": 600,
+        "source_type": "source_provided"
+      },
+      "mode": "hide_all_guess_one",
+      "regions": [
+        {
+          "id": "reg-01",
+          "shape": "rectangle",
+          "coordinates": [
+            25,
+            10,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 1",
+          "answer": "Region 1"
+        },
+        {
+          "id": "reg-02",
+          "shape": "rectangle",
+          "coordinates": [
+            40,
+            10,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 2",
+          "answer": "Region 2"
+        },
+        {
+          "id": "reg-03",
+          "shape": "rectangle",
+          "coordinates": [
+            55,
+            10,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 3",
+          "answer": "Region 3"
+        },
+        {
+          "id": "reg-04",
+          "shape": "rectangle",
+          "coordinates": [
+            70,
+            10,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 4",
+          "answer": "Region 4"
+        },
+        {
+          "id": "reg-05",
+          "shape": "rectangle",
+          "coordinates": [
+            10,
+            30,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 5",
+          "answer": "Region 5"
+        },
+        {
+          "id": "reg-06",
+          "shape": "rectangle",
+          "coordinates": [
+            25,
+            30,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 6",
+          "answer": "Region 6"
+        },
+        {
+          "id": "reg-07",
+          "shape": "rectangle",
+          "coordinates": [
+            40,
+            30,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 7",
+          "answer": "Region 7"
+        },
+        {
+          "id": "reg-08",
+          "shape": "rectangle",
+          "coordinates": [
+            55,
+            30,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 8",
+          "answer": "Region 8"
+        },
+        {
+          "id": "reg-09",
+          "shape": "rectangle",
+          "coordinates": [
+            70,
+            30,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 9",
+          "answer": "Region 9"
+        },
+        {
+          "id": "reg-10",
+          "shape": "rectangle",
+          "coordinates": [
+            10,
+            50,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 10",
+          "answer": "Region 10"
+        },
+        {
+          "id": "reg-11",
+          "shape": "rectangle",
+          "coordinates": [
+            25,
+            50,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 11",
+          "answer": "Region 11"
+        },
+        {
+          "id": "reg-12",
+          "shape": "rectangle",
+          "coordinates": [
+            40,
+            50,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 12",
+          "answer": "Region 12"
+        },
+        {
+          "id": "reg-13",
+          "shape": "rectangle",
+          "coordinates": [
+            55,
+            50,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 13",
+          "answer": "Region 13"
+        },
+        {
+          "id": "reg-14",
+          "shape": "rectangle",
+          "coordinates": [
+            70,
+            50,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 14",
+          "answer": "Region 14"
+        },
+        {
+          "id": "reg-15",
+          "shape": "rectangle",
+          "coordinates": [
+            10,
+            70,
+            12,
+            12
+          ],
+          "label": "क्षेत्र 15",
+          "answer": "Region 15"
+        }
+      ]
+    }
+  ]
+}

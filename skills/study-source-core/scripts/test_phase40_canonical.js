@@ -509,6 +509,10 @@ async function runPhase40Tests() {
                         units: dom.name === 'Physics' ? "m" : null,
                         explanation: dom.contract.archetypes[0].solution_template,
                         difficulty: dom.contract.archetypes[0].difficulty_tier,
+                        hints: [
+                            { tier: 1, text: "अवधारणा लागू करें।" },
+                            { tier: 2, text: "सूत्र से गणना करें।" }
+                        ],
                         inline_contract: dom.contract,
                         exam_metadata: {
                             exam: "RRB ALP CBT-1",

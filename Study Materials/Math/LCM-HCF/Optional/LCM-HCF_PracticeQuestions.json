@@ -1,0 +1,1254 @@
+{
+  "schema_version": "1.0.0",
+  "domain": "Math",
+  "chapter": "LCM-HCF",
+  "provenance": {
+    "source_document": "RRB ALP & SSC Mathematics Master Reference",
+    "verification_status": "VERIFIED"
+  },
+  "questions": [
+    {
+      "id": "q-lcm-01",
+      "pattern_id": "pat-lcm-hcf-001",
+      "problem_family": "lcm_hcf_basic",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "संख्याओं 24 और 36 का ल.स.प. (LCM) ज्ञात कीजिए।",
+      "options": [
+        "72",
+        "48",
+        "96",
+        "108"
+      ],
+      "correct_option": "72",
+      "difficulty": 1.5,
+      "explanation": "24 = 2^3 * 3, 36 = 2^2 * 3^2, LCM = 2^3 * 3^2 = 72.",
+      "solution": "24 और 36 का अभाज्य गुणनखंडन करके अधिकतम घातों का गुणनफल 72 प्राप्त होता है।",
+      "exam_metadata": {
+        "exam": "RRB ALP",
+        "year": 2018
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "संख्याओं का अभाज्य गुणनखंडन करें।"
+        },
+        {
+          "tier": 2,
+          "text": "अधिकतम घातों 2^3 और 3^2 का गुणनफल लें।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.basic",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "72",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "48",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "96",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "108",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "lcm_two_numbers"
+          ],
+          "variant_categories": [
+            "parameter"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "number_system",
+            "arithmetic",
+            "factors"
+          ],
+          "decision_points": [
+            "prime_factorization",
+            "division_method"
+          ],
+          "error_categories": [
+            "common_factor_omission",
+            "arithmetic_slip"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "RRB ALP",
+            "year": 2018,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "LCM of Two Numbers"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.two_num",
+            "difficulty_level": 1,
+            "variant_category": "parameter",
+            "variant_name": "lcm_two_numbers",
+            "parameters": [
+              {
+                "name": "num1",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 6,
+                  "max": 24,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "num2",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 8,
+                  "max": 36,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "संख्याओं {num1} और {num2} का ल.स.प. (LCM) ज्ञात कीजिए।",
+            "answer_derivation": {
+              "type": "lcm_array",
+              "params": [
+                "num1",
+                "num2"
+              ]
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "संख्याओं का अभाज्य गुणनखंडन करके अधिकतम घातों का गुणनफल ज्ञात करें।",
+            "step_nodes": [
+              {
+                "id": "step_factorize",
+                "step_type": "arithmetic",
+                "label": "Prime Factorization",
+                "description_template": "Factorize {num1} and {num2}",
+                "expected_expression_template": "LCM({num1}, {num2}) = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "Prime factorization reveals the base components of both numbers.",
+                "hint_operation": "Write each number as a product of prime powers.",
+                "hint_intermediate": "Examine the common and distinct prime factors."
+              }
+            ],
+            "target_time_ms": 25000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-02",
+      "pattern_id": "pat-lcm-hcf-002",
+      "problem_family": "lcm_hcf_relation",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "दो संख्याओं का गुणनफल 432 है तथा म.स.प. (HCF) 6 है। उनका ल.स.प. (LCM) क्या होगा?",
+      "options": [
+        "72",
+        "64",
+        "84",
+        "96"
+      ],
+      "correct_option": "72",
+      "difficulty": 2,
+      "explanation": "LCM * HCF = Product => LCM * 6 = 432 => LCM = 72.",
+      "solution": "गुणनफल सर्वसमिका LCM * HCF = N1 * N2 का प्रयोग करें। 432 / 6 = 72.",
+      "exam_metadata": {
+        "exam": "SSC CGL",
+        "year": 2020
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "गुणनफल सर्वसमिका LCM * HCF = N1 * N2 का प्रयोग करें।"
+        },
+        {
+          "tier": 2,
+          "text": "432 को 6 से विभाजित करें।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.relation",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.relation.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "72",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "64",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "84",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "96",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "product_identity"
+          ],
+          "variant_categories": [
+            "structural"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "product_identity",
+            "relation"
+          ],
+          "decision_points": [
+            "formula_application",
+            "substitution"
+          ],
+          "error_categories": [
+            "multiplication_error",
+            "formula_confusion"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "SSC CGL",
+            "year": 2020,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "Product Identity Relation"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.product_relation",
+            "difficulty_level": 2,
+            "variant_category": "structural",
+            "variant_name": "product_identity",
+            "parameters": [
+              {
+                "name": "product",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 100,
+                  "max": 1000,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "hcf",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 2,
+                  "max": 20,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "दो संख्याओं का गुणनफल {product} है तथा म.स.प. (HCF) {hcf} है। उनका ल.स.प. (LCM) क्या होगा?",
+            "answer_derivation": {
+              "type": "quotient",
+              "numerator_param": "product",
+              "denominator_param": "hcf"
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "गुणनफल सर्वसमिका LCM * HCF = N1 * N2 का प्रयोग करें।",
+            "step_nodes": [
+              {
+                "id": "step_rel",
+                "step_type": "arithmetic",
+                "label": "Apply Formula",
+                "description_template": "Divide {product} by {hcf}",
+                "expected_expression_template": "LCM = {product} / {hcf} = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "Product of two numbers equals LCM multiplied by HCF.",
+                "hint_operation": "Divide the product by the known HCF.",
+                "hint_intermediate": "Calculate quotient."
+              }
+            ],
+            "target_time_ms": 30000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-03",
+      "pattern_id": "pat-lcm-hcf-003",
+      "problem_family": "lcm_hcf_remainder",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "वह न्यूनतम संख्या ज्ञात कीजिए जिसे 12, 16 और 24 से विभाजित करने पर प्रत्येक स्थिति में शेषफल 5 बचे।",
+      "options": [
+        "53",
+        "48",
+        "58",
+        "63"
+      ],
+      "correct_option": "53",
+      "difficulty": 2.5,
+      "explanation": "LCM(12, 16, 24) = 48. संख्या = 48 + 5 = 53.",
+      "solution": "न्यूनतम संख्या = LCM + r = 48 + 5 = 53.",
+      "exam_metadata": {
+        "exam": "RRB Group D",
+        "year": 2018
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "न्यूनतम संख्या = LCM + r सूत्र लागू करें।"
+        },
+        {
+          "tier": 2,
+          "text": "12, 16, 24 का LCM निकालकर 5 जोड़ें।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.remainder",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.remainder.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "53",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "48",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "58",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "63",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "remainder_addition"
+          ],
+          "variant_categories": [
+            "structural"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "remainder",
+            "divisibility"
+          ],
+          "decision_points": [
+            "lcm_computation",
+            "remainder_addition"
+          ],
+          "error_categories": [
+            "remainder_sign_error",
+            "lcm_calculation_error"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "RRB Group D",
+            "year": 2018,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "LCM with Remainder"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.remainder_add",
+            "difficulty_level": 3,
+            "variant_category": "structural",
+            "variant_name": "remainder_addition",
+            "parameters": [
+              {
+                "name": "n1",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 6,
+                  "max": 20,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "n2",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 8,
+                  "max": 24,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "वह न्यूनतम संख्या ज्ञात कीजिए जिसे {n1} और {n2} से विभाजित करने पर शेषफल 5 बचे।",
+            "answer_derivation": {
+              "type": "lcm_array",
+              "params": [
+                "n1",
+                "n2"
+              ]
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "न्यूनतम संख्या = LCM + शेषफल।",
+            "step_nodes": [
+              {
+                "id": "step_lcm_rem",
+                "step_type": "arithmetic",
+                "label": "Compute LCM and Add",
+                "description_template": "Find LCM and add remainder",
+                "expected_expression_template": "Number = LCM + 5 = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "Smallest divisible number requires LCM, then add remainder.",
+                "hint_operation": "Calculate LCM of divisors and add remainder.",
+                "hint_intermediate": "Add constant remainder to LCM."
+              }
+            ],
+            "target_time_ms": 35000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-04",
+      "pattern_id": "pat-lcm-hcf-004",
+      "problem_family": "lcm_hcf_ratio",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "दो संख्याओं का अनुपात 3 : 4 है तथा उनका म.स.प. 4 है। उनका ल.स.प. क्या होगा?",
+      "options": [
+        "48",
+        "36",
+        "52",
+        "64"
+      ],
+      "correct_option": "48",
+      "difficulty": 2,
+      "explanation": "संख्याएँ = 4*3 = 12 और 4*4 = 16. LCM = 48.",
+      "solution": "LCM = HCF * x * y = 4 * 3 * 4 = 48.",
+      "exam_metadata": {
+        "exam": "RRB NTPC",
+        "year": 2019
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "संख्याएँ = HCF * अनुपात पद।"
+        },
+        {
+          "tier": 2,
+          "text": "LCM = HCF * 3 * 4 = 48।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.ratio",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.ratio.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "48",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "36",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "52",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "64",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "ratio_product"
+          ],
+          "variant_categories": [
+            "structural"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "ratio",
+            "factors"
+          ],
+          "decision_points": [
+            "ratio_scaling",
+            "coprime_multiplication"
+          ],
+          "error_categories": [
+            "ratio_inversion",
+            "factor_omission"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "RRB NTPC",
+            "year": 2019,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "Ratio Decomposition"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.ratio_decomp",
+            "difficulty_level": 2,
+            "variant_category": "structural",
+            "variant_name": "ratio_product",
+            "parameters": [
+              {
+                "name": "x",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 2,
+                  "max": 10,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "y",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 3,
+                  "max": 12,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "दो संख्याओं का अनुपात {x} : {y} है तथा उनका म.स.प. 4 है। उनका ल.स.प. क्या होगा?",
+            "answer_derivation": {
+              "type": "product",
+              "a_param": "x",
+              "b_param": "y"
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "LCM = HCF * x * y का प्रयोग करें।",
+            "step_nodes": [
+              {
+                "id": "step_ratio_calc",
+                "step_type": "arithmetic",
+                "label": "Ratio Multiplication",
+                "description_template": "Multiply HCF by ratio terms",
+                "expected_expression_template": "LCM = 4 * {x} * {y} = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "For numbers in coprime ratio x:y, LCM = H * x * y.",
+                "hint_operation": "Multiply common factor by both ratio terms.",
+                "hint_intermediate": "Complete the multiplication."
+              }
+            ],
+            "target_time_ms": 30000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-05",
+      "pattern_id": "pat-lcm-hcf-005",
+      "problem_family": "lcm_hcf_fractions",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "भिन्न 2/3 और 4/9 का ल.स.प. (LCM) ज्ञात कीजिए।",
+      "options": [
+        "4/3",
+        "2/9",
+        "4/9",
+        "8/27"
+      ],
+      "correct_option": "4/3",
+      "difficulty": 2,
+      "explanation": "LCM = LCM(2, 4) / HCF(3, 9) = 4 / 3.",
+      "solution": "भिन्नों का LCM = LCM(अंश) / HCF(हर) = 4 / 3.",
+      "exam_metadata": {
+        "exam": "SSC CHSL",
+        "year": 2021
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "भिन्नों का LCM = LCM(अंश) / HCF(हर)।"
+        },
+        {
+          "tier": 2,
+          "text": "LCM(2, 4) = 4 तथा HCF(3, 9) = 3।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.fractions",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.fractions.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "4/3",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "2/9",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "4/9",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "8/27",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "fraction_formula"
+          ],
+          "variant_categories": [
+            "structural"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "fractions",
+            "division"
+          ],
+          "decision_points": [
+            "fraction_numerator_lcm",
+            "fraction_denominator_hcf"
+          ],
+          "error_categories": [
+            "fraction_rule_inversion"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "SSC CHSL",
+            "year": 2021,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "Fraction LCM & HCF"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.fraction_calc",
+            "difficulty_level": 2,
+            "variant_category": "structural",
+            "variant_name": "fraction_formula",
+            "parameters": [
+              {
+                "name": "num",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 2,
+                  "max": 10,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "den",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 2,
+                  "max": 10,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "भिन्न {num}/3 और {den}/9 का ल.स.प. (LCM) ज्ञात कीजिए।",
+            "answer_derivation": {
+              "type": "quotient",
+              "numerator_param": "num",
+              "denominator_param": "den"
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "भिन्नों का LCM = LCM(अंश) / HCF(हर)।",
+            "step_nodes": [
+              {
+                "id": "step_frac_rule",
+                "step_type": "arithmetic",
+                "label": "Apply Fraction Rule",
+                "description_template": "Divide numerator LCM by denominator HCF",
+                "expected_expression_template": "LCM = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "LCM of fractions is LCM of numerators divided by HCF of denominators.",
+                "hint_operation": "Calculate separate LCM and HCF.",
+                "hint_intermediate": "Combine numerator and denominator."
+              }
+            ],
+            "target_time_ms": 30000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-06",
+      "pattern_id": "pat-lcm-hcf-006",
+      "problem_family": "lcm_hcf_intervals",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "तीन घंटियाँ क्रमशः 12, 15 और 18 सेकंड के अंतराल पर बजती हैं। वे कितने सेकंड बाद पुनः एक साथ बजेंगी?",
+      "options": [
+        "180",
+        "90",
+        "120",
+        "360"
+      ],
+      "correct_option": "180",
+      "difficulty": 2.5,
+      "explanation": "LCM(12, 15, 18) = 180 सेकंड।",
+      "solution": "पुनः एक साथ बजने का समय अंतरालों का ल.स.प. होता है जो 180 सेकंड है।",
+      "exam_metadata": {
+        "exam": "RRB ALP",
+        "year": 2018
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "पुनः एक साथ बजने का समय = अंतरालों का LCM।"
+        },
+        {
+          "tier": 2,
+          "text": "12, 15, 18 का LCM निकालें।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.intervals",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.intervals.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "180",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "90",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "120",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "360",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "bell_synchronization"
+          ],
+          "variant_categories": [
+            "contextual"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "word_problems",
+            "time_intervals"
+          ],
+          "decision_points": [
+            "periodicity_recognition",
+            "lcm_sync"
+          ],
+          "error_categories": [
+            "unit_mismatch",
+            "addition_instead_of_lcm"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "RRB ALP",
+            "year": 2018,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "Intervals & Bells Ringing"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.intervals_sync",
+            "difficulty_level": 3,
+            "variant_category": "contextual",
+            "variant_name": "bell_synchronization",
+            "parameters": [
+              {
+                "name": "t1",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 6,
+                  "max": 20,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "t2",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 10,
+                  "max": 30,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "घंटियाँ क्रमशः {t1} और {t2} सेकंड के अंतराल पर बजती हैं। वे कितने सेकंड बाद पुनः एक साथ बजेंगी?",
+            "answer_derivation": {
+              "type": "lcm_array",
+              "params": [
+                "t1",
+                "t2"
+              ]
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "पुनः एक साथ बजने का समय अंतरालों का ल.स.प. होता है।",
+            "step_nodes": [
+              {
+                "id": "step_interval_sync",
+                "step_type": "arithmetic",
+                "label": "Interval Sync",
+                "description_template": "Compute LCM of intervals",
+                "expected_expression_template": "Sync Time = LCM({t1}, {t2}) = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "Simultaneous periodic events synchronize at the LCM of periods.",
+                "hint_operation": "Find the LCM of the given intervals.",
+                "hint_intermediate": "Compute the lowest common multiple."
+              }
+            ],
+            "target_time_ms": 35000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-07",
+      "pattern_id": "pat-lcm-hcf-007",
+      "problem_family": "lcm_hcf_hcf_remainder",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "वह अधिकतम संख्या कौन-सी है जिससे 989 और 1327 को भाग देने पर क्रमशः 5 और 7 शेष बचे?",
+      "options": [
+        "24",
+        "16",
+        "32",
+        "48"
+      ],
+      "correct_option": "24",
+      "difficulty": 3,
+      "explanation": "HCF(989 - 5, 1327 - 7) = HCF(984, 1320) = 24.",
+      "solution": "संख्याओं में से उनके शेषफल घटाकर प्राप्त संख्याओं का म.स.प. 24 है।",
+      "exam_metadata": {
+        "exam": "SSC CGL",
+        "year": 2019
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "संख्याओं में से उनके शेषफल घटाकर HCF ज्ञात करें।"
+        },
+        {
+          "tier": 2,
+          "text": "984 और 1320 का HCF निकालें।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.hcf_remainder",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.hcf_remainder.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "24",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "16",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "32",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "48",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "hcf_remainder_difference"
+          ],
+          "variant_categories": [
+            "structural"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "hcf",
+            "remainder",
+            "differences"
+          ],
+          "decision_points": [
+            "subtraction_first",
+            "hcf_computation"
+          ],
+          "error_categories": [
+            "direct_hcf_without_subtraction"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "SSC CGL",
+            "year": 2019,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "Greatest Divisor with Remainder"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.hcf_diff",
+            "difficulty_level": 3,
+            "variant_category": "structural",
+            "variant_name": "hcf_remainder_difference",
+            "parameters": [
+              {
+                "name": "d1",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 20,
+                  "max": 100,
+                  "step": null,
+                  "non_zero": null
+                }
+              },
+              {
+                "name": "d2",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 40,
+                  "max": 200,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "वह अधिकतम संख्या कौन-सी है जिससे {d1} और {d2} को भाग देने पर क्रमशः शेषफल बचे?",
+            "answer_derivation": {
+              "type": "gcd_array",
+              "params": [
+                "d1",
+                "d2"
+              ]
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "संख्याओं में से उनके शेषफल घटाकर प्राप्त मानों का म.स.प. ज्ञात करें।",
+            "step_nodes": [
+              {
+                "id": "step_diff_gcd",
+                "step_type": "arithmetic",
+                "label": "HCF of Differences",
+                "description_template": "Compute GCD of adjusted values",
+                "expected_expression_template": "HCF = {answer}",
+                "alternate_templates": [],
+                "hint_principle": "Subtract remainders before computing HCF.",
+                "hint_operation": "Find GCD of the subtracted numbers.",
+                "hint_intermediate": "Compute greatest common divisor."
+              }
+            ],
+            "target_time_ms": 35000
+          }
+        ]
+      }
+    },
+    {
+      "id": "q-lcm-08",
+      "pattern_id": "pat-lcm-hcf-008",
+      "problem_family": "lcm_hcf_coprime",
+      "question_type": "mcq",
+      "origin_type": "AUTHENTIC_PYQ",
+      "prompt": "यदि दो संख्याएँ सह-अभाज्य (Co-prime) हैं, तो उनका म.स.प. (HCF) क्या होगा?",
+      "options": [
+        "1",
+        "0",
+        "दोनों का गुणनफल",
+        "अपरिभाषित"
+      ],
+      "correct_option": "1",
+      "difficulty": 1,
+      "explanation": "सह-अभाज्य संख्याओं का कोई उभयनिष्ठ गुणनखंड नहीं होता अतः HCF = 1.",
+      "solution": "परिभाषानुसार सह-अभाज्य संख्याओं का म.स.प. सदैव 1 होता है।",
+      "exam_metadata": {
+        "exam": "RRB Group D",
+        "year": 2022
+      },
+      "hints": [
+        {
+          "tier": 1,
+          "text": "सह-अभाज्य संख्याओं की परिभाषा याद करें।"
+        },
+        {
+          "tier": 2,
+          "text": "सह-अभाज्य संख्याओं का एकमात्र उभयनिष्ठ भाजक 1 होता है।"
+        }
+      ],
+      "inline_contract": {
+        "contract": {
+          "family_id": "family.math.number_system.lcm_hcf.coprime",
+          "skill_id": "math.number_system.lcm_hcf",
+          "domain": "mathematics",
+          "default_schema": "schema.math.number_system.lcm_hcf.coprime.v1",
+          "capability": "declarative",
+          "modality": "mcq",
+          "rendering_metadata": {
+            "options": [
+              {
+                "id": "A",
+                "text": "1",
+                "correct": true
+              },
+              {
+                "id": "B",
+                "text": "0",
+                "correct": false
+              },
+              {
+                "id": "C",
+                "text": "दोनों का गुणनफल",
+                "correct": false
+              },
+              {
+                "id": "D",
+                "text": "अपरिभाषित",
+                "correct": false
+              }
+            ]
+          },
+          "min_difficulty": 1,
+          "max_difficulty": 5,
+          "supported_variants": [
+            "coprime_property"
+          ],
+          "variant_categories": [
+            "isomorphic"
+          ],
+          "target_latency_model": {
+            "1": 25000,
+            "2": 35000,
+            "3": 50000,
+            "4": 65000,
+            "5": 80000
+          },
+          "structural_tags": [
+            "coprime",
+            "definitions"
+          ],
+          "decision_points": [
+            "definition_lookup"
+          ],
+          "error_categories": [
+            "coprime_zero_confusion"
+          ],
+          "prerequisites": [],
+          "provenance": {
+            "source": "PYQ Corpus",
+            "exam": "RRB Group D",
+            "year": 2022,
+            "shift": 1
+          },
+          "metadata": {
+            "title": "Co-prime Numbers HCF"
+          }
+        },
+        "archetypes": [
+          {
+            "archetype_id": "arch.lcm.coprime_def",
+            "difficulty_level": 1,
+            "variant_category": "isomorphic",
+            "variant_name": "coprime_property",
+            "parameters": [
+              {
+                "name": "val",
+                "domain": {
+                  "type": "integer_range",
+                  "min": 1,
+                  "max": 1,
+                  "step": null,
+                  "non_zero": null
+                }
+              }
+            ],
+            "constraints": [],
+            "prompt_template": "यदि दो संख्याएँ सह-अभाज्य (Co-prime) हैं, तो उनका म.स.प. (HCF) क्या होगा?",
+            "answer_derivation": {
+              "type": "direct_param",
+              "param_name": "val"
+            },
+            "answer_formatted_template": "{answer}",
+            "solution_template": "परिभाषानुसार सह-अभाज्य संख्याओं का म.स.प. सदैव 1 होता है।",
+            "step_nodes": [
+              {
+                "id": "step_coprime_def",
+                "step_type": "concept_recall",
+                "label": "Definition Recall",
+                "description_template": "Recall coprime definition",
+                "expected_expression_template": "HCF = 1",
+                "alternate_templates": [],
+                "hint_principle": "Co-prime numbers have no common factor other than 1.",
+                "hint_operation": "Recall definition of co-prime.",
+                "hint_intermediate": "The highest common factor is fixed."
+              }
+            ],
+            "target_time_ms": 20000
+          }
+        ]
+      }
+    }
+  ]
+}

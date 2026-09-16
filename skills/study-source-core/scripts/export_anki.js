@@ -379,7 +379,27 @@ async function exportChapterToAnki(chapterDir, options = {}) {
         `Study Source Core: ${deckName}`
     );
 
-    const modelsConfig = buildModelDefinitions();
+    const modelsConfig = options.modelsConfigOverride || buildModelDefinitions();
+
+    // Closed boundary check: Model ID isolation (Dual APKG v1.0 invariant)
+    const ALLOWED_DECLARATIVE_MODELS = new Set([1600000001, 1600000002, 1600000003]);
+    const PROHIBITED_DECLARATIVE_MODELS = new Set([1600000004]);
+    const modelIds = Object.keys(modelsConfig).map(id => parseInt(id, 10));
+    for (const mId of modelIds) {
+        if (PROHIBITED_DECLARATIVE_MODELS.has(mId)) {
+            throw new Error(`[MODEL_ISOLATION_BREACH] Declarative deck contains prohibited procedural model ID ${mId}. Dual APKG v1.0 isolation invariant violated.`);
+        }
+        if (!ALLOWED_DECLARATIVE_MODELS.has(mId)) {
+            throw new Error(`[MODEL_ISOLATION_BREACH] Declarative deck contains unauthorized model ID ${mId}. Allowed models: [1600000001, 1600000002, 1600000003].`);
+        }
+    }
+
+    const injectedNoteMid = options.testInjectedNoteMid;
+    if (injectedNoteMid !== undefined) {
+        if (PROHIBITED_DECLARATIVE_MODELS.has(injectedNoteMid) || !ALLOWED_DECLARATIVE_MODELS.has(injectedNoteMid)) {
+            throw new Error(`[MODEL_ISOLATION_BREACH] Declarative deck note uses unauthorized model ID ${injectedNoteMid}. Dual APKG v1.0 isolation invariant violated.`);
+        }
+    }
 
     // Insert col row
     const insertColStmt = db.prepare(`

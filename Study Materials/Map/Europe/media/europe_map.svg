@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#e0f2fe"/>
+  <path d="M 150 100 L 650 100 L 600 500 L 200 450 Z" fill="#bbf7d0" stroke="#15803d" stroke-width="2"/>
+  <text x="350" y="300" font-family="Arial" font-size="24" fill="#1e3a8a">Europe Map</text>
+</svg>

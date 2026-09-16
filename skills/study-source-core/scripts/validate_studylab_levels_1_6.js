@@ -663,7 +663,9 @@ function validateLevel7PracticeDepth(manifestData, payloadObjects = [], sourceDa
             stats.avg_instances_per_type = Number(avgInstances.toFixed(2));
 
             // Flag shallow one-example-per-type when multiple types are declared with zero depth
-            // [Shallow Coverage check removed to support SOURCE-FIRST 100% authentic packages with zero variant progression]
+            if (question_types.length >= 3 && avgInstances <= 1.0 && variant_count <= question_types.length && !manifestData.is_source_first && (!options || !options.allowShallowSourceFirst)) {
+                errors.push(`[Shallow Coverage] Declared ${question_types.length} question types with strictly 1 shallow instance each (average instances: ${avgInstances}). Practice depth requires progressive variants per question type.`);
+            }
         }
 
         // 3. Difficulty Dispersion & Range Enforcement

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "id": "proc-phys-newton-01",
+  "title": "Newton's Laws & Friction Problem Patterns",
+  "domain": "Physics",
+  "chapter": "Newton-Laws-Friction",
+  "provenance": {
+    "source": "Authentic Engineering & Railway Physics Compendium",
+    "generator_version": "study-source-core v2.0",
+    "verification_status": "VERIFIED"
+  },
+  "decision_trees": [
+    {
+      "id": "tree-phys-fbd",
+      "name": "Force & Acceleration Decision",
+      "rules": [
+        {
+          "condition": "त्वरित गति",
+          "action": "ΣF = ma लागू करें"
+        },
+        {
+          "condition": "साम्यावस्था",
+          "action": "ΣF = 0 लागू करें"
+        }
+      ]
+    },
+    {
+      "id": "tree-phys-friction",
+      "name": "Friction Type Decision",
+      "rules": [
+        {
+          "condition": "आपेक्षिक गति",
+          "action": "गतिज घर्षण fk = μk * N"
+        },
+        {
+          "condition": "विराम अवस्था",
+          "action": "स्थैतिक घर्षण fs <= μs * N"
+        }
+      ]
+    }
+  ],
+  "error_log_taxonomy": [
+    {
+      "code": "ERR_PHY_01",
+      "category": "Normal Force",
+      "description": "Normal force calculation error",
+      "correction_rule": "Resolve perpendicular forces correctly"
+    },
+    {
+      "code": "ERR_PHY_02",
+      "category": "FBD Direction",
+      "description": "FBD direction error",
+      "correction_rule": "Check friction opposes relative motion"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "pat-phys-fric-001",
+      "domain": "Physics",
+      "skill_id": "physics-study",
+      "schema_id": "inclined-plane-friction",
+      "problem_type": "Inclined Plane & Friction",
+      "problem_family": "Dynamics & Friction",
+      "representation": "मुक्त पिंड आरेख (Free-Body Diagram) सहित नत समतल पर बलों का वियोजन।",
+      "deep_structure": "\\sum \\vec{F} = m\\vec{a} तथा f_k = \\mu_k N का अनुप्रयोग।",
+      "recognition_signals": [
+        "नत समतल",
+        "घर्षण गुणांक",
+        "त्वरण"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "मुक्त पिंड आरेख (FBD) खींचें",
+          "बलों को समतल के समांतर तथा लंबवत वियोजित करें",
+          "अभिलंब प्रतिक्रिया N = mg cos(theta) ज्ञात करें",
+          "समीकरण हल करें: mg sin(theta) - fk = ma"
+        ]
+      },
+      "common_traps": [
+        "अभिलंब प्रतिक्रिया को सीधे mg मान लेना"
+      ],
+      "verification_rules": [
+        "विमीय विश्लेषण (Dimensional Check)",
+        "सीमांत विश्लेषण (theta -> 0)"
+      ],
+      "difficulty": "Medium",
+      "pyq_references": [
+        {
+          "exam": "RRB ALP",
+          "year": 2018,
+          "question_id": "P1"
+        }
+      ]
+    },
+    {
+      "id": "pat-phys-work-002",
+      "domain": "Physics",
+      "skill_id": "physics-study",
+      "schema_id": "work-energy-variable-force",
+      "problem_type": "Work-Energy Principle with Friction",
+      "problem_family": "Work-Energy",
+      "representation": "कार्य-ऊर्जा प्रमेय आरेख।",
+      "deep_structure": "W_{\\text{net}} = \\Delta K = K_f - K_i",
+      "recognition_signals": [
+        "घर्षण द्वारा किया गया कार्य",
+        "रुकने की दूरी"
+      ],
+      "governing_method": {
+        "standard_algorithm": [
+          "प्रारंभिक तथा अंतिम गतिज ऊर्जा ज्ञात करें",
+          "घर्षण बल द्वारा किया गया कार्य W = -fk * s लिखें",
+          "समीकरण हल कर दूरी s ज्ञात करें"
+        ]
+      },
+      "common_traps": [
+        "घर्षण द्वारा किए गए कार्य को धनात्मक लेना"
+      ],
+      "verification_rules": [
+        "जूल मात्रक संगति",
+        "k \\to \\infty सीमा"
+      ],
+      "difficulty": "Medium",
+      "pyq_references": [
+        {
+          "exam": "SSC CGL",
+          "year": 2020,
+          "question_id": "P2"
+        }
+      ]
+    }
+  ]
+}

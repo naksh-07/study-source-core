@@ -1094,7 +1094,27 @@ async function exportStudyLabProceduralAnki(targetInput, options = {}) {
         `StudyLab Procedural Learning Entry Points: ${deckName}`
     );
 
-    const modelsConfig = buildProceduralModelDefinition();
+    const modelsConfig = options.modelsConfigOverride || buildProceduralModelDefinition();
+
+    // Closed boundary check: Model ID isolation (Dual APKG v1.0 invariant)
+    const ALLOWED_PROCEDURAL_MODELS = new Set([1600000004]);
+    const PROHIBITED_PROCEDURAL_MODELS = new Set([1600000001, 1600000002, 1600000003]);
+    const modelIds = Object.keys(modelsConfig).map(id => parseInt(id, 10));
+    for (const mId of modelIds) {
+        if (PROHIBITED_PROCEDURAL_MODELS.has(mId)) {
+            throw new Error(`[MODEL_ISOLATION_BREACH] Procedural deck contains prohibited declarative model ID ${mId}. Dual APKG v1.0 isolation invariant violated.`);
+        }
+        if (!ALLOWED_PROCEDURAL_MODELS.has(mId)) {
+            throw new Error(`[MODEL_ISOLATION_BREACH] Procedural deck contains unauthorized model ID ${mId}. Allowed models: [1600000004].`);
+        }
+    }
+
+    const injectedNoteMid = options.testInjectedNoteMid;
+    if (injectedNoteMid !== undefined) {
+        if (PROHIBITED_PROCEDURAL_MODELS.has(injectedNoteMid) || !ALLOWED_PROCEDURAL_MODELS.has(injectedNoteMid)) {
+            throw new Error(`[MODEL_ISOLATION_BREACH] Procedural deck note uses unauthorized model ID ${injectedNoteMid}. Dual APKG v1.0 isolation invariant violated.`);
+        }
+    }
 
     const insertColStmt = db.prepare(`
         INSERT INTO col (id, crt, mod, scm, ver, dty, usn, ls, conf, models, decks, dconf, tags)
@@ -1269,7 +1289,7 @@ async function exportStudyLabProceduralAnki(targetInput, options = {}) {
         const sfld = proceduralPayloadField;
         const csum = calculateFieldChecksum(sfld);
 
-        insertNoteStmt.run([nid, guid, 1600000004, nowSecs, tags, flds, sfld, csum]);
+        insertNoteStmt.run([nid, guid, injectedNoteMid || 1600000004, nowSecs, tags, flds, sfld, csum]);
         totalNotesCreated++;
 
         insertCardStmt.run([cid, nid, deckId, nowSecs, totalCardsCreated + 1]);

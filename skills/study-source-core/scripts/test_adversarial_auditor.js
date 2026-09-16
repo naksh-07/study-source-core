@@ -48,6 +48,7 @@ const { getVaultRoot, getCanonicalArtifactPaths } = require('./path_resolver');
 const { validateTsvContent } = require('./validate_tsv');
 const { validateImageOcclusionContent } = require('./validate_image_occlusion');
 const { auditNoteContract } = require('./note_contract_audit');
+const { ensureAllTestFixtures } = require('./ensure_test_fixtures');
 
 const SCRATCH_DIR = path.resolve(__dirname, 'scratch/adversarial_audit');
 const SCHEMAS_DIR = path.resolve(__dirname, '../resources/schemas');
@@ -330,7 +331,12 @@ async function testCheck1IncompleteChapterJsonTrap() {
                 options: ["12", "16", "18", "24"],
                 correct_option: "16",
                 difficulty: 2.0,
-                exam_metadata: { exam: "RRB ALP", year: 2018 }
+                exam_metadata: { exam: "RRB ALP", year: 2018 },
+                explanation: "ल.स.प. × म.स.प. = पहली संख्या × दूसरी संख्या\n48 × 8 = 24 × x\nx = 16",
+                hints: [
+                    { tier: 1, text: "ल.स.प. और म.स.प. के गुणनफल का संबंध याद करें।" },
+                    { tier: 2, text: "x = (48 × 8) / 24 हल करें।" }
+                ]
             }
         ]
     };
@@ -394,7 +400,13 @@ async function testCheck2SuperficialNumericalInflation() {
             prompt: `संख्याओं ${numA} और ${numB} का ल.स.प. (LCM) ज्ञात कीजिए।`,
             options: [`${numA * 2}`, `${numA * 3}`, `${numB * 2}`, `${numA * numB}`],
             correct_option: `${numA * 2}`,
-            difficulty: 2.0
+            difficulty: 2.0,
+            exam_metadata: { exam: "RRB ALP", year: 2018 },
+            explanation: `संख्याओं ${numA} और ${numB} का ल.स.प. ज्ञात करने के लिए अभाज्य गुणनखंडन का प्रयोग करें।`,
+            hints: [
+                { tier: 1, text: "दी गई संख्याओं के अभाज्य गुणनखंड ज्ञात करें।" },
+                { tier: 2, text: "उभयनिष्ठ और गैर-उभयनिष्ठ गुणनखंडों को गुणा करें।" }
+            ]
         });
     }
 
@@ -1128,7 +1140,13 @@ async function testCheck14DuplicatePackageGenerationAndUnnecessaryProcessing() {
                 prompt: "दो संख्याओं का गुणनफल 300 है और म.स.प. 5 है। ल.स.प. ज्ञात कीजिए।",
                 options: ["50", "60", "75", "100"],
                 correct_option: "60",
-                difficulty: 2.0
+                difficulty: 2.0,
+                exam_metadata: { exam: "RRB Group D", year: 2018 },
+                explanation: "ल.स.प. × म.स.प. = संख्याओं का गुणनफल\nल.स.प. = 300 / 5 = 60",
+                hints: [
+                    { tier: 1, text: "ल.स.प. और म.स.प. के संबंध का प्रयोग करें।" },
+                    { tier: 2, text: "गुणनफल को म.स.प. से विभाजित करें।" }
+                ]
             }
         ]
     };
@@ -1173,7 +1191,12 @@ async function testCheck14DuplicatePackageGenerationAndUnnecessaryProcessing() {
         prompt: "दो संख्याओं का ल.स.प. 120 और म.स.प. 6 है।",
         options: ["10", "20", "30", "40"],
         correct_option: "20",
-        difficulty: 2.5
+        difficulty: 2.5,
+        exam_metadata: { exam: "RRB Group D", year: 2018 },
+        explanation: "ल.स.प. और म.स.प. का अनुपात ज्ञात करें।",
+        hints: [
+            { tier: 1, text: "अनुपात नियम लागू करें।" }
+        ]
     });
     const mutatedContent = JSON.stringify(mutatedData);
     const hashMutated = crypto.createHash('sha256').update(mutatedContent).digest('hex');
@@ -1196,21 +1219,36 @@ async function testCheck15GenericStudySourceCoreDeclarativeRegressionProtection(
     assert.strictEqual(noteAudit.h1Count, 1, "Must have exactly 1 H1");
 
     // 2. Validate Declarative Basic TSV (Europe)
-    assert(fs.existsSync(europePaths.basic.path), `Europe Basic TSV missing at: ${europePaths.basic.path}`);
-    const basicContent = fs.readFileSync(europePaths.basic.path, 'utf8');
-    const basicVal = validateTsvContent(basicContent, europePaths.basic.path, 'Basic');
+    let basicPath = europePaths.basic.path;
+    if (!fs.existsSync(basicPath)) {
+        const buildBasic = path.join(path.dirname(europePaths.notes.path), '..', '.build', 'source-artifacts', 'Basic', 'Europe_Basic.tsv');
+        if (fs.existsSync(buildBasic)) basicPath = buildBasic;
+    }
+    assert(fs.existsSync(basicPath), `Europe Basic TSV missing at: ${basicPath}`);
+    const basicContent = fs.readFileSync(basicPath, 'utf8');
+    const basicVal = validateTsvContent(basicContent, basicPath, 'Basic');
     assert.strictEqual(basicVal.isValid, true, `Basic TSV validation failed: ${basicVal.errors.join('; ')}`);
 
     // 3. Validate Declarative Cloze TSV (Europe)
-    assert(fs.existsSync(europePaths.cloze.path), `Europe Cloze TSV missing at: ${europePaths.cloze.path}`);
-    const clozeContent = fs.readFileSync(europePaths.cloze.path, 'utf8');
-    const clozeVal = validateTsvContent(clozeContent, europePaths.cloze.path, 'Cloze');
+    let clozePath = europePaths.cloze.path;
+    if (!fs.existsSync(clozePath)) {
+        const buildCloze = path.join(path.dirname(europePaths.notes.path), '..', '.build', 'source-artifacts', 'Cloze', 'Europe_Cloze.tsv');
+        if (fs.existsSync(buildCloze)) clozePath = buildCloze;
+    }
+    assert(fs.existsSync(clozePath), `Europe Cloze TSV missing at: ${clozePath}`);
+    const clozeContent = fs.readFileSync(clozePath, 'utf8');
+    const clozeVal = validateTsvContent(clozeContent, clozePath, 'Cloze');
     assert.strictEqual(clozeVal.isValid, true, `Cloze TSV validation failed: ${clozeVal.errors.join('; ')}`);
 
     // 4. Validate Native Image Occlusion (Europe)
-    assert(fs.existsSync(europePaths.imageOcclusion.path), `Europe IO JSON missing at: ${europePaths.imageOcclusion.path}`);
-    const ioContent = fs.readFileSync(europePaths.imageOcclusion.path, 'utf8');
-    const ioVal = validateImageOcclusionContent(ioContent, europePaths.imageOcclusion.path);
+    let ioPath = europePaths.imageOcclusion.path;
+    if (!fs.existsSync(ioPath)) {
+        const buildIo = path.join(path.dirname(europePaths.notes.path), '..', '.build', 'source-artifacts', 'ImageOcclusion', 'Europe_ImageOcclusion.json');
+        if (fs.existsSync(buildIo)) ioPath = buildIo;
+    }
+    assert(fs.existsSync(ioPath), `Europe IO JSON missing at: ${ioPath}`);
+    const ioContent = fs.readFileSync(ioPath, 'utf8');
+    const ioVal = validateImageOcclusionContent(ioContent, ioPath);
     assert.strictEqual(ioVal.isValid, true, `Image Occlusion validation failed: ${ioVal.errors.join('; ')}`);
 
     // 5. Validate Declarative Notes Contract (Maths/Percentage)
@@ -1230,6 +1268,8 @@ async function runAdversarialAuditor() {
     console.log('  STUDYLAB ADVERSARIAL AUDITOR TEST HARNESS (SECTION 31 & 34)');
     console.log('  Testing 15-Point Adversarial Attack Matrix');
     console.log('================================================================================');
+
+    await ensureAllTestFixtures();
 
     await runCheck("ADV-01", "Incomplete Chapter Coverage Interception", "Can an incomplete chapter pass merely because its JSON is valid?", testCheck1IncompleteChapterJsonTrap);
     await runCheck("ADV-02", "Superficial Numerical Variation Inflation", "Can two hundred number variations masquerade as two hundred question types?", testCheck2SuperficialNumericalInflation);

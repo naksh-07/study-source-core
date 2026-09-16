@@ -59,10 +59,11 @@ function extractEntityFacts(text, artifactName) {
 
     // 2. Entity + Year pairings
     const yearRe = new RegExp(ENTITY_YEAR_PATTERN.source, 'gi');
+    const IGNORED_YEAR_ENTITIES = new Set(['year', 'exam', 'status', 'page', 'id', 'code', 'shift', 'step', 'tier', 'date', 'mod', 'crt', 'version', 'time', 'val', 'pyq', 'ref']);
     while ((match = yearRe.exec(cleaned)) !== null) {
         const entity = match[1].toLowerCase().trim();
         const year = match[2].trim();
-        if (entity.length >= 2) {
+        if (entity.length >= 2 && !IGNORED_YEAR_ENTITIES.has(entity)) {
             facts.push({
                 artifact: artifactName,
                 entity,

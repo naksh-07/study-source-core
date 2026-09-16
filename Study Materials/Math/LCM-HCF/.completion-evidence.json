@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "overall_verdict": "SUCCESS",
+    "completed_count": 3,
+    "verified_timestamp": "2026-09-15T20:42:14.550Z",
+    "schema_version": "1.0.0"
+  },
+  "artifacts": [
+    {
+      "task_id": "task-notes",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\Notes\\LCM-HCF_Notes.md",
+      "bytes": 1176,
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\LCM-HCF_Anki.apkg",
+      "bytes": 3665,
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-proc-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\StudyLab\\LCM-HCF_StudyLab_Procedural.apkg",
+      "bytes": 8271,
+      "physical_status": "VERIFIED_ON_DISK"
+    }
+  ]
+}

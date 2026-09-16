@@ -21,6 +21,9 @@ const initSqlJs = require('sql.js');
 const JSZip = require('jszip');
 const { calculateFieldChecksum } = require('./shared_anki_utils');
 
+const ALLOWED_DECLARATIVE_MODEL_IDS = new Set(['1600000001', '1600000002', '1600000003']);
+const PROHIBITED_DECLARATIVE_MODEL_IDS = new Set(['1600000004']);
+
 async function validateApkgContent(apkgBuffer, filePath = 'in-memory', options = {}) {
     const errors = [];
     const warnings = [];
@@ -135,6 +138,15 @@ async function validateApkgContent(apkgBuffer, filePath = 'in-memory', options =
             models = JSON.parse(modelsJson);
             stats.modelNames = Object.values(models).map(m => m.name);
 
+            // Closed boundary check: Model ID isolation (Dual APKG v1.0 invariant)
+            for (const mId of Object.keys(models)) {
+                if (PROHIBITED_DECLARATIVE_MODEL_IDS.has(mId) || models[mId]?.name === 'StudyLab Procedural Anchor') {
+                    errors.push(`[MODEL_ISOLATION_BREACH] Declarative APKG contains prohibited procedural model ID ${mId} ('${models[mId]?.name}'). Dual APKG v1.0 isolation invariant violated.`);
+                } else if (!ALLOWED_DECLARATIVE_MODEL_IDS.has(mId)) {
+                    errors.push(`[MODEL_ISOLATION_BREACH] Declarative APKG contains unauthorized model ID ${mId} ('${models[mId]?.name}'). Allowed models: [1600000001, 1600000002, 1600000003].`);
+                }
+            }
+
             // Basic Model Schema Verification (1600000001)
             const basicModel = models['1600000001'] || Object.values(models).find(m => m.name === 'Basic');
             if (basicModel) {
@@ -241,7 +253,14 @@ async function validateApkgContent(apkgBuffer, filePath = 'in-memory', options =
                 errors.push(`Note row ${nIdx + 1} (id: ${nid}) has empty GUID.`);
             }
 
-            const model = models[mid.toString()];
+            const midStr = mid.toString();
+            if (mid === 1600000004 || PROHIBITED_DECLARATIVE_MODEL_IDS.has(midStr)) {
+                errors.push(`[MODEL_ISOLATION_BREACH] Declarative note id ${nid} violates Model Isolation: uses prohibited StudyLab Model 1600000004.`);
+            } else if (!ALLOWED_DECLARATIVE_MODEL_IDS.has(midStr)) {
+                errors.push(`[MODEL_ISOLATION_BREACH] Declarative note id ${nid} uses unauthorized model ID ${mid}.`);
+            }
+
+            const model = models[midStr];
             if (!model) {
                 errors.push(`Note row ${nIdx + 1} references non-existent model ID ${mid}.`);
                 return;

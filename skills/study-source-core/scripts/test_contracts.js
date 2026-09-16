@@ -125,6 +125,9 @@ async function runAllTests() {
         fs.mkdirSync(SCRATCH_DIR, { recursive: true });
     }
 
+    const { ensureAllTestFixtures } = require('./ensure_test_fixtures');
+    await ensureAllTestFixtures();
+
     // ----------------------------------------------------
     // 1. Basic TSV invalid column count (2 cols) -> rejected
     // ----------------------------------------------------

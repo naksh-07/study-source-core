@@ -726,11 +726,62 @@ async function executeTaskWorkflow(graph, taskExecutor) {
         within_resource_budget: totalInvocations <= 10
     };
 
+    const overallVerdict = failedCount === 0 && blockedCount === 0 ? 'SUCCESS' : (completedCount > 0 ? 'PARTIAL_SUCCESS' : 'FAILED');
+
+    // GAP-08: Physical Completion Evidence Serialization
+    const completionEvidenceDoc = {
+        meta: {
+            overall_verdict: overallVerdict,
+            completed_count: completedCount,
+            skipped_count: skippedCount,
+            failed_count: failedCount,
+            verified_timestamp: new Date().toISOString(),
+            schema_version: "1.0.0"
+        },
+        artifacts: traces.completionEvidence.map(c => {
+            let sha256 = null;
+            let byteSize = c.bytes || 0;
+            if (c.target_path && fs.existsSync(c.target_path)) {
+                try {
+                    const buf = fs.readFileSync(c.target_path);
+                    byteSize = buf.length;
+                    sha256 = crypto.createHash('sha256').update(buf).digest('hex');
+                } catch (e) {}
+            }
+            return {
+                task_id: c.task_id,
+                target_path: c.target_path,
+                bytes: byteSize,
+                sha256,
+                physical_status: c.status,
+                errors: c.errors || []
+            };
+        })
+    };
+
+    let evidenceTargetDir = null;
+    if (graph.context && graph.context.customRoot) {
+        evidenceTargetDir = graph.context.customRoot;
+    } else if (graph.context && graph.context.chapterDir) {
+        evidenceTargetDir = graph.context.chapterDir;
+    } else if (storageDir) {
+        evidenceTargetDir = storageDir;
+    }
+    if (evidenceTargetDir && fs.existsSync(evidenceTargetDir)) {
+        try {
+            fs.writeFileSync(
+                path.join(evidenceTargetDir, '.completion-evidence.json'),
+                JSON.stringify(completionEvidenceDoc, null, 2),
+                'utf8'
+            );
+        } catch (e) {
+            console.warn(`[orchestration_engine] Warning: Could not write .completion-evidence.json: ${e.message}`);
+        }
+    }
+
     if (storageDir) {
         saveExecutionState(executionState, storageDir);
     }
-
-    const overallVerdict = failedCount === 0 && blockedCount === 0 ? 'SUCCESS' : (completedCount > 0 ? 'PARTIAL_SUCCESS' : 'FAILED');
 
     return {
         overallVerdict,

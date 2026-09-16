@@ -681,5 +681,6 @@ module.exports = {
     validateStudyLabLevels1to6,
     validateStudyLabLevels1to7,
     validateSolutionGraphDag,
-    validateHintTierDisclosure
+    validateHintTierDisclosure,
+    getValidators
 };
