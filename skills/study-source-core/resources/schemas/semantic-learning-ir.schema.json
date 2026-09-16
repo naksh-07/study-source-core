@@ -16,9 +16,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": [
-        "1.0.0"
-      ],
+      "enum": ["1.0.0"],
       "description": "Explicit schema versioning."
     },
     "ir_id": {
@@ -28,15 +26,9 @@
     },
     "context": {
       "type": "object",
-      "required": [
-        "subject",
-        "domain",
-        "chapter"
-      ],
+      "required": ["subject", "domain", "chapter"],
       "properties": {
-        "subject": {
-          "type": "string"
-        },
+        "subject": { "type": "string" },
         "domain": {
           "type": "string",
           "enum": [
@@ -47,15 +39,9 @@
             "biological_taxonomic"
           ]
         },
-        "chapter": {
-          "type": "string"
-        },
-        "topic": {
-          "type": "string"
-        },
-        "curriculum": {
-          "type": "string"
-        },
+        "chapter": { "type": "string" },
+        "topic": { "type": "string" },
+        "curriculum": { "type": "string" },
         "language": {
           "type": "string",
           "default": "bilingual_hi_en"
@@ -72,17 +58,13 @@
         "source_hash"
       ],
       "properties": {
-        "evidence_pack_id": {
-          "type": "string"
-        },
+        "evidence_pack_id": { "type": "string" },
         "evidence_hash": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$",
           "description": "SHA-256 hash of canonical evidence pack."
         },
-        "source_id": {
-          "type": "string"
-        },
+        "source_id": { "type": "string" },
         "source_hash": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$",
@@ -93,55 +75,35 @@
     },
     "knowledge_units": {
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/KnowledgeUnit"
-      },
+      "items": { "$ref": "#/definitions/KnowledgeUnit" },
       "description": "Discrete, atomic Knowledge Units (KUs)."
     },
     "relationships": {
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/KURelationship"
-      },
+      "items": { "$ref": "#/definitions/KURelationship" },
       "description": "Directed semantic relationships between KUs."
     },
     "problem_patterns": {
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/ProblemPattern"
-      },
+      "items": { "$ref": "#/definitions/ProblemPattern" },
       "description": "Procedural problem patterns authored for STEM domains."
     },
     "practice_items": {
       "type": "array",
-      "items": {
-        "$ref": "#/definitions/PracticeItem"
-      },
+      "items": { "$ref": "#/definitions/PracticeItem" },
       "description": "Authentic and derived practice items grounded in evidence."
     },
     "metadata": {
       "type": "object",
-      "required": [
-        "created_at",
-        "generator"
-      ],
+      "required": ["created_at", "generator"],
       "properties": {
-        "created_at": {
-          "type": "string"
-        },
+        "created_at": { "type": "string" },
         "generator": {
           "type": "object",
-          "required": [
-            "engine",
-            "version"
-          ],
+          "required": ["engine", "version"],
           "properties": {
-            "engine": {
-              "type": "string"
-            },
-            "version": {
-              "type": "string"
-            }
+            "engine": { "type": "string" },
+            "version": { "type": "string" }
           },
           "additionalProperties": true
         }
@@ -168,48 +130,17 @@
         "certification_state"
       ],
       "properties": {
-        "source_id": {
-          "type": "string"
-        },
+        "source_id": { "type": "string" },
         "source_coordinates": {
           "type": "object",
-          "required": [
-            "section"
-          ],
+          "required": ["section"],
           "properties": {
-            "page_start": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "page_end": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "section": {
-              "type": "string"
-            },
-            "paragraph": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "line_start": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "line_end": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            }
+            "page_start": { "type": ["integer", "null"] },
+            "page_end": { "type": ["integer", "null"] },
+            "section": { "type": "string" },
+            "paragraph": { "type": ["integer", "null"] },
+            "line_start": { "type": ["integer", "null"] },
+            "line_end": { "type": ["integer", "null"] }
           },
           "additionalProperties": false
         },
@@ -218,128 +149,58 @@
           "pattern": "^[a-f0-9]{64}$",
           "description": "Immutable SHA-256 fingerprint of the source text chunk."
         },
-        "evidence_pack_id": {
-          "type": "string"
-        },
-        "ku_id": {
-          "type": "string"
-        },
+        "evidence_pack_id": { "type": "string" },
+        "ku_id": { "type": "string" },
         "origin_tier": {
           "type": "string",
-          "enum": [
-            "AUTHENTIC",
-            "CURATED",
-            "DERIVED",
-            "SYNTHETIC"
-          ]
+          "enum": ["AUTHENTIC", "CURATED", "DERIVED", "SYNTHETIC"]
         },
         "generator_metadata": {
           "type": "object",
-          "required": [
-            "engine_version",
-            "timestamp"
-          ],
+          "required": ["engine_version", "timestamp"],
           "properties": {
-            "engine_version": {
-              "type": "string"
-            },
-            "timestamp": {
-              "type": "string"
-            }
+            "engine_version": { "type": "string" },
+            "timestamp": { "type": "string" }
           },
           "additionalProperties": false
         },
         "model_and_prompt": {
           "type": "object",
-          "required": [
-            "model",
-            "prompt_version"
-          ],
+          "required": ["model", "prompt_version"],
           "properties": {
-            "model": {
-              "type": "string"
-            },
-            "temperature": {
-              "type": [
-                "number",
-                "null"
-              ]
-            },
-            "prompt_version": {
-              "type": "string"
-            }
+            "model": { "type": "string" },
+            "temperature": { "type": ["number", "null"] },
+            "prompt_version": { "type": "string" }
           },
           "additionalProperties": false
         },
         "transformation_history": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "items": { "type": "string" },
           "description": "Ordered log of mutations applied."
         },
         "renderer_target": {
           "type": "object",
-          "required": [
-            "file_path"
-          ],
+          "required": ["file_path"],
           "properties": {
-            "file_path": {
-              "type": "string"
-            },
-            "anchor": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "line": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            }
+            "file_path": { "type": "string" },
+            "anchor": { "type": ["string", "null"] },
+            "line": { "type": ["integer", "null"] }
           },
           "additionalProperties": false
         },
         "certification_state": {
           "type": "object",
-          "required": [
-            "status"
-          ],
+          "required": ["status"],
           "properties": {
             "status": {
               "type": "string",
-              "enum": [
-                "PENDING",
-                "CERTIFIED",
-                "REJECTED"
-              ]
+              "enum": ["PENDING", "CERTIFIED", "REJECTED"]
             },
-            "auditor": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "signature": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "verified_at": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "adv_token": {
-              "type": [
-                "string",
-                "null"
-              ]
-            }
+            "auditor": { "type": ["string", "null"] },
+            "signature": { "type": ["string", "null"] },
+            "verified_at": { "type": ["string", "null"] },
+            "adv_token": { "type": ["string", "null"] }
           },
           "additionalProperties": false
         }
@@ -348,13 +209,7 @@
     },
     "KnowledgeUnit": {
       "type": "object",
-      "required": [
-        "id",
-        "ku_type",
-        "title",
-        "definition",
-        "clr"
-      ],
+      "required": ["id", "ku_type", "title", "definition", "clr"],
       "properties": {
         "id": {
           "type": "string",
@@ -370,53 +225,32 @@
             "procedural_family"
           ]
         },
-        "title": {
-          "type": "string"
-        },
-        "definition": {
-          "type": "string"
-        },
+        "title": { "type": "string" },
+        "definition": { "type": "string" },
         "bilingual": {
           "type": "object",
           "properties": {
-            "hi": {
-              "type": "string"
-            },
-            "en": {
-              "type": "string"
-            }
+            "hi": { "type": "string" },
+            "en": { "type": "string" }
           },
           "additionalProperties": false
         },
         "propositions": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
         "formulas": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "name",
-              "latex"
-            ],
+            "required": ["name", "latex"],
             "properties": {
-              "name": {
-                "type": "string"
-              },
-              "latex": {
-                "type": "string"
-              },
-              "scope": {
-                "type": "string"
-              },
+              "name": { "type": "string" },
+              "latex": { "type": "string" },
+              "scope": { "type": "string" },
               "variables": {
                 "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
+                "additionalProperties": { "type": "string" }
               }
             },
             "additionalProperties": false
@@ -424,31 +258,17 @@
         },
         "prerequisites": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
-        "clr": {
-          "$ref": "#/definitions/ContentLineageRecord"
-        },
+        "clr": { "$ref": "#/definitions/ContentLineageRecord" },
         "factual_discrepancy": {
           "type": "object",
           "properties": {
-            "detected": {
-              "type": "boolean"
-            },
-            "flagged_claim": {
-              "type": "string"
-            },
-            "discrepancy_type": {
-              "type": "string"
-            },
-            "advisory_note": {
-              "type": "string"
-            },
-            "reconciliation_action": {
-              "type": "string"
-            }
+            "detected": { "type": "boolean" },
+            "flagged_claim": { "type": "string" },
+            "discrepancy_type": { "type": "string" },
+            "advisory_note": { "type": "string" },
+            "reconciliation_action": { "type": "string" }
           },
           "additionalProperties": false
         }
@@ -457,22 +277,11 @@
     },
     "KURelationship": {
       "type": "object",
-      "required": [
-        "id",
-        "source_ku_id",
-        "target_ku_id",
-        "relation_type"
-      ],
+      "required": ["id", "source_ku_id", "target_ku_id", "relation_type"],
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "source_ku_id": {
-          "type": "string"
-        },
-        "target_ku_id": {
-          "type": "string"
-        },
+        "id": { "type": "string" },
+        "source_ku_id": { "type": "string" },
+        "target_ku_id": { "type": "string" },
         "relation_type": {
           "type": "string",
           "enum": [
@@ -501,103 +310,59 @@
         "governing_method"
       ],
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "domain": {
-          "type": "string"
-        },
-        "problem_family": {
-          "type": "string"
-        },
-        "difficulty": {
-          "type": "string"
-        },
-        "deep_structure": {
-          "type": "string"
-        },
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "domain": { "type": "string" },
+        "problem_family": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "deep_structure": { "type": "string" },
         "recognition_signals": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
         "governing_method": {
-          "type": [
-            "object",
-            "string"
-          ],
+          "type": ["object", "string"],
           "properties": {
             "standard_algorithm": {
               "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "items": { "type": "string" }
             },
-            "formula": {
-              "type": "string"
-            }
+            "formula": { "type": "string" }
           },
           "additionalProperties": true
         },
         "decision_points": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
         "common_traps": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
         "error_categories": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
         "verification_formulas": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "items": { "type": "string" }
         },
         "parameter_domains": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "name",
-              "type"
-            ],
+            "required": ["name", "type"],
             "properties": {
-              "name": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              },
-              "min": {
-                "type": "number"
-              },
-              "max": {
-                "type": "number"
-              },
-              "domain_rule": {
-                "type": "string"
-              }
+              "name": { "type": "string" },
+              "type": { "type": "string" },
+              "min": { "type": "number" },
+              "max": { "type": "number" },
+              "domain_rule": { "type": "string" }
             },
             "additionalProperties": true
           }
         },
-        "scaffolding_progression": {
-          "type": "object"
-        }
+        "scaffolding_progression": { "type": "object" }
       },
       "additionalProperties": true
     },
@@ -612,74 +377,35 @@
         "clr"
       ],
       "properties": {
-        "id": {
-          "type": "string"
-        },
-        "pattern_id": {
-          "type": "string"
-        },
+        "id": { "type": "string" },
+        "pattern_id": { "type": "string" },
         "question_type": {
           "type": "string",
-          "enum": [
-            "mcq",
-            "numerical",
-            "structured"
-          ]
+          "enum": ["mcq", "numerical", "structured"]
         },
-        "stem": {
-          "type": "string"
-        },
+        "stem": { "type": "string" },
         "options": {
           "type": "array",
-          "items": {
-            "type": "string"
-          },
+          "items": { "type": "string" },
           "description": "For MCQ, must contain at least 4 options."
         },
-        "correct_option": {
-          "type": [
-            "string",
-            "integer"
-          ]
-        },
-        "answer": {
-          "type": [
-            "number",
-            "string"
-          ]
-        },
-        "tolerance": {
-          "type": "number"
-        },
-        "explanation": {
-          "type": "string"
-        },
+        "correct_option": { "type": ["string", "integer"] },
+        "answer": { "type": ["number", "string"] },
+        "tolerance": { "type": "number" },
+        "explanation": { "type": "string" },
         "solution_dag": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": [
-              "step_id",
-              "description"
-            ],
+            "required": ["step_id", "description"],
             "properties": {
-              "step_id": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "operation": {
-                "type": "string"
-              },
-              "intermediate_result": {
-                "type": "string"
-              },
+              "step_id": { "type": "string" },
+              "description": { "type": "string" },
+              "operation": { "type": "string" },
+              "intermediate_result": { "type": "string" },
               "prerequisite_steps": {
                 "type": "array",
-                "items": {
-                  "type": "string"
-                }
+                "items": { "type": "string" }
               }
             },
             "additionalProperties": false
@@ -693,15 +419,9 @@
             "tier3_next_step"
           ],
           "properties": {
-            "tier1_conceptual": {
-              "type": "string"
-            },
-            "tier2_strategic": {
-              "type": "string"
-            },
-            "tier3_next_step": {
-              "type": "string"
-            }
+            "tier1_conceptual": { "type": "string" },
+            "tier2_strategic": { "type": "string" },
+            "tier3_next_step": { "type": "string" }
           },
           "additionalProperties": false
         },
@@ -710,19 +430,13 @@
           "properties": {
             "common_traps": {
               "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "items": { "type": "string" }
             },
-            "verification_check": {
-              "type": "string"
-            }
+            "verification_check": { "type": "string" }
           },
           "additionalProperties": true
         },
-        "clr": {
-          "$ref": "#/definitions/ContentLineageRecord"
-        }
+        "clr": { "$ref": "#/definitions/ContentLineageRecord" }
       },
       "additionalProperties": false
     }

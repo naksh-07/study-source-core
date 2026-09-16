@@ -509,6 +509,40 @@ test('A7.6 — Factual Reconciliation Guard validates provenance and advisories'
     const res4 = checkFactualReconciliation([invalidKu2]);
     assert.strictEqual(res4.passed, false);
     assert.ok(res4.findings.some(f => f.includes('MISSING_ADVISORY')));
+
+    // Case 5: Contradictory propositions across KUs without advisory note
+    const crossKu1 = { id: 'ku.cross.1', title: 'Mount Everest height 8848' };
+    const crossKu2 = { id: 'ku.cross.2', title: 'Mount Everest height 8850' };
+    const res5 = checkFactualReconciliation([crossKu1, crossKu2]);
+    assert.strictEqual(res5.passed, false);
+    assert.ok(res5.findings.some(f => f.includes('UNRECONCILED_FACTUAL_CONTRADICTION')));
+
+    // Case 6: Contradictory propositions WITH advisory note and provenance
+    const crossKu3 = {
+        id: 'ku.cross.3',
+        title: 'Mount Everest height 8848',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: { detected: true, advisory_note: 'Source says 8848 but consensus is 8848.86m' }
+    };
+    const crossKu4 = {
+        id: 'ku.cross.4',
+        title: 'Mount Everest height 8850',
+        clr: { source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234', evidence_pack_id: 'ep.123' },
+        factual_discrepancy: { detected: true, advisory_note: 'Source says 8850' }
+    };
+    const res6 = checkFactualReconciliation([crossKu3, crossKu4]);
+    assert.strictEqual(res6.passed, true);
+
+    // Case 7: Top-level source_chunk_hash backwards compatibility (checked in source grounding too)
+    const { checkSourceGrounding } = require('./semantic_qa_engine');
+    const legacyKu = {
+        id: 'ku.legacy.1',
+        source_chunk_hash: '1234567890123456789012345678901234567890123456789012345678901234',
+        evidence_pack_id: 'ep.123'
+    };
+    const res7 = checkSourceGrounding([legacyKu]);
+    assert.strictEqual(res7.passed, true);
+
 });
 
 
