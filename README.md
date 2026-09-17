@@ -187,14 +187,193 @@ StudySourceCore coordinates **14 specialized, single-responsibility subagents** 
 
 ---
 
-## Quickstart
+## Prerequisites & Dependencies
+
+Before configuring StudySourceCore, ensure your environment satisfies the following runtime requirements.
+
+### Required Dependencies
+
+| Dependency | Minimum Version | Recommended | Purpose |
+|---|---|---|---|
+| **Node.js** | `>= 18.0.0` | `v20.x` or `v22.x` (LTS) | Core engine execution, packaging pipelines, MCP server, and test harnesses |
+| **npm** | `>= 9.0.0` | `v10.x+` | Skill dependency management and execution scripts |
+| **Git** | `>= 2.30.0` | Latest release | Repository version control and workspace lineage tracking |
+
+### Optional Helpers
+
+The following tools are strictly **optional** and not required for core pipeline operation:
+
+- **Python 3 (`>= 3.10`)**: Optional helper required *only* for standalone PDF page counting and structural outline extraction via [`skills/study-source-core/scripts/pdf_inventory.py`](skills/study-source-core/scripts/pdf_inventory.py).
+- **Anki Desktop (`>= 24.x`)**: Optional GUI tool for manual inspection and study review of generated `.apkg` packages (`Study Materials/**/<Chapter>_Anki.apkg` and `Study Materials/**/StudyLab/*_StudyLab_Procedural.apkg`). Not needed for headless generation or automated verification.
+- **External MCP Servers**: Optional third-party MCP servers (e.g., SQLite, Arxiv, Firecrawl) may be connected as needed, but StudySourceCore operates deterministically with its own bundled tools.
+
+---
+
+## Project & Workspace Setup
+
+Google Antigravity and compatible multi-agent frameworks utilize **project-level skills** located directly within the workspace under `skills/study-source-core/`. The root workspace acts as the operational envelope, housing student deliverables in `Study Materials/` and ephemeral compilation caches in `scratch/`.
+
+```
+StudySourceCore/ (Workspace Root)
+├── Study Materials/              ← Production deliverables (persisted, untouched by updates)
+├── scratch/                      ← Ephemeral evidence packs, IR artifacts, checkpoints
+└── skills/
+    └── study-source-core/        ← Project-level skill engine (cwd for dependencies & tests)
+        ├── package.json          ← Skill dependencies and test runners
+        ├── scripts/              ← Packaging, validation, and MCP server tools
+        └── resources/            ← Schemas, contracts, and subject domain policies
+```
+
+### Installation Steps
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/naksh-07/study-source-core.git
+   cd study-source-core
+   ```
+
+2. **Install Skill Engine Dependencies**:
+   Install exact locked dependencies from within the core skill package directory:
+   ```bash
+   cd skills/study-source-core
+   npm ci
+   ```
+   > [!NOTE]
+   > Dependencies (`@modelcontextprotocol/sdk`, `ajv`, `jszip`, `sql.js`) are installed in `skills/study-source-core/node_modules/`. All package commands, test suites, and MCP tools run against this local environment.
+
+3. **Verify Environment and Test Harness**:
+   Verify your environment and run the full test suite:
+   ```bash
+   # Run environment diagnostics
+   npm run doctor
+
+   # Run the master automated test suite (27 test suites, 100% passing)
+   npm test
+   ```
+
+---
+
+## Environment Verification (`npm run doctor`)
+
+StudySourceCore provides an environment diagnostic utility (`npm run doctor`) that validates your local runtime environment before executing generation or certification runs.
 
 ```bash
-# Navigate to core engine skill and install locked dependencies
-cd skills/study-source-core
-npm install
+# From within skills/study-source-core:
+npm run doctor
 
-# Run the master automated test suite (27 test suites, 100% passing)
+# Or from workspace root:
+npm --prefix skills/study-source-core run doctor
+```
+
+### Diagnostic Checks Performed:
+- **Node.js Runtime**: Confirms Node.js is installed and version is `>= 18.0.0` (alerts if `< 20.0.0`).
+- **npm Version**: Asserts npm is `>= 9.0.0`.
+- **Git Version & State**: Confirms Git is installed and working in the workspace.
+- **Skill Engine Dependencies**: Validates that `skills/study-source-core/node_modules/` exists with `@modelcontextprotocol/sdk`, `ajv`, `jszip`, and `sql.js` properly installed.
+- **Workspace Directories**: Confirms existence of `Study Materials/`, `scratch/`, and `skills/study-source-core/`.
+- **Filesystem Permissions**: Confirms read and write access to `scratch/` and `Study Materials/`.
+- **MCP Server Entry Point**: Verifies existence and syntax of [`skills/study-source-core/scripts/mcp_server.js`](skills/study-source-core/scripts/mcp_server.js).
+- **Optional Helper Status**: Checks for Python 3 and Anki Desktop availability and reports non-fatal status.
+
+---
+
+## Model Context Protocol (MCP) Server Setup
+
+StudySourceCore includes a native Model Context Protocol (MCP) server located at [`skills/study-source-core/scripts/mcp_server.js`](skills/study-source-core/scripts/mcp_server.js). It exposes 4 deterministic compilation, validation, and policy tools via `stdio` transport:
+
+| MCP Tool | Description |
+|---|---|
+| `export_anki_package` | Compiles Basic, Cloze, and Image Occlusion flashcards into one unified standard Anki `.apkg` package. |
+| `export_studylab_procedural_package` | Compiles STEM StudyLab practice questions, solution DAGs, and 3-tier progressive hints into an interactive procedural `.apkg` package. |
+| `validate_artifact` | Validates artifacts against pedagogical contracts (TSVs, StudyLab JSONs, LaTeX math syntax, Mermaid diagrams, APKG SQLite integrity). |
+| `resolve_subject_policy` | Resolves authoritative artifact eligibility rules and domain suppressions for any academic subject. |
+
+### Antigravity Configuration (`mcp_config.json`)
+
+To configure the StudySourceCore MCP server in Google Antigravity, add the `studysource-core` entry to your Antigravity configuration file (`mcp_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "studysource-core": {
+      "command": "node",
+      "args": [
+        "<ABSOLUTE_PATH_TO_REPO>/skills/study-source-core/scripts/mcp_server.js"
+      ]
+    }
+  }
+}
+```
+
+> [!IMPORTANT]
+> You **must replace** `<ABSOLUTE_PATH_TO_REPO>` with the actual absolute path to your cloned repository on your local machine. Relative paths or unexpanded placeholders are not supported.
+
+#### OS-Specific Path Examples:
+- **Windows**:
+  ```json
+  "args": [
+    "C:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/mcp_server.js"
+  ]
+  ```
+- **macOS / Linux**:
+  ```json
+  "args": [
+    "/Users/username/workspace/study-source-core/skills/study-source-core/scripts/mcp_server.js"
+  ]
+  ```
+
+### Claude Desktop Configuration
+
+For Claude Desktop, add the same configuration block to `claude_desktop_config.json`:
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "studysource-core": {
+      "command": "node",
+      "args": [
+        "<ABSOLUTE_PATH_TO_REPO>/skills/study-source-core/scripts/mcp_server.js"
+      ]
+    }
+  }
+}
+```
+
+### Verifying the MCP Server
+
+You can verify that the MCP server initializes correctly and exposes all 4 tools by executing the built-in MCP test client:
+
+```bash
+cd skills/study-source-core
+node scripts/test_mcp_server.js
+```
+
+Expected verification output:
+```
+=== Testing StudySourceCore MCP Server ===
+Connecting to MCP Server via stdio transport...
+Connected successfully!
+
+[Test 1] Listing available tools...
+Discovered tools: [ 'export_anki_package', 'export_studylab_procedural_package', 'validate_artifact', 'resolve_subject_policy' ]
+✅ Tool discovery test passed!
+...
+🎉 ALL MCP TESTS PASSED SUCCESSFULLY!
+```
+
+---
+
+## Quickstart & Verification Commands
+
+All core commands are executed from `skills/study-source-core`:
+
+```bash
+# Navigate to core engine skill
+cd skills/study-source-core
+
+# Run master test suite (27 suites, 100% passing)
 npm test
 
 # Run standalone 4-Gate Adversarial Certification CLI on a target chapter
@@ -205,7 +384,89 @@ npm run test:milestone4
 
 # Run Phase 10 Antigravity Host Adapter, Concurrency & Recovery test suite
 npm run test:phase10
+
+# Test Model Context Protocol (MCP) server
+node scripts/test_mcp_server.js
 ```
+
+---
+
+## Lifecycle Management
+
+```mermaid
+flowchart TD
+    subgraph Update ["Safe Update Lifecycle"]
+        U1["git fetch && git pull"] --> U2["cd skills/study-source-core && npm ci"]
+        U2 --> U3["npm run doctor"]
+        U3 --> U4["npm test"]
+        U4 --> U5["Study Materials/ untouched ✅"]
+    end
+
+    subgraph Teardown ["Safe Uninstall Lifecycle"]
+        T1["Backup Study Materials/ & *.apkg"] --> T2["Remove studysource-core from mcp_config.json"]
+        T2 --> T3["Remove scratch/* transients"]
+        T3 --> T4["Remove repository clone"]
+        T4 --> T5["Other Antigravity skills unaffected ✅"]
+    end
+```
+
+### Safe Update Lifecycle
+
+To safely update StudySourceCore when upstream updates or schema improvements are released:
+
+1. **Fetch and Pull Latest Changes**:
+   ```bash
+   git fetch origin
+   git pull origin main
+   ```
+2. **Re-sync Locked Dependencies**:
+   ```bash
+   cd skills/study-source-core
+   npm ci
+   ```
+3. **Run Diagnostic Verification**:
+   ```bash
+   npm run doctor
+   ```
+4. **Run Regression Suites**:
+   ```bash
+   npm test
+   ```
+
+> [!NOTE]
+> **Zero User Deliverable Impact**: All generated study deliverables in `Study Materials/` (Notes, TSVs, APKGs, Image Occlusions) remain **completely untouched** during git pulls and npm updates. Skills, schemas, and validators update in-place within `skills/study-source-core/`.
+
+---
+
+### Safe Uninstall & Teardown Lifecycle
+
+To safely decommission or uninstall StudySourceCore:
+
+1. **Back Up Deliverables**: Copy your generated notes and packages from `Study Materials/` to your backup location or personal Obsidian/Anki vaults:
+   ```bash
+   # Backup study vault deliverables
+   cp -r "Study Materials" /path/to/safe/backup/
+   ```
+2. **Remove MCP Server Configuration**: Delete the `"studysource-core"` block from your Antigravity or Claude Desktop `mcp_config.json`.
+3. **Clean Scratch Directory**: Remove temporary execution state and cache:
+   ```bash
+   rm -rf scratch/*
+   ```
+4. **Remove Repository Clone**: Delete the cloned `study-source-core` repository directory.
+
+> [!IMPORTANT]
+> **Blast Radius Guarantee**: Deleting StudySourceCore will **not** modify, overwrite, or delete any unrelated Antigravity skills, global agent configurations, or other MCP servers registered in your system.
+
+---
+
+### Optional Global Usage Model
+
+For advanced multi-project setups where you want to access StudySourceCore tools across multiple workspaces:
+
+- **Single Canonical Clone**: Maintain **one canonical clone** of StudySourceCore at a stable file system location (e.g. `C:/tools/StudySourceCore` or `~/tools/study-source-core`).
+- **Global MCP Registration**: Register that single repository's `skills/study-source-core/scripts/mcp_server.js` using its absolute path in your global `mcp_config.json`.
+- **Target Workspace Flexibility**: The MCP tools accept absolute paths (`chapterDir`, `targetPath`, `artifactPath`), enabling seamless compilation and validation across multiple project directories or external Obsidian vaults without duplicating the engine.
+- **Canonical Source of Truth**: The StudySourceCore repository remains the single authoritative source of truth for all tools, contracts, and subject skills.
 
 ---
 

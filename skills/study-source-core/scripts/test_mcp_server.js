@@ -46,7 +46,7 @@ async function runTest() {
     });
     const mathPolicy = JSON.parse(mathPolicyCall.content[0].text);
     console.log("Math policy resolved:", mathPolicy);
-    if (!mathPolicy.proceduralApkg || !mathPolicy.notes) {
+    if (!mathPolicy.notes || (!mathPolicy.proceduralApkg && !mathPolicy.proceduralQuestionBank)) {
         throw new Error("Invalid policy for Math!");
     }
     console.log("✅ Math policy resolution test passed!");

@@ -1,0 +1,9 @@
+{
+  "name": "study-source-core-workspace",
+  "private": true,
+  "scripts": {
+    "doctor": "npm run doctor --prefix skills/study-source-core",
+    "test": "npm test --prefix skills/study-source-core",
+    "certify": "npm run certify --prefix skills/study-source-core --"
+  }
+}

@@ -12,6 +12,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 - **AUDIT**: Performs AST, Markdown, link, and frontmatter structural inspections.
 - **UTILITY**: Helper modules for path resolution, transient cleanup, and asset management.
 - **TRANSIENT_TEST**: Comprehensive unit, regression, and adversarial test harnesses.
+- **MAINTENANCE & HEALTH / VERIFICATION**: Validates runtime dependencies, filesystem permissions, and MCP service availability.
 
 ---
 
@@ -59,76 +60,93 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 
 ---
 
-## 3. Test Suites & Verification Harnesses (9 Test Suites)
+## 3. Maintenance, Health & Verification Test Suites
 
-| Test Suite Script | Path | Runner | Purpose & Invariants Asserted | Invoker | Status |
+| Script / Command | Category | Runner | Purpose & Invariants Asserted | Invoker | Status |
 |---|---|---|---|---|---|
-| `test_adversarial_auditor.js` | `scripts/test_adversarial_auditor.js` | Node.js | 15-Point adversarial attack suite testing tamper detection, schema corruptions, and anti-leak rules. | `adversarial-apkg-reviewer` / CI | `FROZEN` |
-| `test_contracts.js` | `scripts/test_contracts.js` | Node.js | Master contract suite covering 111 end-to-end invariant checks across all pipeline artifacts. | CI Test Runner | `FROZEN` |
-| `test_final_audit_harness.js` | `scripts/test_final_audit_harness.js` | Node.js | Final audit harness verifying complete pipeline deliverable integrity and quality gates. | `bm-qa` / CI Test Runner | `FROZEN` |
-| `test_fresh_profile_simulation.js` | `scripts/test_fresh_profile_simulation.js` | Node.js | Simulates clean Anki profile import to prevent ID collisions and model conflicts. | CI Test Runner | `FROZEN` |
-| `test_l1_l7_proof_suite.js` | `scripts/test_l1_l7_proof_suite.js` | Node.js | Proof suite asserting anti-cheat and real Level 1 through Level 7 procedural compliance. | CI Test Runner | `FROZEN` |
-| `test_math_production_path.js` | `scripts/test_math_production_path.js` | Node.js | Master production path test asserting source -> evidence -> routing -> specialist -> render -> validation without hardcoded test questions. | CI Test Runner | `ACTIVE` |
-| `test_non_studylab_regression.js` | `scripts/test_non_studylab_regression.js` | Node.js | Regression suite for standard descriptive and non-procedural chapter runs. | CI Test Runner | `FROZEN` |
-| `test_orchestration.js` | `scripts/test_orchestration.js` | Node.js | Unit tests verifying adaptive orchestrator dispatch rules, gating, and concurrency limits. | CI Test Runner | `FROZEN` |
-| `test_phase40_canonical.js` | `scripts/test_phase40_canonical.js` | Node.js | Phase 40 canonical test suite asserting procedural execution across Math, Physics, Chem, Reasoning. | CI Test Runner | `FROZEN` |
-| `test_phase7_context_routing.js` | `scripts/test_phase7_context_routing.js` | Node.js | Phase 7 multi-tier test suite (20 tests) asserting context minimization, model routing, adaptive retry, state checkpointing, and resource limits. | CI Test Runner (`npm test`) | `ACTIVE` |
-| `test_regression.js` | `scripts/test_regression.js` | Node.js | High-level sanity regression runner for core pipeline components. | CI Test Runner | `FROZEN` |
+| `npm run doctor` | `MAINTENANCE & HEALTH` | npm / Node.js | Validates Node.js (>= 18), npm (>= 9), Git, dependency tree, workspace paths, permissions, and MCP readiness. | Developer / CI Runner | `ACTIVE` |
+| `scripts/test_mcp_server.js` | `VERIFICATION` | Node.js | Client verification test suite discovering and executing all 4 MCP server tools over stdio transport. | Developer / CI Runner | `ACTIVE` |
+| `scripts/test_adversarial_auditor.js` | `TRANSIENT_TEST` | Node.js | 15-Point adversarial attack suite testing tamper detection, schema corruptions, and anti-leak rules. | `adversarial-apkg-reviewer` / CI | `FROZEN` |
+| `scripts/test_contracts.js` | `TRANSIENT_TEST` | Node.js | Master contract suite covering 111 end-to-end invariant checks across all pipeline artifacts. | CI Test Runner | `FROZEN` |
+| `scripts/test_final_audit_harness.js` | `TRANSIENT_TEST` | Node.js | Final audit harness verifying complete pipeline deliverable integrity and quality gates. | `bm-qa` / CI Test Runner | `FROZEN` |
+| `scripts/test_fresh_profile_simulation.js` | `TRANSIENT_TEST` | Node.js | Simulates clean Anki profile import to prevent ID collisions and model conflicts. | CI Test Runner | `FROZEN` |
+| `scripts/test_l1_l7_proof_suite.js` | `TRANSIENT_TEST` | Node.js | Proof suite asserting anti-cheat and real Level 1 through Level 7 procedural compliance. | CI Test Runner | `FROZEN` |
+| `scripts/test_math_production_path.js` | `TRANSIENT_TEST` | Node.js | Master production path test asserting source -> evidence -> routing -> specialist -> render -> validation without hardcoded test questions. | CI Test Runner | `ACTIVE` |
+| `scripts/test_non_studylab_regression.js` | `TRANSIENT_TEST` | Node.js | Regression suite for standard descriptive and non-procedural chapter runs. | CI Test Runner | `FROZEN` |
+| `scripts/test_orchestration.js` | `TRANSIENT_TEST` | Node.js | Unit tests verifying adaptive orchestrator dispatch rules, gating, and concurrency limits. | CI Test Runner | `FROZEN` |
+| `scripts/test_phase40_canonical.js` | `TRANSIENT_TEST` | Node.js | Phase 40 canonical test suite asserting procedural execution across Math, Physics, Chem, Reasoning. | CI Test Runner | `FROZEN` |
+| `scripts/test_phase7_context_routing.js` | `TRANSIENT_TEST` | Node.js | Phase 7 multi-tier test suite (20 tests) asserting context minimization, model routing, adaptive retry, state checkpointing, and resource limits. | CI Test Runner (`npm test`) | `ACTIVE` |
+| `scripts/test_regression.js` | `TRANSIENT_TEST` | Node.js | High-level sanity regression runner for core pipeline components. | CI Test Runner | `FROZEN` |
 
 ---
 
 ## 4. Script Usage & CLI Reference
 
+> [!NOTE]
+> Commands below are shown from the workspace root. If your working directory is `skills/study-source-core`, commands simplify to `node scripts/<script_name>.js` or `npm test`.
+
+### Maintenance & Health Diagnostics
+```powershell
+# Run environment verification diagnostics (from skills/study-source-core)
+npm run doctor
+
+# Run environment diagnostics from workspace root
+npm --prefix skills/study-source-core run doctor
+
+# Verify Model Context Protocol (MCP) server
+node skills/study-source-core/scripts/test_mcp_server.js
+```
+
 ### Ingestion & Intake
 ```powershell
 # Extract structural outline from raw source PDF
-python .agents/skills/study-source-core/scripts/pdf_inventory.py --pdf "Sources/Maths_Ch1.pdf"
+python skills/study-source-core/scripts/pdf_inventory.py --pdf "Sources/Maths_Ch1.pdf"
 
 # Evaluate routing and generate subagent dispatch manifest
-node .agents/skills/study-source-core/scripts/routing_engine.js --evidence "scratch/evidence-pack.md"
+node skills/study-source-core/scripts/routing_engine.js --evidence "scratch/evidence-pack.md"
 ```
 
 ### Formatting & Syntax Validation
 ```powershell
 # Validate 3-column Basic/Cloze TSV formatting
-node .agents/skills/study-source-core/scripts/validate_tsv.js --file "Basic/Percentage_Basic.tsv"
+node skills/study-source-core/scripts/validate_tsv.js --file "Basic/Percentage_Basic.tsv"
 
 # Validate Obsidian note frontmatter and heading monotonicity
-node .agents/skills/study-source-core/scripts/note_contract_audit.js --file "Notes/Percentage_Notes.md"
+node skills/study-source-core/scripts/note_contract_audit.js --file "Notes/Percentage_Notes.md"
 
 # Validate Image Occlusion JSON manifest coordinates
-node .agents/skills/study-source-core/scripts/validate_image_occlusion.js --manifest "ImageOcclusion/Percentage_IO_Manifest.json"
+node skills/study-source-core/scripts/validate_image_occlusion.js --manifest "ImageOcclusion/Percentage_IO_Manifest.json"
 
 # Validate Marp slide presentation format and slide budget
-node .agents/skills/study-source-core/scripts/slide_deck_prompt_audit.js --file "SlideDecks/Percentage_Slides.md"
+node skills/study-source-core/scripts/slide_deck_prompt_audit.js --file "SlideDecks/Percentage_Slides.md"
 ```
 
 ### StudyLab Procedural Compilation & Verification
 ```powershell
 # Validate practice questions JSON
-node .agents/skills/study-source-core/scripts/validate_studylab_practice_questions.js --file "PracticeQuestions/PracticeQuestions.json"
+node skills/study-source-core/scripts/validate_studylab_practice_questions.js --file "PracticeQuestions/PracticeQuestions.json"
 
 # Validate procedural problem patterns JSON
-node .agents/skills/study-source-core/scripts/validate_studylab_procedural.js --file "Procedural/ProceduralPatterns.json"
+node skills/study-source-core/scripts/validate_studylab_procedural.js --file "Procedural/ProceduralPatterns.json"
 
 # Compile interactive StudyLab APKG binary
-node .agents/skills/study-source-core/scripts/export_studylab_procedural_anki.js --questions "PracticeQuestions/PracticeQuestions.json" --patterns "Procedural/ProceduralPatterns.json" --output "StudyLab/Math_Procedural.apkg"
+node skills/study-source-core/scripts/export_studylab_procedural_anki.js --questions "PracticeQuestions/PracticeQuestions.json" --patterns "Procedural/ProceduralPatterns.json" --output "StudyLab/Math_Procedural.apkg"
 
 # Deep validation of compiled procedural APKG
-node .agents/skills/study-source-core/scripts/validate_studylab_procedural_apkg.js --apkg "StudyLab/Math_Procedural.apkg" --manifest "StudyLab/Math_Procedural.manifest.json"
+node skills/study-source-core/scripts/validate_studylab_procedural_apkg.js --apkg "StudyLab/Math_Procedural.apkg" --manifest "StudyLab/Math_Procedural.manifest.json"
 
 # Full Level 1 through Level 7 verification
-node .agents/skills/study-source-core/scripts/validate_studylab_levels_1_7.js --chapter "Study Materials/Maths/Percentage"
+node skills/study-source-core/scripts/validate_studylab_levels_1_7.js --chapter "Study Materials/Maths/Percentage"
 ```
 
 ### Master Verification Harnesses
 ```powershell
 # Execute 111-contract invariant test suite
-node .agents/skills/study-source-core/scripts/test_contracts.js
+node skills/study-source-core/scripts/test_contracts.js
 
 # Execute 15-point adversarial attack test harness
-node .agents/skills/study-source-core/scripts/test_adversarial_auditor.js
+node skills/study-source-core/scripts/test_adversarial_auditor.js
 
 # Execute full regression test suite
-node .agents/skills/study-source-core/scripts/test_regression.js
+node skills/study-source-core/scripts/test_regression.js
 ```

@@ -29,17 +29,29 @@ Before contributing, you **must read** the following Tier 0 master architectural
 - **Node.js**: v18.0.0 or higher (v20+ recommended).
 - **npm**: v9.0.0 or higher.
 - **Git**: v2.30.0 or higher.
-- *(Optional)* Python 3.10+ for PDF text extraction utilities (`scripts/pdf_inventory.py`).
+- *(Optional)* Python 3.10+ for PDF text extraction utilities (`skills/study-source-core/scripts/pdf_inventory.py`).
 - *(Optional)* Anki Desktop for inspecting generated `.apkg` files locally.
 
-### Installation
-Clone the repository and install dependencies in the core skill directory:
+### Installation & Working Directory
+All dependencies, test suites, and script tools are housed in the project-level skill directory `skills/study-source-core`.
+
+You can install dependencies and verify the environment by navigating directly to that working directory:
+
 ```bash
-# Navigate to the core skill package
+# Navigate to the core skill package (canonical working directory)
 cd skills/study-source-core
 
 # Install exact locked dependencies
 npm ci
+
+# Run environment health check immediately after install
+npm run doctor
+```
+
+Alternatively, from the repository root, you can invoke npm with the `--prefix` flag:
+```bash
+npm --prefix skills/study-source-core ci
+npm --prefix skills/study-source-core run doctor
 ```
 
 ---
@@ -52,16 +64,22 @@ npm ci
    ```bash
    git checkout -b feature/phase1-semantic-ir-schema
    ```
-3. **Write or Update Tests First**:
-   Add test coverage for your planned changes in `scripts/tests/` or create a targeted runner in `scripts/`.
-4. **Implement Code or Contracts**:
+3. **Verify Environment Diagnostics**:
+   Ensure your environment is healthy and dependencies are current:
+   ```bash
+   cd skills/study-source-core
+   npm run doctor
+   ```
+4. **Write or Update Tests First**:
+   Add test coverage for your planned changes in `skills/study-source-core/scripts/` or add a targeted test script.
+5. **Implement Code or Contracts**:
    Maintain temporal labeling (`[CURRENT]` vs `[TARGET]`) and adhere to Single-Writer and Parent Self-Execution rules.
-5. **Run the Verification Suite**:
-   Ensure all 27 core test suites pass with zero regressions:
+6. **Run the Verification Suite**:
+   From `skills/study-source-core` (or using `npm --prefix skills/study-source-core test` from root), ensure all 27 core test suites pass with zero regressions:
    ```bash
    npm test
    ```
-6. **Submit PR with Architectural Rationale**:
+7. **Submit PR with Architectural Rationale**:
    Document changes against the corresponding Roadmap Phase or Gap ID.
 
 ---
@@ -83,7 +101,7 @@ Schemas under `skills/study-source-core/resources/*.json` define system data con
 1. Check [`docs/GOVERNANCE.md`](./docs/GOVERNANCE.md) for schema evolution rules (SemVer, backward compatibility).
 2. If the change is breaking (renaming/removing fields or tightening validation), propose an ADR in [`.agents/DECISIONS.md`](.agents/DECISIONS.md).
 3. Update the JSON Schema file.
-4. Update or add test fixtures in `resources/fixtures/`.
+4. Update or add test fixtures in `skills/study-source-core/resources/fixtures/`.
 5. Run contract tests:
    ```bash
    node scripts/test_contracts.js
@@ -119,9 +137,18 @@ Subagent prompts are located under `.agents/agents/*.md`.
 
 All contributions must pass the verification suite before merging.
 
+> [!NOTE]
+> All test commands must be run from the working directory `skills/study-source-core` (or from repository root using `npm --prefix skills/study-source-core ...`). Always execute `npm run doctor` first to confirm dependencies and directory permissions are intact.
+
 ### Running Core Tests
 ```bash
+# Set working directory to skill engine
 cd skills/study-source-core
+
+# Verify environment health first
+npm run doctor
+
+# Execute all 27 automated test suites
 npm test
 ```
 The test command runs all 27 standard verification test suites:
