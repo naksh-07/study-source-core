@@ -1348,9 +1348,21 @@ async function main() {
 
         const content = fs.readFileSync(qbFile, 'utf8');
 
-        // 17 Canonical Dimensions Checklist based on render_studylab_question_bank:
-        const requiredElements = [
-            '### Question',
+        // Lightweight human-facing Question Bank Checklist
+        const requiredLightweightElements = [
+            'artifact: "proceduralQuestionBank"',
+            '# Kinematics-1D — Procedural Question Bank',
+            '> [!info] Question Metadata',
+            '> - **Source Question ID**:',
+            '### Question'
+        ];
+
+        for (const el of requiredLightweightElements) {
+            assert(content.includes(el), `Questions.md must contain lightweight element: '${el}'`);
+        }
+
+        // Strict Anti-Leakage Checklist: Prohibited procedural elements
+        const prohibitedProceduralElements = [
             '### Method & Recognition',
             '- **Signal**:',
             '- **Expected Method**:',
@@ -1366,9 +1378,12 @@ async function main() {
             '### Verification'
         ];
 
-        for (const el of requiredElements) {
-            assert(content.includes(el), `Questions.md must contain mandatory dimension element: '${el}'`);
+        for (const el of prohibitedProceduralElements) {
+            assert(!content.includes(el), `Questions.md must NOT leak procedural element: '${el}'`);
         }
+
+        const val = validateQuestionBankMarkdown(content, qbFile);
+        assert.strictEqual(val.isValid, true, `Questions.md must pass validateQuestionBankMarkdown: ${val.errors ? val.errors.join(', ') : ''}`);
     });
 
     // =========================================================================

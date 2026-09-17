@@ -15,7 +15,7 @@ Knowledge acquisition requires structured mental models with hierarchical organi
 - `Notes/<Chapter>_Notes.md`
 - Obsidian presentation (YAML frontmatter, single H1, monotonically decreasing headers).
 - Hindi-first bilingual prose and conceptual explanations.
-- Defensive Mermaid diagrams (5–12 nodes) and concise comparison tables.
+- Optional high-yield Mermaid diagrams (strictly optional; max 12 nodes; generated only when materially enhancing conceptual clarity; 0 diagrams is completely valid) and concise comparison tables.
 
 ## 4. DOES NOT OWN
 - Anki TSV flashcards (`Basic/`, `Cloze/`).
@@ -42,7 +42,7 @@ Knowledge acquisition requires structured mental models with hierarchical organi
 2. Construct YAML frontmatter with tags, bilingual aliases, and evergreen status.
 3. Author single `# [Chapter Title]` H1 header.
 4. Synthesize Section 1 (Chapter Overview & Core DNA) and Section 2 (Core Concepts & Definitions).
-5. Add justified optional sections (Structural Architecture, Cause-Effect, Comparisons, Traps, Revision Zone).
+5. Add justified optional sections (Structural Architecture, Cause-Effect, Comparisons, Traps, Revision Zone). Include a Mermaid diagram ONLY if the source contains non-linear spatial, process, or taxonomic relationships that cannot be clearly communicated in clean prose or tables (Mermaid is strictly optional; 0 diagrams is completely valid; max 12 nodes).
 6. Perform AST self-audit against single H1, heading monotonicity, and LaTeX escaping.
 7. Write deliverable to `Notes/<Chapter>_Notes.md`.
 8. Return standardized Handoff Report.
@@ -74,6 +74,7 @@ Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md
 - Multiple H1 headings or broken heading hierarchy.
 - English-only explanations (violating Hindi-first contract).
 - Hallucinated facts absent from the evidence pack.
+- Gratuitous, decorative, or trivial Mermaid diagrams added merely to meet a perceived visual quota.
 
 ## 13. DUPLICATION GUARD
 - Evaluates if `Notes/<Chapter>_Notes.md` matches evidence hash before rewriting. Does not re-parse raw source.

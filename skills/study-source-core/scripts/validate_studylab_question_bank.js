@@ -293,39 +293,79 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
         }
     }
 
-    // 4. Section structure checks
-    if (!content.includes('### Question')) {
+    // 4. Anti-Leak Invariants: Strictly reject procedural leakage
+    if (/###\s*Progressive Hints/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Progressive Hints' found in '${filePath}'. Progressive hints must not be rendered in human-facing Questions.md.`);
+    }
+    if (/###\s*Solution/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Solution' found in '${filePath}'. Solutions must not be rendered in human-facing Questions.md.`);
+    }
+    if (/###\s*Verification/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Verification' found in '${filePath}'. Verification blocks must not be rendered in human-facing Questions.md.`);
+    }
+    if (/###\s*Method & Recognition/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Method & Recognition' found in '${filePath}'. Method & Recognition must not be rendered in human-facing Questions.md.`);
+    }
+    if (/###\s*Traps & Errors/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Traps & Errors' found in '${filePath}'. Traps & Errors must not be rendered in human-facing Questions.md.`);
+    }
+    if (/>\s*\[!tip\]-?\s*Tier\s*[123]/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Progressive hint callout (Tier 1/2/3) found in '${filePath}'. Progressive hints must not be rendered in human-facing Questions.md.`);
+    }
+    if (/\*\*Decision Points\*\*/i.test(content) || /###\s*Decision Points/i.test(content) || />\s*-\s*\*\*Decision Points\*\*/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] 'Decision Points' found in '${filePath}'. Decision points must not be rendered in human-facing Questions.md.`);
+    }
+    if (/\*\*Correct\s*(?:Option|Answer)\*\*/i.test(content) || />\s*-\s*\*\*(?:Correct\s*)?Answer\*\*/i.test(content) || /^\s*-\s*\*\*(?:Correct\s*)?Answer\*\*\s*:/mi.test(content) || /###\s*(?:Answer|Correct Answer)/i.test(content) || /\*\*(?:उत्तर|सही\s*विकल्प|सही\s*उत्तर)\*\*/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Correct answer reveal found in '${filePath}'. Answers must not be rendered in human-facing Questions.md.`);
+    }
+    if (/>\s*-\s*\*\*Trap\*\*/i.test(content) || />\s*-\s*\*\*Expected Method\*\*/i.test(content) || />\s*-\s*\*\*Recognition Signals\*\*/i.test(content) || />\s*-\s*\*\*Error Categories\*\*/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Internal procedural metadata callout found in '${filePath}'.`);
+    }
+
+    // 5. Validate required human-facing structure
+    // 5a. Check ### Question sections
+    const qMatches = content.match(/###\s+Question/g) || [];
+    if (qMatches.length === 0) {
         errors.push(`[MISSING_SECTION] Missing '### Question' section in '${filePath}'`);
-    }
-    if (!content.includes('### Method & Recognition')) {
-        errors.push(`[MISSING_SECTION] Missing '### Method & Recognition' section in '${filePath}'`);
-    }
-    if (!content.includes('### Traps & Errors')) {
-        errors.push(`[MISSING_SECTION] Missing '### Traps & Errors' section in '${filePath}'`);
-    }
-    if (!content.includes('### Progressive Hints')) {
-        errors.push(`[MISSING_SECTION] Missing '### Progressive Hints' section in '${filePath}'`);
-    }
-    if (!content.includes('### Solution')) {
-        errors.push(`[MISSING_SECTION] Missing '### Solution' section in '${filePath}'`);
-    }
-    if (!content.includes('### Verification')) {
-        errors.push(`[MISSING_SECTION] Missing '### Verification' section in '${filePath}'`);
+    } else if (qMatches.length !== h2Matches.length) {
+        errors.push(`[QUESTION_COUNT_MISMATCH] Expected ${h2Matches.length} '### Question' sections matching H2 headers, found ${qMatches.length} in '${filePath}'`);
     }
 
-    // Check 3 hint tiers callouts
-    const t1Count = (content.match(/>\s*\[!tip\]-\s*Tier 1/gi) || []).length;
-    const t2Count = (content.match(/>\s*\[!tip\]-\s*Tier 2/gi) || []).length;
-    const t3Count = (content.match(/>\s*\[!tip\]-\s*Tier 3/gi) || []).length;
+    // 5b. Check Source Question ID metadata callouts
+    const sqiMatches = content.match(/>\s*-\s*\*\*Source Question ID\*\*:\s*`?[^\n`]+`?/g) || [];
+    if (sqiMatches.length === 0) {
+        errors.push(`[MISSING_METADATA] Missing '> - **Source Question ID**:' metadata callout in '${filePath}'`);
+    } else if (sqiMatches.length !== h2Matches.length) {
+        errors.push(`[METADATA_COUNT_MISMATCH] Expected ${h2Matches.length} 'Source Question ID' metadata callouts, found ${sqiMatches.length} in '${filePath}'`);
+    }
 
-    if (t1Count !== h2Matches.length) {
-        errors.push(`[MISSING_HINTS] Expected ${h2Matches.length} Tier 1 hints, found ${t1Count} in '${filePath}'`);
-    }
-    if (t2Count !== h2Matches.length) {
-        errors.push(`[MISSING_HINTS] Expected ${h2Matches.length} Tier 2 hints, found ${t2Count} in '${filePath}'`);
-    }
-    if (t3Count !== h2Matches.length) {
-        errors.push(`[MISSING_HINTS] Expected ${h2Matches.length} Tier 3 hints, found ${t3Count} in '${filePath}'`);
+    // 5c. Validate each question block
+    const questionBlocks = content.split(/^##\s+/m).slice(1);
+    for (const block of questionBlocks) {
+        const heading = block.split('\n')[0].trim();
+
+        // Verbatim question text
+        const qPos = block.indexOf('### Question');
+        if (qPos === -1) {
+            errors.push(`[MISSING_QUESTION_STATEMENT] Question block '## ${heading}' missing '### Question' in '${filePath}'`);
+        } else {
+            const afterQ = block.substring(qPos + '### Question'.length);
+            const sepMatch = afterQ.match(/(?:\r?\n\s*-\s*\([A-Z0-9]+\)|\r?\n\s*---|^\s*---)/);
+            const sepPos = sepMatch ? sepMatch.index : -1;
+            const qStatement = (sepPos !== -1 ? afterQ.substring(0, sepPos) : afterQ).trim();
+            if (qStatement.length === 0) {
+                errors.push(`[EMPTY_QUESTION_TEXT] Question block '## ${heading}' has empty question statement in '${filePath}'`);
+            }
+        }
+
+        // Authentic MCQ options check if question type is MCQ
+        const isMcq = />\s*-\s*\*\*Question Type\*\*:\s*mcq/i.test(block);
+        const optionLines = block.match(/^\s*-\s*\([A-Z0-9]+\)\s+.+$/gm) || [];
+        if (isMcq) {
+            if (optionLines.length < 4) {
+                errors.push(`[INSUFFICIENT_MCQ_OPTIONS] MCQ in '## ${heading}' must have at least 4 authentic options (A), (B), (C), (D), found ${optionLines.length} in '${filePath}'`);
+            }
+        }
     }
 
     return {

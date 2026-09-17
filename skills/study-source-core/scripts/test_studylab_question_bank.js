@@ -204,7 +204,7 @@ const sampleValidCanonical = {
     ]
 };
 
-runTest('Renderer deterministically outputs valid Markdown with all required sections', () => {
+runTest('Renderer deterministically outputs valid Markdown with all lightweight sections', () => {
     const md1 = renderQuestionBankToMarkdown(sampleValidCanonical);
     const md2 = renderQuestionBankToMarkdown(sampleValidCanonical);
     assert.strictEqual(md1, md2, 'Rendering must be 100% deterministic');
@@ -214,20 +214,72 @@ runTest('Renderer deterministically outputs valid Markdown with all required sec
     assert(md1.includes('## math-q-001'), 'Must contain H2 for math-q-001');
     assert(md1.includes('## math-q-002'), 'Must contain H2 for math-q-002');
     assert(md1.includes('### Question'), 'Must contain Question section');
-    assert(md1.includes('### Method & Recognition'), 'Must contain Method & Recognition section');
-    assert(md1.includes('### Traps & Errors'), 'Must contain Traps & Errors section');
-    assert(md1.includes('### Progressive Hints'), 'Must contain Progressive Hints section');
-    assert(md1.includes('> [!tip]- Tier 1: Conceptual Approach'), 'Must contain collapsible Tier 1 hint');
-    assert(md1.includes('> [!tip]- Tier 2: Strategy & Setup'), 'Must contain collapsible Tier 2 hint');
-    assert(md1.includes('> [!tip]- Tier 3: Step-by-Step Method'), 'Must contain collapsible Tier 3 hint');
-    assert(md1.includes('### Solution'), 'Must contain Solution section');
-    assert(md1.includes('### Verification'), 'Must contain Verification section');
+    assert(md1.includes('> - **Source Question ID**:'), 'Must contain Source Question ID callout');
+    assert(md1.includes('- (A) 64'), 'Must contain authentic MCQ option (A)');
+    assert(md1.includes('- (B) 56'), 'Must contain authentic MCQ option (B)');
+    assert(md1.includes('- (C) 60'), 'Must contain authentic MCQ option (C)');
+    assert(md1.includes('- (D) 74'), 'Must contain authentic MCQ option (D)');
+
+    // Assert absence of procedural elements in human-facing Questions.md
+    assert(!md1.includes('### Method & Recognition'), 'Must NOT contain Method & Recognition section');
+    assert(!md1.includes('### Traps & Errors'), 'Must NOT contain Traps & Errors section');
+    assert(!md1.includes('### Progressive Hints'), 'Must NOT contain Progressive Hints section');
+    assert(!md1.includes('> [!tip]- Tier 1'), 'Must NOT contain Tier 1 hint callout');
+    assert(!md1.includes('> [!tip]- Tier 2'), 'Must NOT contain Tier 2 hint callout');
+    assert(!md1.includes('> [!tip]- Tier 3'), 'Must NOT contain Tier 3 hint callout');
+    assert(!md1.includes('### Solution'), 'Must NOT contain Solution section');
+    assert(!md1.includes('### Verification'), 'Must NOT contain Verification section');
+});
+
+runTest('Renderer preserves decimal numbers in MCQ options without prefix stripping', () => {
+    const data = {
+        subject: 'Mathematics',
+        chapter: 'Decimals',
+        questions: [{
+            id: 'q-dec-01',
+            source_question_id: 'sqi.math.dec.01',
+            provenance: { origin: 'authentic_pyq', source: 'Exam 2024' },
+            question_type: 'mcq',
+            difficulty: 2.5,
+            question: 'What is the value of the measurement?',
+            options: ['42.5', '3.14', '0.25', '1.5']
+        }]
+    };
+    const md = renderQuestionBankToMarkdown(data);
+    assert(md.includes('- (A) 42.5'), 'Option 42.5 must be preserved verbatim');
+    assert(md.includes('- (B) 3.14'), 'Option 3.14 must be preserved verbatim');
+    assert(md.includes('- (C) 0.25'), 'Option 0.25 must be preserved verbatim');
+    assert(md.includes('- (D) 1.5'), 'Option 1.5 must be preserved verbatim');
+    assert(!md.includes('- (A) 5'), 'Decimal integer prefix must NOT be stripped');
+    assert(!md.includes('- (B) 14'), 'Decimal integer prefix must NOT be stripped');
+});
+
+runTest('Renderer normalizes spaced dash option prefixes cleanly', () => {
+    const data = {
+        subject: 'Mathematics',
+        chapter: 'SpacedDash',
+        questions: [{
+            id: 'q-dash-01',
+            source_question_id: 'sqi.math.dash.01',
+            provenance: { origin: 'authentic_pyq', source: 'Exam 2024' },
+            question_type: 'mcq',
+            difficulty: 2.0,
+            question: 'Choose the correct parameter:',
+            options: ['A - Alpha value', 'B - Beta value', 'C - Gamma value', 'D - Delta value']
+        }]
+    };
+    const md = renderQuestionBankToMarkdown(data);
+    assert(md.includes('- (A) Alpha value'), 'Spaced dash option A - Alpha value must render cleanly');
+    assert(md.includes('- (B) Beta value'), 'Spaced dash option B - Beta value must render cleanly');
+    assert(md.includes('- (C) Gamma value'), 'Spaced dash option C - Gamma value must render cleanly');
+    assert(md.includes('- (D) Delta value'), 'Spaced dash option D - Delta value must render cleanly');
+    assert(!md.includes('- (B) B - Beta value'), 'Duplicate prefix must NOT be retained');
 });
 
 // ----------------------------------------------------
-// 4. VALIDATOR HAPPY PATH
+// 4. VALIDATOR HAPPY PATH & ANTI-LEAKAGE
 // ----------------------------------------------------
-console.log('\n--- 4. Validator Happy Path ---');
+console.log('\n--- 4. Validator Happy Path & Anti-Leakage ---');
 
 runTest('Validator passes canonical in-memory structure with 0 errors', () => {
     const res = validateQuestionBankContent(sampleValidCanonical);
@@ -240,6 +292,40 @@ runTest('Validator passes rendered markdown string with 0 errors', () => {
     const res = validateQuestionBankMarkdown(md, 'test_output.md');
     assert.strictEqual(res.isValid, true, `Expected valid markdown, got errors: ${res.errors.join(', ')}`);
     assert.strictEqual(res.errors.length, 0);
+});
+
+runTest('Validator rejects markdown containing procedural leakage (hints, solutions, verifications, traps, answers)', () => {
+    const md = renderQuestionBankToMarkdown(sampleValidCanonical);
+
+    // 1. Leak hints
+    const leakHints = md + '\n### Progressive Hints\n> [!tip]- Tier 1\nHint text';
+    const resHints = validateQuestionBankMarkdown(leakHints, 'leak_hints.md');
+    assert.strictEqual(resHints.isValid, false);
+    assert(resHints.errors.some(e => e.includes('[PROCEDURAL_LEAKAGE]')), 'Should detect leakage of Progressive Hints');
+
+    // 2. Leak solution
+    const leakSol = md + '\n### Solution\nStep 1: compute value';
+    const resSol = validateQuestionBankMarkdown(leakSol, 'leak_sol.md');
+    assert.strictEqual(resSol.isValid, false);
+    assert(resSol.errors.some(e => e.includes('[PROCEDURAL_LEAKAGE]')), 'Should detect leakage of Solution');
+
+    // 3. Leak verification
+    const leakVer = md + '\n### Verification\nVerification check';
+    const resVer = validateQuestionBankMarkdown(leakVer, 'leak_ver.md');
+    assert.strictEqual(resVer.isValid, false);
+    assert(resVer.errors.some(e => e.includes('[PROCEDURAL_LEAKAGE]')), 'Should detect leakage of Verification');
+
+    // 4. Leak method & traps
+    const leakMethod = md + '\n### Method & Recognition\nSignals';
+    const resMethod = validateQuestionBankMarkdown(leakMethod, 'leak_method.md');
+    assert.strictEqual(resMethod.isValid, false);
+    assert(resMethod.errors.some(e => e.includes('[PROCEDURAL_LEAKAGE]')), 'Should detect leakage of Method & Recognition');
+
+    // 5. Leak answer reveal
+    const leakAns = md + '\n- **Correct Option**: (A)';
+    const resAns = validateQuestionBankMarkdown(leakAns, 'leak_ans.md');
+    assert.strictEqual(resAns.isValid, false);
+    assert(resAns.errors.some(e => e.includes('[PROCEDURAL_LEAKAGE]')), 'Should detect leakage of Correct Answer');
 });
 
 // ----------------------------------------------------
@@ -402,6 +488,38 @@ runTest('Validator rejects markdown with no question blocks', () => {
     const res = validateQuestionBankMarkdown(noQuestionsMd, 'no_questions.md');
     assert.strictEqual(res.isValid, false);
     assert(res.errors.some(e => e.includes('[EMPTY_QUESTION_BANK]')), 'Should detect EMPTY_QUESTION_BANK when no H2 questions exist');
+});
+
+runTest('Validator rejects empty question block preceding block separator ---', () => {
+    const emptyQMd = [
+        '---',
+        'subject: Math',
+        'chapter: Test',
+        'artifact: proceduralQuestionBank',
+        '---',
+        '# Test — Procedural Question Bank',
+        '',
+        '## q1 — P1',
+        '> [!info] Question Metadata',
+        '> - **Source Question ID**: `s1`',
+        '### Question',
+        '',
+        '---',
+        '',
+        '## q2 — P2',
+        '> [!info] Question Metadata',
+        '> - **Source Question ID**: `s2`',
+        '### Question',
+        'Valid question statement.',
+        '',
+        '- (A) Option 1',
+        '- (B) Option 2',
+        '- (C) Option 3',
+        '- (D) Option 4'
+    ].join('\n');
+    const res = validateQuestionBankMarkdown(emptyQMd, 'empty_q_sep.md');
+    assert.strictEqual(res.isValid, false, 'Should fail validation on empty question statement');
+    assert(res.errors.some(e => e.includes('[EMPTY_QUESTION_TEXT]')), 'Should record [EMPTY_QUESTION_TEXT] error');
 });
 
 console.log('\n====================================================');

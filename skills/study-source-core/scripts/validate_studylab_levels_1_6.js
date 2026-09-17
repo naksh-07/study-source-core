@@ -704,8 +704,13 @@ function validateLevel7PracticeDepth(manifestData, payloadObjects = [], sourceDa
         }
 
         // 4b. Source-Question Inventory Lineage Reconciliation
-        if (sourceData && Array.isArray(sourceData.eligible_source_questions)) {
-            const expectedCount = sourceData.eligible_source_questions.length;
+        const eligibleQuestions = sourceData && (
+            (sourceData.source_question_inventory && Array.isArray(sourceData.source_question_inventory.questions) && sourceData.source_question_inventory.questions) ||
+            (Array.isArray(sourceData.eligible_source_questions) && sourceData.eligible_source_questions) ||
+            (Array.isArray(sourceData.source_problems) && sourceData.source_problems)
+        );
+        if (eligibleQuestions) {
+            const expectedCount = eligibleQuestions.length;
             if (stats.source_question_count < expectedCount) {
                  errors.push(`[Source Lineage Dropped] Source data identified ${expectedCount} eligible distinct questions, but APKG only mapped ${stats.source_question_count}. Source question collapse is forbidden.`);
             }

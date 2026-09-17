@@ -103,9 +103,10 @@ function extractSectionItemIds(sectionKey, sectionContent) {
             ids.push(m[2].trim());
         }
     } else if (sectionKey === 'PROBLEMS') {
-        const probMatches = sectionContent.matchAll(/###\s*Source Problem\s*\d*\s*\(([^)]+)\)/g);
+        const probMatches = sectionContent.matchAll(/###\s*(?:Source\s+Problem|Problem)\s*[:\d]*\s*(?:\(([^)]+)\)|:\s*([^\n]+))/gi);
         for (const m of probMatches) {
-            ids.push(m[1].trim());
+            const id = (m[1] || m[2] || '').trim();
+            if (id) ids.push(id);
         }
     } else {
         ids.push(`section:${sectionKey.toLowerCase()}`);

@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudyLabSourceQuestionInventory",
+  "description": "Canonical schema for the authoritative Source Question Inventory representing extracted authentic source questions.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "inventory_id",
+    "subject",
+    "chapter",
+    "total_extracted",
+    "valid_questions_count",
+    "removed_count",
+    "questions",
+    "removals"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "inventory_id": {
+      "type": "string",
+      "pattern": "^sqi\\.[a-z0-9_-]+\\.[a-z0-9_-]+\\.[a-f0-9]+$"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chapter": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domain": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_hash": {
+      "type": "string"
+    },
+    "total_extracted": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "valid_questions_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "removed_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SourceQuestionItem"
+      }
+    },
+    "removals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/RemovalRecord"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "definitions": {
+    "SourceQuestionItem": {
+      "type": "object",
+      "required": [
+        "source_question_id",
+        "question_text",
+        "question_type",
+        "provenance"
+      ],
+      "properties": {
+        "source_question_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question_number": {
+          "type": ["string", "integer", "null"]
+        },
+        "question_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question_type": {
+          "type": "string",
+          "enum": ["mcq", "numerical", "structured", "stepwise", "reference_only", "unknown"]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "correct_answer": {
+          "type": ["string", "number", "null"]
+        },
+        "difficulty": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 5.0
+        },
+        "pattern_ref": {
+          "type": ["string", "null"]
+        },
+        "provenance": {
+          "type": "object",
+          "required": ["source"],
+          "properties": {
+            "source": { "type": "string" },
+            "exam": { "type": ["string", "null"] },
+            "year": { "type": ["integer", "string", "null"] },
+            "shift": { "type": ["string", "null"] },
+            "page": { "type": ["integer", "null"] },
+            "origin": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "solution_steps": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "raw_fingerprint": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "RemovalRecord": {
+      "type": "object",
+      "required": ["item_id", "reason", "timestamp"],
+      "properties": {
+        "item_id": { "type": "string" },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "EXACT_TRUE_DUPLICATE",
+            "EMPTY_QUESTION_TEXT",
+            "UNPARSEABLE_CORRUPT_EXTRACTION"
+          ]
+        },
+        "details": { "type": "string" },
+        "duplicate_of": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

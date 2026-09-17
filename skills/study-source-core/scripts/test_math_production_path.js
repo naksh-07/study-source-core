@@ -466,11 +466,28 @@ async function main() {
         assert(deliveredContent.includes('math-q-004'), 'math-q-004 must exist');
         assert(deliveredContent.includes('math-q-005'), 'math-q-005 must exist');
 
-        // Verification callouts and Progressive hints
-        assert(deliveredContent.includes('> [!tip]- Tier 1: Conceptual Approach'), 'Tier 1 hint callout must exist');
-        assert(deliveredContent.includes('> [!tip]- Tier 2: Strategy & Setup'), 'Tier 2 hint callout must exist');
-        assert(deliveredContent.includes('> [!tip]- Tier 3: Step-by-Step Method'), 'Tier 3 hint callout must exist');
-        assert(deliveredContent.includes('### Verification'), 'Verification section must exist');
+        // Lightweight contract assertions on Questions.md
+        assert(deliveredContent.includes('> - **Source Question ID**:'), 'Source Question ID callout must exist');
+        assert(deliveredContent.includes('- (A)'), 'Authentic MCQ option (A) must exist');
+        assert(deliveredContent.includes('### Question'), 'Question section must exist');
+
+        // Anti-leak assertions on human-facing Questions.md: NO hints, solutions, verification, or traps
+        assert(!deliveredContent.includes('> [!tip]- Tier 1'), 'Tier 1 hint callout must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('> [!tip]- Tier 2'), 'Tier 2 hint callout must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('> [!tip]- Tier 3'), 'Tier 3 hint callout must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('### Verification'), 'Verification section must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('### Progressive Hints'), 'Progressive Hints section must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('### Solution'), 'Solution section must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('### Method & Recognition'), 'Method & Recognition section must NOT exist in Questions.md');
+        assert(!deliveredContent.includes('### Traps & Errors'), 'Traps & Errors section must NOT exist in Questions.md');
+
+        // Ensure internal procedural representation retains hints, solution DAG, and verification
+        const canonicalInternal = authorMathProceduralContent(FIXTURE_PATH);
+        assert(canonicalInternal.questions[0].hints.tier1_conceptual, 'Internal procedural representation retains Tier 1 hint');
+        assert(canonicalInternal.questions[0].hints.tier2_strategic, 'Internal procedural representation retains Tier 2 hint');
+        assert(canonicalInternal.questions[0].hints.tier3_next_step, 'Internal procedural representation retains Tier 3 hint');
+        assert(canonicalInternal.questions[0].solution, 'Internal procedural representation retains Solution');
+        assert(canonicalInternal.questions[0].verification, 'Internal procedural representation retains Verification');
     });
 
     // =========================================================================

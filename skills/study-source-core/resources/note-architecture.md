@@ -28,9 +28,14 @@ The following sections are **strictly optional** and MUST be omitted if the sour
 - **`## 5. Classifications & Comparative Analysis`**: Omit if source has no paired entities or distinct taxonomic categories.
 - **`## 6. Exceptions, Boundary Conditions & Traps`**: Omit if source has no explicit boundary conditions, rules exceptions, or domain traps. (Do NOT fabricate exceptions).
 - **`## 7. 5-Minute Quick Revision Zone`**: Omit or condense for very short definitional sources.
+- **Mermaid Diagrams**: Strictly optional across all sections. Only include a Mermaid diagram when it materially enhances conceptual understanding of non-trivial spatial arrangements, multi-step mechanisms, or complex decision pathways directly grounded in source evidence. Notes with 0 diagrams are completely valid, fully compliant, and preferred over artificial visual clutter.
 
 ### Anti-Slop Rule:
 - **NEVER** invent artificial exceptions, synthetic mechanisms, or decorative comparison tables solely to fill out the 7-section skeleton.
+- **Mermaid Diagrams Strictly Optional**: Mermaid diagrams are strictly optional. Never author decorative, trivial, or quota-driven Mermaid diagrams. A Knowledge Note with 0 diagrams is completely valid and fully compliant.
+- **Decorative Diagrams Prohibited**: Decorative or redundant diagrams added merely to satisfy a perceived visual quota are strictly prohibited.
+- **Material Clarity Standard**: Only include a Mermaid diagram when it materially enhances conceptual understanding of non-trivial spatial arrangements, multi-step mechanisms, or complex decision pathways directly grounded in source evidence.
+- **No Minimum Node Quota**: There is no minimum node quota (maximum 12 nodes per diagram, defensive syntax without unquoted parentheses).
 - Subject Skills remain authoritative for customizing section names, ordering, and domain-native nomenclature.
 
 ---

@@ -2,10 +2,12 @@
  * study-source-core StudyLab Question Bank Markdown Renderer (`render_studylab_question_bank.js`)
  * 
  * Deterministically renders canonical StudyLab procedural question representations into
- * beautiful, structured Obsidian Markdown question banks at:
+ * clean, lightweight, spoiler-free human-facing Obsidian Markdown question banks at:
  * Study Materials/[Subject]/[Chapter]/Questions/[Chapter]_Questions.md
  * 
- * Preserves all 17 canonical semantic fields without inventing, altering, or omitting content.
+ * Preserves 100% source-question cardinality and stable Source Question ID (SQI) traceability,
+ * while isolating internal procedural intelligence (solution DAGs, 3-tier hints, verification,
+ * traps, error codes) within the internal canonical JSON AST (Optional/<Chapter>_PracticeQuestions.json).
  */
 
 const fs = require('fs');
@@ -19,15 +21,23 @@ const { getCanonicalArtifactPaths, getVaultRoot } = require('./path_resolver');
  * @param {Object} [patternMap={}] Pattern reference lookup
  * @returns {Object} Normalized question item
  */
-function normalizeQuestionItem(q, patternMap = {}) {
+function normalizeQuestionItem(q, patternMap = {}, index = 0) {
     const pattern = (q.pattern_id && patternMap[q.pattern_id]) ? patternMap[q.pattern_id] : {};
 
     // 1. Question ID
     const id = q.id || q.question_id || 'unknown-q';
 
+    // Source Question ID & Question Number
+    const source_question_id = q.source_question_id || q.source_id || q.id || '';
+    const question_number = (q.question_number !== undefined && q.question_number !== null && q.question_number !== '')
+        ? q.question_number
+        : ((q.provenance && q.provenance.question_number !== undefined && q.provenance.question_number !== null && q.provenance.question_number !== '')
+            ? q.provenance.question_number
+            : (index !== undefined && index !== null ? (index + 1) : ''));
+
     // 2. Pattern ID
     const pattern_id = q.pattern_id || q.schema_id || pattern.id || 'unknown-pattern';
-    const patternTitle = pattern.name || pattern.title || pattern_id;
+    const patternTitle = q.patternTitle || q.pattern_title || pattern.name || pattern.title || pattern_id;
 
     // 3. Provenance
     let provenance = q.provenance;
@@ -40,6 +50,10 @@ function normalizeQuestionItem(q, patternMap = {}) {
     } else if (!provenance.origin) {
         provenance.origin = q.origin_type ? q.origin_type.toLowerCase() : (q.origin || 'authentic_pyq');
     }
+    if (q.exam && !provenance.exam) provenance.exam = q.exam;
+    if (q.year && !provenance.year) provenance.year = q.year;
+    if (q.shift && !provenance.shift) provenance.shift = q.shift;
+
     // Normalize origin strings
     const validOrigins = ['authentic_pyq', 'source_derived', 'curated_source', 'derived_variant', 'synthetic_schema'];
     if (!validOrigins.includes(provenance.origin.toLowerCase())) {
@@ -160,6 +174,8 @@ function normalizeQuestionItem(q, patternMap = {}) {
 
     return {
         id,
+        source_question_id,
+        question_number,
         pattern_id,
         patternTitle,
         provenance,
@@ -203,7 +219,7 @@ function renderQuestionBankToMarkdown(data) {
         }
     }
 
-    const questions = rawQuestions.map(q => normalizeQuestionItem(q, patternMap));
+    const questions = rawQuestions.map((q, idx) => normalizeQuestionItem(q, patternMap, idx));
 
     // 1. YAML Frontmatter
     const frontmatter = [
@@ -241,16 +257,34 @@ function renderQuestionBankToMarkdown(data) {
         block.push(`## ${q.id} — ${q.patternTitle}`);
 
         // Question Metadata Callout
-        const provenanceDetails = q.provenance.source ? ` (${q.provenance.source})` : '';
-        const prereqList = q.prerequisites.join(', ');
-        block.push([
-            '> [!info] Question Metadata',
-            `> - **Pattern ID**: \`${q.pattern_id}\``,
-            `> - **Provenance**: \`${q.provenance.origin}\`${provenanceDetails}`,
-            `> - **Question Type**: ${q.question_type}`,
-            `> - **Difficulty**: ${q.difficulty}`,
-            `> - **Prerequisites**: ${prereqList}`
-        ].join('\n'));
+        const metaLines = ['> [!info] Question Metadata'];
+        if (q.source_question_id) {
+            metaLines.push(`> - **Source Question ID**: \`${q.source_question_id}\``);
+        }
+        if (q.question_number) {
+            metaLines.push(`> - **Question Number / Reference**: ${q.question_number}`);
+        }
+        const exam = (q.provenance && q.provenance.exam) || q.exam;
+        const year = (q.provenance && q.provenance.year) || q.year;
+        const shift = (q.provenance && q.provenance.shift) || q.shift;
+        if (exam) {
+            metaLines.push(`> - **Exam**: ${exam}`);
+        }
+        if (year) {
+            metaLines.push(`> - **Year**: ${year}`);
+        }
+        if (shift) {
+            metaLines.push(`> - **Shift**: ${shift}`);
+        }
+        metaLines.push(`> - **Pattern ID**: \`${q.pattern_id}\``);
+        if (q.patternTitle && q.patternTitle !== q.pattern_id) {
+            metaLines.push(`> - **Topic / Pattern**: ${q.patternTitle}`);
+        }
+        const provenanceDetails = (q.provenance && q.provenance.source) ? ` (${q.provenance.source})` : '';
+        metaLines.push(`> - **Provenance**: \`${q.provenance.origin}\`${provenanceDetails}`);
+        metaLines.push(`> - **Question Type**: ${q.question_type}`);
+        metaLines.push(`> - **Difficulty**: ${q.difficulty}`);
+        block.push(metaLines.join('\n'));
 
         // Question Statement
         block.push('### Question');
@@ -260,50 +294,14 @@ function renderQuestionBankToMarkdown(data) {
         if (q.options && q.options.length > 0) {
             const optionLines = q.options.map((opt, idx) => {
                 const label = String.fromCharCode(65 + idx);
-                // Avoid double prefixing if option string already starts with (A) or A.
-                const cleanOpt = opt.replace(/^\(?[A-D]\)?[\s.:-]?\s*/i, '');
+                // Avoid double prefixing if option string already starts with (A), A., (E), etc.
+                const cleanOpt = (typeof opt === 'string' && /^(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+\s*[\.\):-](?!\d))\s*/.test(opt))
+                    ? opt.replace(/^\(?[A-Za-z0-9]+\)?\s*[\s.:-]?\s*/, '')
+                    : opt;
                 return `- (${label}) ${cleanOpt}`;
             });
             block.push(optionLines.join('\n'));
         }
-
-        // Method & Recognition
-        block.push('### Method & Recognition');
-        const sigList = q.recognition_signals.map(s => `- **Signal**: ${s}`).join('\n');
-        block.push(sigList);
-        block.push(`- **Expected Method**: ${q.expected_method}`);
-        const dpList = q.decision_points.map(d => `- ${d}`).join('\n');
-        block.push(`- **Decision Points**:\n${dpList}`);
-
-        // Traps & Errors
-        block.push('### Traps & Errors');
-        const trapText = Array.isArray(q.trap) ? q.trap.join('; ') : q.trap;
-        const errList = q.error_category.map(e => `\`${e}\``).join(', ');
-        block.push(`- **Trap**: ${trapText}`);
-        block.push(`- **Error Categories**: ${errList}`);
-
-        // Progressive Hints
-        block.push('### Progressive Hints');
-        block.push([
-            '> [!tip]- Tier 1: Conceptual Approach',
-            `> ${q.hints.tier1_conceptual.trim()}`
-        ].join('\n'));
-        block.push([
-            '> [!tip]- Tier 2: Strategy & Setup',
-            `> ${q.hints.tier2_strategic.trim()}`
-        ].join('\n'));
-        block.push([
-            '> [!tip]- Tier 3: Step-by-Step Method',
-            `> ${q.hints.tier3_next_step.trim()}`
-        ].join('\n'));
-
-        // Solution
-        block.push('### Solution');
-        block.push(q.solution.trim());
-
-        // Verification
-        block.push('### Verification');
-        block.push(q.verification.trim());
 
         questionBlocks.push(block.join('\n\n'));
     }
@@ -349,7 +347,7 @@ function compileCanonicalQuestionBank(practiceQuestions, problemPatterns = null,
         if (p && p.id) patternMap[p.id] = p;
     }
 
-    const questions = rawQuestions.map(q => normalizeQuestionItem(q, patternMap));
+    const questions = rawQuestions.map((q, idx) => normalizeQuestionItem(q, patternMap, idx));
 
     return {
         schema_version: '1.0.0',

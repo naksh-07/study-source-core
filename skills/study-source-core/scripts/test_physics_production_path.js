@@ -619,14 +619,23 @@ async function main() {
             assert(mdContent.includes(qTag), 'Must contain question ' + qTag);
         }
 
-        // Verify 3-tier hints callouts (5 questions * 3 = 15 hint callouts)
-        const t1Calls = (mdContent.match(/>\s*\[!tip\]-\s*Tier 1/gi) || []).length;
-        const t2Calls = (mdContent.match(/>\s*\[!tip\]-\s*Tier 2/gi) || []).length;
-        const t3Calls = (mdContent.match(/>\s*\[!tip\]-\s*Tier 3/gi) || []).length;
+        // Verify lightweight contract and anti-leakage invariants on Questions.md
+        assert(mdContent.includes('> - **Source Question ID**:'), 'Must contain Source Question ID callouts');
+        assert(mdContent.includes('### Question'), 'Must contain Question headings');
+        assert(mdContent.includes('- (A)'), 'Must contain authentic MCQ options');
 
-        assert.strictEqual(t1Calls, 5, 'Must have exactly 5 Tier 1 callouts');
-        assert.strictEqual(t2Calls, 5, 'Must have exactly 5 Tier 2 callouts');
-        assert.strictEqual(t3Calls, 5, 'Must have exactly 5 Tier 3 callouts');
+        const t1Calls = (mdContent.match(/>\s*\[!tip\]-?\s*Tier 1/gi) || []).length;
+        const t2Calls = (mdContent.match(/>\s*\[!tip\]-?\s*Tier 2/gi) || []).length;
+        const t3Calls = (mdContent.match(/>\s*\[!tip\]-?\s*Tier 3/gi) || []).length;
+
+        assert.strictEqual(t1Calls, 0, 'Questions.md must have 0 Tier 1 hint callouts under lightweight contract');
+        assert.strictEqual(t2Calls, 0, 'Questions.md must have 0 Tier 2 hint callouts under lightweight contract');
+        assert.strictEqual(t3Calls, 0, 'Questions.md must have 0 Tier 3 hint callouts under lightweight contract');
+        assert(!mdContent.includes('### Progressive Hints'), 'Questions.md must NOT contain Progressive Hints');
+        assert(!mdContent.includes('### Solution'), 'Questions.md must NOT contain Solution');
+        assert(!mdContent.includes('### Verification'), 'Questions.md must NOT contain Verification');
+        assert(!mdContent.includes('### Method & Recognition'), 'Questions.md must NOT contain Method & Recognition');
+        assert(!mdContent.includes('### Traps & Errors'), 'Questions.md must NOT contain Traps & Errors');
     });
 
     // =========================================================================

@@ -183,8 +183,7 @@
         "artifactKey": "qaReport",
         "dependencies": [
             "task-core-notes",
-            "task-export-anki",
-            "task-export-studylab-anki"
+            "task-export-anki"
         ],
         "output_dir": "Audit",
         "file_pattern": "QA_Report.md",

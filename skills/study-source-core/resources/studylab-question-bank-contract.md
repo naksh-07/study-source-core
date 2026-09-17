@@ -3,15 +3,25 @@
 
 ## 1. Core Architecture & Scope
 
-StudySourceCore decouples semantic procedural problem synthesis from packaging/delivery mechanisms. StudyLab semantic content remains the single authoritative source of truth. The Markdown Question Bank is a deterministic, validated delivery renderer:
+StudySourceCore decouples semantic procedural problem synthesis from packaging/delivery mechanisms. StudyLab operates on a clean two-tier architecture separating the **Internal Canonical Single Source of Truth (SSoT)** from the **Lightweight Human-Facing Delivery Projection**:
 
 ```text
-SOURCE ↓ EVIDENCE PACK ↓ SUBJECT + RUNTIME POLICY ↓ STUDYLAB SEMANTIC CONTENT
-                                                   ├── Markdown renderer (ACTIVE)
-                                                   └── APKG renderer (PRESERVED)
+SOURCE ↓ EVIDENCE PACK ↓ SUBJECT + RUNTIME POLICY ↓ STUDYLAB PROCEDURAL INTELLIGENCE
+                                                   │
+                                                   ├── Internal Canonical JSON AST (SSoT)
+                                                   │   ├── Optional/<Chapter>_PracticeQuestions.json
+                                                   │   ├── Optional/<Chapter>_ProblemPatterns.json
+                                                   │   └── Semantic Learning IR (17 Dimensions, DAGs, Hints, Traps)
+                                                   │
+                                                   ├── Lightweight Markdown Delivery (ACTIVE)
+                                                   │   └── Questions/<Chapter>_Questions.md
+                                                   │       (Clean, spoiler-free problem bank for learners)
+                                                   │
+                                                   └── Procedural APKG Exporter (PRESERVED)
+                                                       └── Interactive multi-tier study package
 ```
 
-In Phase 1, procedural output for **Mathematics, Physics, Chemistry, and Reasoning** shifts from APKG-first delivery to a validated Markdown Question Bank, while preserving all existing semantic contracts, schemas, solution DAGs, and Anki APKG compilers for future multi-mode delivery.
+In Phase 1, procedural output for **Mathematics, Physics, Chemistry, and Reasoning** shifts from APKG-first delivery to a validated Markdown Question Bank (`Questions/<Chapter>_Questions.md`). While the Markdown output delivers a clean, spoiler-free question inventory for students, all rich procedural intelligence (solution DAGs, 3-tier progressive hints, verification routines, traps, decision points, and Content Lineage Records) is preserved 100% losslessly in the internal canonical representation (`Optional/<Chapter>_PracticeQuestions.json`) for future reactivation and automated audits.
 
 ---
 
@@ -28,7 +38,9 @@ In Phase 1, procedural output for **Mathematics, Physics, Chemistry, and Reasoni
 
 ## 3. Required Semantics (17 Minimum Dimensions)
 
-Every procedural question in the canonical representation must support at minimum the following 17 semantic fields:
+Every procedural question in the **internal canonical JSON AST** (`Optional/<Chapter>_PracticeQuestions.json`) and **Semantic Learning IR** must support at minimum the following 17 semantic fields.
+
+*(Note: The external human-facing delivery file `Questions/<Chapter>_Questions.md` deterministically exposes only the learner-facing fields — statement, authentic options, and metadata callout — while filtering out answers, hint tiers, full solutions, verifications, decision points, and traps to prevent spoiler leakage).*
 
 | # | Dimension | Canonical Field | Type | Description |
 |---|---|---|---|---|
@@ -71,26 +83,56 @@ The canonical output file path is:
 Study Materials/[Subject]/[Chapter]/Questions/[Chapter]_Questions.md
 ```
 
+The Markdown Question Bank is a **clean, lightweight, human-facing problem delivery format** designed for active student recall and self-testing. It provides verbatim problem statements, authentic options, provenance, and Source Question ID (SQI) traceability without spoiling solutions, hints, or answers.
+
 ### Required Structural Sections in Markdown:
-1. **YAML Frontmatter**: Includes `subject`, `chapter`, `artifact: proceduralQuestionBank`, `schema_version`, and `total_questions`.
+1. **YAML Frontmatter**:
+   - `subject`: Domain name (e.g. `"Mathematics"`).
+   - `chapter`: Chapter name (e.g. `"LCM-HCF"`).
+   - `artifact`: `"proceduralQuestionBank"`.
+   - `schema_version`: `"1.0.0"`.
+   - `total_questions`: Number of rendered questions matching SQI cardinality.
+   - `domain`: Subject domain identifier.
 2. **Single Top-Level Heading (`#`)**: `# [Chapter] — Procedural Question Bank`.
-3. **Chapter Overview Callout**: High-level metadata block (`> [!info] Chapter Overview`).
+3. **Chapter Overview Callout (`> [!info] Chapter Overview`)**:
+   - Subject / Domain, Chapter name, Skill ID, Language (`Hindi-first (Bilingual)`), Total Practice Questions, and Pipeline Architecture.
 4. **Question Blocks (`## [Question ID] — [Title/Pattern]`)**:
-   - Metadata callout (`> [!info] Question Metadata`) containing Pattern ID, Provenance origin, Type, Difficulty, Prerequisites.
-   - `### Question`: Question statement and (for MCQ) four labeled options `(A)`, `(B)`, `(C)`, `(D)`.
-   - `### Method & Recognition`: Bullet points for Recognition Signals, Expected Method, Decision Points.
-   - `### Traps & Errors`: Common traps and mapped error taxonomy codes.
-   - `### Progressive Hints`: Collapsible Obsidian callouts:
-     - `> [!tip]- Tier 1: Conceptual Approach`
-     - `> [!tip]- Tier 2: Strategy & Setup`
-     - `> [!tip]- Tier 3: Step-by-Step Method`
-   - `### Solution`: Exhaustive step-by-step mathematical or procedural derivation.
-     - **Mathematics**: Stepwise factoring, prime factorizations, product identities.
-     - **Physics**: 6-Stage Numerical Pipeline (`FBD -> Coordinates -> Law -> Solve -> SI -> Sanity`).
-     - **Chemistry**: 7-Stage Chemical Reasoning Pipeline (`Given Context -> Chemical Relationship -> Equation/Reaction Setup -> Stoichiometric/Algebraic Transformation -> Unit/Temperature Consistency -> Final Result -> Chemical Sanity Check`).
-     - **Reasoning**: 7-Layer Cognitive Thinking Pipeline (`Pattern Recognition -> Representation Setup (Venn/Matrix/Track) -> Constraint Extraction (Definite vs Conditional vs Negative vs Hidden) -> Decision Tree Start (Definite Anchor) -> Step-by-Step Deduction & Case Splitting -> Trap & Boundary Check -> Final Conclusion & Consistency Check`).
-   - `### Verification`: Sanity check, reverse substitution, or dimensional analysis.
-     - **Mathematics**: Reverse plug-in equation check.
-     - **Physics**: Dimensional analysis, magnitude and physical boundary sanity.
-     - **Chemistry**: Chemical plausibility, reaction quotient ($Q_c$ vs $K_c$), temperature in Kelvin, and valid pH bounds ($0 \le \text{pH} \le 14$).
-     - **Reasoning**: Domain-aware logical consistency check (Minimal Overlap Venn validity, full constraint satisfaction across all positions in arrangements, complementary pair validity).
+   - **Question Metadata Callout (`> [!info] Question Metadata`)**:
+     - `> - **Source Question ID**: `sqi.<subject>.<chapter>.<ref>`` (Authoritative SQI identifier)
+     - `> - **Question Number / Reference**: <number>` (Original question number from source exam/book when available)
+     - `> - **Exam**: <exam>` (Past exam source when available, e.g. RRB ALP, SSC CGL)
+     - `> - **Year**: <year>` (Exam year when available)
+     - `> - **Shift**: <shift>` (Exam shift when available)
+     - `> - **Pattern ID**: `<pattern_id>`` (Canonical pattern linkage)
+     - `> - **Topic / Pattern**: <pattern_title>` (Human-readable problem family)
+     - `> - **Provenance**: `<origin>`` (`authentic_pyq`, `source_derived`, `curated_source`, `derived_variant`, `synthetic_schema`)
+     - `> - **Question Type**: <type>` (`mcq`, `numerical`, `structured`)
+     - `> - **Difficulty**: <difficulty>` (Numerical rating 1.0–5.0)
+   - **Question Statement (`### Question`)**:
+     - Verbatim question statement supporting multi-line text and LaTeX math delimiters (`$...$` and `$$...$$`).
+   - **MCQ Options**:
+     - For `mcq` type questions, authentic options formatted as list items:
+       - `- (A) <Option A>`
+       - `- (B) <Option B>`
+       - `- (C) <Option C>`
+       - `- (D) <Option D>`
+       - `- (E) <Option E>` (when present in source)
+     - Option label prefixes (e.g. `(A)`, `A.`, `(1)`, `1.`) from raw extractions are cleanly normalized to avoid duplicate label prefixes.
+   - **Separator**: Horizontal rule `---` between adjacent question blocks.
+
+### Prohibited Sections in Human-Facing Markdown (Anti-Leakage Boundary):
+To prevent answer leakage, maintain genuine testing conditions, and preserve pedagogical integrity, the human-facing `Questions.md` file **MUST NOT** render:
+1. ❌ **`### Method & Recognition`**: Recognition signals, expected methods, and decision points.
+2. ❌ **`### Traps & Errors`**: Distractor traps and error category codes.
+3. ❌ **`### Progressive Hints`**: Tier 1 (Conceptual), Tier 2 (Strategic Setup), and Tier 3 (Next Step) hint callouts.
+4. ❌ **`### Solution`**: Step-by-step derivations, calculations, or solution DAG step nodes.
+5. ❌ **`### Verification`**: Reverse plug-in checks, dimensional checks, or sanity bounds.
+6. ❌ **Answers**: Explicit correct answers (`correct_answer`, `correct_option`, `Answer: ...`).
+
+### Archiving & Reactivation Guarantee:
+The omission of procedural sections from `Questions.md` does **not** discard them. All 17 canonical dimensions (solution DAGs, 3-tier hints, step-by-step solutions, verification routines, traps, and CLR records) remain 100% archived in:
+- `Optional/<Chapter>_PracticeQuestions.json` (Validated canonical JSON AST)
+- `Optional/<Chapter>_ProblemPatterns.json` (Validated pattern taxonomy)
+- Semantic Learning IR (Graph topology and lineage)
+
+These internal artifacts are continuously validated by `validate_studylab_practice_questions.js` and `validate_studylab_canonical_contracts.js`, ensuring instant, zero-rework capability for future interactive web quiz engines, progressive hint bots, and procedural APKG compilation.

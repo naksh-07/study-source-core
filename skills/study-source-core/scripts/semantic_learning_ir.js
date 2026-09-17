@@ -184,9 +184,18 @@ function buildSemanticLearningIR(params) {
         if (!item.hints || typeof item.hints !== 'object') {
             throw new Error(`IR_CONSTRUCTION_ERROR: Practice item "${id}" must contain 3-tier hints object`);
         }
-        if (!item.hints.tier1_conceptual || !item.hints.tier2_strategic_method || !item.hints.tier3_next_step_setup) {
-            throw new Error(`IR_CONSTRUCTION_ERROR: Practice item "${id}" hints must contain tier_1_conceptual, tier_2_method, and tier_3_setup`);
+        const tier1 = item.hints.tier1_conceptual || item.hints.tier1;
+        const tier2 = item.hints.tier2_strategic || item.hints.tier2_strategic_method || item.hints.tier2;
+        const tier3 = item.hints.tier3_next_step || item.hints.tier3_next_step_setup || item.hints.tier3;
+        if (!tier1 || !tier2 || !tier3) {
+            throw new Error(`IR_CONSTRUCTION_ERROR: Practice item "${id}" hints must contain tier1_conceptual, tier2_strategic, and tier3_next_step`);
         }
+
+        const normalizedHints = {
+            tier1_conceptual: tier1,
+            tier2_strategic: tier2,
+            tier3_next_step: tier3
+        };
 
         return {
             id,
@@ -199,7 +208,7 @@ function buildSemanticLearningIR(params) {
             tolerance: item.tolerance !== undefined ? item.tolerance : undefined,
             explanation: item.explanation || undefined,
             solution_dag: Array.isArray(item.solution_dag) ? item.solution_dag : [],
-            hints: item.hints,
+            hints: normalizedHints,
             traps_and_checks: item.traps_and_checks || undefined,
             clr
         };
@@ -445,15 +454,19 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
         });
     }
 
-    for (let i = 0; i < (evidencePack.practice_problems || []).length; i++) {
-        const prob = evidencePack.practice_problems[i];
-        const patternId = prob.pattern_id || (problemPatterns[0] ? problemPatterns[0].id : 'pat.general.default');
-        const itemId = prob.id || generatePracticeItemId(patternId, i);
+    const sourceQuestions = (evidencePack.source_question_inventory && Array.isArray(evidencePack.source_question_inventory.questions))
+        ? evidencePack.source_question_inventory.questions
+        : (evidencePack.source_problems || evidencePack.practice_problems || []);
 
-        const matchedChunk = evidencePack.chunks.find(chk => chk.coordinates.section.includes(prob.id || '')) || primaryChunk;
+    for (let i = 0; i < sourceQuestions.length; i++) {
+        const prob = sourceQuestions[i];
+        const patternId = prob.pattern_ref || prob.pattern_id || (problemPatterns[0] ? problemPatterns[0].id : 'pat.general.default');
+        const itemId = prob.source_question_id || prob.id || generatePracticeItemId(patternId, i);
+
+        const matchedChunk = evidencePack.chunks.find(chk => chk.coordinates.section.includes(itemId || prob.id || '')) || primaryChunk;
 
         // Construct 11-field CLR for practice item
-        const originTier = prob.exam || prob.source_pyq_id || prob.year
+        const originTier = (prob.provenance && prob.provenance.origin === 'authentic_pyq') || prob.exam || prob.source_pyq_id || prob.year
             ? ORIGIN_TIERS.AUTHENTIC
             : ORIGIN_TIERS.CURATED;
 
@@ -487,14 +500,15 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
         });
 
         // Normalize hints to 3 non-leaking tiers
-        let hints = prob.hints;
-        if (Array.isArray(hints)) {
+        let rawHints = prob.hints;
+        let hints;
+        if (Array.isArray(rawHints)) {
             hints = {
-                tier1_conceptual: hints[0] || 'Identify the core principle governing this problem.',
-                tier2_strategic: hints[1] || 'Set up the governing algebraic or physical equation.',
-                tier3_next_step: hints[2] || 'Substitute the given values into the equation and simplify.'
+                tier1_conceptual: rawHints[0] || 'Identify the core principle governing this problem.',
+                tier2_strategic: rawHints[1] || 'Set up the governing algebraic or physical equation.',
+                tier3_next_step: rawHints[2] || 'Substitute the given values into the equation and simplify.'
             };
-        } else if (!hints || typeof hints !== 'object') {
+        } else if (!rawHints || typeof rawHints !== 'object') {
             hints = {
                 tier1_conceptual: 'Identify the core principle governing this problem.',
                 tier2_strategic: 'Set up the governing algebraic or physical equation.',
@@ -502,12 +516,9 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
             };
         } else {
             hints = {
-                tier1_conceptual: hints.tier1_conceptual || hints.tier1_conceptual || hints.tier1 || 'Identify the core principle.',
-                tier2_strategic: hints.tier2_strategic_method || hints.tier2_strategic || hints.tier2 || 'Set up the governing method.',
-                tier3_next_step: hints.tier3_next_step_setup || hints.tier3_next_step || hints.tier3 || 'Substitute the values into setup.',
-                tier1_conceptual: hints.tier1_conceptual || hints.tier1_conceptual || hints.tier1 || 'Identify the core principle.',
-                tier2_strategic: hints.tier2_strategic || hints.tier2_strategic_method || hints.tier2 || 'Set up the governing method.',
-                tier3_next_step: hints.tier3_next_step || hints.tier3_next_step_setup || hints.tier3 || 'Substitute the values into setup.'
+                tier1_conceptual: rawHints.tier1_conceptual || rawHints.tier1 || 'Identify the core principle.',
+                tier2_strategic: rawHints.tier2_strategic || rawHints.tier2_strategic_method || rawHints.tier2 || 'Set up the governing method.',
+                tier3_next_step: rawHints.tier3_next_step || rawHints.tier3_next_step_setup || rawHints.tier3 || 'Substitute the values into setup.'
             };
         }
 
@@ -526,6 +537,7 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
 
         practiceItems.push({
             id: itemId,
+            source_question_id: prob.source_question_id || itemId,
             pattern_id: patternId,
             question_type: qType,
             stem: prob.question_text || prob.stem || `Practice problem ${i + 1}`,

@@ -247,29 +247,21 @@ function isStemProceduralVariant(featA, featB) {
         return false;
     }
 
-    // If patterns match, or both are procedural items in the same chapter/family
-    const sharedPattern = featA.pattern_id && featB.pattern_id && featA.pattern_id === featB.pattern_id;
-
     // Check stem differences
-    const normStemA = normalizePropositionText(featA.stem);
-    const normStemB = normalizePropositionText(featB.stem);
+    const normStemA = normalizePropositionText(featA.stem || featA.text || '');
+    const normStemB = normalizePropositionText(featB.stem || featB.text || '');
 
-    // If stems are meaningfully distinct
-    const stemTokensA = extractTokens(normStemA);
-    const stemTokensB = extractTokens(normStemB);
-    const stemSimilarity = computeJaccardSimilarity(stemTokensA, stemTokensB);
+    const exactSameStem = normStemA === normStemB && normStemA.length > 0;
+    const exactSameAnswer = featA.answer === featB.answer;
+    const exactSameOptions = JSON.stringify(featA.options || []) === JSON.stringify(featB.options || []);
 
-    // Distinct numerical parameters or answers
-    const hasDifferentAnswers = featA.answer !== null && featB.answer !== null && featA.answer !== featB.answer;
-    const hasDifferentTypes = featA.question_type && featB.question_type && featA.question_type !== featB.question_type;
-
-    // If stems differ (similarity < 0.90) OR answers differ OR question types differ,
-    // they are distinct practice questions!
-    if (stemSimilarity < 0.90 || hasDifferentAnswers || hasDifferentTypes) {
-        return true;
+    // Only collapse if verbatim identical stem, identical options, and identical answer
+    if (exactSameStem && exactSameAnswer && exactSameOptions) {
+        return false; // True identical duplicate
     }
 
-    return false;
+    // Under '1 Pattern != 1 Question' invariant, distinct source questions must NEVER be collapsed
+    return true;
 }
 
 /**

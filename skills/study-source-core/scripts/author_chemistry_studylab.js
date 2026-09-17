@@ -80,7 +80,24 @@ function normalizeRawSourceData(data) {
     const skill_id = data.skill_id || 'chemistry.physical.equilibrium';
 
     const patterns = Array.isArray(data.problem_patterns) ? data.problem_patterns : [];
-    const sourceProblems = Array.isArray(data.source_problems) ? data.source_problems : [];
+    const rawProblems = (data.source_question_inventory && Array.isArray(data.source_question_inventory.questions))
+        ? data.source_question_inventory.questions
+        : (Array.isArray(data.source_problems) ? data.source_problems : (Array.isArray(data.practice_problems) ? data.practice_problems : (Array.isArray(data.questions) ? data.questions : [])));
+
+    const sourceProblems = rawProblems.map(p => ({
+        source_id: p.source_question_id || p.source_id || p.id,
+        source_question_id: p.source_question_id || p.source_id || p.id,
+        question_number: p.question_number || null,
+        pattern_ref: p.pattern_ref || null,
+        raw_type: p.question_type || p.raw_type || (Array.isArray(p.options) && p.options.length > 0 ? 'mcq' : 'numerical'),
+        statement: p.question_text || p.statement || p.stem || '',
+        options: Array.isArray(p.options) ? [...p.options] : [],
+        correct_answer: p.correct_answer !== undefined ? p.correct_answer : p.answer,
+        difficulty: p.difficulty || 2.0,
+        exam: (p.provenance && (p.provenance.exam || p.provenance.source)) || p.exam || null,
+        source_solution_steps: Array.isArray(p.solution_steps) ? p.solution_steps : (Array.isArray(p.source_solution_steps) ? p.source_solution_steps : []),
+        prerequisites: Array.isArray(p.prerequisites) ? p.prerequisites : []
+    }));
 
     return {
         chapter,
@@ -118,19 +135,19 @@ function parseMarkdownEvidencePackText(text) {
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
 
-        if (line.startsWith('# Evidence Pack:')) {
-            const m = line.match(/# Evidence Pack:\s*([^(]+)(?:\(([^)]+)\))?/);
+        if (line.startsWith('# Evidence Pack:') || line.startsWith('# Canonical Evidence Pack:')) {
+            const m = line.match(/# (?:Canonical )?Evidence Pack:\s*([^(]+)(?:\(([^)]+)\))?/);
             if (m) {
                 chapter = m[1].trim();
                 if (m[2]) domain = m[2].trim();
             }
         } else if (line.startsWith('## 1. Chapter Metadata')) {
             currentSection = 'METADATA';
-        } else if (line.startsWith('## 2. Core Concepts')) {
+        } else if (line.startsWith('## 2. Core Concepts') || line.startsWith('## 2. Granular Source Chunks Registry')) {
             currentSection = 'CONCEPTS';
-        } else if (line.startsWith('## 3. Master Formulas')) {
+        } else if (line.startsWith('## 3. Master Formulas') || line.startsWith('## 3. Extracted Concepts')) {
             currentSection = 'FORMULAS';
-        } else if (line.startsWith('## 4. Problem Pattern')) {
+        } else if (line.startsWith('## 4. Problem Pattern') || line.startsWith('## 4. Master Formulas')) {
             currentSection = 'PATTERNS';
         } else if (line.startsWith('## 5. Authentic Source Problems')) {
             currentSection = 'PROBLEMS';
@@ -147,12 +164,15 @@ function parseMarkdownEvidencePackText(text) {
                 patterns.push(currentItem);
             }
         } else if (line.startsWith('### Source Problem') && currentSection === 'PROBLEMS') {
-            const m = line.match(/### Source Problem\s*\d+\s*\(([^)]+)\)/);
+            const m = line.match(/### Source Problem\s*\d*\s*\(([^)]+)\)/);
             currentItem = {
                 source_id: m ? m[1].trim() : 'chem-pyq-' + (sourceProblems.length + 1),
+                source_question_id: m ? m[1].trim() : null,
                 options: [],
                 source_solution_steps: [],
-                prerequisites: []
+                prerequisites: [],
+                _readingStatement: false,
+                _readingSteps: false
             };
             sourceProblems.push(currentItem);
         } else if (currentItem && currentSection === 'PATTERNS') {
@@ -173,19 +193,47 @@ function parseMarkdownEvidencePackText(text) {
                 currentItem.decision_points.push(line.substring(2).trim());
             }
         } else if (currentItem && currentSection === 'PROBLEMS') {
-            if (line.startsWith('- Exam:')) currentItem.exam = line.substring(7).trim();
-            else if (line.startsWith('- Pattern Ref:')) currentItem.pattern_ref = line.substring(14).trim();
-            else if (line.startsWith('- Type:')) currentItem.raw_type = line.substring(7).trim().toLowerCase();
-            else if (line.startsWith('- Statement:')) currentItem.statement = line.substring(12).trim();
-            else if (line.startsWith('- Correct Answer:')) currentItem.correct_answer = line.substring(17).trim();
-            else if (line.startsWith('- Difficulty:')) currentItem.difficulty = parseFloat(line.substring(13).trim()) || 2.0;
-            else if (line.startsWith('- Prerequisites:')) {
+            if (line.startsWith('- Source Question ID:')) {
+                currentItem._readingStatement = false;
+                currentItem.source_question_id = line.substring(21).trim();
+                currentItem.source_id = currentItem.source_question_id;
+            } else if (line.startsWith('- Question Number:')) {
+                currentItem._readingStatement = false;
+                currentItem.question_number = line.substring(18).trim();
+            } else if (line.startsWith('- Exam:')) {
+                currentItem._readingStatement = false;
+                currentItem.exam = line.substring(7).trim();
+            } else if (line.startsWith('- Pattern Ref:')) {
+                currentItem._readingStatement = false;
+                currentItem.pattern_ref = line.substring(14).trim();
+            } else if (line.startsWith('- Type:')) {
+                currentItem._readingStatement = false;
+                currentItem.raw_type = line.substring(7).trim().toLowerCase();
+            } else if (line.startsWith('- Statement:')) {
+                currentItem._readingStatement = true;
+                currentItem.statement = line.substring(12).trim();
+            } else if (line.startsWith('- Options:')) {
+                currentItem._readingStatement = false;
+            } else if (line.startsWith('- Correct Answer:')) {
+                currentItem._readingStatement = false;
+                currentItem.correct_answer = line.substring(17).trim();
+            } else if (line.startsWith('- Difficulty:')) {
+                currentItem._readingStatement = false;
+                currentItem.difficulty = parseFloat(line.substring(13).trim()) || 2.0;
+            } else if (line.startsWith('- Solution Steps:')) {
+                currentItem._readingStatement = false;
+                currentItem._readingSteps = true;
+            } else if (line.startsWith('- Prerequisites:')) {
+                currentItem._readingStatement = false;
                 currentItem.prerequisites = line.substring(16).split(',').map(s => s.trim()).filter(Boolean);
-            } else if (line.startsWith('- (A)') || line.startsWith('- (B)') || line.startsWith('- (C)') || line.startsWith('- (D)') || line.startsWith('- (E)')) {
-                const optText = line.replace(/^[\s-]*\([A-Z]\)\s*/, '').trim();
+            } else if (/^[\s-]*\([A-Za-z0-9]+\)\s*/.test(line)) {
+                currentItem._readingStatement = false;
+                const optText = line.replace(/^[\s-]*\([A-Za-z0-9]+\)\s*/, '').trim();
                 currentItem.options.push(optText);
-            } else if (/^\d+\.\s*/.test(line)) {
+            } else if (currentItem._readingSteps && /^\d+\.\s*/.test(line)) {
                 currentItem.source_solution_steps.push(line.replace(/^\d+\.\s*/, '').trim());
+            } else if (currentItem._readingStatement && !line.startsWith('- ') && !line.startsWith('### ') && !line.startsWith('## ')) {
+                currentItem.statement += '\n' + lines[i];
             }
         } else if (currentSection === 'METADATA') {
             if (line.startsWith('- Chapter:')) chapter = line.substring(10).trim();
@@ -348,6 +396,8 @@ function authorChemistryProceduralContent(evidenceInput, options = {}) {
 
         canonicalQuestions.push({
             id: qId,
+            source_question_id: rawQ.source_question_id || rawQ.source_id || rawQ.id || qId,
+            question_number: rawQ.question_number || undefined,
             pattern_id: patternId,
             provenance,
             question_type: qType,

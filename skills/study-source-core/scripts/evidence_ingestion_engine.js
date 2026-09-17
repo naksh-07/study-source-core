@@ -21,6 +21,11 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { computeSha256 } = require('./content_lineage_record');
+const {
+    buildSourceQuestionInventory,
+    renderInventoryToEvidenceMarkdown,
+    parseInventoryItemsFromMarkdownText
+} = require('./source_question_inventory');
 
 /**
  * Normalizes raw input string: ensures LF line endings, strips BOM.
@@ -190,10 +195,12 @@ function segmentFixtureIntoChunks(fixture, sourceId, options = {}) {
     }
 
     // 5. Practice Problems chunks
-    const problems = fixture.practice_problems || fixture.practice_questions || fixture.questions;
+    const problems = (fixture.source_question_inventory && Array.isArray(fixture.source_question_inventory.questions))
+        ? fixture.source_question_inventory.questions
+        : (fixture.source_problems || fixture.source_questions || fixture.practice_problems || fixture.practice_questions || fixture.questions);
     if (Array.isArray(problems)) {
         for (const prob of problems) {
-            addChunk('problem', `Problems::${prob.id || 'Problem'}`, prob, prob.page);
+            addChunk('problem', `Problems::${prob.source_question_id || prob.id || 'Problem'}`, prob, prob.page);
         }
     }
 
@@ -257,7 +264,7 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
 
     // 2. Chunk Source (use structured segmentation if fixture, else text segmentation)
     let chunks;
-    if (sourceFixture && (sourceFixture.concepts || sourceFixture.master_formulas || sourceFixture.problem_patterns || sourceFixture.practice_problems || sourceFixture.practice_questions)) {
+    if (sourceFixture && (sourceFixture.concepts || sourceFixture.master_formulas || sourceFixture.formulas || sourceFixture.problem_patterns || sourceFixture.source_question_inventory || sourceFixture.source_problems || sourceFixture.source_questions || sourceFixture.practice_problems || sourceFixture.practice_questions || sourceFixture.questions)) {
         chunks = segmentFixtureIntoChunks(sourceFixture, sourceId, options);
     } else {
         chunks = segmentSourceIntoChunks(normalizedText, sourceId, options);
@@ -267,8 +274,9 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
     const concepts = [];
     const formulas = [];
     const problemPatterns = [];
-    const practiceProblems = [];
+    const rawPracticeProblems = [];
     const visualAssets = [];
+    let sourceInventory = null;
 
     if (sourceFixture) {
         if (Array.isArray(sourceFixture.concepts)) {
@@ -280,12 +288,40 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
         if (Array.isArray(sourceFixture.problem_patterns)) {
             problemPatterns.push(...sourceFixture.problem_patterns);
         }
-        if (Array.isArray(sourceFixture.practice_problems || sourceFixture.practice_questions || sourceFixture.questions)) {
-            practiceProblems.push(...(sourceFixture.practice_problems || sourceFixture.practice_questions || sourceFixture.questions));
+        const rawProblems = (sourceFixture.source_question_inventory && Array.isArray(sourceFixture.source_question_inventory.questions))
+            ? sourceFixture.source_question_inventory.questions
+            : (sourceFixture.source_problems || sourceFixture.source_questions || sourceFixture.practice_problems || sourceFixture.practice_questions || sourceFixture.questions);
+        if (Array.isArray(rawProblems)) {
+            rawPracticeProblems.push(...rawProblems);
         }
         if (Array.isArray(sourceFixture.visual_assets || sourceFixture.diagrams)) {
             visualAssets.push(...(sourceFixture.visual_assets || sourceFixture.diagrams));
         }
+
+        if (rawPracticeProblems.length > 0) {
+            sourceInventory = buildSourceQuestionInventory(rawPracticeProblems, {
+                subject,
+                chapter,
+                sourceId,
+                sourceTitle: sourceFixture.source_provenance?.source_title || options.source_title
+            });
+        }
+    } else {
+        // Attempt to parse inventory items from markdown text
+        const parsedItems = parseInventoryItemsFromMarkdownText(normalizedText);
+        if (parsedItems.length > 0) {
+            sourceInventory = buildSourceQuestionInventory(parsedItems, {
+                subject,
+                chapter,
+                sourceId,
+                sourceTitle: options.source_title
+            });
+            rawPracticeProblems.push(...sourceInventory.questions);
+        }
+    }
+
+    if (!sourceInventory) {
+        sourceInventory = buildSourceQuestionInventory([], { subject, chapter, sourceId });
     }
 
     const evidencePackId = `evp.${subject.toLowerCase().replace(/[^a-z0-9_-]/g, '_')}.${chapter.toLowerCase().replace(/[^a-z0-9_-]/g, '_')}.v1`;
@@ -338,9 +374,11 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
         }
     }
 
-    if (practiceProblems.length > 0) {
+    if (sourceInventory && sourceInventory.questions.length > 0) {
+        mdLines.push(renderInventoryToEvidenceMarkdown(sourceInventory));
+    } else if (rawPracticeProblems.length > 0) {
         mdLines.push('## 5. Authentic Source Problems');
-        for (const p of practiceProblems) {
+        for (const p of rawPracticeProblems) {
             mdLines.push(`### Problem: ${p.id || 'Item'}`);
             mdLines.push(`- Stem: ${p.question_text || p.stem || ''}`);
             if (p.answer) mdLines.push(`- Answer: ${p.answer}`);
@@ -362,7 +400,9 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
         concepts,
         formulas,
         problem_patterns: problemPatterns,
-        practice_problems: practiceProblems,
+        source_question_inventory: sourceInventory,
+        source_problems: sourceInventory.questions,
+        practice_problems: sourceInventory.questions,
         visual_assets: visualAssets,
         markdown: markdownText,
         created_at: new Date().toISOString()
