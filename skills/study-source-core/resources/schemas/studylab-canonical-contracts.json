@@ -54734,7 +54734,7 @@
             "alternate_templates": [],
             "hint_principle": "चक्रीय घटनाओं के एक साथ होने का समय अंतरालों का LCM होता है।",
             "hint_operation": "सभी अंतरालों का LCM निकालें।",
-            "hint_intermediate": "LCM = {answer} सेकंड।"
+            "hint_intermediate": "दिए गए सभी समय अंतरालों का LCM ज्ञात कर उत्तर प्राप्त करें।"
           }
         ],
         "target_time_ms": 30000

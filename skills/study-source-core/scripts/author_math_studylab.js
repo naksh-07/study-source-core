@@ -153,7 +153,7 @@ function parseMarkdownEvidencePackText(text) {
         } else if (line.startsWith('## 5. Authentic Source Problems')) {
             currentSection = 'PROBLEMS';
         } else if (line.startsWith('### Pattern:') && currentSection === 'PATTERNS') {
-            const m = line.match(/### Pattern:\s*([^(]+)\(([^)]+)\)/);
+            const m = line.match(/### Pattern:\s*(.+?)\s*\(([^()]+)\)$/);
             if (m) {
                 currentItem = {
                     pattern_id: m[2].trim(),
@@ -269,35 +269,38 @@ function buildProgressiveHints(prob, pattern, answer) {
     let tier2 = '';
     let tier3 = '';
 
-    if (pattern && pattern.pattern_id === 'pat-math-lcm-prime-factorization') {
-        tier1 = 'संकल्पना एवं प्रथम चरण: संख्याओं का अभाज्य गुणनखंडन (Prime Factorization) ज्ञात करें और प्रत्येक अभाज्य की उच्चतम घात पहचानें।';
-        tier2 = 'विधि: सभी अभाज्य गुणनखंडों की उच्चतम घातों का गुणनफल लेकर LCM ज्ञात करें। यदि शेषफल r दिया गया है, तो अभीष्ट संख्या (LCM + r) होगी।';
-        tier3 = 'सेटअप: दिए गए मानों को सूत्र में रखकर गणना प्रारंभ करें और अंतिम उत्तर प्राप्त करें।';
-    } else if (pattern && pattern.pattern_id === 'pat-math-lcm-product-identity') {
-        tier1 = 'संकल्पना: दो संख्याओं का गुणनफल, उनके लघुत्तम समापवर्त्य (LCM) और महत्तम समापवर्तक (HCF) के गुणनफल के बराबर होता है।';
-        tier2 = 'विधि: गुणनफल सूत्र लागू करें: पहली संख्या × दूसरी संख्या = LCM × HCF अथवा सह-अभाज्य गुणनखंडों a = HCF × x, b = HCF × y का उपयोग करें।';
-        tier3 = 'सेटअप: ज्ञात मानों को सूत्र में प्रतिस्थापित करके अज्ञात राशि के लिए समीकरण हल करें।';
+    // 1. Authoritative Specialist / LLM Hints Check
+    if (prob && prob.hints && prob.hints.tier1_conceptual && prob.hints.tier2_strategic && prob.hints.tier3_next_step) {
+        tier1 = prob.hints.tier1_conceptual;
+        tier2 = prob.hints.tier2_strategic;
+        tier3 = prob.hints.tier3_next_step;
+    } else if (pattern && pattern.hints && pattern.hints.tier1_conceptual && pattern.hints.tier2_strategic && pattern.hints.tier3_next_step) {
+        tier1 = pattern.hints.tier1_conceptual;
+        tier2 = pattern.hints.tier2_strategic;
+        tier3 = pattern.hints.tier3_next_step;
+    } else if (pattern && (pattern.governing_method || pattern.deep_structure || pattern.title)) {
+        const title = pattern.title || 'गणितीय संक्रिया';
+        const method = pattern.governing_method || 'चरणबद्ध मानक विधि';
+        const deepStruct = pattern.deep_structure || 'मूलभूत अवधारणा';
+        tier1 = `संकल्पना एवं सिद्धांत: ${title} के अंतर्गत ${deepStruct} का स्मरण करें।`;
+        tier2 = `विधि एवं रणनीति: समस्या के समाधान हेतु ${method} का अनुप्रयोग करें।`;
+        tier3 = `सेटअप एवं संक्रिया: अज्ञात राशि के लिए समीकरण स्थापित करें और मान प्रतिस्थापित कर गणना पूर्ण करें।`;
     } else {
-        tier1 = 'संकल्पना एवं सिद्धांत: प्रश्न में दी गई गणितीय स्थिति का विश्लेषण करें और उपयुक्त प्रमेय या नियम पहचानें।';
-        tier2 = 'विधि: चरणबद्ध समाधान लागू करें और आवश्यक बीजगणितीय या अंकगणितीय सूत्र का उपयोग करें।';
-        tier3 = 'सेटअप: समीकरण में मान प्रतिस्थापित करके अंतिम गणना पूर्ण करें।';
+        throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Question '${prob && (prob.id || prob.source_id)}' lacks 3-tier progressive hints. Scripts are not permitted to invent generic hints.`);
     }
 
-    // Explicit Anti-Leak Assertion Check
+    // Explicit Anti-Leak Assertion Check (Fail Closed - No Silent Overwriting)
     if (hintLeaksAnswer(tier1, answer)) {
-        tier1 = 'संकल्पना: प्रश्न में दी गई मूलभूत गणितीय परिभाषा और नियमों का स्मरण करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 1 hint leaks final answer '${answer}': "${tier1}"`);
     }
     if (hintLeaksAnswer(tier2, answer)) {
-        tier2 = 'विधि: समस्या को हल करने के लिए मानक चरणबद्ध विधि अपनाएं।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 2 hint leaks final answer '${answer}': "${tier2}"`);
     }
     if (hintLeaksAnswer(tier3, answer)) {
-        tier3 = 'सेटअप: समीकरण को हल करने के लिए उपयुक्त व्यंजक बनाएं।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 3 hint leaks final answer '${answer}': "${tier3}"`);
     }
 
     return {
-        tier1_conceptual: tier1,
-        tier2_strategic: tier2,
-        tier3_next_step: tier3,
         tier1_conceptual: tier1,
         tier2_strategic: tier2,
         tier3_next_step: tier3
@@ -354,21 +357,21 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
         // 3. Recognition Signals
         let recSignals = pattern.deep_structure ? [pattern.deep_structure] : [];
         if (recSignals.length === 0) {
-            recSignals = ['?????? ??? LCM/HCF ???? ???????? ?? ????? ?? ????? ????'];
+            recSignals = ['प्रश्न में LCM/HCF अथवा विभाज्यता के प्रारूप की पहचान करें'];
         }
 
         // 4. Expected Method
-        const expectedMethod = pattern.governing_method || '???? ?????? ???????? ??? ????????? ???? ???? ????';
+        const expectedMethod = pattern.governing_method || 'मानक अभाज्य गुणनखंडन तथा सर्वसमिका विधि लागू करें';
 
         // 5. Decision Points
         const decisionPoints = (pattern.decision_points && pattern.decision_points.length > 0)
             ? pattern.decision_points
-            : ['?????? ?? ??????? ?? ?????? ??????? ????? ???? ???? ?? ??? ????'];
+            : ['समस्या के प्रारूप के अनुसार उपयुक्त संक्रिया विधि का चयन करें'];
 
         // 6. Traps
         const trap = (pattern.common_traps && pattern.common_traps.length > 0)
             ? pattern.common_traps[0]
-            : '???? ???? ????? ?????? ??? ??????? ?????? ?? ?????';
+            : 'अभाज्य गुणनखंडन अथवा सह-अभाज्य युग्मों की गणना में त्रुटि';
 
         // 7. Error Categories
         const errorCats = (pattern.error_categories && pattern.error_categories.length > 0)
@@ -381,13 +384,13 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
         // 9. Solution
         let solution = '';
         if (Array.isArray(rawQ.source_solution_steps) && rawQ.source_solution_steps.length > 0) {
-            solution = '??????? ??????:\n' + rawQ.source_solution_steps.map((st, sIdx) => `${sIdx + 1}. ${st}`).join('\n');
+            solution = 'चरणबद्ध समाधान:\n' + rawQ.source_solution_steps.map((st, sIdx) => `${sIdx + 1}. ${st}`).join('\n');
         } else {
-            solution = `??: ${rawQ.statement} ?? ?????? ???? ???? ???? ???? ?? ????? ${answer} ??????? ???? ???`;
+            solution = `हल: ${rawQ.statement} का विश्लेषण करने पर अभीष्ट परिणाम ${answer} प्राप्त होता है।`;
         }
 
         // 10. Verification
-        const verification = `???? ??? ???????: ??????? ????? ${answer} ?? ??? ?????? ???? ????????? ?????? ??? ???????????? ???? ?? ????? ??????? ???????? ???? ???`;
+        const verification = `उत्तर की पुष्टि: गणना मान ${answer} को मूल प्रतिबंधों में प्रतिस्थापित करने पर संबंध संतुष्ट होता है।`;
 
         // 11. Prerequisites
         const prerequisites = (Array.isArray(rawQ.prerequisites) && rawQ.prerequisites.length > 0)

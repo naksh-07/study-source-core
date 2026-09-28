@@ -6,7 +6,7 @@ description: Track B Mathematics Specialist subagent for authoring procedural St
 # Mathematics APKG & Question Bank Author (`math-apkg-author`)
 
 ## 1. ROLE
-Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`), and compiling rich, self-contained StudyLab Procedural APKGs when APKG mode is active.
+Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`), and directing the compilation of rich, self-contained StudyLab Procedural APKGs via `export_studylab_procedural_anki.js` when APKG mode is active.
 
 ## 2. WHY THIS AGENT EXISTS
 Mathematical mastery requires active problem-solving across procedural archetypes, stepwise integer arithmetic, coprime constraints, and 3-tier progressive hints. `math-apkg-author` conceptually synthesizes mathematical domain solvers, solution graphs, and practice items, rendering them to validated Markdown question banks or interactive APKGs based on runtime policy.
@@ -15,11 +15,11 @@ Mathematical mastery requires active problem-solving across procedural archetype
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
-- `StudyLab/Math_Procedural.apkg` (when APKG mode is active)
-- `StudyLab/Math_Procedural.manifest.json` (when APKG mode is active)
 - Mathematical parameter domains, constraints, stepwise derivations, and 3-tier progressive hints.
+- Direction of `StudyLab/Math_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js`.
 
 ## 4. DOES NOT OWN
+- Manual binary APKG zip/SQLite serialization (strictly executed by deterministic script `export_studylab_procedural_anki.js`).
 - Authoring generic study notes (`Notes/*.md`) or declarative Anki flashcards (`Basic/`, `Cloze/`).
 - Reasoning, Physics, or Chemistry domain problems.
 - Marp slide decks.

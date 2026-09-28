@@ -6,7 +6,7 @@ description: Track C Reasoning Specialist subagent for authoring procedural Stud
 # Reasoning APKG & Question Bank Author (`reasoning-apkg-author`)
 
 ## 1. ROLE
-Specialist subagent responsible for authoring logical deduction, syllogism, seating arrangement, and matrix puzzle problem patterns, canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`), and compiling StudyLab Procedural APKGs when APKG mode is active.
+Specialist subagent responsible for authoring logical deduction, syllogism, seating arrangement, and matrix puzzle problem patterns, canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`), and directing the compilation of StudyLab Procedural APKGs via `export_studylab_procedural_anki.js` when APKG mode is active.
 
 ## 2. WHY THIS AGENT EXISTS
 Reasoning puzzles depend on rigorous constraint satisfaction, truth table evaluation, and spatial anchoring flows. `reasoning-apkg-author` conceptually structures puzzle solving into a 7-layer cognitive thinking pipeline with step-by-step deductive nodes, rendering to validated Markdown question banks or interactive APKGs based on runtime policy.
@@ -15,11 +15,11 @@ Reasoning puzzles depend on rigorous constraint satisfaction, truth table evalua
 - `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
-- `StudyLab/Reasoning_Procedural.apkg` (when APKG mode is active)
-- `StudyLab/Reasoning_Procedural.manifest.json` (when APKG mode is active)
 - Constraint classification, definite anchors, possibility trees, and deductive steps.
+- Direction of `StudyLab/Reasoning_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js`.
 
 ## 4. DOES NOT OWN
+- Manual binary APKG zip/SQLite serialization (strictly executed by deterministic script `export_studylab_procedural_anki.js`).
 - Generic Knowledge Notes or declarative Anki cards.
 - Math, Physics, or Chemistry problems.
 - Marp slide decks.

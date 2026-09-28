@@ -178,6 +178,8 @@ StudySourceCore coordinates **14 specialized, single-responsibility subagents** 
 6. **Hindi-first Language Contract** — Explanatory prose is Hindi-first; technical/domain terms appear in English in parentheses.
 7. **Hard Resource Limits** — Max 4 concurrent subagents; max 10 total launches per mission.
 8. **Physical Completion Gates** — Artifacts must exist on disk with `size > 0`, pass AJV schema validation, and SQLite integrity checks.
+9. **Strict Script De-Usurpation Invariant** — No script is allowed to perform creative or pedagogical decisions (fabricating hints, inventing distractors, synthesizing mock DAGs). Pedagogy belongs exclusively to LLM specialists; mechanical packaging (SHA-256 provenance, SQLite DB schema packaging, zip serialization, AST validation) belongs exclusively to deterministic scripts.
+10. **Fail-Closed Pedagogical Integrity** — Missing authoritative hints or detected answer leaks trigger fail-closed fatal errors (`[MISSING_AUTHORITATIVE_HINTS]`, `[HINT_ANSWER_LEAKAGE_FATAL]`). Scripts never silently overwrite or synthesize synthetic filler to mask upstream defects.
 
 ---
 

@@ -570,7 +570,13 @@ runTest('SEC-3', 'TEST-3.4', 'compileCanonicalQuestionBank normalizes incoming r
                 prompt: 'Find power when 100 J work is done in 5 seconds.',
                 question_type: 'numerical',
                 answer: 20,
-                units: 'W'
+                units: 'W',
+                hints: {
+                    tier1_conceptual: 'Recall the definition of power as rate of doing work: P = W / t.',
+                    tier2_strategic: 'Substitute work W = 100 J and time t = 5 s.',
+                    tier3_next_step: 'Compute 100 / 5 to obtain power in Watts.'
+                },
+                tolerance: 0.1
             }
         ]
     };

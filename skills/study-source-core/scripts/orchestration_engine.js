@@ -1063,6 +1063,14 @@ function createSpecialistTaskDispatcher(context = {}) {
             return await context.fallbackExecutor(task, retryCount);
         }
 
+        if (context.subagentInvoker) {
+            return await context.subagentInvoker(task, enrichedContext);
+        }
+
+        if (context.agentHandlers && typeof context.agentHandlers[task.owner_agent] === 'function') {
+            return await context.agentHandlers[task.owner_agent](task, enrichedContext);
+        }
+
         // Generic fallback for non-specialist sibling tasks
         return {
             status: 'SUPPRESSED',

@@ -269,33 +269,35 @@ function buildReasoningProgressiveHints(prob, pattern, answer) {
     let tier2 = '';
     let tier3 = '';
 
-    if (pattern && pattern.pattern_id === 'pat-reas-syl-standard') {
-        tier1 = 'तार्किक सिद्धांत पहचानें: दिए गए कथनों का केवल न्यूनतम अधिव्यापन वेन आरेख (Minimal Overlap Venn Diagram) बनाएं तथा बाह्य सामान्य ज्ञान को न जोड़ें।';
-        tier2 = 'रणनीति एवं आरेख विश्लेषण: वेन आरेख में प्रत्येक निष्कर्ष की अनिवार्य सत्यता जांचें। जो निष्कर्ष सभी संभावित आरेखों में अनिवार्यतः सत्य हो, केवल वही अनुसरण करेगा।';
-        tier3 = 'चरणबद्ध निगमन: कथनों के सीधे संबंधों को देखें; यदि दो पदों में कोई अनिवार्य अधिव्यापन नहीं है, तो निश्चित निष्कर्ष स्वीकार न करें।';
-    } else if (pattern && pattern.pattern_id === 'pat-reas-syl-either-or') {
-        tier1 = 'तार्किक सिद्धांत पहचानें: या-तो (Either-Or) विकल्प हेतु दोनों निष्कर्षों का व्यक्तिगत रूप से असत्य/संदिग्ध होना तथा समान उद्देश्य व विधेय होना आवश्यक है।';
-        tier2 = 'रणनीति एवं पूरक युग्म: जांचें कि क्या दोनों निष्कर्ष Some + No या Some + Some Not का पूरक युग्म बनाते हैं। All + No को अवैध मानें।';
-        tier3 = 'चरणबद्ध निगमन: चूंकि दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध हैं और एक सकारात्मक तथा दूसरा नकारात्मक है, अतः पूरक युग्म की शर्तें पूरी होती हैं।';
-    } else if (pattern && pattern.pattern_id === 'pat-reas-seating-linear') {
-        tier1 = 'तार्किक सिद्धांत पहचानें: रैखिक बैठने की व्यवस्था में सबसे पहले निश्चित छोर (Definite Anchor) वाले व्यक्ति को बैठाएं।';
-        tier2 = 'रणनीति एवं सापेक्ष शर्तें: निश्चित छोर के आधार पर उससे जुड़े अन्य व्यक्तियों की सापेक्ष स्थिति (जैसे ठीक दाएं या बाएं) को चरणबद्ध भरें।';
-        tier3 = 'चरणबद्ध निगमन: रिक्त स्थानों की संख्या एवं बचे हुए व्यक्तियों के बीच दी गई दूरी या मध्य की शर्त से शेष स्थानों को निर्धारित करें।';
+    // 1. Authoritative Specialist / LLM Hints Check
+    if (prob && prob.hints && prob.hints.tier1_conceptual && prob.hints.tier2_strategic && prob.hints.tier3_next_step) {
+        tier1 = prob.hints.tier1_conceptual;
+        tier2 = prob.hints.tier2_strategic;
+        tier3 = prob.hints.tier3_next_step;
+    } else if (pattern && pattern.hints && pattern.hints.tier1_conceptual && pattern.hints.tier2_strategic && pattern.hints.tier3_next_step) {
+        tier1 = pattern.hints.tier1_conceptual;
+        tier2 = pattern.hints.tier2_strategic;
+        tier3 = pattern.hints.tier3_next_step;
+    } else if (pattern && (pattern.governing_method || pattern.deep_structure || pattern.title)) {
+        const title = pattern.title || 'तार्किक पहेली';
+        const method = pattern.governing_method || 'चरणबद्ध तार्किक निगमन व ग्रिड विधि';
+        const deepStruct = pattern.deep_structure || 'प्रतिबंध एवं सम्बन्ध विश्लेषण';
+        tier1 = `तार्किक सिद्धांत पहचानें: ${title} के अंतर्गत ${deepStruct} की पहचान करें।`;
+        tier2 = `रणनीति एवं संरचना: ${method} का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।`;
+        tier3 = `चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।`;
     } else {
-        tier1 = 'तार्किक सिद्धांत पहचानें: समस्या में शामिल मूल तार्किक नियम (न्यायवाक्य, निश्चित छोर, या पूरक युग्म) को पहचानें।';
-        tier2 = 'रणनीति एवं संरचना: उपयुक्त आरेख या बैठने की व्यवस्था ग्रिड बनाकर ज्ञात प्रतिबंधों को स्थापित करें।';
-        tier3 = 'चरणबद्ध निगमन: दिए गए प्रतिबंधों का चरणबद्ध परीक्षण कर अमान्य विकल्पों को निरस्त करते हुए निष्कर्ष निकालें।';
+        throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Question '${prob && (prob.id || prob.source_id)}' lacks 3-tier progressive hints. Scripts are not permitted to invent generic hints.`);
     }
 
-    // Explicit Anti-Leak Assertion Check
+    // Explicit Anti-Leak Assertion Check (Fail Closed - No Silent Overwriting)
     if (hintLeaksAnswer(tier1, answer)) {
-        tier1 = 'तार्किक सिद्धांत पहचानें: न्यायवाक्य एवं तार्किक व्यवस्था के मूलभूत नियमों का सावधानीपूर्वक विश्लेषण करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 1 hint leaks final answer '${answer}': "${tier1}"`);
     }
     if (hintLeaksAnswer(tier2, answer)) {
-        tier2 = 'रणनीति: आरेख व प्रतिबंधों को स्थापित करें तथा निश्चित आधार बिंदु से प्रारंभ करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 2 hint leaks final answer '${answer}': "${tier2}"`);
     }
     if (hintLeaksAnswer(tier3, answer)) {
-        tier3 = 'संक्रिया: प्रतिबंधों की चरणबद्ध संगति जांचें तथा अमान्य स्थितियों को निरस्त करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 3 hint leaks final answer '${answer}': "${tier3}"`);
     }
 
     return {

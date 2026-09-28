@@ -48,8 +48,8 @@ Authoring agents naturally suffer from confirmation bias and self-certification.
 - Invoked in **Wave 3 (Post-Packaging Audit)** release gate whenever a StudyLab Procedural APKG is generated.
 
 ## 8. PROCESS
-1. Open and parse binary `.apkg` using SQLite and JSZip.
-2. Execute each of the 15 adversarial checks.
+1. Execute the automated adversarial certification tool (`node scripts/run_adversarial_certification.js` or `scripts/test_adversarial_auditor.js`) to inspect the binary `.apkg`, manifest, and SQLite database tables.
+2. Review telemetry across each of the 15 adversarial checks (ADV-01 through ADV-15).
 3. Assert DAG cycle absence ($A \leftrightarrow B$, $A \to B \to C \to A$, $A \to A$).
 4. Check Tier 1 & 2 hints for answer regex leaks.
 5. Inspect MCQ options count ($\ge 4$) and survival into SQLite fields (`flds`).

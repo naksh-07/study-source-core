@@ -38,7 +38,7 @@ Knowledge acquisition requires structured mental models with hierarchical organi
 - Invoked when eligible according to the Subject Artifact Policy in **Wave 1 (Parallel Generation)**.
 
 ## 8. PROCESS
-1. Read the provided `scratch/evidence-pack.md` and verify SHA-256 hash.
+1. Ingest the task-scoped context slice provided by the orchestrator (cryptographic provenance is verified upstream by the orchestrator engine).
 2. Construct YAML frontmatter with tags, bilingual aliases, and evergreen status.
 3. Author single `# [Chapter Title]` H1 header.
 4. Synthesize Section 1 (Chapter Overview & Core DNA) and Section 2 (Core Concepts & Definitions).

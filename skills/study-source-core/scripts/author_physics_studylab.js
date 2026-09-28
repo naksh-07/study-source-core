@@ -22,11 +22,11 @@ const { getCanonicalArtifactPaths } = require('./path_resolver');
 /**
  * Standard error codes taxonomy mapping for physics problems.
  */
-const DEFAULT_MATH_ERROR_MAP = {
-    'prime_factorization': ['ERR_01', 'ERR_02', 'ERR_06'],
-    'product_identity': ['ERR_01', 'ERR_03', 'ERR_05', 'ERR_06'],
-    'remainder_rule': ['ERR_02', 'ERR_06', 'ERR_07'],
-    'ratio_decomposition': ['ERR_03', 'ERR_06', 'ERR_08']
+const DEFAULT_PHYSICS_ERROR_MAP = {
+    'work_constant_force': ['ERR_PHYS_UNIT_CONVERSION', 'ERR_PHYS_SIGN_CONVENTION', 'ERR_PHYS_ANGLE_RESOLUTION'],
+    'work_energy_theorem': ['ERR_PHYS_SIGN_CONVENTION', 'ERR_PHYS_CONSERVATION_BOUNDARY', 'ERR_PHYS_SPEED_CONVERSION'],
+    'kinematics_numerical': ['ERR_PHYS_SIGN_CONVENTION', 'ERR_PHYS_DIMENSIONAL_MISMATCH'],
+    'circuit_numerical': ['ERR_PHYS_SERIES_PARALLEL_CONFUSION', 'ERR_PHYS_OHMS_LAW_MISAPPLIED']
 };
 
 /**
@@ -153,7 +153,7 @@ function parseMarkdownEvidencePackText(text) {
         } else if (line.startsWith('## 5. Authentic Source Problems')) {
             currentSection = 'PROBLEMS';
         } else if (line.startsWith('### Pattern:') && currentSection === 'PATTERNS') {
-            const m = line.match(/### Pattern:\s*([^(]+)\(([^)]+)\)/);
+            const m = line.match(/### Pattern:\s*(.+?)\s*\(([^()]+)\)$/);
             if (m) {
                 currentItem = {
                     pattern_id: m[2].trim(),
@@ -269,29 +269,35 @@ function buildProgressiveHints(prob, pattern, answer) {
     let tier2 = '';
     let tier3 = '';
 
-    if (pattern && pattern.pattern_id === 'pat-phys-wep-work-constant-force') {
-        tier1 = 'भौतिक सिद्धांत पहचानें: नियत बल द्वारा कार्य की परिभाषा W = F * s * cos(theta) का प्रयोग करें। बल और विस्थापन के मध्य कोण का निर्धारण करें।';
-        tier2 = 'रणनीति एवं समीकरण: विस्थापन की दिशा में बल का प्रभावी घटक F_parallel = F * cos(theta) ज्ञात करें। यदि गति ऊर्ध्वाधर है तो न्यूनतम बल F = mg लें।';
-        tier3 = 'चरणबद्ध संक्रिया: दिए गए मान F, s तथा cos(theta) को समीकरण W = F * s * cos(theta) में प्रतिस्थापित कर अंतिम गणना करें।';
-    } else if (pattern && pattern.pattern_id === 'pat-phys-wep-work-energy-theorem') {
-        tier1 = 'भौतिक सिद्धांत पहचानें: कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) W_net = Delta K = K_f - K_i का प्रयोग करें। प्रारंभिक एवं अंतिम अवस्था की गतिज ऊर्जा पर विचार करें।';
-        tier2 = 'रणनीति एवं समीकरण: यदि वाहन रुकता है तो अंतिम गतिज ऊर्जा K_f = 0 होगी। गतिज ऊर्जा K = (1/2)m v^2 सूत्र का प्रयोग करें तथा चाल को आवश्यक रूप से m/s में बदलें।';
-        tier3 = 'चरणबद्ध संक्रिया: कार्य-ऊर्जा प्रमेय से अवरोधी कार्य अथवा प्रतिरोधी बल स्थापित करें: W = - (1/2)m u^2 अथवा F_avg * s = (1/2)m u^2।';
+    // 1. Authoritative Specialist / LLM Hints Check
+    if (prob && prob.hints && prob.hints.tier1_conceptual && prob.hints.tier2_strategic && prob.hints.tier3_next_step) {
+        tier1 = prob.hints.tier1_conceptual;
+        tier2 = prob.hints.tier2_strategic;
+        tier3 = prob.hints.tier3_next_step;
+    } else if (pattern && pattern.hints && pattern.hints.tier1_conceptual && pattern.hints.tier2_strategic && pattern.hints.tier3_next_step) {
+        tier1 = pattern.hints.tier1_conceptual;
+        tier2 = pattern.hints.tier2_strategic;
+        tier3 = pattern.hints.tier3_next_step;
+    } else if (pattern && (pattern.governing_method || pattern.deep_structure || pattern.title)) {
+        const title = pattern.title || 'भौतिक परिघटना';
+        const method = pattern.governing_method || 'मानक भौतिक नियम व समीकरण';
+        const deepStruct = pattern.deep_structure || 'मूलभूत भौतिक सिद्धांत';
+        tier1 = `भौतिक सिद्धांत पहचानें: ${title} के अंतर्गत ${deepStruct} की पहचान करें।`;
+        tier2 = `रणनीति एवं समीकरण: ${method} स्थापित करें तथा आवश्यक SI मात्रकों का निर्धारण करें।`;
+        tier3 = `चरणबद्ध संक्रिया: समीकरण में ज्ञात मान प्रतिस्थापित कर आवश्यक अज्ञात राशि की गणना करें।`;
     } else {
-        tier1 = 'भौतिक सिद्धांत पहचानें: समस्या में शामिल मूल भौतिक नियम अथवा संरक्षण सिद्धांत (कार्य, ऊर्जा अथवा शक्ति) को पहचानें।';
-        tier2 = 'रणनीति एवं समीकरण: ज्ञात एवं अज्ञात भौतिक राशियों को सूचीबद्ध करें तथा उपयुक्त शासी सूत्र का चयन करें।';
-        tier3 = 'चरणबद्ध संक्रिया: SI मात्रकों में मान प्रतिस्थापित कर चरणबद्ध बीजगणितीय हल प्राप्त करें।';
+        throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Question '${prob && (prob.id || prob.source_id)}' lacks 3-tier progressive hints. Scripts are not permitted to invent generic hints.`);
     }
 
-    // Explicit Anti-Leak Assertion Check
+    // Explicit Anti-Leak Assertion Check (Fail Closed - No Silent Overwriting)
     if (hintLeaksAnswer(tier1, answer)) {
-        tier1 = 'भौतिक सिद्धांत पहचानें: कार्य, ऊर्जा एवं संरक्षण नियमों का सावधानीपूर्वक विश्लेषण करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 1 hint leaks final answer '${answer}': "${tier1}"`);
     }
     if (hintLeaksAnswer(tier2, answer)) {
-        tier2 = 'रणनीति: शासी भौतिक समीकरण स्थापित करें तथा SI मात्रकों का ध्यान रखें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 2 hint leaks final answer '${answer}': "${tier2}"`);
     }
     if (hintLeaksAnswer(tier3, answer)) {
-        tier3 = 'संक्रिया: सूत्र में ज्ञात मान प्रतिस्थापित कर आवश्यक अज्ञात राशि ज्ञात करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 3 hint leaks final answer '${answer}': "${tier3}"`);
     }
 
     return {

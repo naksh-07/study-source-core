@@ -84,7 +84,7 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
         } else if (q.structural_tags && Array.isArray(q.structural_tags)) {
             recognition_signals = q.structural_tags;
         } else {
-            recognition_signals = ['Identify problem structure and governing parameters'];
+            recognition_signals = [];
         }
     }
 
@@ -92,11 +92,13 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
     let expected_method = q.expected_method;
     if (!expected_method) {
         if (pattern.governing_method && typeof pattern.governing_method === 'object') {
-            expected_method = pattern.governing_method.name || (pattern.governing_method.standard_algorithm ? pattern.governing_method.standard_algorithm.join(' -> ') : 'Standard domain solver');
+            expected_method = pattern.governing_method.name || (pattern.governing_method.standard_algorithm ? pattern.governing_method.standard_algorithm.join(' -> ') : '');
+        } else if (pattern.governing_method && typeof pattern.governing_method === 'string') {
+            expected_method = pattern.governing_method;
         } else if (pattern.method) {
             expected_method = pattern.method;
         } else {
-            expected_method = 'Apply canonical formula and step-by-step substitution';
+            expected_method = '';
         }
     }
 
@@ -106,7 +108,7 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
         if (pattern.decision_points && Array.isArray(pattern.decision_points)) {
             decision_points = pattern.decision_points;
         } else {
-            decision_points = ['Select governing formula based on given parameters'];
+            decision_points = [];
         }
     }
 
@@ -115,10 +117,12 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
     if (!trap) {
         if (q.diagnostic && q.diagnostic.misconception) {
             trap = q.diagnostic.misconception;
+        } else if (pattern.common_traps && Array.isArray(pattern.common_traps) && pattern.common_traps.length > 0) {
+            trap = pattern.common_traps[0];
         } else if (pattern.common_trap) {
             trap = pattern.common_trap;
         } else {
-            trap = 'Calculation or unit sign slip during algebraic evaluation';
+            trap = '';
         }
     }
 
@@ -130,36 +134,31 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
         } else if (q.diagnostic && q.diagnostic.error_categories) {
             error_category = q.diagnostic.error_categories;
         } else {
-            error_category = ['ERR_01'];
+            error_category = [];
         }
     }
 
     // 12-14. Hints (Tiers 1, 2, 3)
-    let hints = { tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '', tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '' };
+    let hints = { tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '' };
     if (q.hints && typeof q.hints === 'object') {
-        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.tier1_conceptual || q.hints.principle || q.hints.hint_principle || q.tier1_conceptual || '';
+        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.principle || q.hints.hint_principle || q.tier1_conceptual || '';
         hints.tier2_strategic = q.hints.tier2_strategic || q.hints.tier2_strategic_method || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
         hints.tier3_next_step = q.hints.tier3_next_step || q.hints.tier3_next_step_setup || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
-    } else {
-        hints.tier1_conceptual = q.tier1_conceptual || 'अवधारणा और समस्या के संरचनात्मक घटकों की पहचान करें।';
-        hints.tier2_strategic = q.hint_tier_2 || 'मानक सूत्र और समीकरण संबंध स्थापित करें।';
-        hints.tier3_next_step = q.hint_tier_3 || 'चरणबद्ध गणना और बीजगणितीय सरलीकरण निष्पादित करें।';
+    } else if (q.tier1_conceptual && q.hint_tier_2 && q.hint_tier_3) {
+        hints.tier1_conceptual = q.tier1_conceptual;
+        hints.tier2_strategic = q.hint_tier_2;
+        hints.tier3_next_step = q.hint_tier_3;
     }
-    hints.tier1_conceptual = hints.tier1_conceptual;
     hints.tier2_strategic_method = hints.tier2_strategic;
     hints.tier3_next_step_setup = hints.tier3_next_step;
 
     // 15. Solution
-    const solution = q.solution || q.explanation || 'चरणबद्ध हल उपलब्ध नहीं है।';
+    const solution = q.solution || q.explanation || '';
 
     // 16. Verification
-    let verification = q.verification;
-    if (!verification) {
-        if (q.tolerance !== undefined && q.units) {
-            verification = `उत्तर की जांच: गणना मान को मूल समीकरण में प्रतिस्थापित करके संतुष्ट करें। (सटीकता: ±${q.tolerance} ${q.units})`;
-        } else {
-            verification = 'उत्तर की जांच: विमीय विश्लेषण और मान प्रतिस्थापन द्वारा परिणाम का सत्यापन करें।';
-        }
+    let verification = q.verification || '';
+    if (!verification && q.tolerance !== undefined && q.units) {
+        verification = `उत्तर की जांच: गणना मान को मूल समीकरण में प्रतिस्थापित करके संतुष्ट करें। (सटीकता: ±${q.tolerance} ${q.units})`;
     }
 
     // 17. Prerequisites
@@ -168,7 +167,7 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
         if (pattern.prerequisites && Array.isArray(pattern.prerequisites)) {
             prerequisites = pattern.prerequisites;
         } else {
-            prerequisites = ['मूलभूत गणितीय और विषय संबंधी अवधारणाएँ'];
+            prerequisites = [];
         }
     }
 

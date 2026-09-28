@@ -50,6 +50,17 @@ const SUBJECT_DEFAULT_CLASSIFICATIONS = {
 function classifyKnowledgeUnit(ku) {
   if (!ku) return { classification: null, confidence: 0, signals: [], secondaryClassifications: [] };
 
+  // 1. Authoritative Specialist / LLM Subagent Designation
+  const explicitClass = ku.pedagogical_classification || ku.classification;
+  if (explicitClass && PEDAGOGICAL_CLASSIFICATIONS[explicitClass]) {
+    return {
+      classification: PEDAGOGICAL_CLASSIFICATIONS[explicitClass],
+      confidence: 1.0,
+      signals: ['SPECIALIST_EXPLICIT_DESIGNATION'],
+      secondaryClassifications: []
+    };
+  }
+
   const textComponents = [
     ku.title || '',
     ku.definition || '',

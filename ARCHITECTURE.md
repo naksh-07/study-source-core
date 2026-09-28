@@ -234,6 +234,23 @@ A task is never marked `COMPLETE` based on conversational subagent text. Complet
 3. `singleWriterMap[target_path] === executing_agent`
 4. Schema validator passes with zero errors and zero unhandled exceptions.
 
+### 4.5 Strict Script De-Usurpation & Pedagogical Authority
+Scripts are strictly prohibited from performing creative or pedagogical decisions:
+1. **Zero Synthetic Generation**: Scripts must NEVER invent fallback hints, fabricate synthetic distractor choices, or mock solution DAG structures to mask missing source data.
+2. **Authority Hierarchy**: Procedural hints and pedagogical metadata must originate exclusively from:
+   - Authentic source problem evidence (`scratch/evidence-pack.md`).
+   - Specialist LLM agent reasoning AST output (`problem.hints` / `pattern.solution_dag`).
+   - Canonical pattern registry metadata (`studylab-canonical-contracts.json`).
+3. **Fail-Closed on Missing Pedagogy**: If required pedagogical assets are absent from all authoritative sources, the pipeline immediately halts with a fatal invariant exception (`[MISSING_AUTHORITATIVE_HINTS]`) rather than silently synthesizing generic filler text.
+
+### 4.6 Fail-Closed Hint Integrity & Anti-Leak Invariant
+Under ADV-03 and ADV-04 certification rules, hints must preserve cognitive challenge without answer disclosure:
+1. **Zero Silent Sabotage**: When hint answer leakage is detected during validation, scripts MUST NOT silently overwrite, sanitize, or replace hint text with hardcoded template strings to achieve a synthetic test pass.
+2. **Immediate Veto**: Any detected leak in Tier 1 (conceptual approach) or Tier 2 (governing formula) immediately throws `[HINT_ANSWER_LEAKAGE_FATAL]`, stopping publication and exposing the upstream authoring defect for genuine LLM re-synthesis.
+3. **Mechanical vs Cognitive Separation**:
+   - **LLM Domain**: Conceptual synthesis, pedagogical notes, problem pattern recognition, 3-tier progressive hint authoring, solution DAG structuring, plausible distractor design.
+   - **Script Domain**: Cryptographic SHA-256 provenance calculation, SQLite binary compilation, ZIP container packaging, regex/AJV AST linting, runtime timeout management, and physical disk verification. LLMs are never burdened with mental hashes or raw binary manipulation.
+
 ---
 
 ## 5. Storage Layer & Scope Invariants

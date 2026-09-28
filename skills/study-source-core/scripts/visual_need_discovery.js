@@ -121,6 +121,12 @@ function discoverVisualNeeds(options = {}) {
         if (matches && matches.length > 0) {
             // Weight by subject preference
             const isPreferred = preferredCategories.has(category);
+            
+            // Defend against single casual narrative word mentions for non-preferred categories
+            if (!isPreferred && matches.length < 2) {
+                continue;
+            }
+
             const relevance = isPreferred ? 'HIGH' : 'MEDIUM';
 
             if (!seenCategories.has(category)) {

@@ -47,7 +47,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Input**: `scratch/evidence-pack.md` and chapter metadata.
 - **Required Context**: `skills/study-source-core/resources/note-architecture.md`, `skills/study-source-core/resources/source-policy.md`.
 - **Invocation Trigger**: Invoked when eligible according to the Subject Artifact Policy in Wave 1 parallel generation.
-- **Process**: Read evidence pack $\to$ construct frontmatter $\to$ synthesize single H1 and mandatory sections $\to$ add optional justified sections $\to$ AST self-audit $\to$ write `Notes/<Chapter>_Notes.md` $\to$ return handoff.
+- **Process**: Ingest task-scoped context slice $\to$ construct frontmatter $\to$ synthesize single H1 and mandatory sections $\to$ add optional justified sections $\to$ AST self-audit $\to$ write `Notes/<Chapter>_Notes.md` $\to$ return handoff.
 - **Failure Conditions**: Missing frontmatter fields, broken heading hierarchy, multiple H1s, English-only prose, hallucinations.
 - **Duplication Guard**: Evaluates evidence SHA-256 hash before re-authoring; points to `skills/study-source-core/resources/note-architecture.md`.
 
@@ -137,13 +137,13 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 
 ### 9. `math-apkg-author` — Track B Mathematics APKG Author
 - **Definition File**: `.agents/agents/math-apkg-author.md`
-- **Role**: Authors mathematical problem pattern catalogs, practice question inventories, canonical Markdown Question Banks, Solution DAGs, 3-tier hints, and compiles StudyLab APKGs when APKG mode is active.
+- **Role**: Authors mathematical problem pattern catalogs, practice question inventories, canonical Markdown Question Banks, Solution DAGs, 3-tier hints, and directs compilation of StudyLab APKGs via packaging tools when APKG mode is active.
 - **Why Exists**: Embeds deep mathematical solvers, integer constraints, coprime factorizations, and procedural practice progression.
-- **Does Not Own**: Non-math study notes, basic flashcards, slide decks.
+- **Does Not Own**: Non-math study notes, basic flashcards, slide decks, manual binary zip serialization.
 - **Input**: `scratch/evidence-pack.md` (Math domain) and authentic PYQs.
 - **Required Context**: `skills/study-source-core/subject-skills/Math/SKILL.md`, `skills/study-source-core/resources/studylab-procedural-contract.md`, `skills/study-source-core/resources/studylab-question-bank-contract.md`.
 - **Invocation Trigger**: Subject === 'Math' AND solvable practice questions exist in source evidence.
-- **Process**: Extract solvable math questions $\to$ map to canonical problem families $\to$ author procedural items $\to$ render Markdown Question Bank or compile APKG $\to$ validate $\to$ return handoff.
+- **Process**: Extract solvable math questions $\to$ map to canonical problem families $\to$ author procedural items $\to$ render Markdown Question Bank or invoke packaging tool for APKG $\to$ validate $\to$ return handoff.
 - **Failure Conditions**: Incomplete solution DAG, Tier 1/2 hint leaking final answer, MCQ with $< 4$ options, generic flashcard fallback.
 - **Duplication Guard**: Preserves discrete identities (`1 Pattern != 1 Question`); points to `.agents/RESOURCES.md`.
 
@@ -203,7 +203,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 - **Input**: Compiled `.apkg` binaries, `.manifest.json`, and intermediate JSON manifests.
 - **Required Context**: `skills/study-source-core/resources/studylab/anti-fallback-invariant.md`, `skills/study-source-core/resources/studylab/validation-protocol.md`.
 - **Invocation Trigger**: Wave 3 post-packaging release gate whenever a StudyLab Procedural APKG is generated.
-- **Process**: Parse `.apkg` SQLite DB and ZIP structure $\to$ execute 15-point attack checks $\to$ assert DAG cycle absence and non-leaking hints $\to$ verify MCQ options ($\ge 4$) in SQLite $\to$ issue Pass/Fail $\to$ return handoff.
+- **Process**: Executes automated certification tools (`run_adversarial_certification.js`) to parse `.apkg` SQLite DB and ZIP structure $\to$ evaluates 15-point attack checks $\to$ asserts DAG cycle absence and non-leaking hints $\to$ verifies MCQ options ($\ge 4$) in SQLite $\to$ issues Pass/Fail $\to$ returns handoff.
 - **Failure Conditions**: Any breach across the 15 checks, circular DAG dependencies, hint leaking final answer, MCQ with $< 4$ options in SQLite.
 - **Duplication Guard**: Evaluates package checksum; does not re-audit identical binary hashes; points to `.agents/RESOURCES.md`.
 

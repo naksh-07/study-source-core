@@ -1,20 +1,18 @@
 /**
  * study-source-core Declarative Content Renderers (`render_declarative_artifacts.js`)
  * 
- * Implements deterministic downstream projections of SemanticLearningIR and PedagogicalIR
- * for declarative study artifacts:
- * 1. Knowledge Notes (`Notes/<Chapter>_Notes.md`)
- * 2. Basic Anki Flashcards (`Basic/<Chapter>_Basic.tsv`)
- * 3. Cloze Anki Flashcards (`Cloze/<Chapter>_Cloze.tsv`)
- * 4. Relational MindMap (`Optional/<Chapter>.mindmap.json` & Mermaid diagram)
- * 5. NotebookLM Slide Deck Prompt (`SlideDeck/<Chapter>_SlideDeckPrompt.md`)
+ * [ARCHITECTURAL DEPRECATION NOTICE]
+ * This module is a FROZEN legacy reference mock from Milestone 3 AST projections.
+ * Under the modern 14-Agent Master Architecture (Milestone 4+ / Phase 10):
+ * - Knowledge Notes are owned exclusively by `core-notes` (LLM specialist).
+ * - Basic Anki Cards are owned exclusively by `core-basic-anki` (LLM specialist).
+ * - Cloze Anki Cards are owned exclusively by `core-cloze-anki` (LLM specialist).
+ * - MindMaps are owned exclusively by `core-mindmap` (LLM specialist).
+ * - Slide Decks are owned exclusively by `core-slide-deck` (LLM specialist).
  * 
- * Invariants:
- * - Pure Projections: Renderers consume IR directly; no rediscovery of facts from raw source.
- * - Single-Writer & Renderer Independence: No renderer reads another renderer's output.
- * - Determinism: Identical IR input produces byte-for-byte identical output.
- * - Hindi-First Bilingual Standard: Explanatory prose in Hindi with English terms in parentheses.
- * - Anti-Slop: Monotonic headings, single H1, valid TSV delimiters, bounded slide budgets.
+ * This file is RETAINED STRICTLY for legacy Milestone 3 AST unit tests.
+ * It is STRICTLY FORBIDDEN from being invoked by production orchestrators (`orchestration_engine.js`).
+ * "NO SCRIPT IS PERMITTED TO PERFORM CREATIVE OR PEDAGOGICAL WORK IN PRODUCTION."
  */
 
 const fs = require('fs');

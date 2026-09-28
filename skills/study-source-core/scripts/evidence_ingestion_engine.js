@@ -216,6 +216,97 @@ function segmentFixtureIntoChunks(fixture, sourceId, options = {}) {
 }
 
 /**
+ * Extracts structured concepts, formulas, and patterns from markdown text sections.
+ */
+function extractMarkdownStructuredEntities(text) {
+    const concepts = [];
+    const formulas = [];
+    const patterns = [];
+
+    const lines = text.split(/\r?\n/);
+    let currentSection = null;
+    let currentEntity = null;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        if (/^##\s*(?:\d+\.?\s*)?(?:Core\s+Concepts|Concepts|Theory|Overview)/i.test(line)) {
+            currentSection = 'CONCEPTS';
+            currentEntity = null;
+            continue;
+        } else if (/^##\s*(?:\d+\.?\s*)?(?:Master\s+Formulas|Formulas|Key\s+Equations|Principles)/i.test(line)) {
+            currentSection = 'FORMULAS';
+            currentEntity = null;
+            continue;
+        } else if (/^##\s*(?:\d+\.?\s*)?(?:Problem\s+Patterns|Patterns)/i.test(line)) {
+            currentSection = 'PATTERNS';
+            currentEntity = null;
+            continue;
+        } else if (/^##\s+/i.test(line)) {
+            currentSection = null;
+            currentEntity = null;
+            continue;
+        }
+
+        if (currentSection === 'CONCEPTS') {
+            const h3Match = line.match(/^###\s+([^\n]+)/);
+            if (h3Match) {
+                currentEntity = { name: h3Match[1].trim(), definition: '' };
+                concepts.push(currentEntity);
+            } else if (currentEntity) {
+                if (line.startsWith('- Definition:')) {
+                    currentEntity.definition = line.substring(13).trim();
+                } else if (line.startsWith('- Rule:')) {
+                    currentEntity.rule = line.substring(7).trim();
+                } else if (!line.startsWith('- ') && line.length > 0) {
+                    currentEntity.definition += (currentEntity.definition ? ' ' : '') + line;
+                }
+            } else if (line.startsWith('- **') && line.includes('**:')) {
+                const m = line.match(/-\s*\*\*([^*]+)\*\*:\s*(.+)/);
+                if (m) {
+                    concepts.push({ name: m[1].trim(), definition: m[2].trim() });
+                }
+            }
+        } else if (currentSection === 'FORMULAS') {
+            const h3Match = line.match(/^###\s+([^\n]+)/);
+            if (h3Match) {
+                currentEntity = { name: h3Match[1].trim(), formula: '' };
+                formulas.push(currentEntity);
+            } else if (currentEntity) {
+                if (line.startsWith('- Formula:')) {
+                    currentEntity.formula = line.substring(10).replace(/^\$+|\$+$/g, '').trim();
+                } else if (line.startsWith('- Scope:')) {
+                    currentEntity.scope = line.substring(8).trim();
+                } else if (line.startsWith('$$') && line.endsWith('$$')) {
+                    currentEntity.formula = line.slice(2, -2).trim();
+                }
+            } else if (line.includes('$$') || (line.includes('$') && line.includes('='))) {
+                const rawForm = line.replace(/^\d+[\.\)]\s*/, '').replace(/^\$+|\$+$/g, '').trim();
+                formulas.push({ name: `Formula ${formulas.length + 1}`, formula: rawForm });
+            }
+        } else if (currentSection === 'PATTERNS') {
+            const h3Match = line.match(/^###\s*(?:Pattern:\s*)?([^(]+)(?:\(([^)]+)\))?/);
+            if (h3Match) {
+                currentEntity = {
+                    pattern_id: h3Match[2] ? h3Match[2].trim() : `pat-${patterns.length + 1}`,
+                    title: h3Match[1].trim(),
+                    decision_points: [],
+                    common_traps: [],
+                    error_categories: []
+                };
+                patterns.push(currentEntity);
+            } else if (currentEntity) {
+                if (line.startsWith('- Deep Structure:')) currentEntity.deep_structure = line.substring(17).trim();
+                else if (line.startsWith('- Governing Method:')) currentEntity.governing_method = line.substring(19).trim();
+                else if (line.startsWith('- Error Categories:')) currentEntity.error_categories = line.substring(19).split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+    }
+
+    return { concepts, formulas, patterns };
+}
+
+/**
  * Parses and ingests raw source from file or object into a Canonical Evidence Pack.
  */
 function ingestSourceToEvidencePack(sourceInput, options = {}) {
@@ -317,6 +408,26 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
                 sourceTitle: options.source_title
             });
             rawPracticeProblems.push(...sourceInventory.questions);
+        }
+
+        // Extract concepts, formulas, and patterns from markdown
+        const extracted = extractMarkdownStructuredEntities(normalizedText);
+        if (extracted.concepts.length > 0) concepts.push(...extracted.concepts);
+        if (extracted.formulas.length > 0) formulas.push(...extracted.formulas);
+        if (extracted.patterns.length > 0) problemPatterns.push(...extracted.patterns);
+
+        // Retain declared pattern references from questions without synthesizing fake pedagogical deep structures
+        if (problemPatterns.length === 0 && rawPracticeProblems.length > 0) {
+            const seen = new Set();
+            for (const q of rawPracticeProblems) {
+                if (q.pattern_ref && !seen.has(q.pattern_ref)) {
+                    seen.add(q.pattern_ref);
+                    problemPatterns.push({
+                        pattern_id: q.pattern_ref,
+                        title: q.pattern_ref
+                    });
+                }
+            }
         }
     }
 

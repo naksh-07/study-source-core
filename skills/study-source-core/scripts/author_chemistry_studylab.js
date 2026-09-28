@@ -268,33 +268,35 @@ function buildChemistryProgressiveHints(prob, pattern, answer) {
     let tier2 = '';
     let tier3 = '';
 
-    if (pattern && pattern.pattern_id === 'pat-chem-eq-kc-calc') {
-        tier1 = 'रासायनिक सिद्धांत पहचानें: द्रव्यमान अनुपाती क्रिया के नियमानुसार संतुलित उत्क्रमणीय गैसीय अभिक्रिया हेतु साम्य स्थिरांक Kc = [उत्पाद]^[गुणांक] / [अभिकारक]^[गुणांक] का प्रयोग करें।';
-        tier2 = 'रणनीति एवं सांद्रता स्थापना: यदि साम्यावस्था पर मोल दिए गए हैं, तो पहले मोलर सांद्रता [X] = n/V निकालें। आयतन V (L) से भाग देना सुनिश्चित करें।';
-        tier3 = 'चरणबद्ध संक्रिया: साम्य सांद्रताओं के मान Kc व्यंजक में प्रतिस्थापित करें तथा घातों की सही गणना कर अंतिम मान ज्ञात करें।';
-    } else if (pattern && pattern.pattern_id === 'pat-chem-eq-kp-deltang') {
-        tier1 = 'रासायनिक सिद्धांत पहचानें: गैसीय साम्य में Kp एवं Kc के मध्य संबंध Kp = Kc * (RT)^(Delta n_g) का प्रयोग करें।';
-        tier2 = 'रणनीति एवं गैसीय मोल: केवल गैसीय स्पीशीज के मोलों का अंतर Delta n_g = n_p(g) - n_r(g) निकालें तथा तापमान को केल्विन (T = t + 273 K) में बदलें।';
-        tier3 = 'चरणबद्ध संक्रिया: R = 0.0821 तथा Delta n_g का मान सूत्र में रखें; यदि Delta n_g = 0 हो तो सीधे Kp = Kc नियम लागू करें।';
-    } else if (pattern && pattern.pattern_id === 'pat-chem-sol-ph-calc') {
-        tier1 = 'रासायनिक सिद्धांत पहचानें: pH पैमाने की मूल परिभाषा pH = -log10[H+] तथा जल के आयनिक गुणनफल Kw = [H+][OH-] = 10^-14 (25°C पर) का प्रयोग करें।';
-        tier2 = 'रणनीति एवं आयन सांद्रता: प्रबल अम्ल हेतु [H+] तथा प्रबल क्षार हेतु पहले [OH-] ज्ञात करें। क्षार होने पर pOH = -log10[OH-] निकालकर pH = 14 - pOH करें।';
-        tier3 = 'चरणबद्ध संक्रिया: 10 की घात के रूप में सांद्रता लिखकर -log10(10^-n) = n का लघुगणकीय नियम लागू करें।';
+    // 1. Authoritative Specialist / LLM Hints Check
+    if (prob && prob.hints && prob.hints.tier1_conceptual && prob.hints.tier2_strategic && prob.hints.tier3_next_step) {
+        tier1 = prob.hints.tier1_conceptual;
+        tier2 = prob.hints.tier2_strategic;
+        tier3 = prob.hints.tier3_next_step;
+    } else if (pattern && pattern.hints && pattern.hints.tier1_conceptual && pattern.hints.tier2_strategic && pattern.hints.tier3_next_step) {
+        tier1 = pattern.hints.tier1_conceptual;
+        tier2 = pattern.hints.tier2_strategic;
+        tier3 = pattern.hints.tier3_next_step;
+    } else if (pattern && (pattern.governing_method || pattern.deep_structure || pattern.title)) {
+        const title = pattern.title || 'रासायनिक परिघटना';
+        const method = pattern.governing_method || 'संतुलित समीकरण व मानक रासायनिक नियम';
+        const deepStruct = pattern.deep_structure || 'मूलभूत रासायनिक सिद्धांत';
+        tier1 = `रासायनिक सिद्धांत पहचानें: ${title} के अंतर्गत ${deepStruct} की पहचान करें।`;
+        tier2 = `रणनीति एवं समीकरण: ${method} स्थापित करें तथा आवश्यक सांद्रता अथवा मोलरता का निर्धारण करें।`;
+        tier3 = `चरणबद्ध संक्रिया: व्यंजक में मान प्रतिस्थापित कर आवश्यक अज्ञात रासायनिक राशि का मान ज्ञात करें।`;
     } else {
-        tier1 = 'रासायनिक सिद्धांत पहचानें: समस्या में शामिल मूल रासायनिक नियम (साम्यावस्था, द्रव्यमान क्रिया, या अम्ल-क्षार आयनन) को पहचानें।';
-        tier2 = 'रणनीति एवं समीकरण: रासायनिक स्पीशीज, उनकी सांद्रता/दाब तथा संतुलित रासायनिक समीकरण स्थापित करें।';
-        tier3 = 'चरणबद्ध संक्रिया: मान प्रतिस्थापित कर आवश्यक अज्ञात रासायनिक राशि का सटीक मान ज्ञात करें।';
+        throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Question '${prob && (prob.id || prob.source_id)}' lacks 3-tier progressive hints. Scripts are not permitted to invent generic hints.`);
     }
 
-    // Explicit Anti-Leak Assertion Check
+    // Explicit Anti-Leak Assertion Check (Fail Closed - No Silent Overwriting)
     if (hintLeaksAnswer(tier1, answer)) {
-        tier1 = 'रासायनिक सिद्धांत पहचानें: रासायनिक साम्यावस्था एवं आयनिक नियमों का सावधानीपूर्वक विश्लेषण करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 1 hint leaks final answer '${answer}': "${tier1}"`);
     }
     if (hintLeaksAnswer(tier2, answer)) {
-        tier2 = 'रणनीति: संतुलित रासायनिक समीकरण स्थापित करें तथा मोलरता व ताप (Kelvin) का ध्यान रखें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 2 hint leaks final answer '${answer}': "${tier2}"`);
     }
     if (hintLeaksAnswer(tier3, answer)) {
-        tier3 = 'संक्रिया: सूत्र में ज्ञात मान प्रतिस्थापित कर आवश्यक अज्ञात राशि की गणना करें।';
+        throw new Error(`[HINT_ANSWER_LEAKAGE_FATAL] Tier 3 hint leaks final answer '${answer}': "${tier3}"`);
     }
 
     return {

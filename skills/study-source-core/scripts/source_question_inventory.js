@@ -399,27 +399,32 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
         }
     }
 
+    const problemSectionRegex = /^##\s*(?:\d+\.?\s*)?(?:Authentic\s+Source\s+Problems|Practice\s+(?:Problems|Questions)|Questions|Solved\s+Problems|Exercises|Problem\s+Set)/i;
+
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmed = line.trim();
 
-        if (trimmed.startsWith('## 5. Authentic Source Problems')) {
+        if (problemSectionRegex.test(trimmed)) {
+            flushCurrentItem();
             currentSection = 'PROBLEMS';
             continue;
         } else if (trimmed.startsWith('## ') && currentSection === 'PROBLEMS') {
-            // New major section, flush and exit
             flushCurrentItem();
             currentSection = null;
             continue;
         }
 
         if (currentSection === 'PROBLEMS') {
-            if (trimmed.startsWith('### Source Problem') || trimmed.startsWith('### Problem')) {
+            const problemHeaderMatch = trimmed.match(/^###\s*(?:Source\s+Problem\s*\d*|Problem\s*\d*|Question\s*\d*|Q\s*\d*)\s*(?:\(([^)]+)\)|:\s*([^\n]+))?/i);
+            const naturalQMatch = trimmed.match(/^(?:Q(?:uestion)?\s*(\d+)[:.]|\((\d+)\)|(\d+)[\.)])\s+(.+)/i);
+
+            if (problemHeaderMatch) {
                 flushCurrentItem();
-                const m = trimmed.match(/###\s*(?:Source Problem\s*\d+|Problem)\s*(?:\(([^)]+)\)|:\s*([^\n]+))/);
-                const id = m ? (m[1] || m[2] || '').trim() : `item-${questions.length + 1}`;
+                const m = problemHeaderMatch;
+                const id = m[1] || m[2] || `item-${questions.length + 1}`;
                 currentItem = {
-                    source_id: id,
+                    source_id: id.trim(),
                     question_number: null,
                     statement: '',
                     options: [],
@@ -432,54 +437,77 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                     _readingStatement: false,
                     _readingSteps: false
                 };
+            } else if (naturalQMatch && !currentItem) {
+                const qNum = naturalQMatch[1] || naturalQMatch[2] || naturalQMatch[3];
+                const qStmt = naturalQMatch[4];
+                currentItem = {
+                    source_id: `q-${qNum || (questions.length + 1)}`,
+                    question_number: qNum || String(questions.length + 1),
+                    statement: qStmt.trim(),
+                    options: [],
+                    source_solution_steps: [],
+                    prerequisites: [],
+                    raw_type: 'unknown',
+                    difficulty: 2.0,
+                    exam: null,
+                    pattern_ref: null,
+                    _readingStatement: true,
+                    _readingSteps: false
+                };
             } else if (currentItem) {
-                if (trimmed.startsWith('- Question Number:')) {
+                if (/^-\s*(?:Question\s*Number|Q\s*Num|Number):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.question_number = trimmed.substring(18).trim();
-                } else if (trimmed.startsWith('- Source Question ID:')) {
+                    currentItem.question_number = trimmed.replace(/^-\s*(?:Question\s*Number|Q\s*Num|Number):\s*/i, '').trim();
+                } else if (/^-\s*(?:Source\s*Question\s*ID|Source\s*ID|ID):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.source_id = trimmed.substring(21).trim();
-                } else if (trimmed.startsWith('- Exam:')) {
+                    currentItem.source_id = trimmed.replace(/^-\s*(?:Source\s*Question\s*ID|Source\s*ID|ID):\s*/i, '').trim();
+                } else if (/^-\s*(?:Exam|Provenance|Source):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.exam = trimmed.substring(7).trim();
-                } else if (trimmed.startsWith('- Pattern Ref:')) {
+                    currentItem.exam = trimmed.replace(/^-\s*(?:Exam|Provenance|Source):\s*/i, '').trim();
+                } else if (/^-\s*(?:Pattern\s*Ref|Pattern|Family):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.pattern_ref = trimmed.substring(14).trim();
-                } else if (trimmed.startsWith('- Type:')) {
+                    currentItem.pattern_ref = trimmed.replace(/^-\s*(?:Pattern\s*Ref|Pattern|Family):\s*/i, '').trim();
+                } else if (/^-\s*Type:\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.raw_type = trimmed.substring(7).trim().toLowerCase();
-                } else if (trimmed.startsWith('- Statement:')) {
-                    currentItem.statement = trimmed.substring(12).trim();
+                    currentItem.raw_type = trimmed.replace(/^-\s*Type:\s*/i, '').trim().toLowerCase();
+                } else if (/^-\s*Statement:\s*(.+)/i.test(trimmed)) {
+                    currentItem.statement = trimmed.replace(/^-\s*Statement:\s*/i, '').trim();
                     currentItem._readingStatement = true;
                     currentItem._readingSteps = false;
-                } else if (trimmed.startsWith('- Correct Answer:')) {
+                } else if (/^-\s*(?:Correct\s*Answer|Answer|Ans|उत्तर):\s*(.+)/i.test(trimmed) || /^(?:Answer|Ans|उत्तर):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.correct_answer = trimmed.substring(17).trim();
-                } else if (trimmed.startsWith('- Difficulty:')) {
+                    const ansText = trimmed.replace(/^(?:-\s*)?(?:Correct\s*Answer|Answer|Ans|उत्तर):\s*/i, '').trim();
+                    currentItem.correct_answer = ansText;
+                } else if (/^-\s*Difficulty:\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.difficulty = parseFloat(trimmed.substring(13).trim()) || 2.0;
-                } else if (trimmed.startsWith('- Prerequisites:')) {
+                    currentItem.difficulty = parseFloat(trimmed.replace(/^-\s*Difficulty:\s*/i, '').trim()) || 2.0;
+                } else if (/^-\s*Prerequisites:\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    currentItem.prerequisites = trimmed.substring(16).split(',').map(s => s.trim()).filter(Boolean);
-                } else if (trimmed.startsWith('- Solution Steps:')) {
+                    currentItem.prerequisites = trimmed.replace(/^-\s*Prerequisites:\s*/i, '').split(',').map(s => s.trim()).filter(Boolean);
+                } else if (/^-\s*(?:Solution\s*Steps|Solution|हल):\s*/i.test(trimmed) || /^(?:Solution|हल):\s*/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = true;
-                } else if (trimmed.startsWith('- Options:')) {
+                    const rem = trimmed.replace(/^(?:-\s*)?(?:Solution\s*Steps|Solution|हल):\s*/i, '').trim();
+                    if (rem) currentItem.source_solution_steps.push(rem);
+                } else if (/^-\s*Options:\s*/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                } else if (/^[\s-]*\([A-Za-z0-9]+\)\s*/.test(trimmed)) {
+                } else if (/^(?:-\s*)?(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+[\.\)])\s+(.+)/.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
-                    const optText = trimmed.replace(/^[\s-]*\([A-Za-z0-9]+\)\s*/, '').trim();
+                    const optText = trimmed.replace(/^(?:-\s*)?(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+[\.\)])\s+/, '').trim();
                     currentItem.options.push(optText);
+                    if (currentItem.options.length >= 2) {
+                        currentItem.raw_type = 'mcq';
+                    }
                 } else if (currentItem._readingSteps && /^\d+\.\s*/.test(trimmed)) {
                     currentItem.source_solution_steps.push(trimmed.replace(/^\d+\.\s*/, '').trim());
                 } else if (currentItem._readingStatement && !trimmed.startsWith('- ') && !trimmed.startsWith('### ') && !trimmed.startsWith('## ')) {

@@ -499,40 +499,52 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
             }
         });
 
-        // Normalize hints to 3 non-leaking tiers
+        const matchedPattern = problemPatterns.find(p => p.id === patternId || p.pattern_id === patternId);
+
+        // Normalize hints to 3 non-leaking tiers (Problem -> Pattern -> Fail Closed)
         let rawHints = prob.hints;
-        let hints;
-        if (Array.isArray(rawHints)) {
-            hints = {
-                tier1_conceptual: rawHints[0] || 'Identify the core principle governing this problem.',
-                tier2_strategic: rawHints[1] || 'Set up the governing algebraic or physical equation.',
-                tier3_next_step: rawHints[2] || 'Substitute the given values into the equation and simplify.'
+        if (!rawHints && matchedPattern && matchedPattern.hints) {
+            rawHints = matchedPattern.hints;
+        } else if (!rawHints && matchedPattern && (matchedPattern.governing_method || matchedPattern.deep_structure || matchedPattern.title)) {
+            const title = matchedPattern.title || 'मानक संक्रिया';
+            const method = typeof matchedPattern.governing_method === 'string'
+                ? matchedPattern.governing_method
+                : (Array.isArray(matchedPattern.governing_method && matchedPattern.governing_method.standard_algorithm)
+                    ? matchedPattern.governing_method.standard_algorithm.join(' ')
+                    : 'चरणबद्ध मानक विधि');
+            const deepStruct = matchedPattern.deep_structure || 'मूलभूत अवधारणा';
+            rawHints = {
+                tier1_conceptual: `संकल्पना एवं सिद्धांत: ${title} के अंतर्गत ${deepStruct} का स्मरण करें।`,
+                tier2_strategic: `विधि एवं रणनीति: समस्या के समाधान हेतु ${method} का अनुप्रयोग करें।`,
+                tier3_next_step: `सेटअप एवं संक्रिया: मान प्रतिस्थापित कर गणना पूर्ण करें।`
             };
-        } else if (!rawHints || typeof rawHints !== 'object') {
+        }
+
+        let hints;
+        if (Array.isArray(rawHints) && rawHints.length >= 3) {
             hints = {
-                tier1_conceptual: 'Identify the core principle governing this problem.',
-                tier2_strategic: 'Set up the governing algebraic or physical equation.',
-                tier3_next_step: 'Substitute the given values into the equation and simplify.'
+                tier1_conceptual: String(rawHints[0] || '').trim(),
+                tier2_strategic: String(rawHints[1] || '').trim(),
+                tier3_next_step: String(rawHints[2] || '').trim()
+            };
+        } else if (rawHints && typeof rawHints === 'object') {
+            hints = {
+                tier1_conceptual: String(rawHints.tier1_conceptual || rawHints.tier1 || '').trim(),
+                tier2_strategic: String(rawHints.tier2_strategic || rawHints.tier2_strategic_method || rawHints.tier2 || '').trim(),
+                tier3_next_step: String(rawHints.tier3_next_step || rawHints.tier3_next_step_setup || rawHints.tier3 || '').trim()
             };
         } else {
-            hints = {
-                tier1_conceptual: rawHints.tier1_conceptual || rawHints.tier1 || 'Identify the core principle.',
-                tier2_strategic: rawHints.tier2_strategic || rawHints.tier2_strategic_method || rawHints.tier2 || 'Set up the governing method.',
-                tier3_next_step: rawHints.tier3_next_step || rawHints.tier3_next_step_setup || rawHints.tier3 || 'Substitute the values into setup.'
-            };
+            throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Practice item "${itemId}" must contain 3-tier hints. Scripts are not permitted to invent generic hints.`);
+        }
+        if (!hints.tier1_conceptual || !hints.tier2_strategic || !hints.tier3_next_step) {
+            throw new Error(`[INCOMPLETE_AUTHORITATIVE_HINTS] Practice item "${itemId}" hints incomplete across tiers (tier1: ${!!hints.tier1_conceptual}, tier2: ${!!hints.tier2_strategic}, tier3: ${!!hints.tier3_next_step}).`);
         }
 
         // Normalize options for MCQ
         let optionsList = prob.options;
         const qType = prob.question_type || (prob.options ? 'mcq' : 'numerical');
         if (qType === 'mcq') {
-            if (!Array.isArray(optionsList) || optionsList.length < 4) {
-                // If options < 4 in source, pad with valid domain distractors to preserve MCQ invariant
-                optionsList = optionsList && optionsList.length > 0 ? [...optionsList] : ['Option A', 'Option B', 'Option C', 'Option D'];
-                while (optionsList.length < 4) {
-                    optionsList.push(`Option ${String.fromCharCode(65 + optionsList.length)}`);
-                }
-            }
+            optionsList = Array.isArray(optionsList) ? optionsList : [];
         }
 
         practiceItems.push({
@@ -546,14 +558,11 @@ function createIRFromEvidencePack(evidencePack, options = {}) {
             answer: prob.numerical_answer || prob.answer,
             tolerance: prob.tolerance,
             explanation: prob.explanation || prob.solution,
-            solution_dag: prob.solution_dag || [
-                { step_id: 'step_1', description: 'Recognize pattern and identify given variables' },
-                { step_id: 'step_2', description: 'Apply governing relationship and solve for target' }
-            ],
+            solution_dag: Array.isArray(prob.solution_dag) ? prob.solution_dag : [],
             hints,
             traps_and_checks: prob.traps_and_checks || {
-                common_traps: prob.common_traps || ['Arithmetic slip'],
-                verification_check: 'Substitute answer back into initial equation'
+                common_traps: prob.common_traps || [],
+                verification_check: prob.verification_check || ''
             },
             clr: itemClr
         });
