@@ -93,7 +93,7 @@ StudySourceCore/
 │   ├── GOVERNANCE.md               ← Authority hierarchy, ADR protocol, single-rule ownership
 │   ├── GAP_REGISTER.md             ← Authoritative register of architectural gaps & resolutions
 │   ├── CURRENT_IMPLEMENTATION.md   ← Active baseline assessment & test inventory
-│   ├── audits/                     ← Historical audit reports & verification proofs (11 files)
+│   ├── audits/                     ← Audit reports & Master Audit Roadmap (MASTER_AUDIT_AND_BUG_HUNTING_PLAN.md)
 │   ├── archive/                    ← Retired drafts & archive indexes
 │   └── target_architecture/        ← Forward-looking target architecture specifications
 │
