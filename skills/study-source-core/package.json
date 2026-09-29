@@ -1,5 +1,11 @@
 {
+  "name": "study-source-core",
+  "version": "1.1.0",
+  "bin": {
+    "studycore": "./scripts/studycore_cli.js"
+  },
   "scripts": {
+    "studycore": "node scripts/studycore_cli.js",
     "doctor": "node scripts/doctor.js",
     "test": "vitest run",
     "test:watch": "vitest",

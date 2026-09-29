@@ -20,18 +20,13 @@
  *    without replacing it with a smaller representative-question subset.
  */
 
-const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { computeSha256: computeLineageSha256 } = require('./content_lineage_record');
 
 const SCHEMA_VERSION = '1.0.0';
 
-/**
- * Computes SHA-256 hash of UTF-8 content.
- */
-function computeSha256(content) {
-    return crypto.createHash('sha256').update(content || '', 'utf8').digest('hex');
-}
+const computeSha256 = (content) => computeLineageSha256(content || '');
 
 /**
  * Sanitizes input string into a lowercase deterministic slug.

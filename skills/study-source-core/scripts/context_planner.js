@@ -14,14 +14,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
-
-/**
- * Computes SHA-256 hash of UTF-8 content.
- */
-function computeSha256(content) {
-    return crypto.createHash('sha256').update(content, 'utf8').digest('hex');
-}
+const { computeSha256 } = require('./content_lineage_record');
 
 /**
  * Context Budget Tier Definitions

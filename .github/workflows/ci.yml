@@ -1,0 +1,47 @@
+name: StudySourceCore CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  verify:
+    name: Vitest Parallel Suite & Final Audit Harness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'skills/study-source-core/requirements.txt'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r skills/study-source-core/requirements.txt
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 'skills/study-source-core/package-lock.json'
+
+      - name: Install Node.js dependencies
+        working-directory: skills/study-source-core
+        run: npm ci
+
+      - name: Run Vitest Parallel Suite
+        working-directory: skills/study-source-core
+        run: npm test
+
+      - name: Run 10-Gate Final Audit Harness
+        working-directory: skills/study-source-core
+        run: node scripts/test_final_audit_harness.js
