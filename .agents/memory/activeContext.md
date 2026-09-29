@@ -14,3 +14,5 @@
   - [x] Basic vs Cloze 1:1 Deduplication: `deduplicateBasicAgainstCloze` in `export_anki.js` filters verbatim/near-verbatim Basic duplicates while retaining Cloze.
   - [x] Orchestration & Routing Guards: `orchestration_engine.js:819` re-throws `CONTEXT_PROVENANCE_FAILURE`; `routing_engine.js` guards `bmGraph`/`bmQa` policy suppression and includes `problemPatternsJson`/`practiceQuestionsJson` in `PROCEDURAL_TRACK_KEYS`.
   - [x] Page-Range Slicing & Physical Deliverables: Forwarded `--page-start`/`--page-end` in `evidence_ingestion_engine.js`; upgraded `Study Materials/Map/Europe` (`Europe_Notes.md`, `europe_map.svg`, `Europe_ImageOcclusion.json`, `Europe_Anki.apkg`) and `Math/LCM-HCF` (`LCM-HCF_Basic.tsv`, `LCM-HCF_Anki.apkg`).
+- [x] Phase 7 (Polish & MCP v1.1.0): Anki Dark Mode CSS (`.nightMode` on Models `1600000001`–`1600000003`), Atomic APKG streaming temp-file rename (`shared_anki_utils.js`), MCP Server v1.1.0 (`ingest_source_to_evidence_pack`, `query_procedural_contract`, `languagePolicy`, extended `validate_artifact`), and `docs/GAP_REGISTER.md` (`GAP-18` to `GAP-27`) synchronized.
+

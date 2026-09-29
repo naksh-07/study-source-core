@@ -88,7 +88,7 @@ function buildModelDefinitions() {
                 { "name": "Front", "ord": 0, "sticky": false, "rtl": false, "font": "Arial", "size": 20, "media": [] },
                 { "name": "Back", "ord": 1, "sticky": false, "rtl": false, "font": "Arial", "size": 20, "media": [] }
             ],
-            "css": ".card {\n font-family: arial;\n font-size: 20px;\n text-align: center;\n color: black;\n background-color: white;\n}\n",
+            "css": ".card {\n font-family: system-ui, -apple-system, arial, sans-serif;\n font-size: 20px;\n text-align: center;\n color: #0f172a;\n background-color: #ffffff;\n}\n.nightMode.card, .nightMode .card {\n color: #f8fafc;\n background-color: #0f172a;\n}\n",
             "latexPre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
             "latexPost": "\\end{document}",
             "latexsvg": false,
@@ -117,7 +117,7 @@ function buildModelDefinitions() {
                 { "name": "Text", "ord": 0, "sticky": false, "rtl": false, "font": "Arial", "size": 20, "media": [] },
                 { "name": "Back Extra", "ord": 1, "sticky": false, "rtl": false, "font": "Arial", "size": 20, "media": [] }
             ],
-            "css": ".card {\n font-family: arial;\n font-size: 20px;\n text-align: center;\n color: black;\n background-color: white;\n}\n.cloze {\n font-weight: bold;\n color: #0284c7;\n}\n.nightMode .cloze {\n color: #38bdf8;\n}\n",
+            "css": ".card {\n font-family: system-ui, -apple-system, arial, sans-serif;\n font-size: 20px;\n text-align: center;\n color: #0f172a;\n background-color: #ffffff;\n}\n.nightMode.card, .nightMode .card {\n color: #f8fafc;\n background-color: #0f172a;\n}\n.cloze {\n font-weight: bold;\n color: #0284c7;\n}\n.nightMode .cloze {\n color: #38bdf8;\n}\n",
             "latexPre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
             "latexPost": "\\end{document}",
             "latexsvg": false,
@@ -150,7 +150,7 @@ function buildModelDefinitions() {
                 { "name": "Back Extra", "ord": 3, "sticky": false, "rtl": false, "font": "Arial", "size": 20, "media": [] },
                 { "name": "Comments", "ord": 4, "sticky": false, "rtl": false, "font": "Arial", "size": 20, "media": [] }
             ],
-            "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: arial;\n    font-size: 20px;\n    text-align: center;\n    color: black;\n    background-color: white;\n}\n",
+            "css": "#image-occlusion-canvas {\n    --inactive-shape-color: #ffeba2;\n    --active-shape-color: #ff8e8e;\n    --inactive-shape-border: 1px #212121;\n    --active-shape-border: 1px #212121;\n    --highlight-shape-color: #ff8e8e00;\n    --highlight-shape-border: 1px #ff8e8e;\n}\n\n.card {\n    font-family: system-ui, -apple-system, arial, sans-serif;\n    font-size: 20px;\n    text-align: center;\n    color: #0f172a;\n    background-color: #ffffff;\n}\n.nightMode.card, .nightMode .card {\n    color: #f8fafc;\n    background-color: #0f172a;\n}\n",
             "latexPre": "\\documentclass[12pt]{article}\n\\special{papersize=3in,5in}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amssymb,amsmath}\n\\pagestyle{empty}\n\\setlength{\\parindent}{0in}\n\\begin{document}\n",
             "latexPost": "\\end{document}",
             "latexsvg": false,

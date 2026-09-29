@@ -934,15 +934,18 @@ $$LCM(a, b) \\times HCF(a, b) = a \\times b$$
         "भिन्नों का म.स.प. (HCF of Fractions) निकालने का सूत्र क्या है?\tHCF(अंश) / LCM(हर)\tMath::LCM",
         "वह न्यूनतम संख्या जो x, y, z से भाग देने पर प्रत्येक स्थिति में समान शेषफल r छोड़े, उसका व्यंजक क्या है?\tLCM(x, y, z) + r\tMath::LCM"
     ].join('\n') + '\n';
-    fs.writeFileSync(path.join(mathBasic, 'LCM-HCF_Basic.tsv'), mathBasicTsv, 'utf8');
+    writeIfMissing(path.join(mathBasic, 'LCM-HCF_Basic.tsv'), mathBasicTsv, 'utf8');
 
     const mathClozeTsv = "Text\tExtra\tTags\nदो संख्याओं का गुणनफल {{c1::LCM \\times HCF}} के बराबर होता है।\tगुणनफल सर्वसमिका\tMath::LCM\nसह-अभाज्य संख्याओं का HCF सदैव {{c1::1}} होता है।\tपरिभाषा\tMath::LCM\n";
-    fs.writeFileSync(path.join(mathCloze, 'LCM-HCF_Cloze.tsv'), mathClozeTsv, 'utf8');
+    writeIfMissing(path.join(mathCloze, 'LCM-HCF_Cloze.tsv'), mathClozeTsv, 'utf8');
 
-    // Compile Math APKG
+    // Compile Math APKG if not already present
     try {
-        const { exportChapterToAnki } = require('./export_anki');
-        await exportChapterToAnki(mathDir, { chapter: 'LCM-HCF', subject: 'Math', skipProvenanceCheck: true, cleanIntermediates: false });
+        const mathDeclApkg = path.join(mathDir, 'LCM-HCF_Anki.apkg');
+        if (!fs.existsSync(mathDeclApkg) || fs.statSync(mathDeclApkg).size === 0) {
+            const { exportChapterToAnki } = require('./export_anki');
+            await exportChapterToAnki(mathDir, { chapter: 'LCM-HCF', subject: 'Math', skipProvenanceCheck: true, cleanIntermediates: false });
+        }
     } catch (e) {
         if (!fs.existsSync(path.join(mathDir, 'LCM-HCF_Anki.apkg'))) {
             fs.writeFileSync(path.join(mathDir, 'LCM-HCF_Anki.apkg'), Buffer.from('DUMMY_APKG'));
@@ -1292,8 +1295,8 @@ tags: [Geography, Map, Europe, PhysicalGeography]
     <text x="445" y="460" fill="#14532d">Balkans</text>
   </g>
 </svg>`;
-    fs.writeFileSync(path.join(mapMedia, 'europe_map.svg'), europeSvg, 'utf8');
-    fs.writeFileSync(path.join(mapIOMedia, 'europe_map.svg'), europeSvg, 'utf8');
+    writeIfMissing(path.join(mapMedia, 'europe_map.svg'), europeSvg, 'utf8');
+    writeIfMissing(path.join(mapIOMedia, 'europe_map.svg'), europeSvg, 'utf8');
     const europeSvgSha256 = require('crypto').createHash('sha256').update(Buffer.from(europeSvg, 'utf8')).digest('hex');
 
     // Create IO manifest with 15 authentic European geographic regions (giving 15 cards -> 95 + 45 + 15 = 155 cards >= 150)
@@ -1336,12 +1339,15 @@ tags: [Geography, Map, Europe, PhysicalGeography]
             }
         ]
     };
-    fs.writeFileSync(path.join(mapIO, 'Europe_ImageOcclusion.json'), JSON.stringify(europeIO, null, 2), 'utf8');
+    writeIfMissing(path.join(mapIO, 'Europe_ImageOcclusion.json'), JSON.stringify(europeIO, null, 2), 'utf8');
 
-    // Build Europe APKG
+    // Build Europe APKG if not already present
     try {
-        const { exportChapterToAnki } = require('./export_anki');
-        await exportChapterToAnki(mapDir, { chapter: 'Europe', subject: 'Map', skipProvenanceCheck: true, cleanIntermediates: false });
+        const europeApkg = path.join(mapDir, 'Europe_Anki.apkg');
+        if (!fs.existsSync(europeApkg) || fs.statSync(europeApkg).size === 0) {
+            const { exportChapterToAnki } = require('./export_anki');
+            await exportChapterToAnki(mapDir, { chapter: 'Europe', subject: 'Map', skipProvenanceCheck: true, cleanIntermediates: false });
+        }
     } catch (e) {
         if (!fs.existsSync(path.join(mapDir, 'Europe_Anki.apkg'))) {
             fs.writeFileSync(path.join(mapDir, 'Europe_Anki.apkg'), Buffer.from('DUMMY_EUROPE_APKG'));

@@ -230,12 +230,13 @@ async function assembleApkgStream(colDbPathOrBuffer, mediaFilesMap = new Map(), 
         fs.mkdirSync(outDir, { recursive: true });
     }
 
+    const tmpOutputPath = `${outputPath}.tmp_${process.pid}_${Math.random().toString(36).substring(2, 8)}`;
     try {
         const { ZipArchive } = require('archiver');
-        const output = fs.createWriteStream(outputPath);
+        const output = fs.createWriteStream(tmpOutputPath);
         const zip = new ZipArchive({ zlib: { level: 6 } });
 
-        return await new Promise((resolve, reject) => {
+        await new Promise((resolve, reject) => {
             output.on('close', resolve);
             output.on('error', reject);
             zip.on('error', reject);
@@ -267,7 +268,16 @@ async function assembleApkgStream(colDbPathOrBuffer, mediaFilesMap = new Map(), 
             zip.append(JSON.stringify(mediaMap), { name: 'media' });
             zip.finalize();
         });
+
+        try {
+            fs.renameSync(tmpOutputPath, outputPath);
+        } catch (_) {
+            fs.copyFileSync(tmpOutputPath, outputPath);
+            try { fs.unlinkSync(tmpOutputPath); } catch (__) {}
+        }
+        return;
     } catch (err) {
+        try { if (fs.existsSync(tmpOutputPath)) fs.unlinkSync(tmpOutputPath); } catch (_) {}
         // Fallback: If streaming archiver encounters an error, fallback to JSZip
         const buffer = (typeof colDbPathOrBuffer === 'string') ? fs.readFileSync(colDbPathOrBuffer) : colDbPathOrBuffer;
         const zipBuf = await assembleApkgZip(buffer, mediaFilesMap);

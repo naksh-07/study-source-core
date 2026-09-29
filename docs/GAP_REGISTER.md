@@ -37,6 +37,16 @@ Every identified gap is tracked with:
 | **GAP-15** | Fixtures / Hints | **P1 High** | Test Fixture Pedagogical Completeness & 3-Tier Hints | Audit Track 3 | **Resolved** (Track 3) |
 | **GAP-16** | Routing / Matrix | **P2 High** | 9-Subject Matrix Routing & Zero Silent Omission | Audit Track 5 | **Resolved** (Track 5) |
 | **GAP-17** | Windows / Lifecycle | **P2 High** | Windows File Handles & Transient Lifecycle Retries | Audit Track 6 | **Resolved** (Track 6) |
+| **GAP-18** | Packaging / Memory | **P0 Blocker** | Zero-Heap Streaming APKG Compilation (`better-sqlite3` + `archiver`) | Adversarial Audit | **Resolved** (`52cb2fd`) |
+| **GAP-19** | Policy / Language | **P0 Blocker** | Configurable Language Policy (`hinglish`, `en`, `hi`, `bilingual`) | Adversarial Audit | **Resolved** (`52cb2fd`) |
+| **GAP-20** | Validation / Hints | **P0 Blocker** | Question Bank Tier 3 Hint Leak Scan & 17-Dimension Enforcement | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-21** | Contracts / Fail-Closed | **P0 Blocker** | Fail-Closed Procedural Contract Resolution (`CANONICAL_CONTRACT_REQUIRED`) | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-22** | Security / Visual | **P0 Blocker** | Asset Discovery Path Traversal Guard & Blocking IO SHA-256 Check | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-23** | Flashcards / Dedup | **P0 Blocker** | Basic vs. Cloze 1:1 Verbatim Fact Deduplication | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-24** | Vault / Cartography | **P0 Blocker** | `Map/Europe` Multi-Layer Cartographic SVG & Comprehensive Notes | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-25** | Orchestration / Lineage | **P1 Critical** | Re-Throw `CONTEXT_PROVENANCE_FAILURE` & Routing Policy Guards | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-26** | Ingestion / PDF | **P1 Critical** | PyMuPDF/OCR Page-Range Slicing (`--page-start` / `--page-end`) | Adversarial Audit | **Resolved** (`2275762`) |
+| **GAP-27** | UI / MCP | **P2 High** | Anki Dark Mode (`.nightMode`) CSS & MCP Server v1.1.0 Expansion | Adversarial Audit | **Resolved** (v1.1.0) |
 
 ---
 
@@ -355,18 +365,108 @@ Every identified gap is tracked with:
 
 ---
 
+### GAP-18: Zero-Heap Streaming APKG Compilation (`better-sqlite3` + `archiver`)
+- **Category**: Packaging / Memory Scalability
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`P0-1`, `P0-2`) — In-memory WASM `sql.js` + `jszip.generateAsync({ type: 'nodebuffer' })` buffered entire SQLite collections and media assets in V8 heap.
+- **Resolution Details**: Added disk-backed `createAnkiDatabase` (`better-sqlite3`) and `assembleApkgStream` (`archiver`) in `skills/study-source-core/scripts/shared_anki_utils.js`, wired into both `export_anki.js` and `export_studylab_procedural_anki.js` (Commit `52cb2fd`).
+- **Verification Method**: `npx vitest run` (45/45 suites PASS).
+
+---
+
+### GAP-19: Configurable Language Policy (`hinglish`, `en`, `hi`, `bilingual`)
+- **Category**: Policy / Language
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`Ped-P0-1`) — Hardcoded Hindi-first language policy blocked pure English or conversational Hinglish preferences.
+- **Resolution Details**: Added `supported_language_policies: ["hinglish", "en", "hi", "bilingual"]` with default `"hinglish"` in `resources/subject-skill-manifest.json` and `scripts/subject_policy_resolver.js` (Commit `52cb2fd`).
+- **Verification Method**: `node scripts/test_subject_policy_resolver.js` (PASS).
+
+---
+
+### GAP-20: Question Bank Tier 3 Hint Leak Scan & 17-Dimension Enforcement
+- **Category**: Validation / Pedagogical Integrity
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`Ped-P0-2`, `P1-7`) — `validate_studylab_question_bank.js` only checked `t1`/`t2` hints for answer leaks and omitted 5 of the 17 required pedagogical dimensions.
+- **Resolution Details**: Updated `scripts/validate_studylab_question_bank.js` (lines 195–245) to scan `t3` via `hintLeaksAnswer(t3, answer)` and enforce `recognition_signals`, `expected_method`, `decision_points`, `trap`, and `error_category` (Commit `2275762`).
+- **Verification Method**: `node scripts/test_studylab_question_bank.js` (30/30 PASS).
+
+---
+
+### GAP-21: Fail-Closed Procedural Contract Resolution (`CANONICAL_CONTRACT_REQUIRED`)
+- **Category**: Contracts / Anti-Fallback Invariant
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`P0-5`) — Missing contracts in `resolveDeclarativeContract` silently fell back to generic synthetic stubs.
+- **Resolution Details**: Hardened `resolveDeclarativeContract` in `scripts/export_studylab_procedural_anki.js` (lines 389–395) to throw `[CANONICAL_CONTRACT_REQUIRED]` when a contract is absent from `procedural.db` and no explicit archetypes are supplied (Commit `2275762`).
+- **Verification Method**: `node scripts/test_phase40_canonical.js` & `node scripts/test_l1_l7_proof_suite.js` (PASS).
+
+---
+
+### GAP-22: Asset Discovery Path Traversal Guard & Blocking IO SHA-256 Check
+- **Category**: Security / Visual Pipeline
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`P0-4`, `P1-6`, `P2-5`) — `asset_discovery.js` lacked `..` path traversal sanitization, and `validate_image_occlusion.js` emitted non-blocking warnings for invalid/missing `sha256`.
+- **Resolution Details**: Added `[PATH_TRAVERSAL_ERROR]` check in `scripts/asset_discovery.js` (lines 222–231) and promoted invalid/missing `sha256` to blocking `errors.push(...)` in `scripts/validate_image_occlusion.js` (lines 128–143) (Commit `2275762`).
+- **Verification Method**: `node scripts/test_visual_asset_pipeline.js` (102/102 PASS).
+
+---
+
+### GAP-23: Basic vs. Cloze 1:1 Verbatim Fact Deduplication
+- **Category**: Flashcards / Retrieval Hygiene
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`Ped-P0-3`) — Identical facts appeared in both Basic and Cloze decks (`Math/LCM-HCF` Card 1).
+- **Resolution Details**: Implemented `deduplicateBasicAgainstCloze` in `scripts/export_anki.js` (lines 230–277) and replaced the duplicate row in `Study Materials/Math/LCM-HCF/Basic/LCM-HCF_Basic.tsv` and `scripts/ensure_test_fixtures.js` (Commit `2275762`).
+- **Verification Method**: `node scripts/test_unified_anki_packaging.js` (14/14 PASS).
+
+---
+
+### GAP-24: `Map/Europe` Multi-Layer Cartographic SVG & Comprehensive Notes
+- **Category**: Vault / Cartography & Notes
+- **Severity**: **P0 Blocker**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`Ped-P0-4`) — `Study Materials/Map/Europe` contained a 5-line rectangle SVG and 15-line stub note.
+- **Resolution Details**: Upgraded `Europe_Notes.md`, `europe_map.svg`, `Europe_ImageOcclusion.json` (with 15 authentic European geographic regions and verified SHA-256 hash), and re-compiled `Europe_Anki.apkg` (Commit `2275762`).
+- **Verification Method**: `node scripts/note_contract_audit.js "Study Materials/Map/Europe/Notes/Europe_Notes.md"` & `node scripts/test_non_studylab_regression.js` (PASS).
+
+---
+
+### GAP-25: Re-Throw `CONTEXT_PROVENANCE_FAILURE` & Routing Policy Guards
+- **Category**: Orchestration & Routing
+- **Severity**: **P1 Critical**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`P1-1`, `P1-3`, `P1-4`) — `orchestration_engine.js:819` swallowed provenance errors in `catch (e) {}`, and `routing_engine.js` overwrote `bmGraph: false` / `bmQa: false` and omitted `*Json` keys from `PROCEDURAL_TRACK_KEYS`.
+- **Resolution Details**: Re-threw `CONTEXT_PROVENANCE_FAILURE` in `scripts/orchestration_engine.js` and updated `scripts/routing_engine.js` (Commit `2275762`).
+- **Verification Method**: `node scripts/test_phase7_context_routing.js` & `node scripts/test_phase8_independent_verification.js` (PASS).
+
+---
+
+### GAP-26: PyMuPDF/OCR Page-Range Slicing (`--page-start` / `--page-end`)
+- **Category**: Ingestion / PDF Pipeline
+- **Severity**: **P1 Critical**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`P1-8`, `P2-6`) — `evidence_ingestion_engine.js` did not forward `page_start` / `page_end` to `extract_pdf_source.py`.
+- **Resolution Details**: Forwarded `--page-start` and `--page-end` in `scripts/evidence_ingestion_engine.js` (lines 331–338, 612–618) (Commit `2275762`).
+- **Verification Method**: `node scripts/test_pdf_ingestion_end_to_end.js` (PASS).
+
+---
+
+### GAP-27: Anki Dark Mode (`.nightMode`) CSS & MCP Server v1.1.0 Expansion
+- **Category**: UI & MCP Tooling
+- **Severity**: **P2 High**
+- **Evidence**: `docs/audits/INDEPENDENT_PROFESSIONAL_ADVERSARIAL_AUDIT.md` (`P2-4`) — Declarative Anki models lacked `.nightMode` CSS rules, and `mcp_server.js` only exposed 4 tools.
+- **Resolution Details**: Added `.nightMode.card, .nightMode .card` styling across Models `1600000001–1600000003` in `scripts/export_anki.js` and upgraded `scripts/mcp_server.js` to v1.1.0 with `ingest_source_to_evidence_pack`, `query_procedural_contract`, and extended `validate_artifact` types (`studylab_question_bank`, `image_occlusion`, `note_contract`).
+- **Verification Method**: `npx vitest run` (45/45 suites PASS).
+
+---
+
 ## 4. Remediation Schedule & Roadmap Alignment
 
 | Phase | Scheduled Gaps | Key Milestone |
 |---|---|---|
 | **Phase 1** | **GAP-01, GAP-04** | Semantic Learning IR Schema & 3-Tier Hint Normalization |
-| **Phase 2** | **GAP-10** | Evidence Pack Ingestion & Cryptographic Content Lineage Record (CLR) |
-| **Phase 3** | **GAP-06** | Knowledge Unit (KU) Reservation & Subject Hardening |
+| **Phase 2** | **GAP-10, GAP-26** | Evidence Pack Ingestion, Page-Range Slicing & Cryptographic CLR |
+| **Phase 3** | **GAP-06, GAP-19** | Knowledge Unit (KU) Reservation, Subject Hardening & Language Policy |
 | **Phase 4** | *(Scaffolding Engine)*| Pedagogical Compiler & 4-Stage Scaffolding |
-| **Phase 5** | **GAP-09** | Declarative Renderers (Notes, TSVs, MindMap, Slides) |
-| **Phase 6** | *(Visual Pipeline)* | Fail-Closed Visual Learning Pipeline & IO Masks |
-| **Phase 7** | **GAP-02** | StudyLab Procedural Compilers & Markdown Question Banks |
-| **Phase 8** | **GAP-03** | Binary Packaging Compilers (Dual APKG v1.0, Unified APKG v1.1 Prep) |
-| **Phase 9** | **GAP-05, GAP-08, GAP-12** | Independent Adversarial Certification Harness (ADV-01..15) |
-| **Phase 10** | **GAP-07, GAP-11** | Antigravity Host Adapter, Concurrency & Checkpoint Recovery |
-| **v1.0 Final**| *All Closed* | Final Production Release Certification |
+| **Phase 5** | **GAP-09, GAP-23, GAP-24** | Declarative Renderers, Basic/Cloze Dedup & Cartographic SVG |
+| **Phase 6** | **GAP-22** | Fail-Closed Visual Learning Pipeline, Path Traversal & IO SHA-256 Gate |
+| **Phase 7** | **GAP-02, GAP-20, GAP-21** | StudyLab Procedural Compilers, Fail-Closed Contracts & 17-Dim QB Validator |
+| **Phase 8** | **GAP-03, GAP-18, GAP-27** | Zero-Heap Streaming Binary Packaging Compilers & Dark Mode CSS |
+| **Phase 9** | **GAP-05, GAP-08, GAP-12, GAP-13** | Independent Adversarial Certification Harness (ADV-01..15) |
+| **Phase 10** | **GAP-07, GAP-11, GAP-25, GAP-27** | Antigravity Host Adapter, MCP v1.1.0, Concurrency & Checkpoint Recovery |
+| **v1.1 Final**| *All 27 Gaps Closed* | Full Production & Adversarial Re-Audit Certification |
