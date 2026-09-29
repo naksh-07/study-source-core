@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "overall_verdict": "SUCCESS",
+    "chapter": "Syllogism",
+    "subject": "Reasoning",
+    "completed_count": 9,
+    "artifact_count": 9,
+    "verified_timestamp": "2026-09-29T20:12:40.514Z",
+    "schema_version": "1.0.0"
+  },
+  "artifacts": [
+    {
+      "task_id": "task-notes",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Notes\\Syllogism_Notes.md",
+      "bytes": 23844,
+      "sha256": "6f69e3b97d47fe140ef8f3365d28aacf3ad09580da2abe65dad0564d27f3ce73",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-basic",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Basic\\Syllogism_Basic.tsv",
+      "bytes": 6757,
+      "sha256": "9e9f56bd24bd798d7d13d31c585973685749de908b97bd8591beb88d8f361b52",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-cloze",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Cloze\\Syllogism_Cloze.tsv",
+      "bytes": 6962,
+      "sha256": "8e7badd651a6f0ad4a3a86d875fd30b489fde6be8a54cb016ab4643a0faf218b",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-mindmap",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\MindMap\\Syllogism.mindmap.json",
+      "bytes": 5157,
+      "sha256": "56eab21f8d3d6deb29f6aebcfedd9fe7cd849f8d24cf9ba45915e6eca050b1e6",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-slidedeck",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\SlideDeck\\Syllogism_SlideDeckPrompt.md",
+      "bytes": 11644,
+      "sha256": "184266cff446205de96126d9b932c47f1fb55fb082ccb2af31dcc4cf022d91a2",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-qbank",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\StudyLab\\Syllogism_Questions.md",
+      "bytes": 32379,
+      "sha256": "189780f676d4e01f42566bc5fb17d8f9ac79554cde3c01b46cc9b4b9106edc31",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-anki-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Syllogism_Anki.apkg",
+      "bytes": 10098,
+      "sha256": "4a0801f5021254b6366bb1c869a9919a089ccd9a558bffa13beba9680f749c8a",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-graph",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Graph\\Syllogism_Graph_Index.json",
+      "bytes": 916,
+      "sha256": "661d63cb6ce002f36c16fac12942cdc801746643420070d772d96d06a854d519",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-qa",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Audit\\QA_Report.md",
+      "bytes": 3177,
+      "sha256": "53eeb3f2236f0aec76f16bdf835e1511829c9e4eb7e46f65eafdd9fea836e5f3",
+      "physical_status": "VERIFIED_ON_DISK"
+    }
+  ]
+}

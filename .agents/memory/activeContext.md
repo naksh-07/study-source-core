@@ -35,3 +35,7 @@
   - [x] Hardened `validate_studylab_question_bank.js` (anti-false-positive regex, density warning), `author_math_studylab.js` (dynamic fallbacks), and `cross_artifact_checker.js` (pattern linkage).
   - [x] Authored & certified 26 distinct non-redundant MCQs (100% 4-option MCQs from CBSE/SSC/CDS) covering 6 pattern families, 27 Anki cards, comprehensive Notes, MindMap, and SlideDeck.
   - [x] Certified: 4-Gate Adversarial Certification (`run_adversarial_certification.js`), 18-gate Master Smoke Test (`18/18`), and Vitest (`47/47`) passed 100%.
+- [x] Phase 16: Reasoning Student-Grade Chapter Delivery & Certification (`Reasoning/Syllogism`):
+  - [x] Authored 25 distinct non-redundant MCQs (100% 4-option MCQs from SSC/RRB/IBPS/CSAT) across 5 pattern families (Standard, Either-Or, Possibility, Only-a-few, Reverse Syllogism).
+  - [x] Delivered full 9-artifact sibling suite in `Study Materials/Reasoning/Syllogism/` (Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, Question Bank, Anki APKG, Graph Index, QA Report).
+  - [x] Verified: 4-Gate Adversarial Certification (`4/4` PASS), Master Smoke Test (`18/18` PASS), and Vitest (`47/47` PASS).

@@ -1,0 +1,124 @@
+{
+  "id": "map-reas-syllogism",
+  "title": "Syllogism & Deductive Logic Knowledge Map (न्याय निगमन संकल्पना मानचित्र)",
+  "subject": "Reasoning",
+  "language": "hi",
+  "root": {
+    "id": "node-root",
+    "label": "न्याय निगमन (Syllogism)",
+    "description": "औपचारिक तार्किक निगमन एवं वेन आरेखीय विश्लेषण का संपूर्ण ढांचा",
+    "children": [
+      {
+        "id": "node-propositions",
+        "label": "मानक प्रतिज्ञप्तियां (Standard Propositions)",
+        "children": [
+          {
+            "id": "node-prop-a",
+            "label": "Universal Affirmative (A: सभी A, B हैं)",
+            "description": "पूर्ण समावेशन (A ⊆ B)"
+          },
+          {
+            "id": "node-prop-e",
+            "label": "Universal Negative (E: कोई A, B नहीं है)",
+            "description": "पूर्ण वियोग (Disjoint, A ∩ B = ∅)"
+          },
+          {
+            "id": "node-prop-i",
+            "label": "Particular Affirmative (I: कुछ A, B हैं)",
+            "description": "आंशिक समावेशन (A ∩ B ≠ ∅)"
+          },
+          {
+            "id": "node-prop-o",
+            "label": "Particular Negative (O: कुछ A, B नहीं हैं)",
+            "description": "आंशिक वियोग (Some Not)"
+          }
+        ]
+      },
+      {
+        "id": "node-rules",
+        "label": "निगमन एवं वेन आरेख नियम (Deductive Rules)",
+        "children": [
+          {
+            "id": "node-rule-minimal-overlap",
+            "label": "न्यूनतम अधिव्यापन (Minimal Overlap)",
+            "description": "केवल अनिवार्य संबंधों को ही आरेखित करना"
+          },
+          {
+            "id": "node-rule-transitivity",
+            "label": "सार्वत्रिक संक्रामकता (Universal Transitivity)",
+            "description": "All + All => All & Some"
+          },
+          {
+            "id": "node-rule-negative-barrier",
+            "label": "नकारात्मक सीमा नियम (Negative Barrier)",
+            "description": "All + No => No for inner circle"
+          }
+        ]
+      },
+      {
+        "id": "node-either-or",
+        "label": "पूरक युग्म एवं या-तो नियम (Either-Or Logic)",
+        "children": [
+          {
+            "id": "node-eo-conditions",
+            "label": "तीन अनिवार्य शर्तें (3 Mandatory Conditions)",
+            "description": "दोनों संदिग्ध, समान पद, मान्य युग्म"
+          },
+          {
+            "id": "node-eo-pairs",
+            "label": "मान्य पूरक युग्म (Valid Pairs)",
+            "description": "Some + No तथा Some + Some Not"
+          },
+          {
+            "id": "node-eo-trap",
+            "label": "All + No Fallacy (छद्म या-तो जाल)",
+            "description": "दोनों एक साथ असत्य हो सकते हैं, अतः Neither-Nor"
+          }
+        ]
+      },
+      {
+        "id": "node-special-cases",
+        "label": "विशिष्ट एवं आधुनिक प्रारूप (Modern Quantifiers)",
+        "children": [
+          {
+            "id": "node-possibility",
+            "label": "संभावना सिद्धांत (Possibility Logic)",
+            "description": "निषेध के अभाव में संदिग्ध स्थिति सत्य होती है"
+          },
+          {
+            "id": "node-only-a-few",
+            "label": "Only a few (केवल कुछ ही)",
+            "description": "Some + Some-Not का संयुक्त प्रतिबंध"
+          },
+          {
+            "id": "node-only",
+            "label": "Only (केवल)",
+            "description": "All B are A + Exclusivity Restriction"
+          },
+          {
+            "id": "node-can-never-be",
+            "label": "Can never be (कदापि नहीं)",
+            "description": "Definite Some-Not निष्कर्ष"
+          }
+        ]
+      }
+    ]
+  },
+  "crossLinks": [
+    {
+      "sourceId": "node-prop-e",
+      "targetId": "node-rule-negative-barrier",
+      "label": "सार्वत्रिक निषेध सीमा आरोपित करता है"
+    },
+    {
+      "sourceId": "node-prop-i",
+      "targetId": "node-eo-pairs",
+      "label": "Some के साथ पूरक युग्म घटक"
+    },
+    {
+      "sourceId": "node-only-a-few",
+      "targetId": "node-possibility",
+      "label": "All की संभावना को निषेध करता है"
+    }
+  ]
+}

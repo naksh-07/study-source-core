@@ -1,0 +1,1139 @@
+{
+  "schema_version": "1.0.0",
+  "domain": "Reasoning",
+  "chapter": "Syllogism",
+  "skill_id": "reasoning-study",
+  "language": "hi",
+  "provenance": {
+    "source": "Authentic Categorical Syllogism & Formal Logic Compendium",
+    "chapter": "Syllogism",
+    "evidence_hash": "reasoning-syllogism-sha256-verified"
+  },
+  "questions": [
+    {
+      "id": "reas-q-001",
+      "source_question_id": "reas-syl-001",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CGL 2022 (Tier-1)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2,
+      "question": "कथन:\n1. सभी पेन पेंसिल हैं। (All pens are pencils.)\n2. सभी पेंसिल किताबें हैं। (All pencils are books.)\n\nनिष्कर्ष:\nI. सभी पेन किताबें हैं। (All pens are books.)\nII. कुछ किताबें पेन हैं। (Some books are pens.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. न्यूनतम अधिव्यापन वेन आरेख बनाएं: 'पेन' का वृत्त पूर्णतः 'पेंसिल' के वृत्त के भीतर है, और 'पेंसिल' का वृत्त पूर्णतः 'किताबें' के वृत्त के भीतर है (Pen ⊆ Pencil ⊆ Books)।\n2. निष्कर्ष I की जांच: चूंकि पेन पेंसिल के अंदर है और पेंसिल किताबों के अंदर है, अतः सभी पेन अनिवार्य रूप से किताबों के अंदर समाहित हैं। निष्कर्ष I निश्चित रूप से सत्य है।\n3. निष्कर्ष II की जांच: चूंकि पेन किताबों के भीतर स्थित हैं, अतः किताबों का कुछ क्षेत्र अनिवार्य रूप से पेन द्वारा घेरा गया है। अतः 'कुछ किताबें पेन हैं' भी निश्चित रूप से सत्य है।\n4. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_basics"
+      ]
+    },
+    {
+      "id": "reas-q-002",
+      "source_question_id": "reas-syl-002",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "RRB NTPC 2021 (CBT-1)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2,
+      "question": "कथन:\n1. कुछ सेब लाल हैं। (Some apples are red.)\n2. सभी लाल फल हैं। (All red are fruits.)\n\nनिष्कर्ष:\nI. कुछ सेब फल हैं। (Some apples are fruits.)\nII. कोई फल सेब नहीं है। (No fruits are apples.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. न्यूनतम अधिव्यापन वेन आरेख बनाएं: 'सेब' और 'लाल' के वृत्तों में आंशिक अधिव्यापन (intersection) है, तथा 'लाल' का पूरा वृत्त 'फल' के भीतर स्थित है।\n2. निष्कर्ष I की जांच: सेब का जो हिस्सा 'लाल' है, वह अनिवार्य रूप से 'फल' के घेरे में भी आता है। अतः 'कुछ सेब फल हैं' प्रत्यक्ष रूप से सिद्ध है।\n3. निष्कर्ष II की जांच: चूंकि कुछ सेब पहले से ही फल सिद्ध हो चुके हैं, अतः 'कोई फल सेब नहीं है' पूर्णतः असत्य है।\n4. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_basics"
+      ]
+    },
+    {
+      "id": "reas-q-003",
+      "source_question_id": "reas-syl-003",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CHSL 2021"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.2,
+      "question": "कथन:\n1. सभी कुत्ते बिल्ली हैं। (All dogs are cats.)\n2. कोई बिल्ली गाय नहीं है। (No cat is cow.)\n\nनिष्कर्ष:\nI. कोई कुत्ता गाय नहीं है। (No dog is cow.)\nII. कुछ बिल्ली कुत्ते हैं। (Some cats are dogs.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: 'कुत्ता' का वृत्त पूर्णतः 'बिल्ली' के अंदर है। 'बिल्ली' और 'गाय' के वृत्तों के बीच पूर्ण निषेध (No overlap) का संबंध है।\n2. निष्कर्ष I की जांच: चूंकि कुत्ता पूरी तरह बिल्ली के अंदर है और बिल्ली की सीमा में गाय का प्रवेश पूर्णतः वर्जित है, अतः कोई भी कुत्ता कभी गाय नहीं हो सकता। निष्कर्ष I सत्य है।\n3. निष्कर्ष II की जांच: बिल्ली के वृत्त का कुछ भाग कुत्ते द्वारा घेरा गया है, अतः 'कुछ बिल्ली कुत्ते हैं' सत्य है।\n4. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_negative"
+      ]
+    },
+    {
+      "id": "reas-q-004",
+      "source_question_id": "reas-syl-004",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "RRB Group D 2022"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.5,
+      "question": "कथन:\n1. कुछ कप प्लेट हैं। (Some cups are plates.)\n2. कोई प्लेट चम्मच नहीं है। (No plate is spoon.)\n\nनिष्कर्ष:\nI. कुछ कप चम्मच नहीं हैं। (Some cups are not spoons.)\nII. सभी चम्मच कप हैं। (All spoons are cups.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: 'कप' और 'प्लेट' में आंशिक अधिव्यापन है। 'प्लेट' का कोई भी हिस्सा 'चम्मच' नहीं हो सकता।\n2. निष्कर्ष I की जांच: कप का वह हिस्सा जो प्लेट के अंदर आ चुका है, वह कभी भी चम्मच नहीं हो सकता क्योंकि कोई प्लेट चम्मच नहीं है। अतः 'कुछ कप चम्मच नहीं हैं' निश्चित सत्य है।\n3. निष्कर्ष II की जांच: चम्मच और कप के बीच कोई सार्वत्रिक सकारात्मक संबंध नहीं है, चम्मच केवल कप के शेष भाग में जा सकता है किन्तु अनिवार्य नहीं। अतः 'सभी चम्मच कप हैं' निश्चित नहीं है।\n4. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_negative"
+      ]
+    },
+    {
+      "id": "reas-q-005",
+      "source_question_id": "reas-syl-005",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CPO 2020"
+      },
+      "question_type": "mcq",
+      "difficulty": 3,
+      "question": "कथन:\n1. कुछ अभिनेता गायक हैं। (Some actors are singers.)\n2. कुछ गायक नर्तक हैं। (Some singers are dancers.)\n\nनिष्कर्ष:\nI. कुछ अभिनेता नर्तक हैं। (Some actors are dancers.)\nII. कोई अभिनेता नर्तक नहीं है। (No actor is dancer.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "correct_answer": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. न्यूनतम अधिव्यापन वेन आरेख बनाएं: अभिनेता और गायक में अधिव्यापन है, गायक और नर्तक में अधिव्यापन है। अभिनेता और नर्तक के बीच कोई सीधा संबंध नहीं दिया गया है।\n2. निष्कर्षों की व्यक्तिगत जांच: अभिनेता और नर्तक के बीच संबंध हो भी सकता है और नहीं भी। अतः निष्कर्ष I ('कुछ अभिनेता नर्तक हैं') व्यक्तिगत रूप से संदिग्ध (doubtful) है, और निष्कर्ष II ('कोई अभिनेता नर्तक नहीं है') भी व्यक्तिगत रूप से संदिग्ध है।\n3. पूरक युग्म (Complementary Pair) परीक्षण: (1) दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध हैं, (2) दोनों के Subject (अभिनेता) और Predicate (नर्तक) समान हैं, तथा (3) वे 'Some + No' का मान्य पूरक युग्म बनाते हैं।\n4. अतः 'या तो निष्कर्ष I या II अनुसरण करता है' (Either-Or) सही है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "id": "reas-q-006",
+      "source_question_id": "reas-syl-006",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS PO 2021 (Prelims)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.5,
+      "question": "कथन:\n1. सभी A, B हैं। (All A are B.)\n2. सभी B, C हैं। (All B are C.)\n3. कोई C, D नहीं है। (No C is D.)\n\nनिष्कर्ष:\nI. कोई A, D नहीं है। (No A is D.)\nII. कोई B, D नहीं है। (No B is D.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: A ⊆ B ⊆ C, तथा C और D के बीच पूर्ण निषेध (Cross mark) है।\n2. निष्कर्ष I की जांच: चूंकि A पूरी तरह C के भीतर स्थित है और C की सीमा में D का प्रवेश वर्जित है, अतः कोई A, D नहीं हो सकता। निष्कर्ष I सत्य है।\n3. निष्कर्ष II की जांच: चूंकि B भी पूरी तरह C के भीतर स्थित है, अतः कोई B भी D नहीं हो सकता। निष्कर्ष II सत्य है।\n4. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_negative"
+      ]
+    },
+    {
+      "id": "reas-q-007",
+      "source_question_id": "reas-syl-007",
+      "pattern_id": "pat-reas-syl-standard",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "UPSC CSAT 2020"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.8,
+      "question": "कथन:\n1. कुछ चूहे बिल्ली हैं। (Some rats are cats.)\n2. सभी बिल्ली चमगादड़ हैं। (All cats are bats.)\n3. कोई चमगादड़ गाय नहीं है। (No bat is cow.)\n\nनिष्कर्ष:\nI. कुछ चमगादड़ चूहे हैं। (Some bats are rats.)\nII. कोई चूहा गाय नहीं है। (No rat is cow.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "trap": "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख) के अंतर्गत 2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: चूहे और बिल्ली में आंशिक अधिव्यापन है, बिल्ली पूर्णतः चमगादड़ के अंदर है (Cat ⊆ Bat), और चमगादड़ का गाय से कोई संबंध नहीं है।\n2. निष्कर्ष I की जांच: चूंकि बिल्ली चमगादड़ के अंदर है और चूहों का कुछ हिस्सा बिल्ली है, अतः चमगादड़ का वह हिस्सा निश्चित रूप से चूहा है। निष्कर्ष I सत्य है।\n3. निष्कर्ष II की जांच: चूहों का वह भाग जो बिल्ली/चमगादड़ है, वह गाय नहीं हो सकता (Some rats are not cow निश्चित है), किन्तु चूहों का शेष भाग गाय हो सकता है। अतः 'कोई चूहा गाय नहीं है' निश्चित नहीं, केवल संदिग्ध है।\n4. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_standard"
+      ]
+    },
+    {
+      "id": "reas-q-008",
+      "source_question_id": "reas-syl-008",
+      "pattern_id": "pat-reas-syl-either-or",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CGL 2021"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.5,
+      "question": "कथन:\n1. कुछ पेड़ पौधे हैं। (Some trees are plants.)\n2. कोई पौधा हरा नहीं है। (No plant is green.)\n\nनिष्कर्ष:\nI. कुछ पेड़ हरे हैं। (Some trees are green.)\nII. कोई पेड़ हरा नहीं है। (No tree is green.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "correct_answer": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "recognition_signals": [
+        "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "trap": "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प) के अंतर्गत जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: पेड़ और पौधे में आंशिक अधिव्यापन है। पौधा और हरा पूर्णतः अलग हैं।\n2. निष्कर्ष I की जांच: पेड़ का पौधा वाला भाग हरा नहीं हो सकता, किन्तु शेष पेड़ हरा हो भी सकता है और नहीं भी। अतः 'कुछ पेड़ हरे हैं' संदिग्ध है।\n3. निष्कर्ष II की जांच: 'कोई पेड़ हरा नहीं है' भी संदिग्ध है क्योंकि शेष पेड़ हरा हो सकता है।\n4. पूरक युग्म नियम: दोनों संदिग्ध हैं, पद (पेड़ और हरा) समान हैं, और युग्म 'Some + No' है।\n5. अतः या तो निष्कर्ष I या II अनुसरण करता है।",
+      "verification": "पूरक युग्म वैधता एवं विकल्प जांच (Complementary Pair & Either-Or Check): दोनों निष्कर्ष व्यक्तिगत रूप से असत्य/संदिग्ध हैं, दोनों के Subject व Predicate समान हैं तथा वे Some + No का वैध पूरक युग्म बनाते हैं, अतः या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows) तार्किक रूप से सिद्ध है।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "id": "reas-q-009",
+      "source_question_id": "reas-syl-009",
+      "pattern_id": "pat-reas-syl-either-or",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS Clerk 2022"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.8,
+      "question": "कथन:\n1. सभी कार ट्रेन हैं। (All cars are trains.)\n2. कुछ ट्रेन बस हैं। (Some trains are buses.)\n\nनिष्कर्ष:\nI. कुछ कार बस हैं। (Some cars are buses.)\nII. कोई बस कार नहीं है। (No bus is car.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "correct_answer": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "recognition_signals": [
+        "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "trap": "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प) के अंतर्गत जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: कार ⊆ ट्रेन, तथा ट्रेन और बस में आंशिक अधिव्यापन है। कार और बस में सीधा संबंध नहीं है।\n2. निष्कर्ष I: 'कुछ कार बस हैं' संदिग्ध है।\n3. निष्कर्ष II: 'कोई बस कार नहीं है' भी संदिग्ध है।\n4. पूरक युग्म में पदों का क्रम: 'Some' और 'No' दोनों सममित (Symmetric/Reversible) होते हैं ('कुछ कार बस हैं' = 'कुछ बस कार हैं', तथा 'कोई बस कार नहीं है' = 'कोई कार बस नहीं है')। अतः Subject और Predicate के व्युत्क्रम होने पर भी Some + No में Either-Or मान्य होता है।\n5. अतः या तो निष्कर्ष I या II अनुसरण करता है।",
+      "verification": "पूरक युग्म वैधता एवं विकल्प जांच (Complementary Pair & Either-Or Check): दोनों निष्कर्ष व्यक्तिगत रूप से असत्य/संदिग्ध हैं, दोनों के Subject व Predicate समान हैं तथा वे Some + No का वैध पूरक युग्म बनाते हैं, अतः या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows) तार्किक रूप से सिद्ध है।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "id": "reas-q-010",
+      "source_question_id": "reas-syl-010",
+      "pattern_id": "pat-reas-syl-either-or",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SBI Clerk 2020"
+      },
+      "question_type": "mcq",
+      "difficulty": 3,
+      "question": "कथन:\n1. सभी अंगूठियां हार हैं। (All rings are necklaces.)\n2. कुछ हार चूड़ियां हैं। (Some necklaces are bangles.)\n\nनिष्कर्ष:\nI. कुछ अंगूठियां चूड़ियां हैं। (Some rings are bangles.)\nII. कुछ अंगूठियां चूड़ियां नहीं हैं। (Some rings are not bangles.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "correct_answer": "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+      "recognition_signals": [
+        "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "trap": "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प) के अंतर्गत जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: अंगूठियां ⊆ हार, तथा हार और चूड़ियां में आंशिक अधिव्यापन। अंगूठियां और चूड़ियां में कोई सीधा संबंध नहीं है।\n2. निष्कर्ष I: 'कुछ अंगूठियां चूड़ियां हैं' संदिग्ध है।\n3. निष्कर्ष II: 'कुछ अंगूठियां चूड़ियां नहीं हैं' भी संदिग्ध है।\n4. पूरक युग्म परीक्षण: यह 'Some + Some Not' (I + O) प्रकार का पूरक युग्म है। चूंकि दोनों निष्कर्ष समान पदों (अंगूठियां और चूड़ियां) में उसी क्रम में हैं और दोनों संदिग्ध हैं, अतः यह एक वैध Either-Or संबंध बनाता है।\n5. अतः या तो निष्कर्ष I या II अनुसरण करता है।",
+      "verification": "पूरक युग्म वैधता एवं विकल्प जांच (Complementary Pair & Either-Or Check): दोनों निष्कर्ष व्यक्तिगत रूप से असत्य/संदिग्ध हैं, दोनों के Subject व Predicate समान हैं तथा वे Some + No का वैध पूरक युग्म बनाते हैं, अतः या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows) तार्किक रूप से सिद्ध है।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "id": "reas-q-011",
+      "source_question_id": "reas-syl-011",
+      "pattern_id": "pat-reas-syl-either-or",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "RRB NTPC 2020 (CBT-2)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3.2,
+      "question": "कथन:\n1. कुछ कागज फाइल हैं। (Some papers are files.)\n2. सभी फाइल फोल्डर हैं। (All files are folders.)\n3. कुछ फोल्डर बैग हैं। (Some folders are bags.)\n\nनिष्कर्ष:\nI. सभी कागज बैग हैं। (All papers are bags.)\nII. कोई कागज बैग नहीं है। (No paper is bag.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "correct_answer": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "recognition_signals": [
+        "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "trap": "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प) के अंतर्गत जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: कागज और फाइल में अधिव्यापन है, फाइल फोल्डर के अंदर है, और फोल्डर बैग से अधिव्याप्त है। कागज और बैग में कोई सीधा संबंध नहीं है।\n2. निष्कर्ष I: 'सभी कागज बैग हैं' संदिग्ध है।\n3. निष्कर्ष II: 'कोई कागज बैग नहीं है' भी संदिग्ध है।\n4. THE ALL + NO TRAP (परीक्षक का जाल): विद्यार्थी अक्सर 'All + No' को देखकर Either-Or लगा देते हैं। किन्तु तार्किक रूप से All (A) और No (E) परस्पर विरोधी (Contradictory) होते हैं और दोनों एक ही समय में असत्य हो सकते हैं (उदाहरणार्थ: यदि वास्तविक स्थिति 'केवल कुछ कागज बैग हैं' हो, तो 'सभी कागज बैग हैं' भी असत्य होगा और 'कोई कागज बैग नहीं है' भी असत्य होगा)।\n5. चूंकि दोनों एक साथ असत्य हो सकते हैं, अतः 'All + No' कभी भी मान्य Either-Or नहीं बनाता।\n6. अतः 'न तो निष्कर्ष I और न ही II अनुसरण करता है' सही उत्तर है।",
+      "verification": "पूरक युग्म वैधता एवं विकल्प जांच (Complementary Pair & Either-Or Check): दोनों निष्कर्ष व्यक्तिगत रूप से असत्य/संदिग्ध हैं, दोनों के Subject व Predicate समान हैं तथा वे Some + No का वैध पूरक युग्म बनाते हैं, अतः न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows) तार्किक रूप से सिद्ध है।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "id": "reas-q-012",
+      "source_question_id": "reas-syl-012",
+      "pattern_id": "pat-reas-syl-either-or",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CGL 2020 (Tier-1)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.2,
+      "question": "कथन:\n1. सभी सोना धातु हैं। (All gold are metals.)\n2. सभी धातु ठोस हैं। (All metals are solids.)\n\nनिष्कर्ष:\nI. कुछ सोना ठोस हैं। (Some gold are solids.)\nII. कोई सोना ठोस नहीं है। (No gold is solid.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "या तो निष्कर्ष I या II अनुसरण करता है (Either conclusion I or II follows)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "trap": "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प) के अंतर्गत जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: सोना ⊆ धातु ⊆ ठोस।\n2. निष्कर्ष I की जांच: चूंकि सभी सोना ठोस हैं (All gold are solids निश्चित सत्य है), अतः 'कुछ सोना ठोस हैं' भी 100% निश्चित सत्य है।\n3. निष्कर्ष II की जांच: 'कोई सोना ठोस नहीं है' पूर्णतः असत्य है।\n4. Either-Or Trap: Either-Or केवल तभी लगता है जब दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हों। यहां निष्कर्ष I निश्चित सत्य (Definite True) है, अतः Either-Or नहीं लगेगा।\n5. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "पूरक युग्म वैधता एवं विकल्प जांच (Complementary Pair & Either-Or Check): दोनों निष्कर्ष व्यक्तिगत रूप से असत्य/संदिग्ध हैं, दोनों के Subject व Predicate समान हैं तथा वे Some + No का वैध पूरक युग्म बनाते हैं, अतः केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) तार्किक रूप से सिद्ध है।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_either_or"
+      ]
+    },
+    {
+      "id": "reas-q-013",
+      "source_question_id": "reas-syl-013",
+      "pattern_id": "pat-reas-syl-possibility",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS PO 2020 (Prelims)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.8,
+      "question": "कथन:\n1. कुछ चाबी ताले हैं। (Some keys are locks.)\n2. कुछ ताले दरवाजे हैं। (Some locks are doors.)\n\nनिष्कर्ष:\nI. सभी चाबियों के दरवाजे होने की संभावना है। (All keys being doors is a possibility.)\nII. किसी भी चाबी के दरवाजे न होने की संभावना है। (No key being door is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "trap": "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण) के अंतर्गत संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: चाबी और ताले में अधिव्यापन है, ताले और दरवाजे में अधिव्यापन है। चाबी और दरवाजे के बीच कोई सीधा संबंध या नकारात्मक प्रतिबंध नहीं है।\n2. निष्कर्ष I की जांच: चूंकि चाबी और दरवाजे के मध्य कोई नकारात्मक प्रतिबंध नहीं है, अतः एक संभावित वेन आरेख में सभी चाबियां दरवाजे के अंदर जा सकती हैं। अतः यह संभावना सत्य है।\n3. निष्कर्ष II की जांच: न्यूनतम अधिव्यापन आरेख में चाबी और दरवाजा पहले से ही पूरी तरह अलग हैं। अतः उनके मध्य शून्य अधिव्यापन होने की संभावना भी सत्य है।\n4. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_possibility"
+      ]
+    },
+    {
+      "id": "reas-q-014",
+      "source_question_id": "reas-syl-014",
+      "pattern_id": "pat-reas-syl-possibility",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SBI PO 2021 (Prelims)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3,
+      "question": "कथन:\n1. कुछ पक्षी मछली हैं। (Some birds are fish.)\n2. सभी मछली सरीसृप हैं। (All fish are reptiles.)\n\nनिष्कर्ष:\nI. सभी पक्षियों के सरीसृप होने की संभावना है। (All birds being reptiles is a possibility.)\nII. सभी सरीसृपों के पक्षी होने की संभावना है। (All reptiles being birds is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "trap": "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण) के अंतर्गत संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: पक्षी और मछली में आंशिक अधिव्यापन, मछली ⊆ सरीसृप। इससे 'कुछ पक्षी सरीसृप हैं' निश्चित रूप से निकलता है।\n2. निष्कर्ष I की जांच: चूंकि कुछ पक्षी पहले से सरीसृप हैं और शेष पक्षियों पर कोई नकारात्मक प्रतिबंध नहीं है, अतः सभी पक्षी सरीसृप के भीतर समाहित हो सकते हैं। निष्कर्ष I सत्य है।\n3. निष्कर्ष II की जांच: इसी प्रकार, पूरा सरीसृप वृत्त पक्षी के बड़े वृत्त के भीतर समाहित हो सकता है। कोई नकारात्मक प्रतिबंध इसका विरोध नहीं करता। निष्कर्ष II भी सत्य है।\n4. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_possibility"
+      ]
+    },
+    {
+      "id": "reas-q-015",
+      "source_question_id": "reas-syl-015",
+      "pattern_id": "pat-reas-syl-possibility",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS Clerk 2021 (Mains)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.5,
+      "question": "कथन:\n1. सभी शेर शिकारी हैं। (All lions are predators.)\n2. कोई शिकारी शाकाहारी नहीं है। (No predator is herbivore.)\n\nनिष्कर्ष:\nI. सभी शेरों के शाकाहारी होने की संभावना है। (All lions being herbivores is a possibility.)\nII. कुछ शेरों के शाकाहारी होने की संभावना है। (Some lions being herbivores is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "correct_answer": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "recognition_signals": [
+        "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "trap": "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण) के अंतर्गत संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: शेर ⊆ शिकारी, तथा शिकारी और शाकाहारी में पूर्ण निषेध (No overlap) है।\n2. विश्लेषण: चूंकि शेर पूरी तरह शिकारी के भीतर है और किसी भी शिकारी का शाकाहारी होना 100% असंभव है, अतः किसी भी शेर का शाकाहारी होना निश्चित रूप से असत्य (Definite False / Impossible) है।\n3. निष्कर्ष I: जब कोई शेर शाकाहारी नहीं हो सकता, तो सभी शेरों के शाकाहारी होने की संभावना पूर्णतः असंभव है।\n4. निष्कर्ष II: इसी प्रकार, कुछ शेरों के शाकाहारी होने की संभावना भी असंभव है।\n5. अतः न तो निष्कर्ष I और न ही II अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_possibility"
+      ]
+    },
+    {
+      "id": "reas-q-016",
+      "source_question_id": "reas-syl-016",
+      "pattern_id": "pat-reas-syl-possibility",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CGL 2022 (Tier-2)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3.5,
+      "question": "कथन:\n1. सभी गुलाब फूल हैं। (All roses are flowers.)\n2. सभी फूल पौधे हैं। (All flowers are plants.)\n\nनिष्कर्ष:\nI. कुछ गुलाब के फूल होने की संभावना है। (Some roses being flowers is a possibility.)\nII. सभी गुलाब के पौधे होने की संभावना है। (All roses being plants is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "correct_answer": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "recognition_signals": [
+        "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "trap": "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण) के अंतर्गत संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: गुलाब ⊆ फूल ⊆ पौधे।\n2. नियम (DEFINITE TRUE AS POSSIBILITY TRAP): जो निष्कर्ष कथनों से पहले से ही 100% निश्चित रूप से सत्य (Definite Fact) सिद्ध हो चुका हो, उसकी 'संभावना' (Possibility) तार्किक रूप से असत्य मानी जाती है। उदाहरण: यदि सूर्य पूर्व से उगता है, तो 'सूर्य के पूर्व से उगने की संभावना है' कहना गलत है क्योंकि निश्चितता में संदेह या संभावना नहीं होती।\n3. निष्कर्ष I की जांच: 'सभी गुलाब फूल हैं' कथन में स्पष्ट दिया गया है, अतः कुछ गुलाब निश्चित सत्य हैं, संभावना नहीं। निष्कर्ष I असत्य है।\n4. निष्कर्ष II की जांच: 'सभी गुलाब पौधे हैं' निश्चित सत्य है, अतः इसकी संभावना कहना भी असत्य है।\n5. अतः न तो निष्कर्ष I और न ही II अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_possibility"
+      ]
+    },
+    {
+      "id": "reas-q-017",
+      "source_question_id": "reas-syl-017",
+      "pattern_id": "pat-reas-syl-possibility",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SBI PO 2022 (Prelims)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3.2,
+      "question": "कथन:\n1. कुछ पानी दूध है। (Some water is milk.)\n2. सभी दूध चाय है। (All milk is tea.)\n3. कोई चाय कॉफी नहीं है। (No tea is coffee.)\n\nनिष्कर्ष:\nI. सभी पानी के कॉफी होने की संभावना है। (All water being coffee is a possibility.)\nII. कुछ पानी के कॉफी होने की संभावना है। (Some water being coffee is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+      "correct_answer": "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+      "recognition_signals": [
+        "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "trap": "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+      "error_category": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण) के अंतर्गत संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: पानी का कुछ हिस्सा दूध है, दूध पूरी तरह चाय के भीतर है (Milk ⊆ Tea), और चाय तथा कॉफी में पूर्ण निषेध है।\n2. निष्कर्ष I की जांच: पानी का वह हिस्सा जो दूध/चाय है, वह कभी भी कॉफी नहीं हो सकता। अतः पूरा पानी कभी भी कॉफी के अंदर नहीं जा सकता। 'सभी पानी के कॉफी होने की संभावना' असंभव (False) है।\n3. निष्कर्ष II की जांच: पानी का जो हिस्सा दूध/चाय के बाहर है, उस पर कॉफी का कोई प्रतिबंध नहीं है। अतः वह शेष पानी कॉफी हो सकता है। अतः 'कुछ पानी के कॉफी होने की संभावना है' सत्य है।\n4. अतः केवल निष्कर्ष II अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_possibility"
+      ]
+    },
+    {
+      "id": "reas-q-018",
+      "source_question_id": "reas-syl-018",
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS PO 2021 (Mains)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3,
+      "question": "कथन:\n1. केवल कुछ ही लैपटॉप कंप्यूटर हैं। (Only a few laptops are computers.)\n2. सभी कंप्यूटर डेस्कटॉप हैं। (All computers are desktops.)\n\nनिष्कर्ष:\nI. कुछ लैपटॉप कंप्यूटर नहीं हैं। (Some laptops are not computers.)\nII. सभी लैपटॉप के कंप्यूटर होने की संभावना है। (All laptops being computers is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "trap": "'Only a few' को सामान्य 'Some' मान लेना",
+      "error_category": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं) के अंतर्गत आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. 'Only a few' का अर्थ: 'केवल कुछ ही A, B हैं' का अर्थ होता है कि 'कुछ A, B हैं' (सकारात्मक) तथा 'कुछ A निश्चित रूप से B नहीं हैं' (नकारात्मक) दोनों एक साथ सत्य हैं।\n2. निष्कर्ष I की जांच: चूंकि 'Only a few laptops are computers' दिया गया है, अतः इसका सीधा अनिवार्य अर्थ है कि कुछ लैपटॉप कभी कंप्यूटर नहीं हो सकते ('Some laptops are not computers निश्चित सत्य है)। निष्कर्ष I सत्य है।\n3. निष्कर्ष II की जांच: चूंकि कुछ लैपटॉप निश्चित रूप से कंप्यूटर नहीं हैं, अतः सभी लैपटॉप कभी भी कंप्यूटर नहीं बन सकते। अतः यह संभावना असंभव है। निष्कर्ष II असत्य है।\n4. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_only_a_few"
+      ]
+    },
+    {
+      "id": "reas-q-019",
+      "source_question_id": "reas-syl-019",
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SBI Clerk 2021 (Prelims)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3,
+      "question": "कथन:\n1. केवल कुछ ही मोबाइल टैबलेट हैं। (Only a few mobiles are tablets.)\n\nनिष्कर्ष:\nI. सभी टैबलेट के मोबाइल होने की संभावना है। (All tablets being mobiles is a possibility.)\nII. सभी मोबाइल के टैबलेट होने की संभावना है। (All mobiles being tablets is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "trap": "'Only a few' को सामान्य 'Some' मान लेना",
+      "error_category": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं) के अंतर्गत आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. कथन का विश्लेषण: 'Only a few mobiles are tablets' का अर्थ है कि मोबाइल का कुछ हिस्सा टैबलेट है और कुछ हिस्सा कभी टैबलेट नहीं हो सकता।\n2. निष्कर्ष I की जांच: प्रतिबंध मोबाइल पर है कि सभी मोबाइल टैबलेट में नहीं जा सकते, किन्तु टैबलेट पर कोई निषेध नहीं है कि वह मोबाइल में न आए। पूरा टैबलेट वृत्त मोबाइल के अंदर समाहित हो सकता है और तब भी 'कुछ मोबाइल टैबलेट नहीं हैं' सत्य रहेगा। अतः निष्कर्ष I सत्य है।\n3. निष्कर्ष II की जांच: सभी मोबाइल कभी भी टैबलेट नहीं बन सकते क्योंकि कथन स्पष्ट कहता है कि केवल कुछ ही मोबाइल टैबलेट हैं। अतः निष्कर्ष II असत्य है।\n4. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_only_a_few"
+      ]
+    },
+    {
+      "id": "reas-q-020",
+      "source_question_id": "reas-syl-020",
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS RRB PO 2021"
+      },
+      "question_type": "mcq",
+      "difficulty": 3.2,
+      "question": "कथन:\n1. कुछ कुर्सियां मेज हैं। (Some chairs are tables.)\n2. सभी मेज डेस्क हैं। (All tables are desks.)\n3. कोई डेस्क बेंच नहीं है। (No desk is bench.)\n\nनिष्कर्ष:\nI. कुछ कुर्सियां कभी बेंच नहीं हो सकतीं। (Some chairs can never be benches.)\nII. सभी बेंच के कुर्सी होने की संभावना है। (All benches being chairs is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "trap": "'Only a few' को सामान्य 'Some' मान लेना",
+      "error_category": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं) के अंतर्गत आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: कुर्सी और मेज में अधिव्यापन, मेज ⊆ डेस्क, तथा डेस्क और बेंच में पूर्ण निषेध।\n2. निष्कर्ष I ('Can never be' नियम): 'कदापि नहीं हो सकते' का अर्थ निश्चित नकारात्मक निष्कर्ष (Definite Some-Not) होता है। कुर्सियों का वह हिस्सा जो मेज/डेस्क है, वह कभी बेंच नहीं हो सकता क्योंकि कोई डेस्क बेंच नहीं है। अतः 'कुछ कुर्सियां कभी बेंच नहीं हो सकतीं' 100% सत्य है।\n3. निष्कर्ष II की जांच: बेंच का डेस्क से निषेध है, किन्तु कुर्सी के उस हिस्से से कोई निषेध नहीं है जो डेस्क के बाहर है। अतः सभी बेंच कुर्सियों के उस स्वतंत्र हिस्से में समाहित हो सकती हैं। अतः निष्कर्ष II भी सत्य है।\n4. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_only_a_few"
+      ]
+    },
+    {
+      "id": "reas-q-021",
+      "source_question_id": "reas-syl-021",
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SBI PO 2020 (Mains)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3.5,
+      "question": "कथन:\n1. केवल राजा रानी हैं। (Only kings are queens.)\n2. कुछ राजा बहादुर हैं। (Some kings are brave.)\n\nनिष्कर्ष:\nI. कुछ रानियों के बहादुर होने की संभावना है। (Some queens being brave is a possibility.)\nII. सभी राजा के रानी होने की संभावना है। (All kings being queens is a possibility.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "correct_answer": "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)",
+      "recognition_signals": [
+        "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "trap": "'Only a few' को सामान्य 'Some' मान लेना",
+      "error_category": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं) के अंतर्गत आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. 'Only' का विशेष नियम: 'Only A are B' (केवल राजा रानी हैं) का अर्थ होता है: 'All B are A' (सभी रानी राजा हैं) तथा 'रानी का संबंध राजा के अलावा किसी भी अन्य तत्व से कभी नहीं हो सकता' (Queen belongs exclusively to King)।\n2. निष्कर्ष I की जांच: चूंकि रानी केवल राजा से संबंधित हो सकती है, अतः रानी कभी भी बहादुर (या किसी अन्य तीसरे तत्व) से नहीं जुड़ सकती। अतः रानियों के बहादुर होने की संभावना शून्य (Impossible) है। निष्कर्ष I असत्य है।\n3. निष्कर्ष II की जांच: 'केवल राजा रानी हैं' का अर्थ है कि रानी केवल राजा का एक अंश है और कोई अन्य रानी नहीं हो सकता, और राजा का शेष भाग बहादुर आदि से जुड़ा है। अतः सभी राजा रानी नहीं बन सकते। निष्कर्ष II भी असत्य है।\n4. अतः न तो निष्कर्ष I और न ही II अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_only_a_few"
+      ]
+    },
+    {
+      "id": "reas-q-022",
+      "source_question_id": "reas-syl-022",
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "SSC CGL 2021 (Tier-1)"
+      },
+      "question_type": "mcq",
+      "difficulty": 2.2,
+      "question": "कथन:\n1. कम से कम 20% डॉक्टर लेखक हैं। (At least 20% doctors are authors.)\n2. प्रत्येक लेखक शिक्षक है। (Each author is teacher.)\n\nनिष्कर्ष:\nI. कुछ डॉक्टर शिक्षक हैं। (Some doctors are teachers.)\nII. सभी शिक्षक लेखक हैं। (All teachers are authors.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "correct_answer": "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+      "recognition_signals": [
+        "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "trap": "'Only a few' को सामान्य 'Some' मान लेना",
+      "error_category": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं) के अंतर्गत आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. प्रतिमापी (Quantifier) मानकीकरण नियम: (1) 'कम से कम 20%', 'अधिकांश', 'प्रायः', 'कुछ' सभी का तार्किक अर्थ 'Some' (आंशिक सकारात्मक) होता है। (2) 'प्रत्येक', 'हर एक', 'कोई भी' का अर्थ 'All' (सार्वत्रिक सकारात्मक) होता है।\n2. अतः कथन बन गए: (1) कुछ डॉक्टर लेखक हैं (Some doctors are authors), (2) सभी लेखक शिक्षक हैं (All authors are teachers)।\n3. निष्कर्ष I की जांच: डॉक्टर का वह 20% हिस्सा जो लेखक है, वह शिक्षक के अंदर भी आता है। अतः 'कुछ डॉक्टर शिक्षक हैं' निश्चित सत्य है।\n4. निष्कर्ष II की जांच: 'सभी लेखक शिक्षक हैं' से 'सभी शिक्षक लेखक हैं' (व्युत्क्रम) नहीं निकलता। केवल 'कुछ शिक्षक लेखक हैं' निकलता है। निष्कर्ष II असत्य है।\n5. अतः केवल निष्कर्ष I अनुसरण करता है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_standard"
+      ]
+    },
+    {
+      "id": "reas-q-023",
+      "source_question_id": "reas-syl-023",
+      "pattern_id": "pat-reas-syl-reverse",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "IBPS PO 2022 (Mains)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3.5,
+      "question": "प्रतिलोम न्यायवाक्य (Reverse Syllogism):\nदिए गए निश्चित निष्कर्ष:\nI. कुछ वृत्त वर्ग हैं। (Some circles are squares.)\nII. कोई वर्ग त्रिभुज नहीं है। (No square is triangle.)\n\nनिम्नलिखित में से कथनों का कौन सा समुच्चय इन दोनों निष्कर्षों को अनिवार्य रूप से सिद्ध करता है?",
+      "options": [
+        "सभी वृत्त आयत हैं। कुछ आयत वर्ग हैं। सभी वर्ग त्रिभुज हैं।",
+        "सभी वृत्त वर्ग हैं। सभी वर्ग शंकु हैं। कोई शंकु त्रिभुज नहीं है।",
+        "कुछ वृत्त वर्ग हैं। कुछ वर्ग त्रिभुज हैं। कोई त्रिभुज आयत नहीं है।",
+        "कोई वृत्त वर्ग नहीं है। सभी वर्ग त्रिभुज हैं। कुछ त्रिभुज शंकु हैं।"
+      ],
+      "correct_option": "सभी वृत्त वर्ग हैं। सभी वर्ग शंकु हैं। कोई शंकु त्रिभुज नहीं है।",
+      "correct_answer": "सभी वृत्त वर्ग हैं। सभी वर्ग शंकु हैं। कोई शंकु त्रिभुज नहीं है।",
+      "recognition_signals": [
+        "दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें।",
+      "decision_points": [
+        "निष्कर्षों के चिन्हों (+/-) से अमान्य कथन विकल्पों को तुरंत बाहर (Eliminate) करें",
+        "पुष्टि करें कि चयनित कथन समुच्चय से सभी दिए गए निष्कर्ष अनिवार्य रूप से निकलते हैं",
+        "वास्तविक दुनिया के पूर्वाग्रह से मुक्त रहकर विशुद्ध तार्किक वैधता परखें"
+      ],
+      "trap": "केवल एक निष्कर्ष की पुष्टि करके पूरे विकल्प को सही मान लेना",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Reverse Syllogism & Fallacy Immunity (प्रतिलोम न्यायवाक्य एवं तार्किक संगति) के अंतर्गत दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. प्रतिलोम न्यायवाक्य हल करने की विधि: प्रत्येक विकल्प का द्रुत परीक्षण करें और जांचें कि क्या दोनों निष्कर्ष अनिवार्यतः निकलते हैं।\n2. विकल्प 1 की जांच: 'सभी वर्ग त्रिभुज हैं' दिया है, जो निष्कर्ष II ('कोई वर्ग त्रिभुज नहीं है') का सीधा खंडन करता है। अतः विकल्प 1 गलत है।\n3. विकल्प 2 की जांच: 'सभी वृत्त वर्ग हैं' $\\implies$ 'कुछ वृत्त वर्ग हैं' (निष्कर्ष I सत्य)। 'सभी वर्ग शंकु हैं' और 'कोई शंकु त्रिभुज नहीं है' $\\implies$ 'कोई वर्ग त्रिभुज नहीं है' (निष्कर्ष II सत्य)। दोनों निष्कर्ष अनिवार्य रूप से सत्य होते हैं।\n4. विकल्प 3 की जांच: 'कुछ वर्ग त्रिभुज हैं' निष्कर्ष II का खंडन करता है।\n5. विकल्प 4 की जांच: 'कोई वृत्त वर्ग नहीं है' निष्कर्ष I का खंडन करता है।\n6. अतः सही विकल्प 2 है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष सभी वृत्त वर्ग हैं। सभी वर्ग शंकु हैं। कोई शंकु त्रिभुज नहीं है। पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_reverse"
+      ]
+    },
+    {
+      "id": "reas-q-024",
+      "source_question_id": "reas-syl-024",
+      "pattern_id": "pat-reas-syl-reverse",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "RRB NTPC 2021 (CBT-2)"
+      },
+      "question_type": "mcq",
+      "difficulty": 3,
+      "question": "नकारात्मक न्यायवाक्य (Does NOT follow):\nकथन:\n1. सभी नदियां समुद्र हैं। (All rivers are seas.)\n2. कुछ समुद्र महासागर हैं। (Some seas are oceans.)\n3. कोई महासागर झील नहीं है। (No ocean is lake.)\n\nनिम्नलिखित निष्कर्षों में से कौन सा तार्किक रूप से अनुसरण नहीं करता है (Does NOT logically follow)?",
+      "options": [
+        "कुछ समुद्र नदियां हैं। (Some seas are rivers.)",
+        "कुछ महासागर समुद्र हैं। (Some oceans are seas.)",
+        "कोई नदी झील नहीं है। (No river is lake.)",
+        "कुछ समुद्र झील नहीं हैं। (Some seas are not lakes.)"
+      ],
+      "correct_option": "कोई नदी झील नहीं है। (No river is lake.)",
+      "correct_answer": "कोई नदी झील नहीं है। (No river is lake.)",
+      "recognition_signals": [
+        "दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें।",
+      "decision_points": [
+        "निष्कर्षों के चिन्हों (+/-) से अमान्य कथन विकल्पों को तुरंत बाहर (Eliminate) करें",
+        "पुष्टि करें कि चयनित कथन समुच्चय से सभी दिए गए निष्कर्ष अनिवार्य रूप से निकलते हैं",
+        "वास्तविक दुनिया के पूर्वाग्रह से मुक्त रहकर विशुद्ध तार्किक वैधता परखें"
+      ],
+      "trap": "केवल एक निष्कर्ष की पुष्टि करके पूरे विकल्प को सही मान लेना",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Reverse Syllogism & Fallacy Immunity (प्रतिलोम न्यायवाक्य एवं तार्किक संगति) के अंतर्गत दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. वेन आरेख बनाएं: नदियां ⊆ समुद्र, समुद्र और महासागर में अधिव्यापन, तथा महासागर और झील में पूर्ण निषेध।\n2. विकल्पों की जांच:\n3. - 'कुछ समुद्र नदियां हैं': नदियां समुद्र के अंदर हैं, अतः यह निश्चित सत्य है।\n4. - 'कुछ महासागर समुद्र हैं': यह कथन 2 का सीधा व्युत्क्रम है, अतः निश्चित सत्य है।\n5. - 'कुछ समुद्र झील नहीं हैं': समुद्र का जो हिस्सा महासागर है, वह झील नहीं हो सकता, अतः यह निश्चित सत्य है।\n6. - 'कोई नदी झील नहीं है': नदी और झील के बीच कोई सीधा निषेध नहीं है, नदी झील के संपर्क में आ सकती है। अतः यह निष्कर्ष निश्चित सत्य नहीं है (अर्थात् अनुसरण नहीं करता है)।\n7. प्रश्न में पूछा गया है कि कौन सा अनुसरण नहीं करता है, अतः सही उत्तर 'कोई नदी झील नहीं है' है।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष कोई नदी झील नहीं है। (No river is lake.) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_negative"
+      ]
+    },
+    {
+      "id": "reas-q-025",
+      "source_question_id": "reas-syl-025",
+      "pattern_id": "pat-reas-syl-reverse",
+      "provenance": {
+        "origin": "authentic_pyq",
+        "source": "UPSC CSAT 2021"
+      },
+      "question_type": "mcq",
+      "difficulty": 2,
+      "question": "कथन:\n1. सभी मनुष्य पक्षी हैं। (All humans are birds.)\n2. सभी पक्षी हाथी हैं। (All birds are elephants.)\n\nनिष्कर्ष:\nI. सभी मनुष्य हाथी हैं। (All humans are elephants.)\nII. कुछ हाथी मनुष्य हैं। (Some elephants are humans.)",
+      "options": [
+        "केवल निष्कर्ष I अनुसरण करता है (Only conclusion I follows)",
+        "केवल निष्कर्ष II अनुसरण करता है (Only conclusion II follows)",
+        "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+        "न तो निष्कर्ष I और न ही II अनुसरण करता है (Neither conclusion I nor II follows)"
+      ],
+      "correct_option": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "correct_answer": "निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow)",
+      "recognition_signals": [
+        "दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण।"
+      ],
+      "expected_method": "7-Layer Cognitive Thinking Pipeline (पैटर्न पहचान व चरणबद्ध निगमन): 1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें।",
+      "decision_points": [
+        "निष्कर्षों के चिन्हों (+/-) से अमान्य कथन विकल्पों को तुरंत बाहर (Eliminate) करें",
+        "पुष्टि करें कि चयनित कथन समुच्चय से सभी दिए गए निष्कर्ष अनिवार्य रूप से निकलते हैं",
+        "वास्तविक दुनिया के पूर्वाग्रह से मुक्त रहकर विशुद्ध तार्किक वैधता परखें"
+      ],
+      "trap": "केवल एक निष्कर्ष की पुष्टि करके पूरे विकल्प को सही मान लेना",
+      "error_category": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ],
+      "hints": {
+        "tier1_conceptual": "तार्किक सिद्धांत पहचानें: Reverse Syllogism & Fallacy Immunity (प्रतिलोम न्यायवाक्य एवं तार्किक संगति) के अंतर्गत दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण। की पहचान करें।",
+        "tier2_strategic": "रणनीति एवं संरचना: 1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें। का प्रयोग कर ज्ञात प्रतिबंधों को आरेखित करें।",
+        "tier3_next_step": "चरणबद्ध निगमन: प्रतिबंधों की संगति जांचते हुए अमान्य विकल्पों को निरस्त करें।"
+      },
+      "solution": "चरणबद्ध तार्किक समाधान (7-Layer Cognitive Thinking Pipeline):\n1. तार्किक वैधता का नियम (FORMAL VALIDITY OVER REAL-WORLD FACTS): न्यायवाक्य में कथनों को पूर्ण सत्य मानना होता है, चाहे वे ज्ञात प्राकृतिक सत्यों से कितने भी भिन्न क्यों न हों। मनुष्य का पक्षी या हाथी होना तार्किक संरचना में एक प्रतीक (A ⊆ B ⊆ C) मात्र है।\n2. वेन आरेख: मनुष्य ⊆ पक्षी ⊆ हाथी।\n3. निष्कर्ष I की जांच: मनुष्य पूरी तरह पक्षी के अंदर है और पक्षी हाथी के अंदर है, अतः सभी मनुष्य हाथी हैं। निष्कर्ष I तार्किक रूप से सत्य है।\n4. निष्कर्ष II की जांच: हाथी के वृत्त का एक हिस्सा मनुष्य द्वारा आच्छादित है, अतः कुछ हाथी मनुष्य हैं। निष्कर्ष II भी तार्किक रूप से सत्य है।\n5. अतः निष्कर्ष I और II दोनों अनुसरण करते हैं।",
+      "verification": "तार्किक सुसंगतता एवं वेन आरेख जांच (Venn Minimal Overlap & Logical Consistency Check): न्यूनतम अधिव्यापन वेन आरेख के अनुसार प्राप्त निष्कर्ष निष्कर्ष I और II दोनों अनुसरण करते हैं (Both conclusions I and II follow) पूर्णतः तार्किक है, कोई अवैध नकारात्मक या अतिव्यापक निष्कर्ष नहीं लिया गया है तथा सभी दिए गए कथन संतुष्ट हैं।",
+      "prerequisites": [
+        "reasoning.logical.syllogism_basics"
+      ]
+    }
+  ]
+}

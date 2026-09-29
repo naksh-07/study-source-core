@@ -1,0 +1,18 @@
+Front	Back	Tags
+न्याय निगमन में सार्वत्रिक सकारात्मक (Universal Affirmative - 'A') प्रतिज्ञप्ति का मानक रूप क्या है?	'सभी A, B हैं' (All A are B), जिसमें A का संपूर्ण वृत्त B के भीतर समाहित होता है (A ⊆ B)।	Reasoning::Syllogism::Propositions
+न्याय निगमन में सार्वत्रिक नकारात्मक (Universal Negative - 'E') प्रतिज्ञप्ति का अर्थ क्या होता है?	'कोई A, B नहीं है' (No A is B), जिसका अर्थ A और B के मध्य पूर्ण वियोग (Disjoint Set, A ∩ B = ∅) है।	Reasoning::Syllogism::Propositions
+अंशव्यापी सकारात्मक (Particular Affirmative - 'I') प्रतिज्ञप्ति का मानक स्वरूप क्या है?	'कुछ A, B हैं' (Some A are B), जिसका अर्थ A और B में कम से कम एक उभयनिष्ठ भाग (A ∩ B ≠ ∅) होना है।	Reasoning::Syllogism::Propositions
+अंशव्यापी नकारात्मक (Particular Negative - 'O') प्रतिज्ञप्ति की परिभाषा क्या है?	'कुछ A, B नहीं हैं' (Some A are not B), जिसमें A का कम से कम एक हिस्सा B के बाहर अनिवार्य रूप से स्थित होता है।	Reasoning::Syllogism::Propositions
+न्यूनतम अधिव्यापन वेन आरेख (Minimal Overlap Venn Diagram) का मूल नियम क्या है?	केवल उन्हीं वृत्तों के अधिव्यापन को आरेखित करना जो कथनों में अनिवार्यतः दिए गए हों; अनावश्यक अधिव्यापन से बचना।	Reasoning::Syllogism::VennDiagram
+अवितरित मध्यम पद दोष (Fallacy of Undistributed Middle) कब उत्पन्न होता है?	जब दो कथनों में मध्यम पद (Middle Term) किसी भी कथन में सार्वत्रिक रूप से वितरित न हो (जैसे Some A are B + Some B are C)।	Reasoning::Syllogism::Fallacies
+न्यायवाक्य में 'या तो I या II' (Either-Or) लागू होने की पहली अनिवार्य शर्त क्या है?	दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful / Indeterminate) होने चाहिए।	Reasoning::Syllogism::EitherOr
+न्यायवाक्य में 'या तो I या II' (Either-Or) लागू होने की दूसरी अनिवार्य शर्त क्या है?	दोनों निष्कर्षों में उद्देश्य (Subject) और विधेय (Predicate) समान होने चाहिए।	Reasoning::Syllogism::EitherOr
+मान्य पूरक युग्म (Complementary Pairs) कौन-से दो प्रकार के होते हैं?	(1) Some + No तथा (2) Some + Some Not।	Reasoning::Syllogism::EitherOr
+'All + No' कभी भी मान्य Either-Or पूरक युग्म क्यों नहीं बनाता?	क्योंकि दोनों निष्कर्ष एक ही समय में एक साथ असत्य हो सकते हैं (जब केवल कुछ A, B हों)।	Reasoning::Syllogism::EitherOr
+न्यायवाक्य में संभावना (Possibility) कब मान्य (Valid) मानी जाती है?	जब संबंधित तत्वों के मध्य कथनों में कोई प्रत्यक्ष या अप्रत्यक्ष नकारात्मक निषेध (Negative Restriction) न हो।	Reasoning::Syllogism::Possibility
+जो निष्कर्ष पहले से ही निश्चित सत्य (Definite True) हो, उसकी संभावना क्या मानी जाती है?	असत्य (False); क्योंकि निश्चितता में संदेह या संभावना का अस्तित्व समाप्त हो जाता है।	Reasoning::Syllogism::Possibility
+'केवल कुछ ही A, B हैं' (Only a few A are B) का दोहरा तार्किक अर्थ क्या होता है?	'कुछ A, B हैं' (Some A are B) तथा 'कुछ A निश्चित रूप से B नहीं हैं' (Some A are not B) दोनों एक साथ सत्य हैं।	Reasoning::Syllogism::OnlyAFew
+'Only a few A are B' होने पर कौन सी संभावना सदैव असत्य होती है?	'सभी A के B होने की संभावना है' (All A being B is a possibility) सदैव असत्य होती है।	Reasoning::Syllogism::OnlyAFew
+'केवल A, B हैं' (Only A are B) का तार्किक रूपांतरण और अनन्यता प्रतिबंध क्या है?	'सभी B, A हैं' (All B are A), तथा B का संबंध A के अतिरिक्त किसी भी अन्य तत्व से कभी नहीं हो सकता।	Reasoning::Syllogism::Only
+'कदापि नहीं' (Can never be) निष्कर्ष का वास्तविक तार्किक अर्थ क्या होता है?	यह संभावना नहीं, बल्कि एक निश्चित नकारात्मक निष्कर्ष ('Some are not' निश्चित है) होता है।	Reasoning::Syllogism::Keywords
+प्रतिमापी मानकीकरण में 'कम से कम 30%' या 'अधिकांश' का तार्किक रूपांतरण क्या है?	'कुछ' (Some); आंशिक सकारात्मक प्रतिज्ञप्ति।	Reasoning::Syllogism::Quantifiers

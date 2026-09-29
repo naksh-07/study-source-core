@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.0.0",
+  "domain": "Reasoning",
+  "chapter": "Syllogism",
+  "skill_id": "reasoning-study",
+  "language": "hi",
+  "problem_patterns": [
+    {
+      "pattern_id": "pat-reas-syl-standard",
+      "family_id": "family.reasoning.logical.syllogism_standard",
+      "title": "Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख)",
+      "deep_structure": "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।",
+      "governing_method": "1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "common_traps": [
+        "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+        "कथन 'सभी A, B हैं' से उल्टा निष्कर्ष 'सभी B, A हैं' मान लेना (Converse Fallacy)",
+        "मध्यम पद के अवितरित होने पर दो असंबंधित पदों में निश्चित संबंध जोड़ना (Undistributed Middle)"
+      ],
+      "error_categories": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-either-or",
+      "family_id": "family.reasoning.logical.syllogism_either_or",
+      "title": "Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प)",
+      "deep_structure": "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।",
+      "governing_method": "1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "common_traps": [
+        "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+        "यदि कोई एक निष्कर्ष निश्चित रूप से सत्य हो तो भी Either-Or लगा देना",
+        "असमान पदों (different subjects/predicates) के बीच Either-Or लगाना"
+      ],
+      "error_categories": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-possibility",
+      "family_id": "family.reasoning.logical.syllogism_possibility",
+      "title": "Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण)",
+      "deep_structure": "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।",
+      "governing_method": "1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "common_traps": [
+        "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+        "नकारात्मक सीमा के बावजूद संभावना को सही मान लेना",
+        "अप्रत्यक्ष निषेध (Indirect Negative Boundary) को पहचानने में चूक"
+      ],
+      "error_categories": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "family_id": "family.reasoning.logical.syllogism_only_a_few",
+      "title": "Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं)",
+      "deep_structure": "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।",
+      "governing_method": "1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "common_traps": [
+        "'Only a few' को सामान्य 'Some' मान लेना",
+        "'Only A are B' को सामान्य 'All A are B' समझ लेना",
+        "'Can never be' को संभावना का प्रश्न समझ लेना"
+      ],
+      "error_categories": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-reverse",
+      "family_id": "family.reasoning.logical.syllogism_reverse",
+      "title": "Reverse Syllogism & Fallacy Immunity (प्रतिलोम न्यायवाक्य एवं तार्किक संगति)",
+      "deep_structure": "दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण।",
+      "governing_method": "1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें।",
+      "decision_points": [
+        "निष्कर्षों के चिन्हों (+/-) से अमान्य कथन विकल्पों को तुरंत बाहर (Eliminate) करें",
+        "पुष्टि करें कि चयनित कथन समुच्चय से सभी दिए गए निष्कर्ष अनिवार्य रूप से निकलते हैं",
+        "वास्तविक दुनिया के पूर्वाग्रह से मुक्त रहकर विशुद्ध तार्किक वैधता परखें"
+      ],
+      "common_traps": [
+        "केवल एक निष्कर्ष की पुष्टि करके पूरे विकल्प को सही मान लेना",
+        "नकारात्मक निष्कर्ष होने पर पूर्णतः सकारात्मक कथनों वाले विकल्प का चयन करना",
+        "वास्तविक ज्ञान के आधार पर तार्किक प्रश्नों को हल करने का प्रयास"
+      ],
+      "error_categories": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "pattern_id": "pat-reas-syl-standard",
+      "family_id": "family.reasoning.logical.syllogism_standard",
+      "title": "Standard Categorical Syllogism with Minimal Overlap Venn (मानक निरपेक्ष न्यायवाक्य एवं न्यूनतम अधिव्यापन वेन आरेख)",
+      "deep_structure": "2, 3 अथवा 4 कथनों के आधार पर न्यूनतम अधिव्यापन वेन आरेख खींचकर निश्चित सकारात्मक एवं नकारात्मक निष्कर्षों की सर्वमान्य सत्यता का निर्धारण।",
+      "governing_method": "1. कथनों का न्यूनतम अधिव्यापन वेन आरेख बनाएं। 2. दिए गए निष्कर्षों की आरेख में अनिवार्य उपस्थिति जांचें। 3. यदि कोई निष्कर्ष केवल एक संभावना में सत्य है किन्तु अनिवार्य नहीं, तो उसे संदिग्ध मानकर निरस्त करें। 4. केवल सर्वमान्य निष्कर्ष को स्वीकारें।",
+      "decision_points": [
+        "कथनों को ही सत्य मानें, बाह्य सामान्य ज्ञान का प्रयोग न करें",
+        "न्यूनतम अधिव्यापन आरेख बनाकर अनावश्यक अतिरिक्त अधिव्यापन से बचें",
+        "संभावना को निश्चित निष्कर्ष के रूप में न स्वीकारें"
+      ],
+      "common_traps": [
+        "वास्तविक दुनिया के ज्ञान को कथनों पर वरीयता देना (False Premise Assumption)",
+        "कथन 'सभी A, B हैं' से उल्टा निष्कर्ष 'सभी B, A हैं' मान लेना (Converse Fallacy)",
+        "मध्यम पद के अवितरित होने पर दो असंबंधित पदों में निश्चित संबंध जोड़ना (Undistributed Middle)"
+      ],
+      "error_categories": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-either-or",
+      "family_id": "family.reasoning.logical.syllogism_either_or",
+      "title": "Complementary Pairs & Either-Or Validation (पूरक युग्म एवं या-तो तार्किक विकल्प)",
+      "deep_structure": "जब दो निष्कर्ष व्यक्तिगत रूप से संदिग्ध हों किन्तु समान तत्वों के मध्य एक सकारात्मक व एक नकारात्मक पूरक युग्म बनाते हों, तो 'या तो I या II' का निर्धारण।",
+      "governing_method": "1. कथनों का वेन आरेख बनाएं। 2. दोनों निष्कर्षों का व्यक्तिगत परीक्षण करें और पुष्टि करें कि दोनों संदिग्ध हैं। 3. जांचें कि दोनों में उद्देश्य (Subject) और विधेय (Predicate) समान हैं। 4. जांचें कि युग्म 'कुछ + कोई नहीं' (Some + No) या 'कुछ + कुछ नहीं' (Some + Some Not) है। 5. 'All + No' मिलने पर Either-Or को खारिज करें।",
+      "decision_points": [
+        "जांचें कि क्या दोनों निष्कर्ष व्यक्तिगत रूप से संदिग्ध (Doubtful) हैं",
+        "जांचें कि क्या दोनों निष्कर्षों के Subject और Predicate समान हैं",
+        "पुष्टि करें कि पूरक युग्म मान्य है (Some + No या Some + Some Not) न कि All + No"
+      ],
+      "common_traps": [
+        "'All + No' को वैध पूरक युग्म मान लेना (All+No False Either-Or Trap)",
+        "यदि कोई एक निष्कर्ष निश्चित रूप से सत्य हो तो भी Either-Or लगा देना",
+        "असमान पदों (different subjects/predicates) के बीच Either-Or लगाना"
+      ],
+      "error_categories": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-possibility",
+      "family_id": "family.reasoning.logical.syllogism_possibility",
+      "title": "Possibility & Inferred Boundary Analysis (संभावना एवं अनुमानित सीमा विश्लेषण)",
+      "deep_structure": "संदिग्ध निष्कर्षों में संभावना (Possibility) की वैधता का परीक्षण, जिसमें नकारात्मक प्रतिबंधों और निश्चित सत्य के विरोधाभास की जांच की जाती है।",
+      "governing_method": "1. कथनों का बुनियादी आरेख बनाएं। 2. तत्वों के मध्य प्रत्यक्ष या अप्रत्यक्ष निषेध की उपस्थिति खोजें। 3. यदि कोई निषेध नहीं है और स्थिति निश्चित रूप से सत्य नहीं है, तो संभावना को मान्य करें। 4. यदि प्रत्यक्ष निषेध हो तो संभावना को असत्य ठहराएं।",
+      "decision_points": [
+        "जांचें कि क्या निष्कर्ष पहले से ही निश्चित सत्य (Definite True) तो नहीं है",
+        "तत्वों के मध्य किसी नकारात्मक प्रतिबंध (No / Not relation) की उपस्थिति जांचें",
+        "यदि कोई प्रतिबंध नहीं है तो संभावना को स्वीकार करें"
+      ],
+      "common_traps": [
+        "निश्चित सत्य को संभावना के रूप में स्वीकार कर लेना (Definite True as Possibility Trap)",
+        "नकारात्मक सीमा के बावजूद संभावना को सही मान लेना",
+        "अप्रत्यक्ष निषेध (Indirect Negative Boundary) को पहचानने में चूक"
+      ],
+      "error_categories": [
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION",
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-only-a-few",
+      "family_id": "family.reasoning.logical.syllogism_only_a_few",
+      "title": "Modern Quantifiers: Only a few, Only & Can Never Be (आधुनिक प्रतिबंधक न्यायवाक्य: केवल कुछ ही, केवल एवं कभी नहीं)",
+      "deep_structure": "आधुनिक बैंकिंग व SSC परीक्षाओं के विशिष्ट प्रतिबंधक शब्द ('Only', 'Only a few', 'Can never be') पर आधारित दोहरे प्रतिबंधों का विश्लेषण।",
+      "governing_method": "1. 'Only A are B' को 'All B are A (B exclusive)' में बदलें। 2. 'Only a few A are B' को 'Some A are B' + 'Some A are not B' दोनों में विभक्त करें। 3. 'Can never be' को 'निश्चित रूप से Some-Not' के रूप में जांचें। 4. वेन आरेख में प्रतिबंधक सीमाओं को स्पष्ट चिह्नित करें।",
+      "decision_points": [
+        "'Only a few' के दोनों घटकों (Some + Some-Not) को एक साथ ध्यान में रखें",
+        "'Only A are B' में B को किसी भी अन्य तत्व से मिलने से पूरी तरह रोकें",
+        "'Can never be' को संभावना न मानकर निश्चित नकारात्मक निष्कर्ष समझें"
+      ],
+      "common_traps": [
+        "'Only a few' को सामान्य 'Some' मान लेना",
+        "'Only A are B' को सामान्य 'All A are B' समझ लेना",
+        "'Can never be' को संभावना का प्रश्न समझ लेना"
+      ],
+      "error_categories": [
+        "ERR_01: MISSED_EXPLICIT_CONDITION",
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_06: POSSIBILITY_DEFINITE_CONFUSION"
+      ]
+    },
+    {
+      "pattern_id": "pat-reas-syl-reverse",
+      "family_id": "family.reasoning.logical.syllogism_reverse",
+      "title": "Reverse Syllogism & Fallacy Immunity (प्रतिलोम न्यायवाक्य एवं तार्किक संगति)",
+      "deep_structure": "दिए गए वैध निष्कर्षों के आधार पर विकल्पों में उपस्थित कथनों के सही समुच्चय का चयन अथवा 'कौन सा निष्कर्ष अनुसरण नहीं करता है' का निर्धारण।",
+      "governing_method": "1. दिए गए निश्चित निष्कर्षों की प्रकृति (सकारात्मक/नकारात्मक) देखें। 2. विकल्प के कथनों से द्रुत वेन आरेख बनाकर दोनों निष्कर्षों की एक साथ पुष्टि करें। 3. यदि कोई विकल्प किसी निष्कर्ष का उल्लंघन करे तो उसे तुरंत निरस्त करें।",
+      "decision_points": [
+        "निष्कर्षों के चिन्हों (+/-) से अमान्य कथन विकल्पों को तुरंत बाहर (Eliminate) करें",
+        "पुष्टि करें कि चयनित कथन समुच्चय से सभी दिए गए निष्कर्ष अनिवार्य रूप से निकलते हैं",
+        "वास्तविक दुनिया के पूर्वाग्रह से मुक्त रहकर विशुद्ध तार्किक वैधता परखें"
+      ],
+      "common_traps": [
+        "केवल एक निष्कर्ष की पुष्टि करके पूरे विकल्प को सही मान लेना",
+        "नकारात्मक निष्कर्ष होने पर पूर्णतः सकारात्मक कथनों वाले विकल्प का चयन करना",
+        "वास्तविक ज्ञान के आधार पर तार्किक प्रश्नों को हल करने का प्रयास"
+      ],
+      "error_categories": [
+        "ERR_02: INVALID_DEDUCTIVE_STEP",
+        "ERR_03: FALSE_PREMISE_ASSUMPTION",
+        "ERR_11: SYLLOGISM_MIDDLE_TERM_FALLACY"
+      ]
+    }
+  ]
+}

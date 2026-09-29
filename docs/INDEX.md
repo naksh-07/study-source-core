@@ -103,6 +103,7 @@ The workspace maintains production-ready chapter deliverables structured as foll
 | **Math** | `Arithmetic-Progression` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 26-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
 | **Math** | `LCM-HCF` | 6 Deliverables (Notes, Basic TSV, Cloze TSV, Question Bank Markdown, Declarative APKG, StudyLab Procedural APKG) | `Notes✅ Basic✅ Cloze✅ QBank✅ Anki✅ StudyLab✅` |
 | **Physics** | `Newton-Laws-Friction` | 8 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, Question Bank, Declarative APKG, StudyLab Procedural APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab✅` |
+| **Reasoning** | `Syllogism` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
 
 > [!NOTE]
 > **Operational Policy (GAP-30)**: For all procedural STEM subjects (Math, Physics, Chemistry, Reasoning), **canonical Markdown Question Banks (`Questions.md`)** serve as the active primary practice deliverable. Binary Procedural APKG packaging is temporarily paused in automated production runs in favor of human-readable, verifiable Markdown Question Banks with full pedagogical dimensions and 3-tier hints.

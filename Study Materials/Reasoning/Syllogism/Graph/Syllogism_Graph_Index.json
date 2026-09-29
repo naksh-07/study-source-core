@@ -1,0 +1,30 @@
+{
+  "chapter": "Syllogism",
+  "subject": "Reasoning",
+  "domain": "Reasoning",
+  "outgoing_links": [
+    {
+      "target_chapter": "Arithmetic-Progression",
+      "target_subject": "Math",
+      "relationship": "formal_axiomatic_deduction_and_algebraic_structure",
+      "anchor": "## 2. Fundamental Concepts, Rules & Theorems"
+    },
+    {
+      "target_chapter": "LCM-HCF",
+      "target_subject": "Math",
+      "relationship": "discrete_set_theory_and_coprime_partitions",
+      "anchor": "## 3. Representation & Diagrammatic Tools"
+    },
+    {
+      "target_chapter": "Newton-Laws-Friction",
+      "target_subject": "Physics",
+      "relationship": "deductive_axiomatic_laws_and_constraint_boundaries",
+      "anchor": "## 5. Constraint Management & Decision Trees"
+    }
+  ],
+  "incoming_links_candidates": [
+    "Math::Set-Theory",
+    "Reasoning::Seating-Arrangement",
+    "Reasoning::Logical-Puzzles"
+  ]
+}
