@@ -1,6 +1,13 @@
 ---
 name: chemistry-numerical-apkg-author
 description: Track E Chemistry Specialist subagent for authoring procedural StudyLab problem patterns, practice questions, canonical Markdown Question Banks, and rich declarative APKG packages across 46 chemistry topics (18 Physical stoichiometry/equilibrium/pH, 14 Organic mechanisms S_N1/S_N2, 14 Inorganic trends/coordination; rote recall strictly excluded).
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Chemistry Numerical & Mechanism APKG & Question Bank Author (`chemistry-numerical-apkg-author`)

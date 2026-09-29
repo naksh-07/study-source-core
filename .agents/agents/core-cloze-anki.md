@@ -1,6 +1,13 @@
 ---
 name: core-cloze-anki
 description: Specialist subagent for creating Cloze Anki flashcards (TSV format) from an authorized evidence pack. Generates Hindi-first contextual cloze deletions with strict 3-column TSV formatting.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Cloze Anki Specialist (`core-cloze-anki`)

@@ -16,7 +16,11 @@
   - [x] Page-Range Slicing & Physical Deliverables: Forwarded `--page-start`/`--page-end` in `evidence_ingestion_engine.js`; upgraded `Study Materials/Map/Europe` (`Europe_Notes.md`, `europe_map.svg`, `Europe_ImageOcclusion.json`, `Europe_Anki.apkg`) and `Math/LCM-HCF` (`LCM-HCF_Basic.tsv`, `LCM-HCF_Anki.apkg`).
 - [x] Phase 7 (Polish & MCP v1.1.0): Anki Dark Mode CSS (`.nightMode` on Models `1600000001`–`1600000003`), Atomic APKG streaming temp-file rename (`shared_anki_utils.js`), MCP Server v1.1.0 (`ingest_source_to_evidence_pack`, `query_procedural_contract`, `languagePolicy`, extended `validate_artifact`), and `docs/GAP_REGISTER.md` (`GAP-18` to `GAP-27`) synchronized.
 - [x] Phase 8 (DX & CI Seal - Option A): Added `.github/workflows/ci.yml` (Python 3.12 + Node 22 + Vitest + 10-gate Final Audit Harness), unified CLI [`studycore_cli.js`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/studycore_cli.js) (`status`, `ingest`, `package`, `verify`) with [`test_studycore_cli.js`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/test_studycore_cli.js) (`46/46` Vitest suites), and deduplicated `computeSha256` across `context_planner.js` & `source_question_inventory.js`.
-- [x] Phase 9 (Production Delivery - Option B): Executed full Wave 1–3 pipeline for `Physics/Newton-Laws-Friction`: generated and validated `Notes`, `Basic`, `Cloze`, `Questions.md`, `Newton-Laws-Friction_Anki.apkg` (23 cards), and `Newton-Laws-Friction_StudyLab_Procedural.apkg` (Levels 1–7 PASS). Vault now has 3 full production slices (`Map/Europe`, `Math/LCM-HCF`, `Physics/Newton-Laws-Friction`).
-
+- [x] Phase 9 (Production Delivery - Option B): Executed full Wave 1–3 pipeline for `Physics/Newton-Laws-Friction`: generated and validated `Notes`, `Basic`, `Cloze`, `Questions.md`, `Newton-Laws-Friction_Anki.apkg` (23 cards), and `Newton-Laws-Friction_StudyLab_Procedural.apkg` (Levels 1–7 PASS).
+- [x] Phase 10: Architectural Realignment & Orchestration Harness Seal (100% Complete):
+  - [x] Stream 1: Equipped all 14 `.agents/agents/*.md` definitions with `tools: [write_to_file, replace, run_command, view_file, list_dir, send_message]` + `inheritMcp: true`; archived duplicate root `agents/`.
+  - [x] Stream 2: Auto-populated `candidateVaultTargets` & `noteWordCount` in `orchestration_engine.js` for Wave 3 auto-context.
+  - [x] Stream 3: Completed `Physics/Newton-Laws-Friction` deliverables (MindMap JSON, SlideDeck Prompt, Graph Index, QA Report; verified 8/8 deliverables PASS).
+  - [x] Stream 4: 46/46 Vitest suites PASS, 10/10 Master Final Audit Harness Gates PASS, updated `docs/INDEX.md` and `docs/GAP_REGISTER.md` (GAP-28 closed).
 
 

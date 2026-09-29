@@ -455,6 +455,19 @@ Every identified gap is tracked with:
 
 ---
 
+### GAP-28: Subagent Tool Frontmatter, Wave 3 Auto-Context Resolution & Sibling Parity
+- **Category**: Multi-Agent Orchestration & Subagent Tool Permissions
+- **Severity**: **P1 Critical**
+- **Evidence**: Antigravity subagent loading protocol defaulted all 14 subagents to read-only when YAML frontmatters lacked `tools:`; `orchestration_engine.js` did not auto-populate `candidateVaultTargets` and `noteWordCount` into context leading to premature Wave 3 suppression; `Physics/Newton-Laws-Friction` lacked MindMap, SlideDeck, Graph, and QA Report siblings.
+- **Resolution Details**: 
+  1. Equipped all 14 `.agents/agents/*.md` definitions with explicit `tools: [write_to_file, replace_file_content, run_command, view_file, list_dir, send_message]` and `inheritMcp: true`.
+  2. Auto-populated `candidateVaultTargets` and `noteWordCount` in `orchestration_engine.js` (`buildExecutionTaskGraph`).
+  3. Archived duplicate root `agents/` folder into `.agents/legacy_backup/agents/` and updated root `AGENTS.md` and `SKILL.md` to point to `.agents/agents/*.md`.
+  4. Authored canonical `MindMap/Newton-Laws-Friction.mindmap.json` (19 nodes, 4 cross-links, 3 quizzes), `SlideDeck/Newton-Laws-Friction_SlideDeckPrompt.md` (8 slides, 12 mandatory sections), `Graph/Newton-Laws-Friction_Graph_Index.json` (+ Obsidian Wikilinks in Note), and `Audit/QA_Report.md`.
+- **Verification Method**: `npm test` (46/46 suites PASS), `test_final_audit_harness.js` (10/10 PASS), and `studycore verify Physics Newton-Laws-Friction` (8/8 deliverables PASS).
+
+---
+
 ## 4. Remediation Schedule & Roadmap Alignment
 
 | Phase | Scheduled Gaps | Key Milestone |
@@ -468,5 +481,5 @@ Every identified gap is tracked with:
 | **Phase 7** | **GAP-02, GAP-20, GAP-21** | StudyLab Procedural Compilers, Fail-Closed Contracts & 17-Dim QB Validator |
 | **Phase 8** | **GAP-03, GAP-18, GAP-27** | Zero-Heap Streaming Binary Packaging Compilers & Dark Mode CSS |
 | **Phase 9** | **GAP-05, GAP-08, GAP-12, GAP-13** | Independent Adversarial Certification Harness (ADV-01..15) |
-| **Phase 10** | **GAP-07, GAP-11, GAP-25, GAP-27** | Antigravity Host Adapter, MCP v1.1.0, Concurrency & Checkpoint Recovery |
-| **v1.1 Final**| *All 27 Gaps Closed* | Full Production & Adversarial Re-Audit Certification |
+| **Phase 10** | **GAP-07, GAP-11, GAP-25, GAP-28** | Antigravity Realignment, Subagent Tool Parity, Concurrency & Sibling Completion |
+| **v1.1 Final**| *All 28 Gaps Closed* | Full Production & Adversarial Re-Audit Certification |

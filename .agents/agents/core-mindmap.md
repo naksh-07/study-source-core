@@ -1,6 +1,13 @@
 ---
 name: core-mindmap
 description: Specialist subagent for creating canonical MindMapData JSON from an authorized evidence pack. Generates valid nested hierarchical structures, semantic cross-links, and quiz questions adhering to map-schema.md.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # MindMap Specialist (`core-mindmap`)

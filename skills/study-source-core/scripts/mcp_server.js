@@ -32,7 +32,7 @@ const { getContractById, getContractsByDomain } = require('./procedural_db_clien
 // Initialize MCP Server
 const server = new McpServer({
     name: "studysource-core",
-    version: "1.1.0"
+    version: "1.2.0-beta.1"
 });
 
 // Tool 1: Compile Standard Anki Package
@@ -315,7 +315,7 @@ server.tool(
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error("[StudySourceCore MCP] Server v1.1.0 listening on stdio.");
+    console.error("[StudySourceCore MCP] Server v1.2.0-beta.1 listening on stdio.");
 }
 
 main().catch(err => {

@@ -29,6 +29,8 @@ const { validateStudyLabLevels1to7 } = require('./validate_studylab_levels_1_7')
 const { validateQuestionBankMarkdown } = require('./validate_studylab_question_bank');
 const { validateImageOcclusionContent } = require('./validate_image_occlusion');
 const { auditNoteContract } = require('./note_contract_audit');
+const { validateMapContent } = require('./validate_map');
+const { auditSlideDeckPrompt } = require('./slide_deck_prompt_audit');
 
 function parseFlags(args) {
     const positional = [];
@@ -276,6 +278,22 @@ async function cmdVerify(positional, flags) {
             run: (file) => validateImageOcclusionContent(fs.readFileSync(file, 'utf8'), file)
         },
         {
+            name: 'MindMap',
+            file: resolveFirstExisting([
+                path.join(chapterDir, 'MindMap', `${norm}.mindmap.json`),
+                path.join(chapterDir, 'MindMap', `${norm}_MindMap.json`)
+            ]),
+            run: (file) => validateMapContent(fs.readFileSync(file, 'utf8'), file)
+        },
+        {
+            name: 'SlideDeck',
+            file: resolveFirstExisting([
+                path.join(chapterDir, 'SlideDeck', `${norm}_SlideDeckPrompt.md`),
+                path.join(chapterDir, 'SlideDeck', `${norm}_SlideDeck.md`)
+            ]),
+            run: (file) => auditSlideDeckPrompt(file)
+        },
+        {
             name: 'Question Bank',
             file: resolveFirstExisting([
                 path.join(chapterDir, 'StudyLab', `${norm}_Questions.md`),
@@ -339,7 +357,7 @@ async function cmdVerify(positional, flags) {
 
 function printHelp() {
     console.log(`
-StudySourceCore CLI (v1.1.0)
+StudySourceCore CLI (v1.2.0-beta.1)
 
 Commands:
   studycore status [--json]

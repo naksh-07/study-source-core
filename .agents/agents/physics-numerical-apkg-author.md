@@ -1,6 +1,13 @@
 ---
 name: physics-numerical-apkg-author
 description: Track D Physics Specialist subagent for authoring procedural StudyLab problem patterns, practice questions, canonical Markdown Question Banks, and rich declarative APKG packages strictly focused on 40 numerical physics topics with 6-stage numerical pipeline, FBDs, kinematics, incline friction, energy, circuits, optics, SI units, tolerances, and sanity checks (descriptive theory excluded).
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Physics Numerical APKG & Question Bank Author (`physics-numerical-apkg-author`)

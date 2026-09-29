@@ -12,12 +12,12 @@ evidence_hash: "5b99be8b3ffb32d084e6f958af9597cd6ef037d06a6634a6af057b620bca4d3d
 
 ## 1. अध्याय का परिचय एवं भौतिक मॉडल (Chapter Overview & Physical Model)
 
-चिरसम्मत यांत्रिकी (Classical Mechanics) के अंतर्गत गतिकी (Dynamics) वह शाखा है जो पिंडों की गति और उस गति को उत्पन्न या परिवर्तित करने वाले बलों (Forces) के मध्य कारण-प्रभाव संबंध (Cause-Effect Relationship) स्थापित करती है। इस अध्याय का मूल भौतिक मॉडल (Physical Model) बिंदु द्रव्यमान (Point Mass), दृढ़ पिंड (Rigid Body), द्रव्यमानहीन एवं अवितान्य डोरी (Massless and Inextensible String), घर्षणरहित घिरनी (Frictionless Pulley) तथा जड़त्वीय निर्देश तंत्र (Inertial Frame of Reference) की आदर्श मान्यताओं पर आधारित है।
+चिरसम्मत यांत्रिकी (Classical Mechanics) के अंतर्गत गतिकी (Dynamics) वह शाखा है जो शुद्ध गतिकी ([[Kinematics-1D]]) के आधार पर पिंडों की गति और उस गति को उत्पन्न या परिवर्तित करने वाले बलों (Forces) के मध्य कारण-प्रभाव संबंध (Cause-Effect Relationship) स्थापित करती है। इस अध्याय का मूल भौतिक मॉडल (Physical Model) बिंदु द्रव्यमान (Point Mass), दृढ़ पिंड (Rigid Body), द्रव्यमानहीन एवं अवितान्य डोरी (Massless and Inextensible String), घर्षणरहित घिरनी (Frictionless Pulley) तथा जड़त्वीय निर्देश तंत्र (Inertial Frame of Reference) की आदर्श मान्यताओं पर आधारित है।
 
 इस अध्याय में किसी भी यांत्रिक निकाय (Mechanical System) का विश्लेषण तीन मूलभूत चरणों में किया जाता है:
 1. निकाय के प्रत्येक घटक की पहचान कर उसका मुक्त पिंड आरेख (Free-Body Diagram - FBD) बनाना और सभी संपर्क बलों (Contact Forces) एवं क्षेत्र बलों (Field Forces) को दर्शाना।
 2. गति की दिशा के अनुदिश और उसके लंबवत निर्देशांक अक्षों (Coordinate Axes) का चयन करके सदिश बलों को घटकों (Vector Components) में वियोजित करना।
-3. न्यूटन के गति के नियमों (Newton's Laws of Motion) अथवा कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) को लागू करके त्वरण ($a$), तनाव ($T$), अभिलंब प्रतिक्रिया ($N$), घर्षण बल ($f$) तथा रुकने की दूरी ($s$) की गणना करना।
+3. न्यूटन के गति के नियमों (Newton's Laws of Motion) अथवा कार्य-ऊर्जा प्रमेय ([[Work-Energy-Power]]) को लागू करके त्वरण ($a$), तनाव ($T$), अभिलंब प्रतिक्रिया ($N$), घर्षण बल ($f$) तथा रुकने की दूरी ($s$) की गणना करना।
 
 ---
 

@@ -1,6 +1,13 @@
 ---
 name: core-slide-deck
 description: Specialist subagent for creating a high-quality, subject-aware NotebookLM Slide Deck prompt and Marp presentation slides from an authorized evidence pack and visual profile.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # SlideDeck Specialist (`core-slide-deck`)

@@ -1,6 +1,13 @@
 ---
 name: reasoning-apkg-author
 description: Track C Reasoning Specialist subagent for authoring procedural StudyLab problem patterns, practice questions, canonical Markdown Question Banks, and rich declarative APKG packages across 30 reasoning topics with 7-layer thinking flow, 4-tier constraint classification, seating arrangements, matrix puzzles, syllogisms, and coded relations.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Reasoning APKG & Question Bank Author (`reasoning-apkg-author`)

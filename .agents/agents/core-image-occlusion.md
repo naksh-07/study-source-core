@@ -1,6 +1,13 @@
 ---
 name: core-image-occlusion
 description: Specialist subagent for creating canonical Image Occlusion manifests (.json format) and media coordinates from an authorized evidence pack. Generates Hindi-first spatial/diagrammatic recall regions adhering to image-occlusion-contract.md.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Image Occlusion Specialist (`core-image-occlusion`)

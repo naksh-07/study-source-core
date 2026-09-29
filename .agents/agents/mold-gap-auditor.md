@@ -1,6 +1,13 @@
 ---
 name: mold-gap-auditor
 description: Mold & Gap Auditor subagent for auditing the 533 contract registry against 175 topics, establishing strict reuse vs extend vs create boundaries, synthesizing declarative molds, and verifying zero pre-seeding standalone portability.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Mold & Gap Auditor (`mold-gap-auditor`)

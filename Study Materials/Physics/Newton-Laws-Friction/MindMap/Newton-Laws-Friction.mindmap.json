@@ -1,0 +1,212 @@
+{
+  "id": "physics-newton-laws-friction-mindmap",
+  "title": "न्यूटन के गति के नियम एवं घर्षण (Newton's Laws of Motion & Friction)",
+  "subtitle": "बल, जड़त्व, संवेग, मुक्त पिंड आरेख (FBD) एवं घर्षण का समग्र मानचित्रण",
+  "subject": "Physics",
+  "chapter": "Newton-Laws-Friction",
+  "language": "mixed",
+  "root": {
+    "id": "newton-root",
+    "label": "न्यूटनियन यांत्रिकी एवं घर्षण (Newtonian Mechanics & Friction)",
+    "subtitle": "शास्त्रीय यांत्रिकी का आधारभूत ढाँचा (Foundation of Classical Mechanics)",
+    "description": "न्यूटन के तीनों गति नियम, संवेग संरक्षण, जड़त्व, मुक्त पिंड आरेख (FBD), लिफ्ट में आभासी भार, एवं स्थैतिक/गतिक घर्षण की विस्तृत संकल्पना।",
+    "category": "Mechanics",
+    "badge": "Classical Physics",
+    "color": "#1E3A8A",
+    "icon": "atom",
+    "tags": ["Physics", "Mechanics", "NewtonLaws", "Friction", "Dynamics"],
+    "keyFacts": [
+      "प्रथम नियम बल की गुणात्मक परिभाषा (Qualitative Definition) और जड़त्व का आधार देता है",
+      "द्वितीय नियम बल की संख्यात्मक गणना (Quantitative Measure) F = dp/dt = ma प्रदान करता है",
+      "तृतीय नियम क्रिया-प्रतिक्रिया की युगल प्रकृति (Action-Reaction Pairs) स्पष्ट करता है",
+      "सीमान्त घर्षण (Limiting Friction) fs(max) = μs N होता है और यह संपर्क क्षेत्रफल पर निर्भर नहीं करता",
+      "विश्राम कोण (Angle of Repose) α और घर्षण कोण θ बराबर होते हैं: tan α = tan θ = μs"
+    ],
+    "children": [
+      {
+        "id": "branch-first-law",
+        "label": "प्रथम नियम एवं जड़त्व (First Law & Inertia)",
+        "subtitle": "गैलिलियो का प्रयोग और गुणात्मक बल",
+        "category": "Inertia",
+        "badge": "Law 1",
+        "color": "#2563EB",
+        "children": [
+          {
+            "id": "sub-galileo-principle",
+            "label": "गैलिलियो का आनत तल प्रयोग (Galileo's Incline Experiment)",
+            "description": "बिना किसी बाह्य बल के वस्तु अपनी समरूप गति बनाए रखती है।"
+          },
+          {
+            "id": "sub-inertia-types",
+            "label": "जड़त्व के तीन प्रकार (3 Forms of Inertia)",
+            "description": "विराम का जड़त्व (Inertia of Rest), गति का जड़त्व (Inertia of Motion), और दिशा का जड़त्व (Inertia of Direction)। द्रव्यमान जड़त्व का परिमाणात्मक माप है।"
+          }
+        ]
+      },
+      {
+        "id": "branch-second-law",
+        "label": "द्वितीय नियम एवं संवेग (Second Law & Momentum)",
+        "subtitle": "संवेग परिवर्तन की दर और आवेग (Impulse)",
+        "category": "Dynamics",
+        "badge": "Law 2",
+        "color": "#059669",
+        "children": [
+          {
+            "id": "sub-momentum-rate",
+            "label": "संवेग एवं बल संबंध (p = mv, F_net = dp/dt)",
+            "description": "F_net = m·a जब द्रव्यमान स्थिर हो। SI मात्रक न्यूटन (N = kg·m/s²) एवं CGS मात्रक डाइन (1 N = 10^5 dyne)।"
+          },
+          {
+            "id": "sub-impulse-theorem",
+            "label": "आवेग-संवेग प्रमेय (Impulse-Momentum Theorem)",
+            "description": "आवेग J = ∫ F dt = Δp = p_f - p_i। कैच लेते समय हाथ पीछे खींचने से संपर्क समय Δt बढ़ता है और बल घटता है।"
+          }
+        ]
+      },
+      {
+        "id": "branch-third-law",
+        "label": "तृतीय नियम एवं संरक्षण (Third Law & Conservation)",
+        "subtitle": "क्रिया-प्रतिक्रिया एवं संवेग संरक्षण",
+        "category": "Action-Reaction",
+        "badge": "Law 3",
+        "color": "#D97706",
+        "children": [
+          {
+            "id": "sub-action-reaction-pairs",
+            "label": "क्रिया-प्रतिक्रिया युगल (Action-Reaction Pairs)",
+            "description": "F_AB = - F_BA। दोनों बल अलग-अलग पिंडों पर एक साथ लगते हैं, इसलिए वे कभी एक-दूसरे को निरस्त नहीं करते।"
+          },
+          {
+            "id": "sub-momentum-conservation",
+            "label": "रैखिक संवेग संरक्षण (Conservation of Linear Momentum)",
+            "description": "यदि F_ext = 0, तो कुल संवेग नियत रहता है। बन्दूक का प्रतिक्षेप वेग (Recoil Velocity) v_g = -(m_b / m_g) · v_b।"
+          }
+        ]
+      },
+      {
+        "id": "branch-fbd-applications",
+        "label": "साम्यावस्था, FBD एवं अनुप्रयोग (FBD & Applications)",
+        "subtitle": "मुक्त पिंड आरेख, लिफ्ट एवं ऐटवुड मशीन",
+        "category": "Applications",
+        "badge": "Systems",
+        "color": "#7C3AED",
+        "children": [
+          {
+            "id": "sub-fbd-atwood",
+            "label": "ऐटवुड मशीन (Atwood Machine Dynamics)",
+            "description": "त्वरण a = (m2 - m1)g / (m1 + m2), डोरी का तनाव T = 2 m1 m2 g / (m1 + m2)।"
+          },
+          {
+            "id": "sub-elevator-weight",
+            "label": "लिफ्ट में आभासी भार (Apparent Weight in Elevator)",
+            "description": "ऊपर त्वरित (a): N = m(g + a); नीचे त्वरित (a): N = m(g - a); मुक्त पतन (a = g): N = 0 (भारहीनता)।"
+          }
+        ]
+      },
+      {
+        "id": "branch-friction-laws",
+        "label": "घर्षण के नियम एवं प्रकार (Laws of Friction)",
+        "subtitle": "स्थैतिक, सीमान्त, गतिक एवं लोटनिक घर्षण",
+        "category": "Friction",
+        "badge": "Contact Forces",
+        "color": "#DC2626",
+        "children": [
+          {
+            "id": "sub-friction-hierarchy",
+            "label": "घर्षण पदानुक्रम (Friction Hierarchy: fs ≤ fs(max) > fk >> fr)",
+            "description": "स्थैतिक घर्षण स्वतः समायोज्य (self-adjusting) होता है। सीमान्त घर्षण fs(max) = μs N। गतिक घर्षण fk = μk N (μk < μs)।"
+          },
+          {
+            "id": "sub-angle-repose",
+            "label": "घर्षण कोण एवं विश्राम कोण (Angle of Friction & Repose)",
+            "description": "tan θ = μs (घर्षण कोण) एवं tan α = μs (विश्राम कोण)। अतः आनत तल पर फिसलने की सीमान्त अवस्था में θ = α।"
+          }
+        ]
+      },
+      {
+        "id": "branch-incline-dynamics",
+        "label": "आनत तल एवं कार्य-ऊर्जा (Inclined Plane & Work-Energy)",
+        "subtitle": "घर्षण युक्त आनत तल पर गति एवं रुकने की दूरी",
+        "category": "Incline",
+        "badge": "Work-Energy",
+        "color": "#0891B2",
+        "children": [
+          {
+            "id": "sub-incline-accel",
+            "label": "आनत तल पर अधोमुखी त्वरण (Acceleration down Incline)",
+            "description": "चिकना तल: a = g sin θ; खुरदुरा तल: a = g (sin θ - μk cos θ)। यदि θ < α तो पिंड स्वतः नहीं फिसलेगा।"
+          },
+          {
+            "id": "sub-stopping-distance",
+            "label": "कार्य-ऊर्जा प्रमेय एवं रुकने की दूरी (Stopping Distance)",
+            "description": "घर्षण द्वारा किया गया कार्य W = -fk · s = -μk m g s = -½ m u²। रुकने की दूरी s = u² / (2 μk g)।"
+          }
+        ]
+      }
+    ]
+  },
+  "crossLinks": [
+    {
+      "sourceId": "branch-first-law",
+      "targetId": "branch-second-law",
+      "label": "Defines force qualitatively before second law quantifies it",
+      "type": "causality"
+    },
+    {
+      "sourceId": "branch-second-law",
+      "targetId": "branch-fbd-applications",
+      "label": "Provides governing differential equations for pulley and elevator systems",
+      "type": "relationship"
+    },
+    {
+      "sourceId": "branch-friction-laws",
+      "targetId": "branch-incline-dynamics",
+      "label": "Supplies normal-dependent retarding force on inclined surfaces",
+      "type": "causality"
+    },
+    {
+      "sourceId": "branch-friction-laws",
+      "targetId": "branch-fbd-applications",
+      "label": "Acts as self-adjusting opposing contact force in equilibrium diagrams",
+      "type": "relationship"
+    }
+  ],
+  "quizQuestions": [
+    {
+      "id": "quiz-newton-1",
+      "nodeId": "sub-inertia-types",
+      "question": "यदि किसी वस्तु का द्रव्यमान दोगुना कर दिया जाए, तो उसके जड़त्व (Inertia) पर क्या प्रभाव पड़ेगा?",
+      "options": [
+        "जड़त्व दोगुना हो जाएगा",
+        "जड़त्व आधा हो जाएगा",
+        "जड़त्व अपरिवर्तित रहेगा",
+        "जड़त्व चार गुना हो जाएगा"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "id": "quiz-newton-2",
+      "nodeId": "sub-elevator-weight",
+      "question": "एक लिफ्ट त्वरण a = g/2 से नीचे की ओर त्वरित हो रही है। 60 kg के व्यक्ति का आभासी भार क्या होगा (g = 10 m/s²)?",
+      "options": [
+        "300 N",
+        "600 N",
+        "900 N",
+        "शून्य"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "id": "quiz-newton-3",
+      "nodeId": "sub-angle-repose",
+      "question": "यदि किसी सतह के लिए स्थैतिक घर्षण गुणांक μs = 1/√3 हो, तो विश्राम कोण (Angle of Repose) क्या होगा?",
+      "options": [
+        "30°",
+        "45°",
+        "60°",
+        "90°"
+      ],
+      "correctAnswerIndex": 0
+    }
+  ]
+}

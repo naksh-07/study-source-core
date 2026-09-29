@@ -17,20 +17,20 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 
 | # | Agent ID | Agent File Link | Category | Primary Role |
 |---|---|---|---|---|
-| 1 | `core-notes` | [01-source-ingestion / `core-notes.md`](agents/core-notes.md) | Generic Content | Knowledge Notes Architect |
-| 2 | `core-basic-anki` | [02-flashcard-author / `core-basic-anki.md`](agents/core-basic-anki.md) | Generic Content | Basic Flashcard Specialist |
-| 3 | `core-cloze-anki` | [03-cloze-author / `core-cloze-anki.md`](agents/core-cloze-anki.md) | Generic Content | Cloze Flashcard Specialist |
-| 4 | `core-image-occlusion` | [04-image-occlusion / `core-image-occlusion.md`](agents/core-image-occlusion.md) | Generic Content | Image Occlusion Specialist |
-| 5 | `core-mindmap` | [05-mindmap-author / `core-mindmap.md`](agents/core-mindmap.md) | Generic Content | MindMap Specialist |
-| 6 | `core-slide-deck` | [06-slide-deck / `core-slide-deck.md`](agents/core-slide-deck.md) | Generic Content | SlideDeck Specialist |
-| 7 | `bm-graph` | [07-graph-linker / `bm-graph.md`](agents/bm-graph.md) | Downstream QA | Graph Linker Specialist |
-| 8 | `bm-qa` | [08-cross-artifact-qa / `bm-qa.md`](agents/bm-qa.md) | Downstream QA | Cross-Artifact QA Specialist |
-| 9 | `math-apkg-author` | [09-math-specialist / `math-apkg-author.md`](agents/math-apkg-author.md) | StudyLab Specialist | Track B Mathematics APKG Author |
-| 10 | `reasoning-apkg-author` | [10-reasoning-specialist / `reasoning-apkg-author.md`](agents/reasoning-apkg-author.md) | StudyLab Specialist | Track C Reasoning APKG Author |
-| 11 | `physics-numerical-apkg-author` | [11-physics-specialist / `physics-numerical-apkg-author.md`](agents/physics-numerical-apkg-author.md) | StudyLab Specialist | Track D Physics Numerical APKG Author |
-| 12 | `chemistry-numerical-apkg-author` | [12-chemistry-specialist / `chemistry-numerical-apkg-author.md`](agents/chemistry-numerical-apkg-author.md) | StudyLab Specialist | Track E Chemistry Numerical APKG Author |
-| 13 | `mold-gap-auditor` | [13-mold-gap-auditor / `mold-gap-auditor.md`](agents/mold-gap-auditor.md) | Downstream QA | Mold & Gap Auditor |
-| 14 | `adversarial-apkg-reviewer` | [14-adversarial-reviewer / `adversarial-apkg-reviewer.md`](agents/adversarial-apkg-reviewer.md) | Downstream QA | Independent Adversarial Reviewer |
+| 1 | `core-notes` | [01-source-ingestion / `core-notes.md`](.agents/agents/core-notes.md) | Generic Content | Knowledge Notes Architect |
+| 2 | `core-basic-anki` | [02-flashcard-author / `core-basic-anki.md`](.agents/agents/core-basic-anki.md) | Generic Content | Basic Flashcard Specialist |
+| 3 | `core-cloze-anki` | [03-cloze-author / `core-cloze-anki.md`](.agents/agents/core-cloze-anki.md) | Generic Content | Cloze Flashcard Specialist |
+| 4 | `core-image-occlusion` | [04-image-occlusion / `core-image-occlusion.md`](.agents/agents/core-image-occlusion.md) | Generic Content | Image Occlusion Specialist |
+| 5 | `core-mindmap` | [05-mindmap-author / `core-mindmap.md`](.agents/agents/core-mindmap.md) | Generic Content | MindMap Specialist |
+| 6 | `core-slide-deck` | [06-slide-deck / `core-slide-deck.md`](.agents/agents/core-slide-deck.md) | Generic Content | SlideDeck Specialist |
+| 7 | `bm-graph` | [07-graph-linker / `bm-graph.md`](.agents/agents/bm-graph.md) | Downstream QA | Graph Linker Specialist |
+| 8 | `bm-qa` | [08-cross-artifact-qa / `bm-qa.md`](.agents/agents/bm-qa.md) | Downstream QA | Cross-Artifact QA Specialist |
+| 9 | `math-apkg-author` | [09-math-specialist / `math-apkg-author.md`](.agents/agents/math-apkg-author.md) | StudyLab Specialist | Track B Mathematics APKG Author |
+| 10 | `reasoning-apkg-author` | [10-reasoning-specialist / `reasoning-apkg-author.md`](.agents/agents/reasoning-apkg-author.md) | StudyLab Specialist | Track C Reasoning APKG Author |
+| 11 | `physics-numerical-apkg-author` | [11-physics-specialist / `physics-numerical-apkg-author.md`](.agents/agents/physics-numerical-apkg-author.md) | StudyLab Specialist | Track D Physics Numerical APKG Author |
+| 12 | `chemistry-numerical-apkg-author` | [12-chemistry-specialist / `chemistry-numerical-apkg-author.md`](.agents/agents/chemistry-numerical-apkg-author.md) | StudyLab Specialist | Track E Chemistry Numerical APKG Author |
+| 13 | `mold-gap-auditor` | [13-mold-gap-auditor / `mold-gap-auditor.md`](.agents/agents/mold-gap-auditor.md) | Downstream QA | Mold & Gap Auditor |
+| 14 | `adversarial-apkg-reviewer` | [14-adversarial-reviewer / `adversarial-apkg-reviewer.md`](.agents/agents/adversarial-apkg-reviewer.md) | Downstream QA | Independent Adversarial Reviewer |
 
 ---
 

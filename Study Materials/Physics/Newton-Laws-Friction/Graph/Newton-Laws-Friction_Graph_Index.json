@@ -1,0 +1,33 @@
+{
+  "chapter": "Newton-Laws-Friction",
+  "subject": "Physics",
+  "status": "linked",
+  "outgoing_links": [
+    {
+      "target": "Kinematics-1D",
+      "predicate": "precedes",
+      "context": "शुद्ध गतिकी (Kinematics) के आधार पर गति और त्वरण का निरूपण"
+    },
+    {
+      "target": "Work-Energy-Power",
+      "predicate": "extends_to",
+      "context": "कार्य-ऊर्जा प्रमेय और घर्षण द्वारा गतिज ऊर्जा क्षय"
+    }
+  ],
+  "internal_anchors": [
+    "अध्याय का परिचय एवं भौतिक मॉडल",
+    "न्यूटन के गति के तीन नियम एवं आवेग-संवेग प्रमेय",
+    "साम्यावस्था एवं मुक्त पिंड आरेख (FBD) निर्माण प्रविधि",
+    "घर्षण के नियम, प्रकार एवं वैज्ञानिक सीमाएं",
+    "विश्राम कोण, घर्षण कोण एवं आनत तल पर गतिकी",
+    "कार्य-ऊर्जा संबंध एवं रुकने की दूरी"
+  ],
+  "metrics": {
+    "total_words": 3469,
+    "total_links": 2,
+    "unique_targets": 2,
+    "link_density": "0.06%",
+    "self_links": 0,
+    "generic_slop_links": 0
+  }
+}

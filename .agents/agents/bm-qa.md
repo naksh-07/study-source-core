@@ -1,6 +1,13 @@
 ---
 name: bm-qa
 description: Specialist subagent for semantic review across Content, Study Layer, Cross-Artifact Integrity, and routing recovery triage.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Cross-Artifact QA Specialist (`bm-qa`)

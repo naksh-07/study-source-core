@@ -1,6 +1,13 @@
 ---
 name: adversarial-apkg-reviewer
 description: Independent Adversarial Reviewer subagent for executing the 15-point attack harness, decoupled L1–L7 multi-tier validation, DAG cycle/hint leak detection, and regression safety sign-off for procedural StudyLab APKG packages.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Independent Adversarial Reviewer (`adversarial-apkg-reviewer`)

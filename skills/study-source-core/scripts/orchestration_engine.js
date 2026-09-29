@@ -108,7 +108,41 @@ function buildExecutionTaskGraph(context = {}) {
     const outputDirEnv = process.env.STUDYSOURCE_OUTPUT_DIR;
     const effectiveCustomRoot = customRoot || context.outputDir || (outputDirEnv ? path.resolve(outputDirEnv) : null);
 
-    const routing = evaluateArtifactRouting(context);
+    const effectiveContext = { ...context };
+    if (effectiveContext.candidateVaultTargets === undefined) {
+        try {
+            const vaultRoot = getVaultRoot();
+            const studyMaterialsDir = path.join(vaultRoot, 'Study Materials');
+            if (fs.existsSync(studyMaterialsDir)) {
+                const targets = [];
+                const subjects = fs.readdirSync(studyMaterialsDir, { withFileTypes: true })
+                    .filter(d => d.isDirectory())
+                    .map(d => d.name);
+                for (const s of subjects) {
+                    const sDir = path.join(studyMaterialsDir, s);
+                    const chs = fs.readdirSync(sDir, { withFileTypes: true })
+                        .filter(d => d.isDirectory())
+                        .map(d => d.name);
+                    for (const c of chs) {
+                        if (s.toLowerCase() === subject.toLowerCase() && c.toLowerCase() === chapter.toLowerCase()) continue;
+                        targets.push(`${s}/${c}`);
+                    }
+                }
+                effectiveContext.candidateVaultTargets = targets;
+            }
+        } catch (e) {}
+    }
+    if (effectiveContext.noteWordCount === undefined) {
+        try {
+            const candidatePaths = getCanonicalArtifactPaths(subject, chapter, effectiveCustomRoot);
+            if (candidatePaths.notes && candidatePaths.notes.path && fs.existsSync(candidatePaths.notes.path)) {
+                const txt = fs.readFileSync(candidatePaths.notes.path, 'utf8');
+                effectiveContext.noteWordCount = txt.trim().split(/\s+/).filter(Boolean).length;
+            }
+        } catch (e) {}
+    }
+
+    const routing = evaluateArtifactRouting(effectiveContext);
     const paths = getCanonicalArtifactPaths(subject, chapter, effectiveCustomRoot);
     let domainSpecialist = specialist_agent || getDomainSpecialistAgent(subject);
 

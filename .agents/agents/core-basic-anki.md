@@ -1,6 +1,13 @@
 ---
 name: core-basic-anki
 description: Specialist subagent for creating Basic Anki flashcards (TSV format) from an authorized evidence pack. Generates Hindi-first question-answer pairs with strict 3-column TSV formatting.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Basic Anki Specialist (`core-basic-anki`)

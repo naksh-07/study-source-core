@@ -1,6 +1,13 @@
 ---
 name: math-apkg-author
 description: Track B Mathematics Specialist subagent for authoring procedural StudyLab problem patterns, practice questions, canonical Markdown Question Banks, and rich declarative APKG packages across 59 math topics with canonical question types, coprime constraints, stepwise factoring, and Hindi-first bilingual prose.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Mathematics APKG & Question Bank Author (`math-apkg-author`)

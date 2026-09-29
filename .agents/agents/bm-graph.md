@@ -1,6 +1,13 @@
 ---
 name: bm-graph
 description: Specialist subagent for proposing high-value Wikilinks, heading anchors, and relationship predicates using vault targets and MindMap semantics.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Graph Linker Specialist (`bm-graph`)

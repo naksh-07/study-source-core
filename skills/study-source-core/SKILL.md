@@ -71,12 +71,13 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 | Domain | Canonical Source |
 |--------|-----------------|
 | Full workflow (11 phases) | [`resources/workflow.md`](./resources/workflow.md) |
-| Ownership & Single-Writer Rule | [`OWNERSHIP.md`](../../OWNERSHIP.md) |
-| Execution lifecycle & handoff | [`EXECUTION_LIFECYCLE.md`](../../EXECUTION_LIFECYCLE.md) |
-| Agent registry (14 agents) | [`AGENTS.md`](../../AGENTS.md) |
-| Resource & schema registry | [`RESOURCES.md`](../../RESOURCES.md) |
+| Unified CLI Driver | [`scripts/studycore_cli.js`](./scripts/studycore_cli.js) |
+| Ownership & Single-Writer Rule | [`OWNERSHIP.md`](../../.agents/OWNERSHIP.md) |
+| Execution lifecycle & handoff | [`EXECUTION_LIFECYCLE.md`](../../.agents/EXECUTION_LIFECYCLE.md) |
+| Agent registry (14 subagents) | [`AGENTS.md`](../../.agents/AGENTS.md) |
+| Specialist subagents directory | [`.agents/agents/*.md`](../../.agents/agents) |
+| Resource & schema registry | [`RESOURCES.md`](../../.agents/RESOURCES.md) |
 | Anki core rules & model IDs | [`resources/anki-core-rules.md`](./resources/anki-core-rules.md) |
-
 | Note architecture | [`resources/note-architecture.md`](./resources/note-architecture.md) |
 | Subject domain knowledge | [`subject-skills/<Subject>/SKILL.md`](./subject-skills) |
 

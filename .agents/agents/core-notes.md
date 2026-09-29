@@ -1,6 +1,13 @@
 ---
 name: core-notes
 description: Specialist subagent for creating structured, source-grounded Obsidian Notes from an authorized evidence pack. Acts as the ONE Knowledge Note Architect owning Information Architecture, Study Design, Visual Design, Obsidian Presentation, and Anti-Slop.
+tools:
+  - view_file
+  - write_to_file
+  - replace_file_content
+  - run_command
+  - send_message
+inheritMcp: true
 ---
 
 # Knowledge Notes Architect (`core-notes`)
