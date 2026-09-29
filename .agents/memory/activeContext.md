@@ -4,12 +4,19 @@
 
 # Active Context: StudySourceCore
 
-## Current Sprint: Master Audit & Multi-Agent Bug Hunting (Waves 1–4 Complete)
-- [x] Track 1 (P0): Canonical Contracts Anti-Leak Audit (533 contracts, 1,004 params, 1,599 hints, 0 leaks, 0 DAG cycles).
-- [x] Track 2 (P0): Standalone Test Suites Alignment (All 28 core test suites + vNext & L1-L7 suites 100% green).
-- [x] Track 3 (P1): Test Fixtures Pedagogical Completeness (authentic 3-tier progressive hints in Math fixtures).
-- [x] Track 4 (P1): Production Vault Parity (authored `Europe.mindmap.json` and `Europe_SlideDeckPrompt.md`).
-- [x] Track 5 (P2): 9-Subject Matrix Routing & Gating (63/63 cells audited, zero silent omission invariant upheld).
-- [x] Track 6 (P2): Windows Transient Lifecycle & EBUSY Backoff (`safeUnlinkSync` / `safeRmdirSync`, 10 rapid stress cycles 100% pass).
-- [x] Wave 3 Adversarial Certification: ADV-01..15 (15/15), CLI certification (4/4), PKG-01..15 (15/15) 100% certified.
-- [x] Wave 4 Master Consolidation: Synthesized `docs/audits/MASTER_AUDIT_EXECUTION_REPORT.md`; `npm test` 28/28 passed.
+## Current Sprint: Modernization & Production Readiness (Local-First Workstation)
+- [x] Phase 1 (P0): Real PDF & Scanned Document Ingestion Pipeline
+  - [x] Python `.venv` layout extractor `extract_pdf_source.py` with text, tables, formulas, MCQs & page coordinates.
+  - [x] Scanned document detection (`is_scanned: true`) with PIL/pytesseract OCR & multimodal visual cataloging.
+  - [x] Connected to `evidence_ingestion_engine.js` with SHA-256 chunking; verified via `test_pdf_ingestion_end_to_end.js`.
+- [x] Phase 2 (P1): Modern Test Runner (Vitest 4 Parallel Execution)
+  - [x] Vitest 4 with isolated thread workers (`maxWorkers: 4`) slashing test runtime from 32s to 6.44s.
+  - [x] All 45 test files passing 100% green with zero errors or unhandled rejections.
+- [x] Phase 3 (P2): Native SQLite WAL Persistence Layer (`better-sqlite3`)
+  - [x] Migrated 54,744-line JSON monolith (2.5MB) to `resources/procedural.db` (2.3MB WAL B-tree indexed).
+  - [x] Synchronous sub-millisecond queries via native `better-sqlite3` in `procedural_db_client.js`.
+  - [x] 100% decoupled from JSON monolith (verified even with JSON file removed).
+- [x] Phase 4 (P3): Orchestration De-Usurpation
+  - [x] Hooked `enrichedContext.invokeSubagentFn` for native Antigravity subagent dispatching.
+
+

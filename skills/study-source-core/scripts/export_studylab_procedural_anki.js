@@ -50,16 +50,21 @@ let canonicalContractsCache = null;
  */
 function getCanonicalContracts() {
     if (!canonicalContractsCache) {
-        const contractsPath = path.resolve(__dirname, '../resources/schemas/studylab-canonical-contracts.json');
-        if (fs.existsSync(contractsPath)) {
-            try {
-                canonicalContractsCache = JSON.parse(fs.readFileSync(contractsPath, 'utf8'));
-            } catch (e) {
-                console.warn(`[Warning] Could not load studylab-canonical-contracts.json: ${e.message}`);
+        try {
+            const { getAllContractsSync } = require('./procedural_db_client');
+            canonicalContractsCache = getAllContractsSync();
+        } catch (_) {
+            const contractsPath = path.resolve(__dirname, '../resources/schemas/studylab-canonical-contracts.json');
+            if (fs.existsSync(contractsPath)) {
+                try {
+                    canonicalContractsCache = JSON.parse(fs.readFileSync(contractsPath, 'utf8'));
+                } catch (e) {
+                    console.warn(`[Warning] Could not load studylab-canonical-contracts.json: ${e.message}`);
+                    canonicalContractsCache = {};
+                }
+            } else {
                 canonicalContractsCache = {};
             }
-        } else {
-            canonicalContractsCache = {};
         }
     }
     return canonicalContractsCache;

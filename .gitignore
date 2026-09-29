@@ -1,12 +1,20 @@
 # Dependencies
 node_modules/
 .npm/
+.venv/
+*/.venv/
+__pycache__/
+*.pyc
 
 # Build / cache
 .build/
 .bm-cache/
 *.log
 *.tmp
+*-wal
+*-shm
+*.db-wal
+*.db-shm
 
 # Test output & artifacts (ephemeral)
 scratch/

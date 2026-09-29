@@ -20,6 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { execFileSync } = require('child_process');
 const { computeSha256 } = require('./content_lineage_record');
 const {
     buildSourceQuestionInventory,
@@ -319,21 +320,40 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
     if (typeof sourceInput === 'string') {
         if (fs.existsSync(sourceInput) && fs.statSync(sourceInput).isFile()) {
             const fileExt = path.extname(sourceInput).toLowerCase();
-            const fileRaw = fs.readFileSync(sourceInput, 'utf8');
 
-            if (fileExt === '.json') {
+            if (fileExt === '.pdf') {
+                const extractorScript = path.join(__dirname, 'extract_pdf_source.py');
+                const venvPy = path.join(__dirname, '../.venv/Scripts/python.exe');
+                const pythonPath = fs.existsSync(venvPy) ? venvPy : (process.platform === 'win32' ? 'python' : 'python3');
+
                 try {
-                    sourceFixture = JSON.parse(fileRaw);
-                    rawSourceContent = fileRaw;
-                    sourceId = sourceFixture.source_id || options.source_id || path.basename(sourceInput, '.json');
+                    const pyArgs = [extractorScript, '--pdf', path.resolve(sourceInput), '--subject', subject, '--chapter', chapter];
+                    const stdout = execFileSync(pythonPath, pyArgs, { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 });
+                    sourceFixture = JSON.parse(stdout);
+                    rawSourceContent = stdout;
+                    sourceId = sourceFixture.source_provenance?.source_id || options.source_id || path.basename(sourceInput, '.pdf');
                     subject = sourceFixture.subject || options.subject || subject;
                     chapter = sourceFixture.chapter || options.chapter || chapter;
-                } catch (e) {
-                    throw new Error(`MALFORMED_SOURCE_JSON: Failed to parse JSON source at ${sourceInput}: ${e.message}`);
+                } catch (pyErr) {
+                    throw new Error(`PDF_EXTRACTION_ERROR: Failed to extract PDF source at ${sourceInput}: ${pyErr.message}`);
                 }
             } else {
-                rawSourceContent = fileRaw;
-                sourceId = options.source_id || path.basename(sourceInput, fileExt);
+                const fileRaw = fs.readFileSync(sourceInput, 'utf8');
+
+                if (fileExt === '.json') {
+                    try {
+                        sourceFixture = JSON.parse(fileRaw);
+                        rawSourceContent = fileRaw;
+                        sourceId = sourceFixture.source_id || options.source_id || path.basename(sourceInput, '.json');
+                        subject = sourceFixture.subject || options.subject || subject;
+                        chapter = sourceFixture.chapter || options.chapter || chapter;
+                    } catch (e) {
+                        throw new Error(`MALFORMED_SOURCE_JSON: Failed to parse JSON source at ${sourceInput}: ${e.message}`);
+                    }
+                } else {
+                    rawSourceContent = fileRaw;
+                    sourceId = options.source_id || path.basename(sourceInput, fileExt);
+                }
             }
         } else {
             // Source input passed as raw string
@@ -353,9 +373,11 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
     const normalizedText = normalizeSourceText(rawSourceContent);
     const sourceHash = computeSha256(normalizedText);
 
-    // 2. Chunk Source (use structured segmentation if fixture, else text segmentation)
+    // 2. Chunk Source (use existing chunks if provided by extractor, else structured/text segmentation)
     let chunks;
-    if (sourceFixture && (sourceFixture.concepts || sourceFixture.master_formulas || sourceFixture.formulas || sourceFixture.problem_patterns || sourceFixture.source_question_inventory || sourceFixture.source_problems || sourceFixture.source_questions || sourceFixture.practice_problems || sourceFixture.practice_questions || sourceFixture.questions)) {
+    if (sourceFixture && Array.isArray(sourceFixture.chunks) && sourceFixture.chunks.length > 0) {
+        chunks = sourceFixture.chunks;
+    } else if (sourceFixture && (sourceFixture.concepts || sourceFixture.master_formulas || sourceFixture.formulas || sourceFixture.problem_patterns || sourceFixture.source_question_inventory || sourceFixture.source_problems || sourceFixture.source_questions || sourceFixture.practice_problems || sourceFixture.practice_questions || sourceFixture.questions)) {
         chunks = segmentFixtureIntoChunks(sourceFixture, sourceId, options);
     } else {
         chunks = segmentSourceIntoChunks(normalizedText, sourceId, options);
@@ -559,3 +581,55 @@ module.exports = {
     ingestSourceToEvidencePack,
     persistEvidencePack
 };
+
+if (require.main === module) {
+    const args = process.argv.slice(2);
+    let sourcePath = null;
+    let subject = 'General';
+    let chapter = 'Overview';
+    let scratchDir = path.join(__dirname, '../scratch');
+
+    for (let i = 0; i < args.length; i++) {
+        if ((args[i] === '--source' || args[i] === '--pdf') && args[i + 1]) {
+            sourcePath = args[i + 1];
+            i++;
+        } else if (args[i] === '--subject' && args[i + 1]) {
+            subject = args[i + 1];
+            i++;
+        } else if (args[i] === '--chapter' && args[i + 1]) {
+            chapter = args[i + 1];
+            i++;
+        } else if (args[i] === '--scratch' && args[i + 1]) {
+            scratchDir = args[i + 1];
+            i++;
+        }
+    }
+
+    if (!sourcePath) {
+        console.error('Usage: node evidence_ingestion_engine.js --source <path-to-pdf-or-json-or-md> [--subject <subj>] [--chapter <chap>] [--scratch <dir>]');
+        process.exit(1);
+    }
+
+    try {
+        const evidencePack = ingestSourceToEvidencePack(sourcePath, { subject, chapter });
+        const persisted = persistEvidencePack(evidencePack, scratchDir);
+        console.log(JSON.stringify({
+            status: 'SUCCESS',
+            evidence_pack_id: evidencePack.evidence_pack_id,
+            evidence_hash: evidencePack.evidence_hash,
+            chunks_count: evidencePack.chunks.length,
+            concepts_count: evidencePack.concepts.length,
+            formulas_count: evidencePack.formulas.length,
+            questions_count: evidencePack.source_problems.length,
+            markdown_path: persisted.markdownPath,
+            provenance_path: persisted.provenancePath
+        }, null, 2));
+    } catch (err) {
+        console.error(JSON.stringify({
+            status: 'ERROR',
+            error: err.message
+        }, null, 2));
+        process.exit(1);
+    }
+}
+

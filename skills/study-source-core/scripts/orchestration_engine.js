@@ -1020,6 +1020,10 @@ function createSpecialistTaskDispatcher(context = {}) {
             evidenceHash: context.evidenceHash || (task.contextPlan && task.contextPlan.source_hash)
         };
 
+        if (typeof enrichedContext.invokeSubagentFn === 'function') {
+            return await enrichedContext.invokeSubagentFn(task, enrichedContext);
+        }
+
         if (task.owner_agent === 'math-apkg-author') {
             const { executeMathSpecialistTask } = require('./author_math_studylab');
             return await executeMathSpecialistTask(task, enrichedContext);
