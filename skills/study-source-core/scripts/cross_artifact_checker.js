@@ -25,8 +25,13 @@ const ENTITY_YEAR_PATTERN = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\
 
 function cleanContentForExtraction(text) {
     if (!text || typeof text !== 'string') return '';
+    // Strip LaTeX math blocks and inline formulas ($...$, $$...$$, \[...\], \(...\))
+    let cleaned = text.replace(/\$\$[\s\S]*?\$\$/g, ' ');
+    cleaned = cleaned.replace(/\$([^\$\n]+?)\$/g, ' ');
+    cleaned = cleaned.replace(/\\\[[\s\S]*?\\\]/g, ' ');
+    cleaned = cleaned.replace(/\\\([\s\S]*?\\\)/g, ' ');
     // Strip cloze tags {{c1::content}} -> content
-    let cleaned = text.replace(/\{\{c\d+::(.*?)\}\}/g, '$1');
+    cleaned = cleaned.replace(/\{\{c\d+::(.*?)\}\}/g, '$1');
     // Strip markdown formatting like **bold**, *italic*, [[wikilinks]]
     cleaned = cleaned.replace(/\*\*([^*]+)\*\*/g, '$1');
     cleaned = cleaned.replace(/\*([^*]+)\*/g, '$1');
@@ -45,7 +50,13 @@ function extractEntityFacts(text, artifactName) {
         'year', 'exam', 'status', 'page', 'id', 'code', 'shift', 'step', 'tier', 'date',
         'mod', 'crt', 'version', 'time', 'val', 'pyq', 'ref', 'prompt', 'question',
         'title', 'description', 'name', 'explanation', 'text', 'extra', 'front', 'back',
-        'tags', 'concept', 'notes', 'solution', 'hint', 'option', 'options', 'difficulty'
+        'tags', 'concept', 'notes', 'solution', 'hint', 'option', 'options', 'difficulty',
+        'तापमान', 'temperature', 'temp', 'दाब', 'pressure', 'आयतन', 'volume', 'सांद्रता',
+        'concentration', 'द्रव्यमान', 'mass', 'चाल', 'गति', 'वेग', 'speed', 'velocity',
+        'त्वरण', 'acceleration', 'दूरी', 'distance', 'विस्थापन', 'displacement', 'कार्य',
+        'work', 'ऊर्जा', 'energy', 'बल', 'force', 'समय', 'आवृति', 'frequency', 'कोण',
+        'angle', 'अनुपात', 'ratio', 'log', 'log10', 'ln', 'oh', 'ka', 'kb', 'kw', 'kc',
+        'kp', 'qc', 'qp', 'ph', 'poh', 'mol', 'mole', 'moles', '10', 'rt', 'delta', 'deltang'
     ]);
 
     let match;

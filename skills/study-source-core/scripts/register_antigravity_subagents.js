@@ -73,8 +73,10 @@ function parseAgentDefinition(content, filename) {
     const agentId = frontmatter.name || path.basename(filename, '.md');
     const description = frontmatter.description || (sectionMap['ROLE'] ? sectionMap['ROLE'].join(' ').trim() : 'StudySourceCore Specialist');
 
-    // Determine tool capabilities based on specialist role
-    const isSpecialistWriter = !['bm-qa', 'bm-graph', 'mold-gap-auditor', 'adversarial-apkg-reviewer'].includes(agentId);
+    // Determine tool capabilities based on specialist role:
+    // All specialists that write deliverables (Notes, TSVs, MindMaps, Decks, Questions, Graphs, QA Reports)
+    // or run node audit scripts need enable_write_tools: true.
+    const isSpecialistWriter = !['mold-gap-auditor'].includes(agentId);
     const isAuditorOrReviewer = ['bm-qa', 'adversarial-apkg-reviewer', 'mold-gap-auditor'].includes(agentId);
 
     return {

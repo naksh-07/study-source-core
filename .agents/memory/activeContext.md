@@ -4,38 +4,14 @@
 
 # Active Context: StudySourceCore
 
-## Current Sprint: Modernization & Adversarial Audit Remediation (100% Complete)
-- [x] Phase 1–4: Real PDF/OCR Ingestion (`extract_pdf_source.py`), Vitest 4 Parallel Suite (45 files in ~6.2s), Native SQLite WAL (`procedural.db`), Subagent Dispatch Hook.
-- [x] Phase 5: Zero-Heap Streaming APKG Compiler (`archiver` + `better-sqlite3` disk DB in `shared_anki_utils.js`, `export_anki.js`, `export_studylab_procedural_anki.js`) & Configurable Language Policy (`hinglish`, `en`, `hi`, `bilingual`).
-- [x] Phase 6: Adversarial Audit P0/P1 Remediation (All 10 Remaining Gaps Closed):
-  - [x] Question Bank Validator: Tier 3 (`t3`) hint answer leak scan + 5 pedagogical dimensions (`recognition_signals`, `expected_method`, `decision_points`, `trap`, `error_category`) in `validate_studylab_question_bank.js`.
-  - [x] Fail-Closed Procedural Contract: `resolveDeclarativeContract` in `export_studylab_procedural_anki.js` throws `CANONICAL_CONTRACT_REQUIRED` when contract is missing.
-  - [x] Path Traversal & SHA-256 Hardening: `asset_discovery.js` blocks `..` traversal (`PATH_TRAVERSAL_ERROR`); `validate_image_occlusion.js` promotes invalid/missing `sha256` to blocking error.
-  - [x] Basic vs Cloze 1:1 Deduplication: `deduplicateBasicAgainstCloze` in `export_anki.js` filters verbatim/near-verbatim Basic duplicates while retaining Cloze.
-  - [x] Orchestration & Routing Guards: `orchestration_engine.js:819` re-throws `CONTEXT_PROVENANCE_FAILURE`; `routing_engine.js` guards `bmGraph`/`bmQa` policy suppression and includes `problemPatternsJson`/`practiceQuestionsJson` in `PROCEDURAL_TRACK_KEYS`.
-  - [x] Page-Range Slicing & Physical Deliverables: Forwarded `--page-start`/`--page-end` in `evidence_ingestion_engine.js`; upgraded `Study Materials/Map/Europe` (`Europe_Notes.md`, `europe_map.svg`, `Europe_ImageOcclusion.json`, `Europe_Anki.apkg`) and `Math/LCM-HCF` (`LCM-HCF_Basic.tsv`, `LCM-HCF_Anki.apkg`).
-- [x] Phase 7 (Polish & MCP v1.1.0): Anki Dark Mode CSS (`.nightMode` on Models `1600000001`–`1600000003`), Atomic APKG streaming temp-file rename (`shared_anki_utils.js`), MCP Server v1.1.0 (`ingest_source_to_evidence_pack`, `query_procedural_contract`, `languagePolicy`, extended `validate_artifact`), and `docs/GAP_REGISTER.md` (`GAP-18` to `GAP-27`) synchronized.
-- [x] Phase 8 (DX & CI Seal - Option A): Added `.github/workflows/ci.yml` (Python 3.12 + Node 22 + Vitest + 10-gate Final Audit Harness), unified CLI [`studycore_cli.js`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/studycore_cli.js) (`status`, `ingest`, `package`, `verify`) with [`test_studycore_cli.js`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/test_studycore_cli.js) (`46/46` Vitest suites), and deduplicated `computeSha256` across `context_planner.js` & `source_question_inventory.js`.
-- [x] Phase 9 (Production Delivery - Option B): Executed full Wave 1–3 pipeline for `Physics/Newton-Laws-Friction`: generated and validated `Notes`, `Basic`, `Cloze`, `Questions.md`, `Newton-Laws-Friction_Anki.apkg` (23 cards), and `Newton-Laws-Friction_StudyLab_Procedural.apkg` (Levels 1–7 PASS).
-- [x] Phase 10: Architectural Realignment & Subagent Write Tools (GAP-28 closed, v1.2.0-beta.1 tagged & pushed).
-- [x] Phase 11: Master Smoke Test & Anti-Tamper Integrity Harness (100% Complete):
-  - [x] Implemented `run_master_smoke_test.js` (`npm run smoke`) with 5 pillars, 17 zero-mock gates (17/17 PASS).
-  - [x] Fixed `mcp_server.js` procedural contract query functions (`getContractByKeySync`, `getAllContractsSync`).
-  - [x] Documented GAP-29 in `docs/GAP_REGISTER.md`, updated `docs/INDEX.md`, `README.md`, and `SKILL.md`.
-- [x] Phase 12: Telemetry & Production Calibration System (`npm run telemetry`):
-  - [x] Implemented `telemetry_engine.js` with high-res spans, token load estimation, latency percentiles, and SQLite WAL + streaming JSONL sinks.
-  - [x] Integrated telemetry into `orchestration_engine.js` (mission & subagent worker spans), `studycore_cli.js` (`telemetry` command with `--summary`, `--spans`, `--export`), and `run_master_smoke_test.js` (Gate 4.3).
-  - [x] Verified full Vitest test suite (`47/47` suites PASS in ~6.5s) and Master Smoke Test (`18/18` gates PASS in ~4.5s).
-- [x] Phase 13: Physics Chapter Generation & Verification (`Study Materials/Physics/Newton-Laws-Friction`): 8/8 deliverables generated & verified.
-- [x] Phase 14: Question Bank Primary Delivery Policy & GAP-30 Resolution:
-  - [x] Formally designated canonical Markdown Question Banks (`Questions.md`) as active primary practice deliverable; paused procedural APKG in automated production runs.
-  - [x] Synchronized `artifact-registry.json`, `studycore_cli.js`, `README.md`, `SKILL.md`, `AGENTS.md`, `.agents/AGENTS.md`, `.agents/agents/*.md`, and documentation suite (`docs/`).
-  - [x] Isolated dynamic registry test harness (`test_dynamic_artifact.js` via in-memory cache) ensuring zero disk mutation during parallel runs.
-  - [x] Phase 15: Mathematics Student-Grade Chapter & Pipeline Hardening (`Math/Arithmetic-Progression`):
-  - [x] Hardened `validate_studylab_question_bank.js` (anti-false-positive regex, density warning), `author_math_studylab.js` (dynamic fallbacks), and `cross_artifact_checker.js` (pattern linkage).
-  - [x] Authored & certified 26 distinct non-redundant MCQs (100% 4-option MCQs from CBSE/SSC/CDS) covering 6 pattern families, 27 Anki cards, comprehensive Notes, MindMap, and SlideDeck.
-  - [x] Certified: 4-Gate Adversarial Certification (`run_adversarial_certification.js`), 18-gate Master Smoke Test (`18/18`), and Vitest (`47/47`) passed 100%.
-- [x] Phase 16: Reasoning Student-Grade Chapter Delivery & Certification (`Reasoning/Syllogism`):
-  - [x] Authored 25 distinct non-redundant MCQs (100% 4-option MCQs from SSC/RRB/IBPS/CSAT) across 5 pattern families (Standard, Either-Or, Possibility, Only-a-few, Reverse Syllogism).
-  - [x] Delivered full 9-artifact sibling suite in `Study Materials/Reasoning/Syllogism/` (Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, Question Bank, Anki APKG, Graph Index, QA Report).
+## Current Sprint: Autonomous Multi-Agent Delivery & Genuinely Source-Driven Production (100% Complete)
+- [x] Phase 1–8: Real PDF/OCR Ingestion, Zero-Heap Streaming APKG, Adversarial Audit Remediation, Telemetry Engine, Unified CLI & CI.
+- [x] Phase 9–14: Physics (`Newton-Laws-Friction`), GAP-28–30, Question Bank Primary Delivery Policy (`Questions.md`), Dynamic Registry Isolation.
+- [x] Phase 15: Mathematics Chapter Delivery (`Math/Arithmetic-Progression`): 26 distinct 4-option MCQs across 6 pattern families, 27 Anki cards, Notes, MindMap, SlideDeck; 4-Gate Adversarial Certification PASS.
+- [x] Phase 16: Reasoning Chapter Delivery (`Reasoning/Syllogism`): 25 distinct 4-option MCQs across 5 pattern families, 34 Anki cards, Notes, MindMap, SlideDeck, Graph, QA Report; 4-Gate Adversarial Certification PASS.
+- [x] Phase 17: Multi-Agent Subagent Execution & Chemistry Delivery (`Chemistry/Chemical-Equilibrium`):
+  - [x] Enforced Parent Self-Execution Ban: Replaced parent direct writing with verified subagent dispatch (`invoke_subagent`).
+  - [x] Subagent Write Tools: Equipped all specialists (`core-notes`, `core-basic-anki`, `core-cloze-anki`, `core-mindmap`, `core-slide-deck`, `chemistry-numerical-apkg-author`, `bm-graph`, `bm-qa`) with write permissions and contract self-audits.
+  - [x] Chemistry Deliverables: Authored 25 distinct 4-option MCQs (5 pattern families: Kc ICE, Kp-Kc, Le Chatelier, Qc quotient, ionic pH/buffer), 40 Anki flashcards, 2,911-word Note, 38-node MindMap, 8-slide SlideDeck blueprint, Graph index, and QA report.
+  - [x] Pipeline Hardening: Resolved `cross_artifact_checker.js` LaTeX math extraction & variable state false-positive divergences; permitted `RUNNING -> SKIPPED` state transition in `execution_state.js`; fixed `author_chemistry_studylab.js` track_key routing.
   - [x] Verified: 4-Gate Adversarial Certification (`4/4` PASS), Master Smoke Test (`18/18` PASS), and Vitest (`47/47` PASS).

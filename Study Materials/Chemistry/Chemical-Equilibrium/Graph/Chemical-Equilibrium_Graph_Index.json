@@ -1,0 +1,24 @@
+{
+  "chapter": "Chemical-Equilibrium",
+  "subject": "Chemistry",
+  "domain": "Chemistry",
+  "outgoing_links": [
+    {
+      "target_chapter": "Newton-Laws-Friction",
+      "target_subject": "Physics",
+      "relationship": "dynamic_balance_and_steady_state_equilibrium",
+      "anchor": "## 1. रासायनिक साम्यावस्था एवं साम्य स्थिरांक (Chemical Equilibrium & Equilibrium Constants)"
+    },
+    {
+      "target_chapter": "Arithmetic-Progression",
+      "target_subject": "Math",
+      "relationship": "logarithmic_ph_scale_and_concentration_progressions",
+      "anchor": "## 4. आयनिक साम्य, pH पैमाना एवं बफर विलयन (Ionic Equilibrium, pH Scale & Buffer Solutions)"
+    }
+  ],
+  "incoming_links_candidates": [
+    "Chemistry::Thermodynamics",
+    "Chemistry::Electrochemistry",
+    "Chemistry::Solutions"
+  ]
+}

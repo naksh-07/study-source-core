@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
+const crypto = require('crypto');
 const { getVaultRoot, normalizeName } = require('./path_resolver');
 const { loadManifest } = require('./artifact_provenance');
 const { resolveSubjectPolicy } = require('./subject_policy_resolver');
@@ -32,6 +33,9 @@ const { auditNoteContract } = require('./note_contract_audit');
 const { validateMapContent } = require('./validate_map');
 const { auditSlideDeckPrompt } = require('./slide_deck_prompt_audit');
 const { telemetry, TELEMETRY_LAYERS, SPAN_STATUS } = require('./telemetry_engine');
+const { buildExecutionTaskGraph } = require('./orchestration_engine');
+const { AntigravityHostAdapter } = require('./antigravity_adapter');
+const { loadAllAgentDefinitions, buildAntigravityRegistrationPayload } = require('./register_antigravity_subagents');
 
 function parseFlags(args) {
     const positional = [];
@@ -347,6 +351,65 @@ async function cmdVerify(positional, flags) {
     }
 
     const allPassed = results.every(r => r.passed);
+    if (allPassed) {
+        const evidenceFile = path.join(chapterDir, '.completion-evidence.json');
+        const artifactsList = results.map(r => {
+            const stat = fs.statSync(r.file);
+            const buf = fs.readFileSync(r.file);
+            const sha256 = crypto.createHash('sha256').update(buf).digest('hex');
+            return {
+                task_id: `task-${r.check.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+                target_path: path.resolve(r.file),
+                bytes: stat.size,
+                sha256,
+                physical_status: 'VERIFIED_ON_DISK'
+            };
+        });
+
+        const graphFile = path.join(chapterDir, 'Graph', `${norm}_Graph_Index.json`);
+        if (fs.existsSync(graphFile)) {
+            const stat = fs.statSync(graphFile);
+            const buf = fs.readFileSync(graphFile);
+            artifactsList.push({
+                task_id: 'task-graph',
+                target_path: path.resolve(graphFile),
+                bytes: stat.size,
+                sha256: crypto.createHash('sha256').update(buf).digest('hex'),
+                physical_status: 'VERIFIED_ON_DISK'
+            });
+        }
+        const qaFile = path.join(chapterDir, 'Audit', 'QA_Report.md');
+        if (fs.existsSync(qaFile)) {
+            const stat = fs.statSync(qaFile);
+            const buf = fs.readFileSync(qaFile);
+            artifactsList.push({
+                task_id: 'task-qa',
+                target_path: path.resolve(qaFile),
+                bytes: stat.size,
+                sha256: crypto.createHash('sha256').update(buf).digest('hex'),
+                physical_status: 'VERIFIED_ON_DISK'
+            });
+        }
+
+        const evidenceDoc = {
+            meta: {
+                overall_verdict: 'SUCCESS',
+                chapter,
+                subject,
+                completed_count: artifactsList.length,
+                artifact_count: artifactsList.length,
+                verified_timestamp: new Date().toISOString(),
+                schema_version: '1.0.0'
+            },
+            artifacts: artifactsList
+        };
+
+        fs.writeFileSync(evidenceFile, JSON.stringify(evidenceDoc, null, 2), 'utf8');
+        if (!flags.json) {
+            console.log(`  🛡️ Completion Evidence Saved: .completion-evidence.json (${artifactsList.length} verified artifacts)`);
+        }
+    }
+
     const summary = { status: allPassed ? 'SUCCESS' : 'FAILED', subject, chapter, results };
     if (flags.json) {
         console.log(JSON.stringify(summary, null, 2));
@@ -355,6 +418,168 @@ async function cmdVerify(positional, flags) {
         process.exitCode = 1;
     }
     return summary;
+}
+
+function cmdDispatch(positional, flags) {
+    const subject = positional[0] || flags.subject;
+    const chapter = positional[1] || flags.chapter;
+
+    if (!subject || !chapter) {
+        throw new Error("Usage: studycore dispatch <Subject> <Chapter> [--wave 1|2|3] [--evidence <path>] [--json]");
+    }
+
+    const vaultRoot = getVaultRoot(process.cwd());
+    const norm = normalizeName(chapter);
+    const chapterDir = path.join(vaultRoot, 'Study Materials', subject, chapter);
+
+    // Locate Evidence Pack
+    let evidencePath = flags.evidence ? path.resolve(flags.evidence) : null;
+    if (!evidencePath) {
+        const candidates = [
+            path.join(chapterDir, '.build', 'evidence-pack.md'),
+            path.join(vaultRoot, 'scratch', 'evidence-pack.md'),
+            path.join(chapterDir, 'evidence-pack.md')
+        ];
+        for (const c of candidates) {
+            if (fs.existsSync(c)) {
+                evidencePath = c;
+                break;
+            }
+        }
+    }
+
+    let evidenceHash = '0000000000000000000000000000000000000000000000000000000000000000';
+    let evidenceChars = 0;
+    if (evidencePath && fs.existsSync(evidencePath)) {
+        const content = fs.readFileSync(evidencePath, 'utf8');
+        evidenceHash = crypto.createHash('sha256').update(content).digest('hex');
+        evidenceChars = content.length;
+    }
+
+    // Inspect existing deliverables for Wave 3 gating (word count & candidate targets)
+    let noteWordCount = 0;
+    const noteFile = path.join(chapterDir, 'Notes', `${norm}_Notes.md`);
+    if (fs.existsSync(noteFile)) {
+        const noteContent = fs.readFileSync(noteFile, 'utf8');
+        noteWordCount = noteContent.trim().split(/\s+/).length;
+    }
+
+    const graph = buildExecutionTaskGraph({
+        subject,
+        chapter,
+        evidenceHash,
+        evidenceChars,
+        evidencePack: evidencePath,
+        customRoot: vaultRoot,
+        noteWordCount,
+        candidateVaultTargets: [
+            `${subject}/${chapter}`,
+            'Math/Arithmetic-Progression',
+            'Physics/Newton-Laws-Friction',
+            'Reasoning/Syllogism'
+        ]
+    });
+
+    const hostAdapter = new AntigravityHostAdapter({
+        missionId: `mission_dispatch_${Date.now()}`
+    });
+    const agentDefs = loadAllAgentDefinitions();
+
+    const targetWave = flags.wave ? parseInt(flags.wave, 10) : null;
+    const waveTasks = {
+        wave1: [],
+        wave2: [],
+        wave3: []
+    };
+
+    const defineSubagentPayloads = [];
+    const registeredSubagents = new Set();
+    const invokeSubagentSpecs = [];
+
+    for (const task of graph.tasks) {
+        if (targetWave && task.wave !== targetWave) continue;
+
+        const isSkipped = task.status === 'SKIPPED';
+        const waveKey = task.wave === 1 ? 'wave1' : (task.wave === 2 ? 'wave2' : 'wave3');
+
+        const taskSummary = {
+            task_id: task.task_id,
+            wave: task.wave,
+            owner_agent: task.owner_agent,
+            writer_agent: task.writer_agent,
+            target_path: task.target_path,
+            status: task.status,
+            suppression_reason: task.suppression_reason || null
+        };
+        waveTasks[waveKey].push(taskSummary);
+
+        if (!isSkipped && agentDefs.has(task.owner_agent)) {
+            const agentDef = agentDefs.get(task.owner_agent);
+            if (!registeredSubagents.has(task.owner_agent)) {
+                registeredSubagents.add(task.owner_agent);
+                defineSubagentPayloads.push(buildAntigravityRegistrationPayload(agentDef));
+
+                const workerState = hostAdapter.bindWorkerToTask({
+                    logicalTaskId: task.task_id,
+                    ownerAgent: task.owner_agent,
+                    writerAgent: task.writer_agent,
+                    waveId: task.wave
+                });
+                const spec = hostAdapter.buildSubagentInvocationSpec(workerState, task);
+                invokeSubagentSpecs.push(spec.subagentSpec);
+            }
+        }
+    }
+
+    const result = {
+        subject,
+        chapter,
+        evidencePath,
+        evidenceHash,
+        totalTasks: graph.tasks.length,
+        waves: waveTasks,
+        defineSubagentsCount: defineSubagentPayloads.length,
+        defineSubagentPayloads,
+        invokeSubagentSpecsCount: invokeSubagentSpecs.length,
+        invokeSubagentSpecs
+    };
+
+    if (flags.json) {
+        console.log(JSON.stringify(result, null, 2));
+        return result;
+    }
+
+    console.log('\n================================================================================');
+    console.log(`STUDYSOURCECORE — DISPATCH TASK GRAPH (${subject} / ${chapter})`);
+    console.log('================================================================================');
+    console.log(`Evidence Pack : ${evidencePath ? evidencePath : 'NONE (Using default hash)'}`);
+    console.log(`Evidence Hash : ${evidenceHash}`);
+    console.log(`Target Wave   : ${targetWave ? `Wave ${targetWave} Only` : 'All Waves (1, 2, 3)'}`);
+    console.log('\n--- Task Breakdown by Wave ---');
+
+    ['wave1', 'wave2', 'wave3'].forEach((wk, idx) => {
+        const wNum = idx + 1;
+        const tasks = waveTasks[wk];
+        console.log(`\n[Wave ${wNum}] (${tasks.length} tasks):`);
+        for (const t of tasks) {
+            const icon = t.status === 'SKIPPED' ? '⏭️ SKIPPED' : '📋 PLANNED';
+            const detail = t.status === 'SKIPPED' ? `(${t.suppression_reason})` : `-> ${t.target_path || 'internal'}`;
+            console.log(`  - ${icon} ${t.task_id.padEnd(35)} | Owner: ${t.owner_agent.padEnd(32)} ${detail}`);
+        }
+    });
+
+    console.log('\n--- Autonomous Subagent Payloads ---');
+    console.log(`Subagents requiring write registration (define_subagent): ${defineSubagentPayloads.length}`);
+    for (const d of defineSubagentPayloads) {
+        console.log(`  🔑 ${d.name.padEnd(32)} (enable_write_tools: ${d.enable_write_tools})`);
+    }
+    console.log(`\nSubagents ready to invoke (invoke_subagent): ${invokeSubagentSpecs.length}`);
+    for (const s of invokeSubagentSpecs) {
+        console.log(`  🚀 ${s.TypeName.padEnd(32)} | Role: ${s.Role} | Model: ${s.Model}`);
+    }
+    console.log('================================================================================\n');
+
+    return result;
 }
 
 function cmdTelemetry(positional, flags) {
@@ -480,6 +705,9 @@ Commands:
   studycore ingest <sourcePath> --subject <Subject> --chapter <Chapter> [--output <path>] [--page-start <N>] [--page-end <M>] [--lang <hinglish|en|hi|bilingual>]
       Ingest a PDF, Markdown, or text source into a canonical Evidence Pack and resolve subject policy.
 
+  studycore dispatch <Subject> <Chapter> [--wave 1|2|3] [--evidence <path>] [--json]
+      Build execution task graph, resolve context slices, and generate subagent payloads.
+
   studycore package <Subject> <Chapter> [--studylab]
       Compile unified declarative Anki .apkg (and optionally StudyLab procedural .apkg).
 
@@ -505,6 +733,8 @@ async function runCli(argv = process.argv.slice(2)) {
             return cmdStatus(flags);
         case 'ingest':
             return cmdIngest(positional, flags);
+        case 'dispatch':
+            return cmdDispatch(positional, flags);
         case 'package':
             return await cmdPackage(positional, flags);
         case 'verify':

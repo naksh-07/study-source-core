@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "overall_verdict": "SUCCESS",
+    "chapter": "Europe",
+    "subject": "Map",
+    "completed_count": 7,
+    "artifact_count": 7,
+    "verified_timestamp": "2026-09-29T23:32:34.495Z",
+    "schema_version": "1.0.0"
+  },
+  "artifacts": [
+    {
+      "task_id": "task-notes-contract",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Notes\\Europe_Notes.md",
+      "bytes": 9284,
+      "sha256": "884934e9cecafbf6716db80032577e8dc859c98278e5093ae31198770dd5e347",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-basic-tsv",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Basic\\Europe_Basic.tsv",
+      "bytes": 13584,
+      "sha256": "d899d5c0bdaccca70047016aa71b83f3146d0a3ec49c424500b14ddc567fe27c",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-cloze-tsv",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Cloze\\Europe_Cloze.tsv",
+      "bytes": 6434,
+      "sha256": "d913b97d0653a4c8333788b111c2db744badb64d9eba7e3a3b99cda6d2b30475",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-image-occlusion",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\ImageOcclusion\\Europe_ImageOcclusion.json",
+      "bytes": 6306,
+      "sha256": "4bfe1fdd48b85926da4e4c1741a0ee306e1767266dae90cc2ca2572ca01e8c39",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-mindmap",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\MindMap\\Europe.mindmap.json",
+      "bytes": 27438,
+      "sha256": "d52dd019c63fc5a4a988b5f2f7701fcd934f055c9a674676086858f7570c50f4",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-slidedeck",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\SlideDeck\\Europe_SlideDeckPrompt.md",
+      "bytes": 28540,
+      "sha256": "94f7fd7ea6c11174f2178c398a10c6e8bedb84ba360a2e981c8cf5baf7e55894",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-declarative-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Europe_Anki.apkg",
+      "bytes": 18818,
+      "sha256": "21ff04a3eaaf3c14422d0038ce8473e6f9a611e25a56a0bfefc15ad33704b8d9",
+      "physical_status": "VERIFIED_ON_DISK"
+    }
+  ]
+}

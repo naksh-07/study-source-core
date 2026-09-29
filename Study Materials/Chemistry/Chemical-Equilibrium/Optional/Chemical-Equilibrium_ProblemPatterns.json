@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0.0",
+  "id": "pat-chem-chemical-equilibrium",
+  "title": "Chemical-Equilibrium Problem Patterns",
+  "domain": "Chemistry",
+  "chapter": "Chemical-Equilibrium",
+  "skill_id": "chemistry.physical.equilibrium",
+  "language": "hi",
+  "patterns": [
+    {
+      "id": "pat-chem-eq-kc-calc",
+      "pattern_id": "pat-chem-eq-kc-calc",
+      "title": "Homogeneous Gaseous Equilibrium Constant (Kc) Calculation (समांगी गैसीय साम्य स्थिरांक Kc की गणना)",
+      "domain": "Chemistry",
+      "problem_type": "CHEM_PHYS_EQUILIBRIUM",
+      "difficulty": "Medium",
+      "family_id": "family.chemistry.physical.equilibrium.kc_calc",
+      "deep_structure": "जब किसी बंद पात्र में संतुलित उत्क्रमणीय गैसीय अभिक्रिया के लिए साम्यावस्था पर अभिकारकों एवं उत्पादों की मोलर सांद्रता या मोल दिए गए हों, तो साम्य स्थिरांक व्यंजक Kc = [उत्पाद]^[गुणांक] / [अभिकारक]^[गुणांक] लागू कर Kc की गणना की जाती है।",
+      "recognition_signals": [
+        "जब किसी बंद पात्र में संतुलित उत्क्रमणीय गैसीय अभिक्रिया के लिए साम्यावस्था पर अभिकारकों एवं उत्पादों की मोलर सांद्रता या मोल दिए गए हों, तो साम्य स्थिरांक व्यंजक Kc = [उत्पाद]^[गुणांक] / [अभिकारक]^[गुणांक] लागू कर Kc की गणना की जाती है।"
+      ],
+      "governing_method": {
+        "name": "Homogeneous Gaseous Equilibrium Constant (Kc) Calculation (समांगी गैसीय साम्य स्थिरांक Kc की गणना)",
+        "standard_algorithm": [
+          "संतुलित रासायनिक समीकरण लिखें।",
+          "यदि मोल दिए हों तो पात्र के आयतन V (L) से भाग देकर मोलर सांद्रता [X] = n/V निकालें।",
+          "Kc व्यंजक स्थापित करें।",
+          "मान प्रतिस्थापित कर बीजगणितीय हल प्राप्त करें।",
+          "रासायनिक सार्थकता जांचें।"
+        ]
+      },
+      "decision_points": [
+        {
+          "condition": "जांचें कि दिए गए मान सीधे साम्यावस्था सांद्रता (mol/L) हैं अथवा मोल (mol)",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        },
+        {
+          "condition": "यदि आयतन V",
+          "action": "1 L है, तो सांद्रता निकालने हेतु V से अनिवार्यतः भाग दें"
+        },
+        {
+          "condition": "स्टोइकिओमेट्रिक गुणांकों को सांद्रता की घात के रूप में सही रूप से लगाएं",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        }
+      ],
+      "common_traps": [
+        "पात्र के आयतन (Volume in L) से भाग देना भूल जाना और सीधे मोलों को Kc सूत्र में रख देना",
+        "उत्पाद और अभिकारक के पदों को व्युत्क्रम (invert) कर देना",
+        "स्टोइकिओमेट्रिक गुणांक को घात के बजाय गुणांक के रूप में लिख देना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION",
+        "ERR_CHEM_STOICHIOMETRIC_RATIO",
+        "ERR_CHEM_CONCENTRATION_VOLUME"
+      ]
+    },
+    {
+      "id": "pat-chem-eq-kp-deltang",
+      "pattern_id": "pat-chem-eq-kp-deltang",
+      "title": "Conversion Between Kp and Kc Using Reaction Stoichiometry (Kp एवं Kc का रूपांतरण तथा डेल्टा n_g)",
+      "domain": "Chemistry",
+      "problem_type": "CHEM_PHYS_EQUILIBRIUM",
+      "difficulty": "Medium",
+      "family_id": "family.chemistry.physical.equilibrium.kp_deltang",
+      "deep_structure": "गैसीय अभिक्रिया के लिए Kp और Kc के बीच संबंध Kp = Kc(RT)^{\\Delta n_g} द्वारा दिया जाता है। यहाँ \\Delta n_g गैसीय उत्पादों के मोलों और गैसीय अभिकारकों के मोलों का अंतर है तथा T परम ताप (K) है।",
+      "recognition_signals": [
+        "गैसीय अभिक्रिया के लिए Kp और Kc के बीच संबंध Kp = Kc(RT)^{\\Delta n_g} द्वारा दिया जाता है। यहाँ \\Delta n_g गैसीय उत्पादों के मोलों और गैसीय अभिकारकों के मोलों का अंतर है तथा T परम ताप (K) है।"
+      ],
+      "governing_method": {
+        "name": "Conversion Between Kp and Kc Using Reaction Stoichiometry (Kp एवं Kc का रूपांतरण तथा डेल्टा n_g)",
+        "standard_algorithm": [
+          "संतुलित समीकरण में केवल गैसीय स्पीशीज के मोल गिनकर \\Delta n_g = n_p(g) - n_r(g) ज्ञात करें।",
+          "तापमान को सेल्सियस से केल्विन में बदलें (T = t + 273 K)।",
+          "R =",
+          "0821 L*atm/(mol*K) लेकर Kp = Kc(RT)^{\\Delta n_g} सूत्र में मान रखें।",
+          "\\Delta n_g = 0 होने पर Kp = Kc की पुष्टि करें।"
+        ]
+      },
+      "decision_points": [
+        {
+          "condition": "तापमान को डिग्री सेल्सियस के बजाय केल्विन में अनिवार्यतः बदलें",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        },
+        {
+          "condition": "\\Delta n_g की गणना में ठोस (solid) या द्रव (liquid) घटकों के मोलों को छोड़ दें",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        },
+        {
+          "condition": "\\Delta n_g के धनात्मक, शून्य या ऋणात्मक होने के अनुसार घात का सही निर्धारण करें",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        }
+      ],
+      "common_traps": [
+        "तापमान को डिग्री सेल्सियस में ही प्रयुक्त कर लेना (T in °C instead of Kelvin)",
+        "समीकरण में उपस्थित ठोस घटकों के मोलों को भी \\Delta n_g में जोड़ लेना",
+        "\\Delta n_g का चिन्ह उलट देना (अभिकारक - उत्पाद कर देना)"
+      ],
+      "error_categories": [
+        "ERR_CHEM_KELVIN_TEMPERATURE_MISS",
+        "ERR_CHEM_DELTA_NG_GAS_ONLY",
+        "ERR_CHEM_STOICHIOMETRIC_RATIO"
+      ]
+    },
+    {
+      "id": "pat-chem-sol-ph-calc",
+      "pattern_id": "pat-chem-sol-ph-calc",
+      "title": "Aqueous Solution pH & Hydrogen Ion Concentration (जलीय विलयन की pH एवं हाइड्रोजन आयन सांद्रता)",
+      "domain": "Chemistry",
+      "problem_type": "CHEM_PHYS_EQUILIBRIUM",
+      "difficulty": "Medium",
+      "family_id": "family.chemistry.physical.solutions.ph_calc",
+      "deep_structure": "विलयन की अम्लीयता या क्षारीयता pH पैमाने से मापी जाती है जहाँ pH = -log10[H+] तथा pOH = -log10[OH-]। 25°C पर जल के आयनिक गुणनफल के आधार पर pH + pOH = 14 होता है।",
+      "recognition_signals": [
+        "विलयन की अम्लीयता या क्षारीयता pH पैमाने से मापी जाती है जहाँ pH = -log10[H+] तथा pOH = -log10[OH-]। 25°C पर जल के आयनिक गुणनफल के आधार पर pH + pOH = 14 होता है।"
+      ],
+      "governing_method": {
+        "name": "Aqueous Solution pH & Hydrogen Ion Concentration (जलीय विलयन की pH एवं हाइड्रोजन आयन सांद्रता)",
+        "standard_algorithm": [
+          "विलयन की मोलरता एवं अम्ल/क्षार के वियोजन से [H+] या [OH-] ज्ञात करें।",
+          "यदि प्रबल क्षार है तो pOH = -log10[OH-] निकालें फिर pH = 14 - pOH करें।",
+          "लघुगणक नियमों से pH की सटीक गणना करें।",
+          "अम्लीय विलयन हेतु pH < 7 तथा क्षारीय हेतु pH > 7 की संगति जांचें।"
+        ]
+      },
+      "decision_points": [
+        {
+          "condition": "पहचानें कि दिया गया पदार्थ अम्ल (H+) है या क्षार (OH-)",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        },
+        {
+          "condition": "क्षार होने पर सीधे pH न निकालें, पहले pOH निकालें फिर 14 से घटाएं",
+          "action": "उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।"
+        },
+        {
+          "condition": "द्विक्षारकीय अम्ल (जैसे H2SO4) में [H+]",
+          "action": "2 * Molarity लेना न भूलें"
+        }
+      ],
+      "common_traps": [
+        "क्षार के विलयन में -log[OH-] को ही सीधे pH मान लेना",
+        "द्विक्षारकीय अम्ल या द्विक्षारीय भस्म में गुणांक 2 से गुणा न करना",
+        "लघुगणक के ऋण चिन्ह को अनदेखा कर ऋणात्मक pH निकाल देना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_PH_LOG_ARITHMETIC",
+        "ERR_CHEM_BASE_POH_CONFUSION",
+        "ERR_CHEM_DIPROTIC_FACTOR"
+      ]
+    }
+  ]
+}

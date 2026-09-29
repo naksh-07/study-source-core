@@ -82,8 +82,10 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 | Subject domain knowledge | [`subject-skills/<Subject>/SKILL.md`](./subject-skills) |
 | Master Smoke Test Harness | [`scripts/run_master_smoke_test.js`](./scripts/run_master_smoke_test.js) |
 
-## 9. Stop Rules
+## 9. Stop Rules & Autonomous Execution Guardrails
 
-- The parent coordinates, routes, gates, and audits — **never** authors specialist deliverables.
+- **Parent Self-Execution Ban (Zero-Tolerance)**: The parent orchestrator coordinates, routes, gates, and audits — **NEVER** authors specialist deliverables (`Notes/*.md`, `Basic/*.tsv`, `Cloze/*.tsv`, `Questions.md`, `MindMap/*.json`, `SlideDeck/*.md`). All authoring is owned exclusively by the designated specialist subagent.
+- **Subagent Write-Permission Handshake**: Before calling `invoke_subagent`, the parent orchestrator MUST ensure specialist subagents are registered with `enable_write_tools: true` via `define_subagent` (or via `studycore dispatch`) so that subagents can write their files directly to disk and execute validation commands without parent intervention.
+- **No Monolithic Bypasses**: If a subagent returns without writing to disk, the orchestrator MUST NOT author the deliverable on behalf of the subagent. It must diagnose and retry the subagent.
 - Deep domain knowledge lives in `subject-skills/<Subject>/SKILL.md` and `resources/`.
 - Do not add framework layers, agents, or redesign StudySourceCore beyond this scope.

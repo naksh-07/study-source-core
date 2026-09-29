@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "overall_verdict": "SUCCESS",
+    "chapter": "Chemical-Equilibrium",
+    "subject": "Chemistry",
+    "completed_count": 9,
+    "artifact_count": 9,
+    "verified_timestamp": "2026-09-29T23:32:09.862Z",
+    "schema_version": "1.0.0"
+  },
+  "artifacts": [
+    {
+      "task_id": "task-notes-contract",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Notes\\Chemical-Equilibrium_Notes.md",
+      "bytes": 35398,
+      "sha256": "5189f4bf956df301329a0eae5f3009431ba2eee160d7fea15fe72ac09c6482f4",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-basic-tsv",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Basic\\Chemical-Equilibrium_Basic.tsv",
+      "bytes": 10807,
+      "sha256": "60a388159637fa3abc8fa097b4f690b0626684e0b285aa04b87cd317a60842ae",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-cloze-tsv",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Cloze\\Chemical-Equilibrium_Cloze.tsv",
+      "bytes": 16599,
+      "sha256": "07e37ea3f9620367aef5463f7e1d51bf0d5fd5d0630155993fa549f80e3a4fe0",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-mindmap",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\MindMap\\Chemical-Equilibrium.mindmap.json",
+      "bytes": 31640,
+      "sha256": "5259b8b84180ed744c6df089ab8d8f85d9036aa95efe2800acea5aabf28e7877",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-slidedeck",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\SlideDeck\\Chemical-Equilibrium_SlideDeckPrompt.md",
+      "bytes": 24361,
+      "sha256": "c49e919db688a6ea015be7384c9d875250531165b4a62bc16d60536dd09597cc",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-question-bank",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\StudyLab\\Chemical-Equilibrium_Questions.md",
+      "bytes": 22625,
+      "sha256": "988973a760e7ef5e0fa7df72c0410ea52801551949d01d4d87a39243753315b9",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-declarative-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Chemical-Equilibrium_Anki.apkg",
+      "bytes": 13793,
+      "sha256": "4bc52a46911076b02bee9b486201ae1616b6db2d4f8325fcdf02dccb2d0ab22e",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-graph",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Graph\\Chemical-Equilibrium_Graph_Index.json",
+      "bytes": 933,
+      "sha256": "5baed1c60d9b4959a7c19eb54747be442a746dbc8d55596a736ad09b65c82101",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-qa",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Audit\\QA_Report.md",
+      "bytes": 22671,
+      "sha256": "467574880d587f3dd9eec25e5755cdf7fee666b10460346dac3f007fb347d273",
+      "physical_status": "VERIFIED_ON_DISK"
+    }
+  ]
+}

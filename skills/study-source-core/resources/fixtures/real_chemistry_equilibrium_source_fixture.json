@@ -1,0 +1,1442 @@
+{
+  "chapter": "Chemical-Equilibrium",
+  "subject": "Chemistry",
+  "domain": "Chemistry",
+  "topic": "Physical Chemistry - Chemical & Ionic Equilibrium",
+  "skill_id": "chemistry.physical.equilibrium",
+  "source_provenance": {
+    "source_title": "Authentic Competitive Chemistry Compendium: Chemical & Ionic Equilibrium",
+    "edition": "2024-2026",
+    "exam_corpus": [
+      "SSC CGL Tier-1/Tier-2 (2018-2023)",
+      "RRB NTPC & Group D (2018-2022)",
+      "RRB ALP & Technician (2018-2024)",
+      "UPSC CDS / NDA (2019-2023)",
+      "JEE Main & NEET (2020-2024)"
+    ]
+  },
+  "concepts": [
+    {
+      "name": "Law of Mass Action & Equilibrium Constant Kc",
+      "definition": "बंद पात्र में उत्क्रमणीय अभिक्रिया aA + bB <=> cC + dD के लिए साम्य स्थिरांक Kc = ([C]^c [D]^d) / ([A]^a [B]^b) होता है। Kc केवल तापमान पर निर्भर करता है, प्रारंभिक सांद्रता या उत्प्रेरक से अप्रभावित रहता है।",
+      "conditions": "उत्क्रमणीय रासायनिक अभिक्रिया, बंद पात्र, स्थिर तापमान।",
+      "si_unit": "(mol/L)^{\\Delta n_g}",
+      "dimensional_formula": "[M^{\\Delta n_g} L^{-3\\Delta n_g}]"
+    },
+    {
+      "name": "Relation Between Kp and Kc",
+      "definition": "गैसीय साम्यावस्था में आंशिक दाब साम्य स्थिरांक Kp तथा मोलर सांद्रता साम्य स्थिरांक Kc के मध्य संबंध Kp = Kc * (RT)^{\\Delta n_g} होता है, जहाँ \\Delta n_g = उत्पाद गैस मोल - अभिकारक गैस मोल, R = 0.0821 L*atm/(mol*K), और T केल्विन ताप है।",
+      "conditions": "तापमान अनिवार्य रूप से केल्विन (T = t°C + 273.15) में होना चाहिए। ठोस व शुद्ध द्रव को \\Delta n_g में नहीं गिना जाता।",
+      "si_unit": "atm^{\\Delta n_g} or bar^{\\Delta n_g}",
+      "dimensional_formula": "[M^{\\Delta n_g} L^{-\\Delta n_g} T^{-2\\Delta n_g}]"
+    },
+    {
+      "name": "Le Chatelier's Principle & Stress Response",
+      "definition": "यदि साम्यावस्था पर उपस्थित किसी निकाय पर सांद्रता, दाब, आयतन या तापमान में परिवर्तन द्वारा बाह्य प्रतिबल लगाया जाए, तो साम्य उस दिशा में विस्थापित होता है जहाँ उस प्रतिबल का प्रभाव निरस्त हो सके।",
+      "conditions": "दाब वृद्धि से साम्य कम गैसीय मोल की ओर जाता है; स्थिर आयतन पर अक्रिय गैस मिलाने पर साम्य पर कोई प्रभाव नहीं पड़ता।",
+      "si_unit": "Qualitative dynamic response",
+      "dimensional_formula": "Dimensionless"
+    },
+    {
+      "name": "Reaction Quotient Q vs Equilibrium Constant K",
+      "definition": "किसी भी क्षण अभिक्रिया मिश्रण के सांद्रताओं का अनुपात अभिक्रिया भागफल Q कहलाता है। यदि Q < K तो अभिक्रिया अग्र दिशा में, Q > K तो पश्च दिशा में, तथा Q = K होने पर साम्यावस्था में होती है।",
+      "conditions": "असाम्यावस्था में अभिक्रिया की दिशा पूर्वानुमानित करने हेतु मान्य।",
+      "si_unit": "(mol/L)^{\\Delta n_g}",
+      "dimensional_formula": "[M^{\\Delta n_g} L^{-3\\Delta n_g}]"
+    },
+    {
+      "name": "Ionic Equilibrium, pH Scale & Buffer Action",
+      "definition": "जलीय विलयन में pH = -log10[H+] तथा pOH = -log10[OH-]। 25°C पर Kw = 10^-14 होने से pH + pOH = 14। दुर्बल अम्ल का वियोजन ऑस्टवाल्ड तनुता नियम K_a = C\\alpha^2 से तथा बफर विलयन का pH हेन्डरसन-हेसेलबाल्च समीकरण pH = pKa + log([Salt]/[Acid]) से निर्धारित होता है।",
+      "conditions": "25°C पर जलीय तनु विलयन।",
+      "si_unit": "Dimensionless (pH scale 0 to 14)",
+      "dimensional_formula": "Dimensionless"
+    }
+  ],
+  "master_formulas": [
+    {
+      "name": "Equilibrium Constant Expression",
+      "formula": "K_c = \\frac{[C]^c [D]^d}{[A]^a [B]^b}, \\quad K_p = \\frac{(P_C)^c (P_D)^d}{(P_A)^a (P_B)^b}",
+      "scope": "साम्य सांद्रताओं [X] mol/L तथा आंशिक दाबों P_X atm पर मान्य।",
+      "units": "mol/L and atm"
+    },
+    {
+      "name": "Thermodynamic Kp-Kc Transformation",
+      "formula": "K_p = K_c (RT)^{\\Delta n_g}",
+      "scope": "गैसीय साम्य हेतु, R = 0.0821 L*atm/(mol*K), T in Kelvin।",
+      "units": "atm^{\\Delta n_g}"
+    },
+    {
+      "name": "Reaction Direction Criterion",
+      "formula": "Q_c = \\frac{[C]_t^c [D]_t^d}{[A]_t^a [B]_t^b}, \\quad Q_c < K_c \\implies \\text{Forward}, \\quad Q_c > K_c \\implies \\text{Backward}",
+      "scope": "किसी भी तात्क्षणिक समय t पर अभिक्रिया दिशा निर्धारण हेतु।",
+      "units": "Dimensionless ratio"
+    },
+    {
+      "name": "pH and Ionic Equilibrium Formulas",
+      "formula": "\\text{pH} = -\\log_{10}[H^+], \\quad \\text{pH} + \\text{pOH} = 14, \\quad \\alpha = \\sqrt{\\frac{K_a}{C}}, \\quad \\text{pH} = \\text{p}K_a + \\log_{10}\\left(\\frac{[\\text{Salt}]}{[\\text{Acid}]}\\right)",
+      "scope": "25°C पर तनु जलीय विलयन एवं अम्लीय बफर हेतु।",
+      "units": "pH dimensionless, Ka in mol/L"
+    }
+  ],
+  "problem_patterns": [
+    {
+      "pattern_id": "pat-chem-eq-kc-ice",
+      "family_id": "family.chemistry.physical.equilibrium.kc_ice",
+      "title": "Equilibrium Constant Kc & ICE Table Calculations",
+      "deep_structure": "प्रारंभिक मोलों (Initial), परिवर्तन (Change - स्टोइकिओमेट्रिक अनुपात में), तथा साम्यावस्था पर सांद्रताओं (Equilibrium [X] = n/V) को ICE सारणी द्वारा व्यवस्थित कर Kc व्यंजक में प्रतिस्थापित करके अज्ञात सांद्रता या Kc ज्ञात करना।",
+      "governing_method": "1. संतुलित रासायनिक समीकरण लिखें। 2. ICE सारणी बनाकर साम्य मोल निकालें। 3. आयतन V से भाग देकर मोलर सांद्रताएं प्राप्त करें। 4. Kc के व्यंजक में मान रखकर हल करें।",
+      "decision_points": [
+        "जांचें कि दिए गए मान मोल (moles) हैं या मोलर सांद्रता (mol/L); यदि मोल हैं तो आयतन V से भाग दें",
+        "यदि Delta n_g = 0 हो (जैसे H2 + I2 <=> 2HI), तो आयतन V व्यंजक में कट जाता है",
+        "ठोस या शुद्ध द्रव अभिकारकों की सांद्रता को व्यंजक में 1 मानकर छोड़ दें"
+      ],
+      "common_traps": [
+        "पात्र के आयतन V से भाग न देना और सीधे मोलों को सांद्रता मान लेना",
+        "गुणांक को घात (power) में न लगाना (जैसे 2HI में [HI]^2 न करना)",
+        "ठोस पदार्थ (जैसे CaCO3) की सांद्रता को साम्य व्यंजक में सम्मिलित करना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_VOLUME_DIVISION_OMISSION",
+        "ERR_CHEM_STOICHIOMETRIC_POWER_MISS",
+        "ERR_CHEM_SOLID_STATE_INCLUSION"
+      ]
+    },
+    {
+      "pattern_id": "pat-chem-eq-kp-deltang",
+      "family_id": "family.chemistry.physical.equilibrium.kp_deltang",
+      "title": "Kp - Kc Relation & Partial Pressure Calculations",
+      "deep_structure": "Kp = Kc(RT)^{\\Delta n_g} का उपयोग करके Kp और Kc में रूपांतरण, तापमान को केल्विन में रखना, तथा डाल्टन के आंशिक दाब नियम P_i = X_i * P_total द्वारा गैसीय साम्य स्थिरांक ज्ञात करना।",
+      "governing_method": "1. गैसीय मोलों का अंतर Delta n_g = n_p(g) - n_r(g) निकालें। 2. तापमान को T(K) = t°C + 273 में बदलें। 3. Kp = Kc(RT)^(Delta n_g) सूत्र लगाएं।",
+      "decision_points": [
+        "Delta n_g = 0 होने पर Kp = Kc (इकाई रहित)",
+        "Delta n_g > 0 होने पर उच्च ताप पर Kp > Kc",
+        "Delta n_g < 0 होने पर Kp < Kc"
+      ],
+      "common_traps": [
+        "सेल्सियस ताप को सीधे सूत्र में रख देना",
+        "अक्रिय ठोसों के मोलों को Delta n_g में जोड़ लेना",
+        "गैस नियतांक R = 8.314 J/(mol*K) लेना जबकि दाब atm में हो (R = 0.0821 आवश्यक है)"
+      ],
+      "error_categories": [
+        "ERR_CHEM_CELSIUS_NOT_KELVIN",
+        "ERR_CHEM_R_CONSTANT_MISMATCH",
+        "ERR_CHEM_NON_GAS_IN_DELTANG"
+      ]
+    },
+    {
+      "pattern_id": "pat-chem-eq-le-chatelier",
+      "family_id": "family.chemistry.physical.equilibrium.le_chatelier",
+      "title": "Le Chatelier's Principle & Dynamic Equilibrium Shifts",
+      "deep_structure": "साम्य निकाय पर दाब, आयतन, ताप, सांद्रता, तथा अक्रिय गैस मिलाने पर साम्य विस्थापन की दिशा का सटीक गुणात्मक व मात्रात्मक विश्लेषण।",
+      "governing_method": "1. Delta n_g और Delta H (ऊष्माक्षेपी/ऊष्माशोषी) का चिन्ह पहचानें। 2. दाब बढ़ने पर कम गैसीय मोल की ओर विस्थापन। 3. ताप बढ़ने पर ऊष्माशोषी दिशा में विस्थापन। 4. स्थिर आयतन पर अक्रिय गैस मिलाने पर शून्य विस्थापन।",
+      "decision_points": [
+        "Delta n_g = 0 वाली अभिक्रिया पर दाब परिवर्तन का कोई प्रभाव नहीं पड़ता",
+        "स्थिर आयतन पर अक्रिय गैस मिलाने पर आंशिक दाब नहीं बदलते, अतः साम्य अपरिवर्तित रहता है",
+        "स्थिर दाब पर अक्रिय गैस मिलाने पर आयतन बढ़ता है, अतः साम्य अधिक मोल की ओर जाता है",
+        "उत्प्रेरक केवल साम्य तक पहुंचने का समय कम करता है, साम्य सांद्रता या Kc को नहीं बदलता"
+      ],
+      "common_traps": [
+        "यह सोचना कि उत्प्रेरक से उत्पाद की मात्रा या Kc बढ़ जाएगा",
+        "स्थिर आयतन पर अक्रिय गैस डालने से दाब बढ़ने पर साम्य खिसकना मान लेना",
+        "ऊष्माक्षेपी अभिक्रिया में ताप बढ़ाने पर उत्पाद बढ़ना मान लेना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_CATALYST_FALLACY",
+        "ERR_CHEM_INERT_GAS_CONSTANT_V_MISCONCEPTION",
+        "ERR_CHEM_EXOTHERMIC_TEMP_REVERSAL"
+      ]
+    },
+    {
+      "pattern_id": "pat-chem-eq-quotient-q",
+      "family_id": "family.chemistry.physical.equilibrium.reaction_quotient",
+      "title": "Reaction Quotient Qc and Directional Prediction",
+      "deep_structure": "किसी क्षण की सांद्रताओं से Qc ज्ञात कर Kc से तुलना द्वारा यह निर्धारित करना कि अभिक्रिया अग्र (Forward), पश्च (Reverse) या साम्यावस्था (Equilibrium) में है।",
+      "governing_method": "1. तात्क्षणिक सांद्रताओं को Qc के व्यंजक में रखें। 2. Qc का मान निकालें। 3. Qc < Kc => अग्र दिशा; Qc > Kc => पश्च दिशा; Qc = Kc => साम्यावस्था।",
+      "decision_points": [
+        "Qc < Kc: उत्पाद कम हैं, अग्र अभिक्रिया होगी",
+        "Qc > Kc: उत्पाद अधिक हैं, पश्च अभिक्रिया होगी",
+        "Qc = Kc: निकाय साम्यावस्था में है, शुद्ध परिवर्तन शून्य"
+      ],
+      "common_traps": [
+        "Qc और Kc के अनुपात की तुलना में चिन्ह उलटा कर देना",
+        "आयतन में परिवर्तन होने पर सांद्रता को अपडेट किए बिना पुराने मान उपयोग करना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_DIRECTION_CRITERION_INVERSION",
+        "ERR_CHEM_TRANSIENT_CONCENTRATION_NEGLECT"
+      ]
+    },
+    {
+      "pattern_id": "pat-chem-eq-ionic-ph-buffer",
+      "family_id": "family.chemistry.physical.equilibrium.ionic_ph_buffer",
+      "title": "Ionic Equilibrium, pH Calculation & Buffer Solutions",
+      "deep_structure": "प्रबल/दुर्बल अम्ल व क्षार, जल का आयनिक गुणनफल Kw, pH-pOH संबंध, ऑस्टवाल्ड तनुता नियम, तथा हेन्डरसन समीकरण द्वारा अम्लीय/क्षारीय बफर का pH ज्ञात करना।",
+      "governing_method": "1. [H+] या [OH-] निर्धारित करें (द्विक्षारकीय/द्विक्षारीय गुणांक 2 का ध्यान रखें)। 2. pH = -log10[H+] या pOH = -log10[OH-] लगाएं। 3. क्षार होने पर pH = 14 - pOH करें। 4. बफर में pH = pKa + log([Salt]/[Acid]) लगाएं।",
+      "decision_points": [
+        "क्षार के विलयन में पहले pOH निकालें, सीधे pH न लिखें",
+        "अत्यंत तनु अम्ल (जैसे 10^-8 M HCl) का pH कभी 7 से अधिक (क्षारीय) नहीं हो सकता; जल का वियोजन (10^-7 M) जोड़ना अनिवार्य है",
+        "समान सांद्रता पर दुर्बल अम्ल व उसके लवण का बफर pH = pKa होता है"
+      ],
+      "common_traps": [
+        "10^-8 M HCl का pH = 8 (क्षारीय) लिख देना",
+        "Ca(OH)2 या Ba(OH)2 में [OH-] = 2 * Molarity न करना",
+        "लघुगणक में log(A/B) = log A - log B के स्थान पर जोड़ देना"
+      ],
+      "error_categories": [
+        "ERR_CHEM_DILUTE_ACID_WATER_IONIZATION_OMISSION",
+        "ERR_CHEM_VALENCY_FACTOR_MISS",
+        "ERR_CHEM_LOG_OPERATION_ERROR"
+      ]
+    }
+  ],
+  "source_problems": [
+    {
+      "source_id": "chem-q01-alp-kc-hi",
+      "question_number": 1,
+      "exam": "RRB ALP 2018 Shift 2",
+      "pattern_ref": "pat-chem-eq-kc-ice",
+      "raw_type": "mcq",
+      "statement": "एक 2 L के बंद पात्र में 440 K पर साम्यावस्था में 2 mol H2, 2 mol I2 तथा 4 mol HI उपस्थित हैं। उत्क्रमणीय अभिक्रिया H2(g) + I2(g) <=> 2HI(g) के लिए साम्य स्थिरांक Kc का मान क्या होगा?",
+      "options": [
+        "(A) 4",
+        "(B) 2",
+        "(C) 8",
+        "(D) 1"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "गैसीय समांगी साम्य H2(g) + I2(g) <=> 2HI(g)",
+        "बंद पात्र का आयतन V = 2 L तथा साम्य मोल दिए गए हैं",
+        "Delta n_g = 0 साम्य प्रणाली"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "दिए गए मोलों को सीधे सूत्र में न रखकर पात्र के आयतन V = 2 L से भाग देकर सक्रिय द्रव्यमान [M] निकालें",
+        "उत्पाद HI का स्टोइकिओमेट्रिक गुणांक 2 होने के कारण अंश में [HI]^2 का प्रयोग करें",
+        "Delta n_g = 0 होने पर Kc विमाहीन (इकाई रहित) होगा"
+      ],
+      "trap": "HI के गुणांक 2 को घात में न लगाना या आयतन V से भाग देना भूल जाना",
+      "error_category": [
+        "ERR_CHEM_STOICHIOMETRIC_POWER_MISS",
+        "ERR_CHEM_VOLUME_DIVISION_OMISSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "साम्यावस्था में द्रव्य अनुपाती क्रिया के नियमानुसार सक्रिय द्रव्यमानों (मोलर सांद्रता) के अनुपात से Kc ज्ञात किया जाता है।",
+        "tier2_strategic": "साम्य स्थिरांक सूत्र Kc = [HI]^2 / ([H2] * [I2]) स्थापित करें तथा दिए गए मोलों को पात्र के आयतन 2 L से भाग देकर साम्य सांद्रताएं ज्ञात करें।",
+        "tier3_next_step": "सांद्रताएं प्रतिस्थापित करें: [H2] = 2/2 = 1 M, [I2] = 2/2 = 1 M, तथा [HI] = 4/2 = 2 M। अब अंश में (2)^2 और हर में (1 * 1) का मान रखकर भाग दें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): उत्क्रमणीय समांगी गैसीय अभिक्रिया H2(g) + I2(g) <=> 2HI(g) बंद पात्र V = 2 L में 440 K पर साम्यावस्था में है।",
+        "चरण 2 (संचालक सिद्धांत): द्रव्य अनुपाती क्रिया का नियम (Law of Mass Action) तथा साम्य स्थिरांक Kc की परिभाषा।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): H2(g) + I2(g) <=> 2HI(g) के लिए Kc = [HI]^2 / ([H2] * [I2])।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): साम्य सांद्रताएं: [H2] = 2 mol / 2 L = 1.0 M; [I2] = 2 mol / 2 L = 1.0 M; [HI] = 4 mol / 2 L = 2.0 M।",
+        "चरण 5 (तापमान/मात्रक संगति): T = 440 K स्थिर है; Delta n_g = 2 - (1 + 1) = 0 होने से Kc इकाई रहित (dimensionless) है।",
+        "चरण 6 (बीजगणितीय गणना): Kc = (2.0)^2 / (1.0 * 1.0) = 4.0 / 1.0 = 4।",
+        "चरण 7 (रासायनिक सार्थकता जांच): उत्पाद HI की सांद्रता अभिकारकों से अधिक है, अतः Kc = 4 > 1 रासायनिक रूप से सुसंगत है। सही विकल्प (A) 4 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Delta n_g = 0 होने से Kc विमाहीन है, सभी सांद्रताएं धनात्मक हैं ([HI] = 2 M, [H2] = 1 M, [I2] = 1 M), और (2)^2 / (1*1) = 4 पूर्णतः संतुलित है।",
+      "prerequisites": [
+        "chemistry.equilibrium_law",
+        "chemistry.molar_concentration"
+      ]
+    },
+    {
+      "source_id": "chem-q02-groupd-kc-n2o4",
+      "question_number": 2,
+      "exam": "RRB Group D 2018 Shift 1",
+      "pattern_ref": "pat-chem-eq-kc-ice",
+      "raw_type": "mcq",
+      "statement": "एक 1 L के बंद पात्र में साम्यावस्था पर अभिक्रिया N2O4(g) <=> 2NO2(g) के लिए [N2O4] = 0.2 mol/L तथा [NO2] = 0.4 mol/L पाए गए। इस ताप पर साम्य स्थिरांक Kc (mol/L में) क्या होगा?",
+      "options": [
+        "(A) 0.8 mol/L",
+        "(B) 0.4 mol/L",
+        "(C) 1.6 mol/L",
+        "(D) 2.0 mol/L"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "गैसीय वियोजन साम्य N2O4(g) <=> 2NO2(g)",
+        "घटकों की साम्य मोलर सांद्रताएं सीधे mol/L में दी गई हैं",
+        "Delta n_g = 2 - 1 = +1"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "उत्पाद NO2 का स्टोइकिओमेट्रिक गुणांक 2 है, अतः अंश में [NO2]^2 होगा",
+        "सांद्रताएं सीधे mol/L में दी गई हैं, पुनः आयतन से भाग देने की आवश्यकता नहीं है",
+        "Delta n_g = 1 होने से Kc की इकाई mol/L होगी"
+      ],
+      "trap": "NO2 की सांद्रता का वर्ग न करना और सीधे 0.4/0.2 = 2.0 निकाल देना",
+      "error_category": [
+        "ERR_CHEM_STOICHIOMETRIC_POWER_MISS",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "अभिक्रिया N2O4(g) <=> 2NO2(g) में उत्पाद NO2 का स्टोइकिओमेट्रिक गुणांक 2 है, जो साम्य व्यंजक में घातांक बनेगा।",
+        "tier2_strategic": "साम्य स्थिरांक व्यंजक Kc = [NO2]^2 / [N2O4] स्थापित करें तथा दिए गए सांद्रता मानों को प्रतिस्थापित करें।",
+        "tier3_next_step": "अंश में (0.4)^2 = 0.16 तथा हर में 0.2 रखें, फिर 0.16 को 0.2 से विभाजित करके मान प्राप्त करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): बंद पात्र V = 1 L में डाइनाइट्रोजन टेट्राऑक्साइड और नाइट्रोजन डाइऑक्साइड का साम्य N2O4(g) <=> 2NO2(g)।",
+        "चरण 2 (संचालक सिद्धांत): द्रव्य अनुपाती क्रिया नियमानुसार गैसीय वियोजन साम्य स्थिरांक।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): N2O4(g) <=> 2NO2(g) के लिए Kc = [NO2]^2 / [N2O4]।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): सीधे साम्य सांद्रताएं दी गई हैं: [N2O4] = 0.2 mol/L, [NO2] = 0.4 mol/L।",
+        "चरण 5 (तापमान/मात्रक संगति): Delta n_g = 2 - 1 = +1; Kc की इकाई mol/L है।",
+        "चरण 6 (बीजगणितीय गणना): Kc = (0.4)^2 / 0.2 = 0.16 / 0.2 = 0.8 mol/L।",
+        "चरण 7 (रासायनिक सार्थकता जांच): NO2 का आंशिक वियोजन 0.8 mol/L प्राप्त होता है, जो भौतिक रसायन के वियोजन नियमों से सुसंगत है। सही विकल्प (A) 0.8 mol/L है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [NO2]^2 / [N2O4] = (0.16 mol^2/L^2) / (0.2 mol/L) = 0.8 mol/L। मात्रक mol/L सुसंगत है।",
+      "prerequisites": [
+        "chemistry.equilibrium_law",
+        "chemistry.molar_concentration"
+      ]
+    },
+    {
+      "source_id": "chem-q03-cgl-kc-pcl5",
+      "question_number": 3,
+      "exam": "SSC CGL 2021 Tier 1",
+      "pattern_ref": "pat-chem-eq-kc-ice",
+      "raw_type": "mcq",
+      "statement": "एक 5 L के बंद बर्तन में PCl5(g) <=> PCl3(g) + Cl2(g) साम्य पर PCl5, PCl3 तथा Cl2 के क्रमशः 1 mol, 2 mol तथा 2 mol उपस्थित हैं। साम्य स्थिरांक Kc का मान ज्ञात कीजिए।",
+      "options": [
+        "(A) 0.8 mol/L",
+        "(B) 4.0 mol/L",
+        "(C) 0.4 mol/L",
+        "(D) 0.16 mol/L"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "PCl5 का ऊष्मीय वियोजन साम्य",
+        "पात्र का आयतन V = 5 L दिया गया है",
+        "घटकों के साम्य मोल दिए गए हैं (मोलरता नहीं)"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "Delta n_g = (1 + 1) - 1 = 1 होने के कारण आयतन V निरस्त नहीं होगा; मोलों को 5 L से भाग देना अनिवार्य है",
+        "साम्य सांद्रता [X] = n / V सूत्र से ज्ञात करें"
+      ],
+      "trap": "आयतन 5 L से भाग देना भूल जाना और सीधे मोलों से (2 * 2)/1 = 4.0 mol/L निकाल देना",
+      "error_category": [
+        "ERR_CHEM_VOLUME_DIVISION_OMISSION",
+        "ERR_CHEM_CONCENTRATION_VOLUME"
+      ],
+      "hints": {
+        "tier1_conceptual": "जब Delta n_g != 0 हो, तो आयतन V साम्य व्यंजक में शेष रहता है; अतः सांद्रता [X] = n/V का उपयोग अनिवार्य है।",
+        "tier2_strategic": "साम्य व्यंजक Kc = ([PCl3] * [Cl2]) / [PCl5] स्थापित करें तथा प्रत्येक घटक के मोलों को 5 L से भाग दें।",
+        "tier3_next_step": "सांद्रताएं निकालें: [PCl5] = 1/5 M, [PCl3] = 2/5 M, [Cl2] = 2/5 M। अब ((2/5) * (2/5)) / (1/5) = (4/25) / (1/5) को सरल करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): फास्फोरस पेंटाक्लोराइड का गैसीय वियोजन साम्य PCl5(g) <=> PCl3(g) + Cl2(g) 5 L के पात्र में।",
+        "चरण 2 (संचालक सिद्धांत): द्रव्य अनुपाती क्रिया नियम के अनुसार गैसीय वियोजन का Kc व्यंजक।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): PCl5(g) <=> PCl3(g) + Cl2(g) => Kc = ([PCl3][Cl2]) / [PCl5]।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): साम्य सांद्रताएं: [PCl5] = 1 mol / 5 L = 0.2 M; [PCl3] = 2 mol / 5 L = 0.4 M; [Cl2] = 2 mol / 5 L = 0.4 M।",
+        "चरण 5 (तापमान/मात्रक संगति): Delta n_g = 2 - 1 = 1; मात्रक (M^2)/M = M (mol/L)।",
+        "चरण 6 (बीजगणितीय गणना): Kc = (0.4 * 0.4) / 0.2 = 0.16 / 0.2 = 0.8 mol/L।",
+        "चरण 7 (रासायनिक सार्थकता जांच): यदि आयतन V=5 L का ध्यान न रखा जाए तो 4.0 mol/L आता जो भ्रामक है। 0.8 mol/L मात्रक एवं मान दोनों में सही है। सही विकल्प (A) 0.8 mol/L है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Kc = (0.4 * 0.4)/0.2 = 0.8 M। V = 5 L से भाग देने पर सांद्रता सही निकलती है।",
+      "prerequisites": [
+        "chemistry.equilibrium_law",
+        "chemistry.molar_concentration"
+      ]
+    },
+    {
+      "source_id": "chem-q04-jeemain-ice-so3",
+      "question_number": 4,
+      "exam": "JEE Main 2020",
+      "pattern_ref": "pat-chem-eq-kc-ice",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया 2SO2(g) + O2(g) <=> 2SO3(g) के लिए यदि 1 L फ्लास्क में साम्य पर [SO2] = 0.5 M, [O2] = 0.2 M तथा [SO3] = 1.0 M हों, तो Kc का मान क्या होगा?",
+      "options": [
+        "(A) 20 L/mol",
+        "(B) 10 L/mol",
+        "(C) 5 L/mol",
+        "(D) 40 L/mol"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 3,
+      "recognition_signals": [
+        "संपर्क प्रक्रम साम्य 2SO2(g) + O2(g) <=> 2SO3(g)",
+        "अभिकारकों और उत्पादों की साम्य सांद्रताएं दी गई हैं",
+        "स्टोइकिओमेट्रिक गुणांक 2, 1, 2"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "SO2 और SO3 दोनों के गुणांक 2 होने से दोनों के पदों का वर्ग ([SO2]^2 और [SO3]^2) होगा",
+        "Delta n_g = 2 - (2 + 1) = -1, अतः इकाई L/mol होगी"
+      ],
+      "trap": "SO2 के वर्ग को भूल जाना, जिससे 1.0 / (0.5 * 0.2) = 10 प्राप्त हो",
+      "error_category": [
+        "ERR_CHEM_STOICHIOMETRIC_POWER_MISS",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "रासायनिक समीकरण के स्टोइकिओमेट्रिक गुणांक साम्य स्थिरांक व्यंजक में संगत सांद्रता पदों के घातांक बनते हैं।",
+        "tier2_strategic": "साम्य व्यंजक Kc = [SO3]^2 / ([SO2]^2 * [O2]) लिखें तथा दिए गए मान [SO3]=1.0, [SO2]=0.5, [O2]=0.2 प्रतिस्थापित करें।",
+        "tier3_next_step": "हर की गणना करें: (0.5)^2 * 0.2 = 0.25 * 0.2 = 0.05। अब अंश के 1.0 को 0.05 से भाग दें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): सल्फर डाइऑक्साइड का सल्फर ट्राइऑक्साइड में ऑक्सीकरण साम्य 2SO2(g) + O2(g) <=> 2SO3(g)।",
+        "चरण 2 (संचालक सिद्धांत): द्रव्य अनुपाती क्रिया नियमानुसार संतुलित गुणांकों के घातांक का नियम।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): 2SO2(g) + O2(g) <=> 2SO3(g) => Kc = [SO3]^2 / ([SO2]^2 * [O2])।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): साम्य सांद्रताएं: [SO3] = 1.0 M, [SO2] = 0.5 M, [O2] = 0.2 M।",
+        "चरण 5 (तापमान/मात्रक संगति): Delta n_g = 2 - 3 = -1; इकाई = (M)^(-1) = L/mol।",
+        "चरण 6 (बीजगणितीय गणना): Kc = (1.0)^2 / ((0.5)^2 * 0.2) = 1.0 / (0.25 * 0.2) = 1.0 / 0.05 = 20 L/mol।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Kc = 20 L/mol > 1 दर्शाता है कि साम्यावस्था पर उत्पाद SO3 का बनना अनुकूल है। सही विकल्प (A) 20 L/mol है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): (1.0)^2 / (0.25 * 0.2) = 1 / 0.05 = 20 L/mol। मात्रक L/mol एवं मान 20 पूर्णतः सत्यापित है।",
+      "prerequisites": [
+        "chemistry.equilibrium_law",
+        "chemistry.molar_concentration"
+      ]
+    },
+    {
+      "source_id": "chem-q05-cds-kc-hetero",
+      "question_number": 5,
+      "exam": "UPSC CDS 2019",
+      "pattern_ref": "pat-chem-eq-kc-ice",
+      "raw_type": "mcq",
+      "statement": "विषमांगी साम्यावस्था CaCO3(s) <=> CaO(s) + CO2(g) के लिए साम्य स्थिरांक Kc का सही व्यंजक क्या है?",
+      "options": [
+        "(A) Kc = [CO2]",
+        "(B) Kc = ([CaO] * [CO2]) / [CaCO3]",
+        "(C) Kc = [CaO] / [CaCO3]",
+        "(D) Kc = 1 / [CO2]"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "विषमांगी साम्यावस्था (Heterogeneous Equilibrium)",
+        "ठोस अभिकारक CaCO3(s) तथा ठोस उत्पाद CaO(s)",
+        "गैसीय उत्पाद CO2(g)"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "शुद्ध ठोसों का सक्रिय द्रव्यमान स्थिर रहता है, अतः उन्हें मानक रूप से इकाई (1) माना जाता है",
+        "केवल गैसीय घटकों के सांद्रता पद साम्य व्यंजक में लिखे जाते हैं"
+      ],
+      "trap": "ठोस घटकों [CaO] और [CaCO3] को साम्य व्यंजक में सम्मिलित कर लेना",
+      "error_category": [
+        "ERR_CHEM_SOLID_STATE_INCLUSION",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "विषमांगी साम्य में शुद्ध ठोसों तथा शुद्ध द्रवों का सक्रिय द्रव्यमान स्थिर रहता है और उन्हें साम्य स्थिरांक व्यंजक में 1 मानकर सम्मिलित नहीं किया जाता।",
+        "tier2_strategic": "समीकरण CaCO3(s) <=> CaO(s) + CO2(g) में ठोस घटकों [CaCO3(s)] = 1 तथा [CaO(s)] = 1 रखें।",
+        "tier3_next_step": "व्यंजक Kc = ([CaO(s)] * [CO2(g)]) / [CaCO3(s)] में दोनों ठोस पदों को इकाई मानकर केवल गैसीय पद पृथक करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): चूना पत्थर (CaCO3) का ऊष्मीय अपघटन विषमांगी साम्यावस्था CaCO3(s) <=> CaO(s) + CO2(g)।",
+        "चरण 2 (संचालक सिद्धांत): विषमांगी साम्य में सक्रिय द्रव्यमान का नियम तथा शुद्ध ठोसों की स्थिर मोलर सांद्रता।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): सामान्य रूप: K'_c = ([CaO(s)] * [CO2(g)]) / [CaCO3(s)]।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): शुद्ध ठोस प्रावस्था होने के कारण [CaCO3(s)] = स्थिरांक k1 तथा [CaO(s)] = स्थिरांक k2।",
+        "चरण 5 (तापमान/मात्रक संगति): स्थिरांकों को संयोजित करने पर Kc = K'_c * (k1 / k2) = [CO2(g)]।",
+        "चरण 6 (बीजगणितीय गणना): अंतिम साम्य व्यंजक Kc = [CO2] प्राप्त होता है।",
+        "चरण 7 (रासायनिक सार्थकता जांच): नियत ताप पर CO2 का साम्य दाब/सांद्रता केवल तापमान का फलन है, ठोस की मात्रा पर निर्भर नहीं करता। सही विकल्प (A) Kc = [CO2] है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): शुद्ध ठोसों की सांद्रता नियत होने से Kc केवल [CO2] पर निर्भर करता है तथा Kp = P_CO2 होता है।",
+      "prerequisites": [
+        "chemistry.heterogeneous_equilibrium"
+      ]
+    },
+    {
+      "source_id": "chem-q06-cgl-kp-rel-nh3",
+      "question_number": 6,
+      "exam": "SSC CGL 2019 Tier 1",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "mcq",
+      "statement": "हैबर प्रक्रम द्वारा अमोनिया निर्माण अभिक्रिया N2(g) + 3H2(g) <=> 2NH3(g) के लिए Kp तथा Kc के मध्य सही संबंध क्या है?",
+      "options": [
+        "(A) Kp = Kc (RT)^(-2)",
+        "(B) Kp = Kc (RT)^2",
+        "(C) Kp = Kc (RT)^(-1)",
+        "(D) Kp = Kc"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "हैबर प्रक्रम N2(g) + 3H2(g) <=> 2NH3(g)",
+        "Kp तथा Kc के मध्य संबंध",
+        "Delta n_g का निर्धारण"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "उत्पाद गैस मोल = 2, अभिकारक गैस मोल = 1 + 3 = 4",
+        "Delta n_g = n_P(g) - n_R(g) = 2 - 4 = -2",
+        "Kp = Kc(RT)^(Delta n_g) में Delta n_g = -2 प्रतिस्थापित करें"
+      ],
+      "trap": "Delta n_g = 4 - 2 = +2 (अभिकारक माइनस उत्पाद) कर देना",
+      "error_category": [
+        "ERR_CHEM_DELTA_NG_GAS_ONLY",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "Kp और Kc का सार्वत्रिक संबंध Kp = Kc(RT)^(Delta n_g) होता है, जहाँ Delta n_g केवल गैसीय मोलों का अंतर है।",
+        "tier2_strategic": "उत्पाद गैस मोलों (n_P) में से अभिकारक गैस मोलों (n_R) को घटाकर Delta n_g = n_P - n_R ज्ञात करें।",
+        "tier3_next_step": "n_P = 2 तथा n_R = 1 + 3 = 4 रखें; Delta n_g = 2 - 4 की गणना करें और घातांक के रूप में लगाएं।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): हैबर प्रक्रम द्वारा अमोनिया संश्लेषण की उत्क्रमणीय गैसीय अभिक्रिया N2(g) + 3H2(g) <=> 2NH3(g)।",
+        "चरण 2 (संचालक सिद्धांत): आदर्श गैस समीकरण PV = nRT तथा रासायनिक साम्य में Kp एवं Kc का ऊष्मागतिक संबंध।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): N2(g) + 3H2(g) <=> 2NH3(g) => Kp = Kc(RT)^(Delta n_g)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): Delta n_g = गैसीय उत्पादों के कुल मोल - गैसीय अभिकारकों के कुल मोल = 2 - (1 + 3) = 2 - 4 = -2।",
+        "चरण 5 (तापमान/मात्रक संगति): R = 0.0821 L*atm/(mol*K) तथा T केल्विन में; Delta n_g ऋणात्मक (-2) है।",
+        "चरण 6 (बीजगणितीय गणना): Kp = Kc * (RT)^(-2) अथवा Kp = Kc / (RT)^2।",
+        "चरण 7 (रासायनिक सार्थकता जांच): चूंकि अभिक्रिया में मोल्स घट रहे हैं (Delta n_g < 0), अतः Kp < Kc होना चाहिए, जो Kp = Kc(RT)^(-2) से संतुष्ट होता है। सही विकल्प (A) Kp = Kc (RT)^(-2) है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Delta n_g = 2 - 4 = -2। Kp = Kc(RT)^(-2) भौतिक व ऊष्मागतिक दृष्टि से पूर्णतः सुसंगत है।",
+      "prerequisites": [
+        "chemistry.kp_kc_relation"
+      ]
+    },
+    {
+      "source_id": "chem-q07-ntpc-kp-kc-equal",
+      "question_number": 7,
+      "exam": "RRB NTPC 2021 Shift 1",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया H2(g) + I2(g) <=> 2HI(g) के लिए 500 K पर Kc = 50 है। इस ताप पर Kp का मान क्या होगा? (R = 0.0821 L*atm/(mol*K))",
+      "options": [
+        "(A) 50",
+        "(B) 50 * (0.0821 * 500)",
+        "(C) 50 / (0.0821 * 500)",
+        "(D) 25"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "H2(g) + I2(g) <=> 2HI(g)",
+        "Delta n_g = 2 - 2 = 0",
+        "Kc = 50, Kp का मान ज्ञात करना"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "Delta n_g = 0 होने पर (RT)^0 = 1",
+        "अतः Kp = Kc संख्यात्मक रूप से समान होते हैं"
+      ],
+      "trap": "तापमान 500 K और R का गुणा करके व्यर्थ गणना में समय व्यर्थ करना",
+      "error_category": [
+        "ERR_CHEM_DELTA_NG_GAS_ONLY",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "यदि किसी गैसीय अभिक्रिया में उत्पादों और अभिकारकों के गैसीय मोल समान हों (Delta n_g = 0), तो Kp और Kc संख्यात्मक रूप से बराबर होते हैं।",
+        "tier2_strategic": "Delta n_g = n_p(g) - n_r(g) निकालें तथा Kp = Kc(RT)^(Delta n_g) में किसी भी संख्या की घात 0 का नियम लगाएं।",
+        "tier3_next_step": "Delta n_g = 2 - 2 = 0 है; (RT)^0 = 1 होता है, अतः Kp का मान सीधे Kc के मान के तुल्य होगा।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): हाइड्रोजन और आयोडीन का हाइड्रोजन आयोडाइड में रूपांतरण H2(g) + I2(g) <=> 2HI(g) 500 K पर।",
+        "चरण 2 (संचालक सिद्धांत): Kp = Kc(RT)^(Delta n_g) का नियम।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): H2(g) + I2(g) <=> 2HI(g) => Delta n_g = 2 - (1 + 1) = 0।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): Delta n_g = 0 होने के कारण आयतन या आंशिक दाब परिवर्तन का साम्य अनुपात पर कोई शुद्ध घात प्रभाव नहीं पड़ता।",
+        "चरण 5 (तापमान/मात्रक संगति): T = 500 K, (RT)^0 = (0.0821 * 500)^0 = 1।",
+        "चरण 6 (बीजगणितीय गणना): Kp = Kc * 1 = 50।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Delta n_g = 0 वाली सभी अभिक्रियाओं (जैसे H2 + I2 <=> 2HI, N2 + O2 <=> 2NO) के लिए Kp = Kc सदैव सत्य होता है। सही विकल्प (A) 50 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Delta n_g = 0 => (RT)^0 = 1 => Kp = Kc = 50। कोई ताप निर्भरता Kp/Kc अनुपात पर नहीं है।",
+      "prerequisites": [
+        "chemistry.kp_kc_relation"
+      ]
+    },
+    {
+      "source_id": "chem-q08-nda-kp-calc-pcl5",
+      "question_number": 8,
+      "exam": "UPSC NDA 2021",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "mcq",
+      "statement": "PCl5(g) <=> PCl3(g) + Cl2(g) के लिए 27°C (300 K) पर Kc = 0.04 mol/L है। इस ताप पर Kp का मान क्या होगा? (R = 0.0821 L*atm/(mol*K))",
+      "options": [
+        "(A) 0.985 atm",
+        "(B) 0.04 atm",
+        "(C) 9.85 atm",
+        "(D) 0.0016 atm"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "PCl5 वियोजन साम्य",
+        "T = 27°C = 300 K, Kc = 0.04 M",
+        "Kp की गणना (Delta n_g = 1)"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "तापमान T = 27 + 273 = 300 K केल्विन में उपयोग करना अनिवार्य है",
+        "Delta n_g = 2 - 1 = +1",
+        "Kp = Kc * RT = 0.04 * (0.0821 * 300)"
+      ],
+      "trap": "सेल्सियस ताप 27 को सीधे सूत्र में रखकर 0.04 * (0.0821 * 27) कर देना",
+      "error_category": [
+        "ERR_CHEM_CELSIUS_NOT_KELVIN",
+        "ERR_CHEM_R_CONSTANT_MISMATCH"
+      ],
+      "hints": {
+        "tier1_conceptual": "गैसीय साम्य में Kp = Kc(RT)^(Delta n_g) सूत्र का उपयोग किया जाता है जहाँ तापमान सदैव परम ताप (केल्विन) में होना चाहिए।",
+        "tier2_strategic": "Delta n_g की गणना करें तथा तापमान को T(K) = 27 + 273 = 300 K में परिवर्तित कर RT का मान ज्ञात करें।",
+        "tier3_next_step": "Delta n_g = 1 है। RT = 0.0821 * 300 = 24.63 प्राप्त होता है। अब 0.04 को 24.63 से गुणा करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): फास्फोरस पेंटाक्लोराइड का गैसीय वियोजन साम्य PCl5(g) <=> PCl3(g) + Cl2(g) 27°C पर।",
+        "चरण 2 (संचालक सिद्धांत): आंशिक दाब साम्य स्थिरांक Kp एवं Kc का संबंध Kp = Kc(RT)^(Delta n_g)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): PCl5(g) <=> PCl3(g) + Cl2(g) => Delta n_g = (1 + 1) - 1 = +1।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): Delta n_g = +1 होने से Kp = Kc * (RT)^1।",
+        "चरण 5 (तापमान/मात्रक संगति): T = 27 + 273.15 = 300 K; R = 0.0821 L*atm/(mol*K); RT = 0.0821 * 300 = 24.63 L*atm/mol।",
+        "चरण 6 (बीजगणितीय गणना): Kp = 0.04 * 24.63 = 0.9852 atm ≈ 0.985 atm।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Delta n_g > 0 तथा T = 300 K पर Kp > Kc होना चाहिए (0.985 > 0.04), जो परिणाम से सिद्ध होता है। सही विकल्प (A) 0.985 atm है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Kp = 0.04 * 24.63 = 0.9852 atm। Delta n_g = +1 के लिए मात्रक atm सुसंगत है।",
+      "prerequisites": [
+        "chemistry.kp_kc_relation"
+      ]
+    },
+    {
+      "source_id": "chem-q09-jeemain-partial-pressure",
+      "question_number": 9,
+      "exam": "JEE Main 2019",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "mcq",
+      "statement": "एक पात्र में साम्य A(g) <=> B(g) + C(g) पर कुल साम्य दाब P_total = 3 atm है तथा साम्य पर A, B और C के मोलों की संख्या परस्पर समान है। Kp का मान क्या होगा?",
+      "options": [
+        "(A) 1 atm",
+        "(B) 3 atm",
+        "(C) 0.33 atm",
+        "(D) 9 atm"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "A(g) <=> B(g) + C(g)",
+        "P_total = 3 atm",
+        "साम्य पर A, B, C के मोल परस्पर समान"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "मोल प्रभाज X_i = 1/3 (समान मोल होने से)",
+        "डाल्टन का आंशिक दाब नियम P_i = X_i * P_total",
+        "Kp = (P_B * P_C) / P_A"
+      ],
+      "trap": "कुल दाब 3 atm को सीधे आंशिक दाब मान लेना",
+      "error_category": [
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION",
+        "ERR_CHEM_STOICHIOMETRIC_RATIO"
+      ],
+      "hints": {
+        "tier1_conceptual": "डाल्टन के आंशिक दाब नियमानुसार किसी गैस का आंशिक दाब उसके मोल प्रभाज और कुल दाब के गुणनफल के बराबर होता है।",
+        "tier2_strategic": "साम्य पर तीनों गैसों के मोल समान होने के कारण प्रत्येक का मोल प्रभाज X_i = 1/3 निकालें तथा P_i = X_i * P_total से आंशिक दाब ज्ञात करें।",
+        "tier3_next_step": "प्रत्येक गैस का आंशिक दाब (1/3) * 3 atm = 1 atm आता है। अब Kp = (P_B * P_C) / P_A में मान रखें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): समांगी गैसीय वियोजन साम्यावस्था A(g) <=> B(g) + C(g) कुल दाब 3 atm पर।",
+        "चरण 2 (संचालक सिद्धांत): डाल्टन का आंशिक दाब नियम P_i = X_i * P_total एवं Kp की परिभाषा।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): A(g) <=> B(g) + C(g) => Kp = (P_B * P_C) / P_A।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): तीनों के मोल समान (n_A = n_B = n_C = n) हैं, अतः कुल मोल = 3n; X_A = X_B = X_C = n/(3n) = 1/3।",
+        "चरण 5 (तापमान/मात्रक संगति): आंशिक दाब: P_A = P_B = P_C = (1/3) * 3 atm = 1.0 atm; Delta n_g = 2 - 1 = 1, अतः Kp का मात्रक atm है।",
+        "चरण 6 (बीजगणितीय गणना): Kp = (1.0 * 1.0) / 1.0 = 1.0 atm।",
+        "चरण 7 (रासायनिक सार्थकता जांच): प्रत्येक घटक का दाब 1 atm है तथा कुल दाब 1 + 1 + 1 = 3 atm संतुलित है। सही विकल्प (A) 1 atm है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): P_total = 1 + 1 + 1 = 3 atm। Kp = (1 * 1)/1 = 1 atm। डाल्टन का नियम पूर्णतः संतुष्ट है।",
+      "prerequisites": [
+        "chemistry.daltons_law",
+        "chemistry.partial_pressure"
+      ]
+    },
+    {
+      "source_id": "chem-q10-neet-kp-kc-unit",
+      "question_number": 10,
+      "exam": "NEET 2020",
+      "pattern_ref": "pat-chem-eq-kp-deltang",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया 2SO3(g) <=> 2SO2(g) + O2(g) के लिए Kp की SI/पारंपरिक इकाई क्या होगी?",
+      "options": [
+        "(A) atm",
+        "(B) atm^2",
+        "(C) atm^(-1)",
+        "(D) इकाई रहित (Dimensionless)"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "2SO3(g) <=> 2SO2(g) + O2(g)",
+        "Kp की विमीय/पारंपरिक इकाई",
+        "Delta n_g = (2 + 1) - 2 = 1"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "उत्पाद गैस मोल = 2 + 1 = 3; अभिकारक गैस मोल = 2",
+        "Delta n_g = 3 - 2 = +1",
+        "Kp की इकाई = (दाब की इकाई)^(Delta n_g) = atm^1"
+      ],
+      "trap": "Delta n_g = 2 - 3 = -1 समझकर atm^(-1) चुनना",
+      "error_category": [
+        "ERR_CHEM_DELTA_NG_GAS_ONLY",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "आंशिक दाब साम्य स्थिरांक Kp की सामान्य इकाई (atm)^(Delta n_g) या (bar)^(Delta n_g) होती है।",
+        "tier2_strategic": "रासायनिक समीकरण 2SO3(g) <=> 2SO2(g) + O2(g) से Delta n_g = n_p(g) - n_r(g) की गणना करें।",
+        "tier3_next_step": "उत्पाद के मोल 2 + 1 = 3 तथा अभिकारक के मोल 2 हैं। Delta n_g = 3 - 2 = 1 की घात लगाएं।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): सल्फर ट्राइऑक्साइड का ऊष्मीय वियोजन साम्य 2SO3(g) <=> 2SO2(g) + O2(g)।",
+        "चरण 2 (संचालक सिद्धांत): साम्य स्थिरांक Kp का विमीय विश्लेषण तथा Delta n_g पर निर्भरता।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): Kp = (P_SO2)^2 * (P_O2) / (P_SO3)^2।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): Delta n_g = (2 + 1) - 2 = 3 - 2 = +1।",
+        "चरण 5 (तापमान/मात्रक संगति): आंशिक दाब atm में मापे जाने पर Kp की इकाई = (atm)^2 * (atm) / (atm)^2 = (atm)^(Delta n_g)।",
+        "चरण 6 (बीजगणितीय गणना): इकाई = (atm)^(+1) = atm।",
+        "चरण 7 (रासायनिक सार्थकता जांच): चूंकि उत्पाद में एक मोल गैस अधिक उत्पन्न हो रही है, अतः व्यंजक में दाब का एक प्रथम घात पद शेष रहेगा। सही विकल्प (A) atm है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [atm^2 * atm] / [atm^2] = atm^1 = atm। विमीय सूत्र [M L^-1 T^-2] पूर्णतः सही है।",
+      "prerequisites": [
+        "chemistry.kp_kc_relation"
+      ]
+    },
+    {
+      "source_id": "chem-q11-cgl-le-chatelier-haber",
+      "question_number": 11,
+      "exam": "SSC CGL 2020 Tier 1",
+      "pattern_ref": "pat-chem-eq-le-chatelier",
+      "raw_type": "mcq",
+      "statement": "हैबर प्रक्रम N2(g) + 3H2(g) <=> 2NH3(g) + 92.4 kJ (ऊष्माक्षेपी) में अमोनिया की अधिकतम लब्धि (yield) हेतु अनुकूल परिस्थितियां क्या हैं?",
+      "options": [
+        "(A) उच्च दाब एवं निम्न ताप",
+        "(B) निम्न दाब एवं उच्च ताप",
+        "(C) उच्च दाब एवं उच्च ताप",
+        "(D) निम्न दाब एवं निम्न ताप"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "हैबर प्रक्रम N2 + 3H2 <=> 2NH3 + 92.4 kJ",
+        "ऊष्माक्षेपी अभिक्रिया (Delta H < 0)",
+        "ली-शातेलिए का सिद्धांत (दाब व ताप प्रभाव)"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "Delta n_g = 2 - 4 = -2 (कम मोल की ओर विस्थापन हेतु उच्च दाब आवश्यक)",
+        "ऊष्माक्षेपी होने के कारण ऊष्मा मुक्त करने वाली अग्र दिशा हेतु निम्न ताप अनुकूल"
+      ],
+      "trap": "उच्च ताप से दर बढ़ती है सोचकर साम्य लब्धि के लिए भी उच्च ताप चुन लेना",
+      "error_category": [
+        "ERR_CHEM_EXOTHERMIC_TEMP_REVERSAL",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "ली-शातेलिए के नियमानुसार बाह्य प्रतिबल (दाब व ताप परिवर्तन) का विरोध करने वाली दिशा में साम्य विस्थापित होता है।",
+        "tier2_strategic": "गैसीय मोलों में परिवर्तन (4 मोल अभिकारक -> 2 मोल उत्पाद) तथा एन्थैल्पी परिवर्तन (ऊष्माक्षेपी Delta H < 0) का अलग-अलग विश्लेषण करें।",
+        "tier3_next_step": "दाब वृद्धि साम्य को कम मोलों (अमोनिया) की ओर ले जाती है तथा ताप में कमी ऊष्माक्षेपी अग्र दिशा को प्रेरित करती है।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): अमोनिया का औद्योगिक हैबर प्रक्रम N2(g) + 3H2(g) <=> 2NH3(g) + 92.4 kJ।",
+        "चरण 2 (संचालक सिद्धांत): ली-शातेलिए का सिद्धांत (Le Chatelier's Principle) एवं वांट हॉफ ताप नियम।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): N2(g) + 3H2(g) <=> 2NH3(g); Delta n_g = 2 - (1 + 3) = -2; Delta H = -92.4 kJ (ऊष्माक्षेपी)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): अभिकारक के 4 मोल गैस उत्पाद के 2 मोल गैस बनाते हैं।",
+        "चरण 5 (तापमान/मात्रक संगति): उच्च दाब लगाने पर निकाय प्रति इकाई आयतन मोल घटाने हेतु अग्र दिशा में खिसकेगा; ताप घटाने पर निकाय ऊष्मा मुक्त करने हेतु अग्र दिशा में खिसकेगा।",
+        "चरण 6 (बीजगणितीय गणना): दोनों कारकों का संयुक्त प्रभाव: उच्च दाब (High Pressure) एवं निम्न ताप (Low Temperature) अधिकतम NH3 लब्धि देते हैं।",
+        "चरण 7 (रासायनिक सार्थकता जांच): औद्योगिक रूप से गतिज कारणों (दर) के लिए अनुकूलतम 700 K व 200 atm प्रयुक्त होता है, किंतु साम्यावस्था सिद्धांत के अनुसार 'उच्च दाब एवं निम्न ताप' ही अधिकतम लब्धि देते हैं। सही विकल्प (A) उच्च दाब एवं निम्न ताप है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Delta n_g = -2 < 0 => High P favors products; Delta H < 0 => Low T favors products। दोनों दशाएं अग्र विस्थापन सुनिश्चित करती हैं।",
+      "prerequisites": [
+        "chemistry.le_chatelier_principle"
+      ]
+    },
+    {
+      "source_id": "chem-q12-alp-catalyst-effect",
+      "question_number": 12,
+      "exam": "RRB ALP 2018 Shift 3",
+      "pattern_ref": "pat-chem-eq-le-chatelier",
+      "raw_type": "mcq",
+      "statement": "किसी उत्क्रमणीय अभिक्रिया में धनात्मक उत्प्रेरक मिलाने पर रासायनिक साम्यावस्था पर क्या प्रभाव पड़ता है?",
+      "options": [
+        "(A) साम्य सांद्रताएं तथा साम्य स्थिरांक K अपरिवर्तित रहते हैं, केवल साम्य शीघ्र स्थापित होता है",
+        "(B) अग्र अभिक्रिया की दर पश्च से अधिक बढ़ जाती है और साम्य स्थिरांक बढ़ जाता है",
+        "(C) उत्पादों की मात्रा में स्थायी वृद्धि हो जाती है",
+        "(D) साम्यावस्था पश्च दिशा में विस्थापित हो जाती है"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "उत्क्रमणीय रासायनिक साम्य में उत्प्रेरक का योग",
+        "साम्य स्थिरांक K तथा साम्य सांद्रताओं की अपरिवर्तनशीलता",
+        "सक्रियण ऊर्जा Ea में समान कमी"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "उत्प्रेरक अग्र (R_f) और पश्च (R_b) दोनों अभिक्रिया दरों को समान अनुपात में बढ़ाता है",
+        "K = k_f / k_b अपरिवर्तित रहता है",
+        "साम्य स्थिति (yield) में कोई परिवर्तन नहीं होता, केवल साम्य शीघ्र प्राप्त होता है"
+      ],
+      "trap": "यह सोचना कि उत्प्रेरक से उत्पाद की मात्रा या K बढ़ जाएगा",
+      "error_category": [
+        "ERR_CHEM_CATALYST_FALLACY",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "उत्प्रेरक अभिक्रिया की सक्रियण ऊर्जा (Activation Energy) घटाता है परंतु अभिकारकों और उत्पादों की मूल मुक्त ऊर्जा (Delta G°) को नहीं बदलता।",
+        "tier2_strategic": "चूंकि k_f और k_b दोनों समान गुणक से बढ़ते हैं, अतः साम्य स्थिरांक K = k_f / k_b पर प्रभाव का मूल्यांकन करें।",
+        "tier3_next_step": "विचार करें कि क्या उत्प्रेरक अंतिम साम्य संघटन को बदल सकता है या वह केवल साम्यावस्था तक पहुंचने की गति को तीव्र करता है।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): उत्क्रमणीय रासायनिक साम्यावस्था निकाय में धनात्मक उत्प्रेरक का योग।",
+        "चरण 2 (संचालक सिद्धांत): आरेनियस सिद्धांत, रासायनिक गतिकी एवं साम्यावस्था ऊष्मागतिकी।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): K = k_f / k_b तथा Delta G° = -RT ln K।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): उत्प्रेरक अग्र एवं पश्च दोनों दिशाओं की सक्रियण ऊर्जा (E_a,f तथा E_a,b) को ठीक समान मान (Delta E_a) से घटाता है।",
+        "चरण 5 (तापमान/मात्रक संगति): अग्र दर नियतांक k_f तथा पश्च दर नियतांक k_b दोनों समान अनुपात में बढ़ते हैं।",
+        "चरण 6 (बीजगणितीय गणना): नया साम्य स्थिरांक K' = (k_f * C) / (k_b * C) = k_f / k_b = K (अपरिवर्तित)।",
+        "चरण 7 (रासायनिक सार्थकता जांच): उत्प्रेरक केवल साम्य प्राप्ति के समय को घटाता है, साम्य सांद्रताओं या लब्धि को नहीं बदलता। सही विकल्प (A) है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Delta G° स्थिर है => K = exp(-Delta G°/RT) स्थिर है। उत्प्रेरक साम्य रचना को कभी परिवर्तित नहीं करता।",
+      "prerequisites": [
+        "chemistry.catalysis",
+        "chemistry.equilibrium_law"
+      ]
+    },
+    {
+      "source_id": "chem-q13-cds-inert-gas-constant-v",
+      "question_number": 13,
+      "exam": "UPSC CDS 2020",
+      "pattern_ref": "pat-chem-eq-le-chatelier",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया PCl5(g) <=> PCl3(g) + Cl2(g) के साम्य मिश्रण में स्थिर आयतन (Constant Volume) पर एक अक्रिय गैस (जैसे हीलियम) मिलाने पर क्या होगा?",
+      "options": [
+        "(A) साम्यावस्था पर कोई प्रभाव नहीं पड़ेगा",
+        "(B) PCl5 का वियोजन बढ़ जाएगा (अग्र दिशा)",
+        "(C) PCl5 का वियोजन घट जाएगा (पश्च दिशा)",
+        "(D) साम्य स्थिरांक Kc का मान बढ़ जाएगा"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "स्थिर आयतन (Constant Volume) पर अक्रिय गैस का योग",
+        "PCl5(g) <=> PCl3(g) + Cl2(g)",
+        "घटक आंशिक दाबों की स्थिरता"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "स्थिर आयतन पर कुल दाब बढ़ता है परंतु प्रत्येक घटक का आंशिक दाब P_i = n_i RT / V स्थिर रहता है",
+        "सांद्रताएं [X] = n_i / V नहीं बदलतीं, अतः साम्य अपरिवर्तित रहता है"
+      ],
+      "trap": "कुल दाब बढ़ने से यह मान लेना कि साम्य कम मोल की ओर खिसकेगा",
+      "error_category": [
+        "ERR_CHEM_INERT_GAS_CONSTANT_V_MISCONCEPTION",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "साम्यावस्था अभिकारकों और उत्पादों के आंशिक दाबों तथा मोलर सांद्रताओं पर निर्भर करती है, कुल दाब पर नहीं।",
+        "tier2_strategic": "स्थिर आयतन (V = constant) पर किसी घटक के आंशिक दाब P_i = n_i RT / V का विश्लेषण करें।",
+        "tier3_next_step": "जांचें कि अक्रिय गैस मिलाने से n_i, R, T अथवा V में से कोई राशि परिवर्तित होती है या नहीं।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): PCl5(g) <=> PCl3(g) + Cl2(g) के साम्य मिश्रण में स्थिर आयतन पर अक्रिय गैस (He/Ar) का योग।",
+        "चरण 2 (संचालक सिद्धांत): ली-शातेलिए का सिद्धांत एवं डाल्टन का आंशिक दाब नियम।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): Kc = [PCl3][Cl2]/[PCl5] तथा Kp = (P_PCl3 * P_Cl2) / P_PCl5।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): स्थिर आयतन पर अक्रिय गैस मिलाने से कुल मोल n_total बढ़ते हैं, जिससे कुल दाब P_total = n_total RT / V बढ़ता है।",
+        "चरण 5 (तापमान/मात्रक संगति): परंतु प्रत्येक भाग लेने वाली गैस का आंशिक दाब P_i = (n_i / V) RT होता है; n_i, V और T तीनों अपरिवर्तित हैं।",
+        "चरण 6 (बीजगणितीय गणना): चूंकि किसी भी रासायनिक स्पीशीज की मोलर सांद्रता [X] = n_i / V में कोई परिवर्तन नहीं होता, अतः Qc = Kc बना रहता है।",
+        "चरण 7 (रासायनिक सार्थकता जांच): स्थिर आयतन पर अक्रिय गैस का योग साम्य स्थिति को तनिक भी विस्थापित नहीं करता। सही विकल्प (A) साम्यावस्था पर कोई प्रभाव नहीं पड़ेगा है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [X] = n_i / V स्थिर है => Qc = Kc स्थिर है => साम्य अपरिवर्तित रहता है।",
+      "prerequisites": [
+        "chemistry.le_chatelier_principle",
+        "chemistry.daltons_law"
+      ]
+    },
+    {
+      "source_id": "chem-q14-jeemain-inert-gas-constant-p",
+      "question_number": 14,
+      "exam": "JEE Main 2021",
+      "pattern_ref": "pat-chem-eq-le-chatelier",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया N2O4(g) <=> 2NO2(g) के साम्य मिश्रण में स्थिर दाब (Constant Pressure) पर अक्रिय गैस मिलाने पर साम्य किस दिशा में विस्थापित होगा?",
+      "options": [
+        "(A) अग्र दिशा में (NO2 का निर्माण बढ़ेगा)",
+        "(B) पश्च दिशा में (N2O4 का निर्माण बढ़ेगा)",
+        "(C) साम्य पूरी तरह अपरिवर्तित रहेगा",
+        "(D) अभिक्रिया रुक जाएगी"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "स्थिर दाब (Constant Pressure) पर अक्रिय गैस का योग",
+        "N2O4(g) <=> 2NO2(g) (Delta n_g = 2 - 1 = +1)",
+        "पात्र के आयतन में वृद्धि"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "स्थिर दाब बनाए रखने के लिए अक्रिय गैस मिलाने पर कुल आयतन V बढ़ता है",
+        "आयतन बढ़ने से घटकों के आंशिक दाब घटते हैं",
+        "साम्य अधिक गैसीय मोलों (Delta n_g > 0) अर्थात अग्र दिशा में खिसकता है"
+      ],
+      "trap": "स्थिर आयतन और स्थिर दाब के प्रभाव को एक समान मान लेना",
+      "error_category": [
+        "ERR_CHEM_INERT_GAS_CONSTANT_V_MISCONCEPTION",
+        "ERR_CHEM_DELTA_NG_GAS_ONLY"
+      ],
+      "hints": {
+        "tier1_conceptual": "स्थिर दाब पर अक्रिय गैस मिलाने से कुल दाब नियत रखने के लिए पात्र का आयतन बढ़ जाता है, जो तनुकरण (dilution) के समान है।",
+        "tier2_strategic": "आयतन बढ़ने पर आंशिक दाब घटते हैं; ली-शातेलिए के नियमानुसार साम्य अधिक गैसीय मोलों की दिशा में विस्थापित होता है।",
+        "tier3_next_step": "अभिक्रिया N2O4(g) <=> 2NO2(g) में अभिकारकों के मोल (1) तथा उत्पादों के मोल (2) की तुलना करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): N2O4(g) <=> 2NO2(g) के साम्य मिश्रण में स्थिर दाब (P = constant) पर अक्रिय गैस का प्रवेश।",
+        "चरण 2 (संचालक सिद्धांत): ली-शातेलिए का सिद्धांत तथा स्थिर दाब पर आयतन प्रसार।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): N2O4(g) <=> 2NO2(g) => Delta n_g = 2 - 1 = +1।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): स्थिर दाब पर अक्रिय गैस मिलाने से निकाय का कुल आयतन V अनिवार्यतः बढ़ता है।",
+        "चरण 5 (तापमान/मात्रक संगति): आयतन V बढ़ने से प्रत्येक घटक का आंशिक दाब P_i = X_i * P_total = (n_i / n_total) * P_total घटता है।",
+        "चरण 6 (बीजगणितीय गणना): कल्पित भागफल Qp = (P_NO2)^2 / P_N2O4 = (n_NO2)^2 * P_total / (n_N2O4 * n_total) में n_total हर में होने से Qp < Kp हो जाता है; अतः Qp को Kp तक पहुंचाने हेतु अग्र अभिक्रिया होती है।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Delta n_g > 0 होने से स्थिर दाब पर अक्रिय गैस मिलाने से वियोजन बढ़ता है (अग्र दिशा)। सही विकल्प (A) अग्र दिशा में है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): V बढ़ता है => आंशिक दाब घटते हैं => साम्य अधिक मोलों (Delta n_g = +1, अग्र दिशा) की ओर खिसकता है।",
+      "prerequisites": [
+        "chemistry.le_chatelier_principle"
+      ]
+    },
+    {
+      "source_id": "chem-q15-ssc-endothermic-temp",
+      "question_number": 15,
+      "exam": "SSC CPO 2020",
+      "pattern_ref": "pat-chem-eq-le-chatelier",
+      "raw_type": "mcq",
+      "statement": "ऊष्माशोषी अभिक्रिया N2(g) + O2(g) <=> 2NO(g) - 180 kJ में तापमान बढ़ाने पर साम्य स्थिरांक Kc तथा NO के उत्पादन पर क्या प्रभाव पड़ेगा?",
+      "options": [
+        "(A) Kc बढ़ेगा तथा NO का उत्पादन बढ़ेगा",
+        "(B) Kc घटेगा तथा NO का उत्पादन घटेगा",
+        "(C) Kc अपरिवर्तित रहेगा परंतु NO बढ़ेगा",
+        "(D) Kc बढ़ेगा परंतु NO का उत्पादन घटेगा"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "ऊष्माशोषी अभिक्रिया (Endothermic Reaction Delta H > 0)",
+        "तापमान में वृद्धि",
+        "साम्य स्थिरांक Kc तथा उत्पाद की लब्धि पर प्रभाव"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "समीकरण में '- 180 kJ' लिखा है, अतः Delta H = +180 kJ (ऊष्माशोषी)",
+        "ऊष्माशोषी अभिक्रियाओं के लिए वांट हॉफ समीकरण के अनुसार ताप T बढ़ने पर Kc बढ़ता है",
+        "Kc बढ़ने पर साम्य अग्र दिशा में विस्थापित होता है जिससे NO बढ़ता है"
+      ],
+      "trap": "यह सोचना कि साम्य स्थिरांक K कभी परिवर्तित नहीं होता",
+      "error_category": [
+        "ERR_CHEM_EXOTHERMIC_TEMP_REVERSAL",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "साम्य स्थिरांक K का मान केवल तापमान पर निर्भर करता है; ऊष्माशोषी अभिक्रिया में ताप बढ़ाने पर K का मान बढ़ता है।",
+        "tier2_strategic": "वांट हॉफ समीकरण ln(K2/K1) = (Delta H / R) * (1/T1 - 1/T2) का विश्लेषण करें जहाँ Delta H > 0 है।",
+        "tier3_next_step": "जब ताप T2 > T1 हो और Delta H धनात्मक हो, तो K2 > K1 होगा; साम्य स्थिरांक बढ़ने पर उत्पाद की साम्य सांद्रता पर क्या प्रभाव पड़ेगा, विचार करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): नाइट्रोजन और ऑक्सीजन से नाइट्रिक ऑक्साइड निर्माण N2(g) + O2(g) <=> 2NO(g) - 180 kJ।",
+        "चरण 2 (संचालक सिद्धांत): ली-शातेलिए का सिद्धांत तथा वांट हॉफ समताप समीकरण (van 't Hoff equation)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): N2(g) + O2(g) <=> 2NO(g); Delta H° = +180 kJ/mol (ऊष्माशोषी)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): निकाय ऊष्मा अवशोषित करके अग्र दिशा में अग्रसर होता है।",
+        "चरण 5 (तापमान/मात्रक संगति): d(ln Kc)/dT = Delta H° / (RT^2) > 0; अतः ताप T में वृद्धि से Kc में अनिवार्य वृद्धि होगी।",
+        "चरण 6 (बीजगणितीय गणना): चूंकि Kc = [NO]^2 / ([N2][O2]) बढ़ता है, अतः अंश [NO] बढ़ेगा और साम्य अग्र दिशा में विस्थापित होगा।",
+        "चरण 7 (रासायनिक सार्थकता जांच): ऊष्मा देने पर निकाय ऊष्मा खपत करने वाली दिशा (ऊष्माशोषी अग्र दिशा) में जाकर अधिक NO उत्पन्न करता है। सही विकल्प (A) Kc बढ़ेगा तथा NO का उत्पादन बढ़ेगा है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Delta H > 0 => dK/dT > 0 => T बढ़ने पर K बढ़ता है तथा अग्र विस्थापन से NO का उत्पादन बढ़ता है।",
+      "prerequisites": [
+        "chemistry.vant_hoff_equation",
+        "chemistry.le_chatelier_principle"
+      ]
+    },
+    {
+      "source_id": "chem-q16-jeemain-qc-forward",
+      "question_number": 16,
+      "exam": "JEE Main 2018",
+      "pattern_ref": "pat-chem-eq-quotient-q",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया A + B <=> C + D हेतु 298 K पर Kc = 100 है। यदि किसी क्षण मिश्रण में [A] = [B] = 0.5 M तथा [C] = [D] = 2.0 M हों, तो निकाय की तात्कालिक स्थिति क्या होगी?",
+      "options": [
+        "(A) Qc = 16 < Kc, अतः अभिक्रिया अग्र दिशा में जाएगी",
+        "(B) Qc = 16 > Kc, अतः अभिक्रिया पश्च दिशा में जाएगी",
+        "(C) Qc = 64 > Kc, अतः अभिक्रिया पश्च दिशा में जाएगी",
+        "(D) Qc = 4 < Kc, अतः अभिक्रिया साम्यावस्था छोड़ देगी"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "A + B <=> C + D, Kc = 100",
+        "तात्कालिक सांद्रताएं दी गई हैं (असाम्यावस्था)",
+        "Qc तथा Kc की तुलना द्वारा दिशा का पूर्वानुमान"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "अभिक्रिया भागफल Qc = ([C][D])/([A][B])",
+        "यदि Qc < Kc तो अभिक्रिया अग्र दिशा में जाती है",
+        "यदि Qc > Kc तो पश्च दिशा में जाती है"
+      ],
+      "trap": "Qc की तुलना का चिन्ह उलट देना",
+      "error_category": [
+        "ERR_CHEM_DIRECTION_CRITERION_INVERSION",
+        "ERR_CHEM_TRANSIENT_CONCENTRATION_NEGLECT"
+      ],
+      "hints": {
+        "tier1_conceptual": "अभिक्रिया भागफल Qc किसी भी क्षण के सांद्रता अनुपात को दर्शाता है; यदि Qc < Kc हो तो साम्य प्राप्ति हेतु उत्पाद बनने की अग्र दिशा में अभिक्रिया होती है।",
+        "tier2_strategic": "Qc = ([C] * [D]) / ([A] * [B]) स्थापित करें तथा दिए गए मान प्रतिस्थापित कर Qc की गणना करें।",
+        "tier3_next_step": "अंश में 2.0 * 2.0 = 4.0 तथा हर में 0.5 * 0.5 = 0.25 रखें; 4.0 को 0.25 से भाग देकर प्राप्त मान की तुलना Kc = 100 से करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): उत्क्रमणीय समांगी रासायनिक अभिक्रिया A + B <=> C + D, 298 K पर असाम्यावस्था में।",
+        "चरण 2 (संचालक सिद्धांत): अभिक्रिया भागफल Qc एवं साम्य स्थिरांक Kc की तुलनात्मक दिशा कसौटी।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): A + B <=> C + D => Qc = ([C][D]) / ([A][B])।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): तात्कालिक सांद्रताएं: [A] = 0.5 M, [B] = 0.5 M, [C] = 2.0 M, [D] = 2.0 M।",
+        "चरण 5 (तापमान/मात्रक संगति): T = 298 K पर Kc = 100 (इकाई रहित); Qc भी इकाई रहित है।",
+        "चरण 6 (बीजगणितीय गणना): Qc = (2.0 * 2.0) / (0.5 * 0.5) = 4.0 / 0.25 = 16।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Qc = 16 तथा Kc = 100 => Qc < Kc। चूंकि वर्तमान में उत्पाद कम हैं, साम्य तक पहुंचने के लिए शुद्ध अग्र अभिक्रिया होगी। सही विकल्प (A) है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Qc = 4 / 0.25 = 16। 16 < 100 => अग्र दिशा (Forward shift)।",
+      "prerequisites": [
+        "chemistry.reaction_quotient"
+      ]
+    },
+    {
+      "source_id": "chem-q17-neet-qc-reverse",
+      "question_number": 17,
+      "exam": "NEET 2019",
+      "pattern_ref": "pat-chem-eq-quotient-q",
+      "raw_type": "mcq",
+      "statement": "अभिक्रिया 2A <=> B + C के लिए Kc = 2 * 10^-3 है। यदि दिए गए क्षण पर [A] = 1.0 M, [B] = 0.1 M, [C] = 0.1 M हों, तो क्या होगा?",
+      "options": [
+        "(A) Qc = 10^-2 > Kc, अतः अभिक्रिया पश्च दिशा में चलेगी",
+        "(B) Qc = 10^-3 < Kc, अतः अभिक्रिया अग्र दिशा में चलेगी",
+        "(C) Qc = Kc, अतः निकाय साम्य में रहेगा",
+        "(D) कोई अभिक्रिया नहीं होगी"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "2A <=> B + C",
+        "Kc = 2 * 10^-3",
+        "Qc > Kc की स्थिति"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "A का गुणांक 2 होने से हर में [A]^2 = 1.0^2 = 1",
+        "Qc = (0.1 * 0.1) / 1.0 = 0.01 = 10^-2",
+        "10^-2 (0.01) > 2 * 10^-3 (0.002) => पश्च दिशा"
+      ],
+      "trap": "10^-3 को 10^-2 से बड़ा समझ लेना (घातांक के परिमाण में भ्रम)",
+      "error_category": [
+        "ERR_CHEM_DIRECTION_CRITERION_INVERSION",
+        "ERR_CHEM_LOG_OPERATION_ERROR"
+      ],
+      "hints": {
+        "tier1_conceptual": "जब किसी क्षण उत्पाद सांद्रताओं का अनुपात साम्य अनुपात से अधिक हो जाता है (Qc > Kc), तो साम्य पुनर्संस्थापन हेतु पश्च अभिक्रिया होती है।",
+        "tier2_strategic": "Qc = ([B] * [C]) / [A]^2 लिखें तथा [A]=1.0, [B]=0.1, [C]=0.1 मान रखें।",
+        "tier3_next_step": "अंश में 0.1 * 0.1 = 0.01 = 10^-2 निकालें और हर में 1.0^2 = 1 रखें। अब 0.01 की तुलना 0.002 (Kc) से करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): गैसीय अपघटन साम्य 2A <=> B + C, असाम्यावस्था में।",
+        "चरण 2 (संचालक सिद्धांत): अभिक्रिया भागफल Qc एवं साम्य स्थिरांक Kc का तुलनात्मक नियम।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): 2A <=> B + C => Qc = ([B][C]) / [A]^2।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): तात्कालिक सांद्रताएं: [A] = 1.0 M, [B] = 0.1 M, [C] = 0.1 M।",
+        "चरण 5 (तापमान/मात्रक संगति): Kc = 2 * 10^-3 = 0.002।",
+        "चरण 6 (बीजगणितीय गणना): Qc = (0.1 * 0.1) / (1.0)^2 = 0.01 / 1.0 = 10^-2 = 0.010।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Qc (0.010) > Kc (0.002)। उत्पाद आवश्यकता से अधिक हैं, अतः निकाय उत्पादों को अभिकारकों में बदलने हेतु पश्च दिशा में चलेगा। सही विकल्प (A) है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Qc = 10^-2 = 0.01 > 2*10^-3 = 0.002 => पश्च अभिक्रिया (Reverse direction)।",
+      "prerequisites": [
+        "chemistry.reaction_quotient"
+      ]
+    },
+    {
+      "source_id": "chem-q18-nda-qc-equilibrium",
+      "question_number": 18,
+      "exam": "UPSC NDA 2022",
+      "pattern_ref": "pat-chem-eq-quotient-q",
+      "raw_type": "mcq",
+      "statement": "यदि किसी रासायनिक अभिक्रिया में किसी समय अभिक्रिया भागफल Qc का मान साम्य स्थिरांक Kc के बिल्कुल बराबर हो जाए (Qc = Kc), तो इसका क्या अर्थ है?",
+      "options": [
+        "(A) निकाय गतिक साम्यावस्था में है और शुद्ध अभिक्रिया दर शून्य है",
+        "(B) अग्र अभिक्रिया की दर पश्च अभिक्रिया की दर से दोगुनी है",
+        "(C) अभिकारक पूर्णतः समाप्त हो चुके हैं",
+        "(D) अभिक्रिया विपरीत दिशा में मुड़ जाएगी"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "Qc = Kc की सैद्धांतिक अवस्था",
+        "गतिक साम्यावस्था (Dynamic Equilibrium)",
+        "अग्र दर = पश्च दर"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "Qc = Kc होने पर अग्र और पश्च दरें बराबर हो जाती हैं",
+        "शुद्ध दर (net rate) शून्य होती है परंतु अभिक्रिया रुकती नहीं है"
+      ],
+      "trap": "यह सोचना कि रासायनिक अभिक्रिया पूर्णतः रुक गई है या स्थैतिक हो गई है",
+      "error_category": [
+        "ERR_CHEM_DIRECTION_CRITERION_INVERSION",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "रासायनिक साम्यावस्था गतिक (dynamic) होती है, जहाँ अग्र और पश्च दोनों अभिक्रियाएं समान दर से चलती रहती हैं।",
+        "tier2_strategic": "जब Qc = Kc हो जाता है, तो अग्र अभिक्रिया दर R_f और पश्च अभिक्रिया दर R_b के संबंध का विश्लेषण करें।",
+        "tier3_next_step": "विचार करें कि क्या सांद्रताओं में समय के साथ कोई शुद्ध परिवर्तन होगा जब दोनों दरें परस्पर बराबर हो जाएं।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): उत्क्रमणीय रासायनिक निकाय में तात्कालिक सांद्रता अनुपात Qc का परीक्षण।",
+        "चरण 2 (संचालक सिद्धांत): रासायनिक साम्य की गतिक प्रकृति (Dynamic Equilibrium Concept)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): R_f = k_f [Reactants], R_b = k_b [Products]; साम्य पर R_f = R_b।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): Qc = Kc होने का सीधा अर्थ है कि सांद्रताओं का अनुपात ठीक वही है जो साम्यावस्था के लिए आवश्यक है।",
+        "चरण 5 (तापमान/मात्रक संगति): इस स्थिति में रासायनिक विभव Delta G = 0 हो जाता है।",
+        "चरण 6 (बीजगणितीय गणना): शुद्ध अभिक्रिया दर = R_f - R_b = 0।",
+        "चरण 7 (रासायनिक सार्थकता जांच): निकाय गतिक साम्य में रहता है; अणु निरंतर परस्पर परिवर्तित होते रहते हैं किंतु स्थूल गुणधर्म (सांद्रता, दाब, रंग) अपरिवर्तित रहते हैं। सही विकल्प (A) है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Qc = Kc => Delta G = 0 => R_forward = R_reverse => Dynamic Equilibrium.",
+      "prerequisites": [
+        "chemistry.dynamic_equilibrium"
+      ]
+    },
+    {
+      "source_id": "chem-q19-cgl-delta-g-qc",
+      "question_number": 19,
+      "exam": "SSC CGL 2021 Tier 2",
+      "pattern_ref": "pat-chem-eq-quotient-q",
+      "raw_type": "mcq",
+      "statement": "गिब्स मुक्त ऊर्जा परिवर्तन Delta G तथा साम्य स्थिरांक K के बीच संबंध Delta G = Delta G° + RT ln Q होता है। साम्यावस्था पर Delta G और Delta G° के मान क्या होते हैं?",
+      "options": [
+        "(A) Delta G = 0 तथा Delta G° = -RT ln K",
+        "(B) Delta G° = 0 तथा Delta G = -RT ln K",
+        "(C) Delta G = Delta G° = 0",
+        "(D) Delta G > 0 तथा Delta G° < 0"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "Delta G = Delta G° + RT ln Q",
+        "साम्यावस्था पर Delta G का मान",
+        "मानक मुक्त ऊर्जा परिवर्तन Delta G° का मान"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "साम्यावस्था पर वास्तविक मुक्त ऊर्जा परिवर्तन Delta G = 0 होता है",
+        "Q = K रखने पर 0 = Delta G° + RT ln K => Delta G° = -RT ln K"
+      ],
+      "trap": "Delta G और Delta G° दोनों को शून्य मान लेना",
+      "error_category": [
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION",
+        "ERR_CHEM_DIRECTION_CRITERION_INVERSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "साम्यावस्था पर निकाय की मुक्त ऊर्जा न्यूनतम होती है, जिसके कारण वास्तविक मुक्त ऊर्जा परिवर्तन Delta G शून्य हो जाता है।",
+        "tier2_strategic": "समीकरण Delta G = Delta G° + RT ln Q में साम्यावस्था की शर्तें Delta G = 0 तथा Q = K प्रतिस्थापित करें।",
+        "tier3_next_step": "0 = Delta G° + RT ln K को Delta G° के लिए पुनर्व्यवस्थित करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): रासायनिक साम्यावस्था का ऊष्मागतिक आधार एवं गिब्स मुक्त ऊर्जा फलन।",
+        "चरण 2 (संचालक सिद्धांत): ऊष्मागतिकी का द्वितीय नियम एवं साम्यावस्था कसौटी (Delta G_T,P = 0)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): Delta G = Delta G° + RT ln Q।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): साम्यावस्था पर अभिक्रिया भागफल Q साम्य स्थिरांक K के बराबर हो जाता है (Q = K)।",
+        "चरण 5 (तापमान/मात्रक संगति): T केल्विन में तथा R सार्वत्रिक गैस नियतांक (8.314 J/(mol*K))।",
+        "चरण 6 (बीजगणितीय गणना): 0 = Delta G° + RT ln K => Delta G° = -RT ln K।",
+        "चरण 7 (रासायनिक सार्थकता जांच): Delta G = 0 साम्य की गतिक स्थिति बताता है जबकि Delta G° = -RT ln K साम्य स्थिरांक का परिमाण निर्धारित करता है। सही विकल्प (A) Delta G = 0 तथा Delta G° = -RT ln K है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): Equilibrium condition: Delta G = 0 and Q = K => Delta G° = -RT ln K. ऊष्मागतिक रूप से पूर्णतः प्रामाणिक।",
+      "prerequisites": [
+        "chemistry.thermodynamics_equilibrium"
+      ]
+    },
+    {
+      "source_id": "chem-q20-rrb-je-k-manipulation",
+      "question_number": 20,
+      "exam": "RRB JE 2019",
+      "pattern_ref": "pat-chem-eq-quotient-q",
+      "raw_type": "mcq",
+      "statement": "यदि अभिक्रिया A <=> B के लिए साम्य स्थिरांक K1 = 4 हो, तो अभिक्रिया 2B <=> 2A के लिए साम्य स्थिरांक K2 क्या होगा?",
+      "options": [
+        "(A) 1/16",
+        "(B) 1/8",
+        "(C) 16",
+        "(D) 1/4"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "A <=> B (K1 = 4)",
+        "2B <=> 2A (K2 का मान ज्ञात करना)",
+        "अभिक्रिया का उत्क्रमण तथा स्टोइकिओमेट्रिक गुणन"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "अभिक्रिया उलटने पर K' = 1/K1",
+        "2 से गुणा करने पर K2 = (K')^2 = (1/K1)^2"
+      ],
+      "trap": "2 से गुणा करने पर K को सीधे 2 से भाग दे देना (4/2 = 2)",
+      "error_category": [
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION",
+        "ERR_CHEM_STOICHIOMETRIC_POWER_MISS"
+      ],
+      "hints": {
+        "tier1_conceptual": "रासायनिक समीकरण में किए गए गणितीय रूपांतरण साम्य स्थिरांक पर घातांकीय प्रभाव डालते हैं; उलटने पर व्युत्क्रम तथा गुणा करने पर घात बनती है।",
+        "tier2_strategic": "पहले अभिक्रिया B <=> A के लिए स्थिरांक निकालें, फिर उसे 2 से गुणा करने पर प्राप्त नई घात लागू करें।",
+        "tier3_next_step": "व्युत्क्रम करने पर 1/4 प्राप्त होता है; अब समीकरण को 2 से गुणा करने के कारण (1/4)^2 की गणना करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): रासायनिक समीकरणों के बीजगणितीय रूपांतरण पर साम्य स्थिरांक K का व्यवहार।",
+        "चरण 2 (संचालक सिद्धांत): द्रव्य अनुपाती क्रिया नियम के साम्य स्थिरांक बीजगणित नियम।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): मूल अभिक्रिया: A <=> B => K1 = [B]/[A] = 4।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): लक्षित अभिक्रिया: 2B <=> 2A => K2 = [A]^2 / [B]^2।",
+        "चरण 5 (तापमान/मात्रक संगति): तापमान समान रहने के कारण K1 और K2 का संबंध शुद्ध बीजगणितीय है।",
+        "चरण 6 (बीजगणितीय गणना): K2 = ([A]/[B])^2 = (1 / K1)^2 = (1/4)^2 = 1/16।",
+        "चरण 7 (रासायनिक सार्थकता जांच): मूल अभिक्रिया में B का बनना अनुकूल था (K1=4>1), अतः 2B से 2A बनना अत्यंत प्रतिकूल होगा (K2=1/16 < 1), जो यथार्थ है। सही विकल्प (A) 1/16 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): K2 = (1/4)^2 = 1/16। साम्य स्थिरांक हेरफेर नियम पूर्णतः संतुष्ट हैं।",
+      "prerequisites": [
+        "chemistry.equilibrium_algebra"
+      ]
+    },
+    {
+      "source_id": "chem-q21-alp-ph-hcl",
+      "question_number": 21,
+      "exam": "RRB ALP 2018 Shift 1",
+      "pattern_ref": "pat-chem-eq-ionic-ph-buffer",
+      "raw_type": "mcq",
+      "statement": "25°C पर 0.001 M हाइड्रोक्लोरिक अम्ल (HCl) के जलीय विलयन का pH मान क्या होगा?",
+      "options": [
+        "(A) 3",
+        "(B) 11",
+        "(C) 1",
+        "(D) 4"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "0.001 M HCl प्रबल एकक्षारकीय अम्ल",
+        "25°C ताप पर जलीय विलयन",
+        "pH मान की गणना"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "HCl पूर्णतः आयनित होता है, [H+] = 0.001 M = 10^-3 M",
+        "pH = -log10[H+] = -log10(10^-3) = 3"
+      ],
+      "trap": "0.001 को 10^-2 समझ लेना",
+      "error_category": [
+        "ERR_CHEM_LOG_OPERATION_ERROR",
+        "ERR_CHEM_PH_LOG_ARITHMETIC"
+      ],
+      "hints": {
+        "tier1_conceptual": "HCl एक प्रबल एकक्षारकीय खनिज अम्ल है जो जलीय विलयन में पूर्णतः वियोजित होकर समान मोलरता के H+ आयन देता है।",
+        "tier2_strategic": "pH = -log10[H+] सूत्र का उपयोग करें और सांद्रता 0.001 M को 10 की ऋणात्मक घात (10^-n) के रूप में लिखें।",
+        "tier3_next_step": "0.001 M = 10^-3 M लिखें। अब -log10(10^-3) का मान सरल करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): प्रबल अम्ल हाइड्रोक्लोरिक एसिड का जलीय विलयन 25°C पर।",
+        "चरण 2 (संचालक सिद्धांत): सॉरेन्सन की pH संकल्पना एवं प्रबल विद्युत-अपघट्य का पूर्ण वियोजन सिद्धांत।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): HCl(aq) -> H+(aq) + Cl-(aq) (पूर्ण आयनन)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): 1 mol HCl => 1 mol H+; अतः [H+] = [HCl] = 0.001 M = 10^-3 M।",
+        "चरण 5 (तापमान/मात्रक संगति): 25°C पर जल का Kw = 10^-14; [H+] = 10^-3 M जल के 10^-7 M की तुलना में अत्यधिक प्रबल है, अतः जल का आयनन नगण्य है।",
+        "चरण 6 (बीजगणितीय गणना): pH = -log10[H+] = -log10(10^-3) = -(-3 * log10(10)) = 3 * 1 = 3।",
+        "चरण 7 (रासायनिक सार्थकता जांच): अम्लीय विलयन के लिए 25°C पर pH < 7 होना चाहिए; pH = 3 प्रबल अम्लीय विलयन के लिए पूर्णतः संगत है। सही विकल्प (A) 3 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [H+] = 10^-3 M => pH = 3.0। pH 0 से 14 के वैध परास में है और अम्लीय माध्यम की पुष्टि करता है।",
+      "prerequisites": [
+        "chemistry.ph_concept"
+      ]
+    },
+    {
+      "source_id": "chem-q22-jeemain-ph-naoh",
+      "question_number": 22,
+      "exam": "JEE Main 2020",
+      "pattern_ref": "pat-chem-eq-ionic-ph-buffer",
+      "raw_type": "mcq",
+      "statement": "25°C पर 0.01 M सोडियम हाइड्रॉक्साइड (NaOH) विलयन का pH मान क्या होगा? (जल का Kw = 10^-14)",
+      "options": [
+        "(A) 12",
+        "(B) 2",
+        "(C) 7",
+        "(D) 10"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "0.01 M NaOH प्रबल क्षार",
+        "25°C ताप पर Kw = 10^-14",
+        "क्षार का pH मान"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "NaOH क्षार है, अतः पहले [OH-] = 0.01 M = 10^-2 M से pOH = 2 निकलेगा",
+        "pH = 14 - pOH = 14 - 2 = 12"
+      ],
+      "trap": "pOH = 2 को ही सीधे pH समझ लेना (विकल्प B)",
+      "error_category": [
+        "ERR_CHEM_BASE_POH_CONFUSION",
+        "ERR_CHEM_LOG_OPERATION_ERROR"
+      ],
+      "hints": {
+        "tier1_conceptual": "NaOH एक प्रबल क्षार है जो जलीय विलयन में OH- आयन प्रदान करता है; क्षार के लिए पहले pOH ज्ञात कर फिर pH की गणना की जाती है।",
+        "tier2_strategic": "pOH = -log10[OH-] सूत्र से pOH निकालें तथा 25°C पर जल के आयनिक गुणनफल संबंध pH + pOH = 14 का प्रयोग करें।",
+        "tier3_next_step": "[OH-] = 0.01 M = 10^-2 M है, अतः pOH = 2 प्राप्त होता है। अब 14 में से इस pOH मान को घटाएं।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): प्रबल क्षार सोडियम हाइड्रॉक्साइड का जलीय विलयन 25°C पर।",
+        "चरण 2 (संचालक सिद्धांत): आरेनियस क्षार सिद्धांत तथा जल का आयनिक गुणनफल (Ionic Product of Water Kw)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): NaOH(aq) -> Na+(aq) + OH-(aq); Kw = [H+][OH-] = 10^-14 (25°C पर)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): [OH-] = [NaOH] = 0.01 M = 10^-2 M।",
+        "चरण 5 (तापमान/मात्रक संगति): 25°C पर pKw = pH + pOH = 14।",
+        "चरण 6 (बीजगणितीय गणना): pOH = -log10[OH-] = -log10(10^-2) = 2; pH = 14 - pOH = 14 - 2 = 12।",
+        "चरण 7 (रासायनिक सार्थकता जांच): क्षारीय विलयन के लिए pH > 7 होना चाहिए; pH = 12 तीव्र क्षारीय माध्यम को सही दर्शाता है (pH=2 अम्लीय होता जो क्षार के लिए असंभव है)। सही विकल्प (A) 12 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [OH-] = 10^-2 M => pOH = 2 => pH = 14 - 2 = 12 > 7 (Basic medium verified).",
+      "prerequisites": [
+        "chemistry.ph_poh_relation"
+      ]
+    },
+    {
+      "source_id": "chem-q23-cgl-ph-baoh2",
+      "question_number": 23,
+      "exam": "SSC CGL 2022 Tier 1",
+      "pattern_ref": "pat-chem-eq-ionic-ph-buffer",
+      "raw_type": "mcq",
+      "statement": "25°C पर 0.005 M बेरियम हाइड्रॉक्साइड Ba(OH)2 के जलीय विलयन का pH मान क्या होगा?",
+      "options": [
+        "(A) 12",
+        "(B) 11.7",
+        "(C) 2.3",
+        "(D) 13"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "0.005 M Ba(OH)2 द्विक्षारीय भस्म (diacidic base)",
+        "[OH-] में गुणांक 2 का प्रभाव",
+        "25°C पर pH मान"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "Ba(OH)2 पूर्ण वियोजन पर प्रति अणु 2 OH- देता है",
+        "[OH-] = 2 * 0.005 M = 0.01 M = 10^-2 M",
+        "pOH = 2 => pH = 14 - 2 = 12"
+      ],
+      "trap": "द्विक्षारीय गुणांक 2 से गुणा न करना और [OH-] = 0.005 मान लेना",
+      "error_category": [
+        "ERR_CHEM_DIPROTIC_FACTOR",
+        "ERR_CHEM_VALENCY_FACTOR_MISS"
+      ],
+      "hints": {
+        "tier1_conceptual": "Ba(OH)2 एक द्विक्षारीय प्रबल भस्म है; इसके पूर्ण वियोजन से प्रति मोल दो मोल OH- आयन प्राप्त होते हैं।",
+        "tier2_strategic": "हाइड्रोक्साइड आयन सांद्रता [OH-] = 2 * Molarity निर्धारित करें, तत्पश्चात pOH निकालकर pH = 14 - pOH सूत्र लगाएं।",
+        "tier3_next_step": "[OH-] की गणना करें: 2 * 0.005 M = 0.01 M = 10^-2 M। अब pOH = 2 प्राप्त कर 14 में से घटाएं।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): द्विक्षारीय प्रबल क्षार बेरियम हाइड्रॉक्साइड Ba(OH)2 का जलीय विलयन।",
+        "चरण 2 (संचालक सिद्धांत): स्टोइकिओमेट्रिक आयनन एवं क्षारकता/अम्लता गुणांक (n-factor)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): Ba(OH)2(aq) -> Ba^2+(aq) + 2OH-(aq)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): 1 mol Ba(OH)2 से 2 mol OH- बनते हैं; अतः [OH-] = 2 * [Ba(OH)2] = 2 * 0.005 M = 0.01 M = 10^-2 M।",
+        "चरण 5 (तापमान/मात्रक संगति): 25°C पर pH + pOH = 14।",
+        "चरण 6 (बीजगणितीय गणना): pOH = -log10(10^-2) = 2; pH = 14 - 2 = 12।",
+        "चरण 7 (रासायनिक सार्थकता जांच): द्विक्षारीय क्षार होने से 0.005 M Ba(OH)2 की नॉर्मलता 0.01 N है, जो 0.01 M NaOH के समतुल्य होकर pH = 12 देती है। सही विकल्प (A) 12 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [OH-] = 2 * 0.005 = 0.01 M = 10^-2 M => pOH = 2 => pH = 12.0। संयोजकता गुणांक 2 पूर्णतः सत्यापित।",
+      "prerequisites": [
+        "chemistry.ph_poh_relation",
+        "chemistry.stoichiometry"
+      ]
+    },
+    {
+      "source_id": "chem-q24-neet-ostwald-dilution",
+      "question_number": 24,
+      "exam": "NEET 2021",
+      "pattern_ref": "pat-chem-eq-ionic-ph-buffer",
+      "raw_type": "mcq",
+      "statement": "0.1 M ऐसीटिक अम्ल (CH3COOH, Ka = 1.8 * 10^-5) के वियोजन की मात्रा \\alpha (Degree of Dissociation) लगभग कितनी होगी?",
+      "options": [
+        "(A) 1.34 * 10^-2 (1.34%)",
+        "(B) 1.8 * 10^-4",
+        "(C) 0.134",
+        "(D) 1.8 * 10^-3"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2.5,
+      "recognition_signals": [
+        "दुर्बल अम्ल CH3COOH, C = 0.1 M, Ka = 1.8 * 10^-5",
+        "ऑस्टवाल्ड तनुता नियम",
+        "वियोजन की मात्रा \\alpha का निर्धारण"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "दुर्बल अम्ल के लिए \\alpha << 1 होने से Ka = C * \\alpha^2",
+        "\\alpha = sqrt(Ka / C) = sqrt((1.8 * 10^-5)/0.1) = sqrt(1.8 * 10^-4)",
+        "sqrt(1.8 * 10^-4) = 1.34 * 10^-2"
+      ],
+      "trap": "वर्गमूल न लेना और सीधे Ka / C = 1.8 * 10^-4 लिख देना",
+      "error_category": [
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION",
+        "ERR_CHEM_LOG_OPERATION_ERROR"
+      ],
+      "hints": {
+        "tier1_conceptual": "दुर्बल विद्युत-अपघट्यों के लिए ऑस्टवाल्ड के तनुता नियमानुसार वियोजन की मात्रा \\alpha सांद्रता के वर्गमूल के व्युत्क्रमानुपाती होती है।",
+        "tier2_strategic": "चूंकि \\alpha का मान 5% से कम होता है, अतः सन्निकटन सूत्र \\alpha = sqrt(Ka / C) का प्रयोग करें।",
+        "tier3_next_step": "Ka / C = (1.8 * 10^-5) / 0.1 = 1.8 * 10^-4 = 180 * 10^-6 निकालें। अब 1.8 * 10^-4 का वर्गमूल ज्ञात करें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): दुर्बल मोनोबेसिक कार्बनिक अम्ल ऐसीटिक एसिड (CH3COOH) का जलीय आयनन साम्य।",
+        "चरण 2 (संचालक सिद्धांत): दुर्बल विद्युत-अपघट्यों हेतु ऑस्टवाल्ड तनुता नियम (Ostwald's Dilution Law)।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): CH3COOH <=> CH3COO- + H+; Ka = (C\\alpha * C\\alpha) / (C(1 - \\alpha)) = C\\alpha^2 / (1 - \\alpha)।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): चूंकि Ka = 1.8 * 10^-5 अत्यंत छोटा है, अतः \\alpha << 1; 1 - \\alpha ≈ 1 मानने पर Ka ≈ C\\alpha^2।",
+        "चरण 5 (तापमान/मात्रक संगति): C = 0.1 mol/L, Ka = 1.8 * 10^-5 mol/L; \\alpha विमाहीन प्रभाज है।",
+        "चरण 6 (बीजगणितीय गणना): \\alpha = sqrt(Ka / C) = sqrt((1.8 * 10^-5) / 0.1) = sqrt(1.8 * 10^-4) = sqrt(180 * 10^-6) ≈ 1.3416 * 10^-2 = 1.34%।",
+        "चरण 7 (रासायनिक सार्थकता जांच): \\alpha = 0.0134 < 0.05 (1.34% < 5%), अतः सन्निकटन 1 - \\alpha ≈ 1 पूर्णतः वैध सिद्ध होता है। सही विकल्प (A) 1.34 * 10^-2 (1.34%) है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): \\alpha = sqrt(1.8*10^-4) = 1.34*10^-2। 1.34% < 5% होने से ऑस्टवाल्ड सन्निकटन पूर्णतः सही है।",
+      "prerequisites": [
+        "chemistry.ostwald_dilution_law"
+      ]
+    },
+    {
+      "source_id": "chem-q25-jeemain-buffer-henderson",
+      "question_number": 25,
+      "exam": "JEE Main 2022",
+      "pattern_ref": "pat-chem-eq-ionic-ph-buffer",
+      "raw_type": "mcq",
+      "statement": "एक अम्लीय बफर विलयन में 0.1 M ऐसीटिक अम्ल (pKa = 4.74) तथा 0.1 M सोडियम ऐसीटेट उपस्थित हैं। हेन्डरसन-हेसेलबाल्च समीकरण के अनुसार इस बफर का pH क्या होगा?",
+      "options": [
+        "(A) 4.74",
+        "(B) 5.74",
+        "(C) 3.74",
+        "(D) 7.00"
+      ],
+      "correct_answer": "(A)",
+      "difficulty": 2,
+      "recognition_signals": [
+        "अम्लीय बफर (CH3COOH + CH3COONa)",
+        "pKa = 4.74, [Acid] = 0.1 M, [Salt] = 0.1 M",
+        "हेन्डरसन-हेसेलबाल्च समीकरण"
+      ],
+      "expected_method": "चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच",
+      "decision_points": [
+        "[Salt] = [Acid] = 0.1 M होने से अनुपात [Salt]/[Acid] = 1",
+        "log10(1) = 0 होने के कारण pH = pKa"
+      ],
+      "trap": "log10(1) को 1 मानकर pH = 4.74 + 1 = 5.74 कर देना",
+      "error_category": [
+        "ERR_CHEM_LOG_OPERATION_ERROR",
+        "ERR_CHEM_EQUILIBRIUM_EXPRESSION"
+      ],
+      "hints": {
+        "tier1_conceptual": "हेन्डरसन-हेसेलबाल्च समीकरण के अनुसार जब बफर में अम्ल तथा उसके संयुग्मी क्षार (लवण) की सांद्रताएं बराबर हों, तो बफर का pH उसके pKa के बराबर होता है।",
+        "tier2_strategic": "सूत्र pH = pKa + log10([Salt] / [Acid]) स्थापित करें तथा दिए गए मान [Salt] = 0.1 M और [Acid] = 0.1 M रखें।",
+        "tier3_next_step": "सांद्रता अनुपात [Salt]/[Acid] = 0.1 / 0.1 = 1 ज्ञात करें; अब log10(1) का मान निर्धारित कर pKa में जोड़ें।"
+      },
+      "source_solution_steps": [
+        "चरण 1 (रासायनिक संदर्भ): दुर्बल अम्ल (CH3COOH) तथा इसके प्रबल क्षार लवण (CH3COONa) से निर्मित अम्लीय बफर विलयन।",
+        "चरण 2 (संचालक सिद्धांत): सम-आयन प्रभाव (Common Ion Effect) एवं हेन्डरसन-हेसेलबाल्च समीकरण।",
+        "चरण 3 (संतुलित समीकरण एवं साम्य व्यंजक): CH3COOH <=> CH3COO- + H+; CH3COONa -> CH3COO- + Na+; pH = pKa + log10([CH3COO-] / [CH3COOH])।",
+        "चरण 4 (स्टोइकिओमेट्रिक रूपांतरण): [Salt] = [CH3COONa] = 0.1 M; [Acid] = [CH3COOH] = 0.1 M।",
+        "चरण 5 (तापमान/मात्रक संगति): दिया गया pKa = 4.74; अनुपात [Salt]/[Acid] = 0.1 / 0.1 = 1.0 (विमाहीन)।",
+        "चरण 6 (बीजगणितीय गणना): pH = pKa + log10(1.0) = 4.74 + 0 = 4.74।",
+        "चरण 7 (रासायनिक सार्थकता जांच): [Salt] = [Acid] की स्थिति बफर की आदर्श स्थिति (अधिकतम बफर क्षमता) कहलाती है, जहाँ pH = pKa = 4.74 प्राप्त होता है। सही विकल्प (A) 4.74 है।"
+      ],
+      "verification": "रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): [Salt] = [Acid] => log(1) = 0 => pH = pKa = 4.74। हेन्डरसन समीकरण पूर्णतः संतुष्ट है।",
+      "prerequisites": [
+        "chemistry.henderson_hasselbalch",
+        "chemistry.buffer_solutions"
+      ]
+    }
+  ]
+}

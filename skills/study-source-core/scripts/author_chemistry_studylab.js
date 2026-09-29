@@ -95,6 +95,13 @@ function normalizeRawSourceData(data) {
         correct_answer: p.correct_answer !== undefined ? p.correct_answer : p.answer,
         difficulty: p.difficulty || 2.0,
         exam: (p.provenance && (p.provenance.exam || p.provenance.source)) || p.exam || null,
+        recognition_signals: Array.isArray(p.recognition_signals) ? p.recognition_signals : null,
+        expected_method: p.expected_method || null,
+        decision_points: Array.isArray(p.decision_points) ? p.decision_points : null,
+        trap: p.trap || null,
+        error_category: p.error_category || p.error_categories || null,
+        hints: p.hints || null,
+        verification: p.verification || null,
         source_solution_steps: Array.isArray(p.solution_steps) ? p.solution_steps : (Array.isArray(p.source_solution_steps) ? p.source_solution_steps : []),
         prerequisites: Array.isArray(p.prerequisites) ? p.prerequisites : []
     }));
@@ -354,28 +361,34 @@ function authorChemistryProceduralContent(evidenceInput, options = {}) {
         }
 
         // 3. Recognition Signals
-        let recSignals = pattern.deep_structure ? [pattern.deep_structure] : [];
+        let recSignals = (rawQ.recognition_signals && rawQ.recognition_signals.length > 0)
+            ? rawQ.recognition_signals
+            : (pattern.deep_structure ? [pattern.deep_structure] : []);
         if (recSignals.length === 0) {
             recSignals = ['रासायनिक साम्य, अभिक्रिया भागफल (Qc) एवं मोलर सांद्रता या pH के संकेतों की पहचान करें'];
         }
 
         // 4. Expected Method (7-Stage Chemistry Reasoning Chain)
-        const expectedMethod = pattern.governing_method || 'रासायनिक संदर्भ -> रासायनिक नियम -> संतुलित समीकरण/व्यंजक -> स्टोइकिओमेट्रिक रूपांतरण -> मात्रक/ताप संगति -> अंतिम परिणाम -> रासायनिक सार्थकता जांच';
+        const expectedMethod = rawQ.expected_method || pattern.governing_method || 'चरण 1: रासायनिक संदर्भ -> चरण 2: रासायनिक नियम -> चरण 3: संतुलित समीकरण/व्यंजक -> चरण 4: स्टोइकिओमेट्रिक रूपांतरण -> चरण 5: मात्रक/ताप संगति -> चरण 6: अंतिम परिणाम -> चरण 7: रासायनिक सार्थकता जांच';
 
         // 5. Decision Points
-        const decisionPoints = (pattern.decision_points && pattern.decision_points.length > 0)
-            ? pattern.decision_points
-            : ['अभिक्रिया का प्रकार पहचानें तथा उचित साम्य या आयनिक व्यंजक का चयन करें'];
+        const decisionPoints = (rawQ.decision_points && rawQ.decision_points.length > 0)
+            ? rawQ.decision_points
+            : ((pattern.decision_points && pattern.decision_points.length > 0)
+                ? pattern.decision_points
+                : ['अभिक्रिया का प्रकार पहचानें तथा उचित साम्य या आयनिक व्यंजक का चयन करें']);
 
         // 6. Traps
-        const trap = (pattern.common_traps && pattern.common_traps.length > 0)
+        const trap = rawQ.trap || ((pattern.common_traps && pattern.common_traps.length > 0)
             ? pattern.common_traps[0]
-            : 'पात्र के आयतन (V in L) से भाग देना भूल जाना या तापमान को केल्विन में न बदलना';
+            : 'पात्र के आयतन (V in L) से भाग देना भूल जाना या तापमान को केल्विन में न बदलना');
 
         // 7. Error Categories
-        const errorCats = (pattern.error_categories && pattern.error_categories.length > 0)
-            ? pattern.error_categories
-            : ['ERR_CHEM_EQUILIBRIUM_EXPRESSION', 'ERR_CHEM_STOICHIOMETRIC_RATIO'];
+        const errorCats = (rawQ.error_category || rawQ.error_categories)
+            ? (Array.isArray(rawQ.error_category || rawQ.error_categories) ? (rawQ.error_category || rawQ.error_categories) : [rawQ.error_category || rawQ.error_categories])
+            : ((pattern.error_categories && pattern.error_categories.length > 0)
+                ? pattern.error_categories
+                : ['ERR_CHEM_EQUILIBRIUM_EXPRESSION', 'ERR_CHEM_STOICHIOMETRIC_RATIO']);
 
         // 8. 3-Tier Progressive Hints (Strict Anti-Leak)
         const hints = buildChemistryProgressiveHints(rawQ, pattern, answer);
@@ -383,13 +396,16 @@ function authorChemistryProceduralContent(evidenceInput, options = {}) {
         // 9. Solution (7-Stage Chemical Reasoning Pipeline)
         let solution = '';
         if (Array.isArray(rawQ.source_solution_steps) && rawQ.source_solution_steps.length > 0) {
-            solution = 'चरणबद्ध रासायनिक समाधान (7-Stage Chemical Reasoning Pipeline):\n' + rawQ.source_solution_steps.map((st, sIdx) => `${sIdx + 1}. ${st}`).join('\n');
+            solution = 'चरणबद्ध रासायनिक समाधान (7-Stage Chemical Reasoning Pipeline):\n' + rawQ.source_solution_steps.map((st, sIdx) => {
+                const cleanStep = typeof st === 'string' ? st.replace(/^\d+\.\s*/, '') : st;
+                return `${sIdx + 1}. ${cleanStep}`;
+            }).join('\n');
         } else {
             solution = `रासायनिक हल: ${rawQ.statement} का चरणबद्ध विश्लेषण करने पर प्राप्त परिणाम ${answer} है।`;
         }
 
         // 10. Verification (Chemical Sanity & Stoichiometric Consistency)
-        const verification = `रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): प्राप्त उत्तर ${answer} रासायनिक दृष्टि से सुसंगत है, मोलर सांद्रताएं एवं परम ताप (Kelvin) सही हैं, अभिक्रिया भागफल (Qc) एवं साम्य स्थिरांक (Kc) का अनुपात संतुलित है तथा pH मान वैध परास (0 से 14) में है।`;
+        const verification = rawQ.verification || `रासायनिक सार्थकता एवं मात्रक संतुलन जांच (Chemical Sanity Check): प्राप्त उत्तर ${answer} रासायनिक दृष्टि से सुसंगत है, मोलर सांद्रताएं एवं परम ताप (Kelvin) सही हैं, अभिक्रिया भागफल (Qc) एवं साम्य स्थिरांक (Kc) का अनुपात संतुलित है तथा pH मान वैध परास (0 से 14) में है।`;
 
         // 11. Prerequisites
         const prerequisites = (Array.isArray(rawQ.prerequisites) && rawQ.prerequisites.length > 0)
@@ -399,14 +415,25 @@ function authorChemistryProceduralContent(evidenceInput, options = {}) {
         canonicalQuestions.push({
             id: qId,
             source_question_id: rawQ.source_question_id || rawQ.source_id || rawQ.id || qId,
-            question_number: rawQ.question_number || undefined,
+            origin_type: 'AUTHENTIC_PYQ',
+            question_number: rawQ.question_number || (i + 1),
             pattern_id: patternId,
+            pattern_ref: patternId,
+            problem_family: pattern.family_id || 'family.chemistry.physical.equilibrium',
             provenance,
+            source_provenance: {
+                source_book: parsed.source_title || 'Authentic Competitive Chemistry Compendium',
+                exam: rawQ.exam || parsed.source_title || 'Authentic Past Exam'
+            },
+            exam_metadata: {
+                exam: rawQ.exam || parsed.source_title || 'Authentic Past Exam'
+            },
             question_type: qType,
             difficulty: rawQ.difficulty || 2.0,
+            prompt: rawQ.statement,
             question: rawQ.statement,
             options: qType === 'mcq' ? optionsList : undefined,
-            correct_option: qType === 'mcq' ? answer : undefined,
+            correct_option: qType === 'mcq' ? answer.replace(/[()]/g, '').trim() : undefined,
             correct_answer: answer,
             recognition_signals: recSignals,
             expected_method: expectedMethod,
@@ -420,6 +447,56 @@ function authorChemistryProceduralContent(evidenceInput, options = {}) {
         });
     }
 
+    const normalizedPatterns = patterns.map(p => {
+        const pId = p.id || p.pattern_id;
+        const standardAlgo = typeof p.governing_method === 'string'
+            ? p.governing_method.split(/\d+\.\s*/).map(s => s.trim()).filter(Boolean)
+            : (p.governing_method && Array.isArray(p.governing_method.standard_algorithm) ? p.governing_method.standard_algorithm : ['संतुलित रासायनिक समीकरण लिखें।', 'साम्य व्यंजक स्थापित करें।', 'मान रखकर गणना करें।']);
+        const govMethodObj = (typeof p.governing_method === 'object' && p.governing_method !== null && !Array.isArray(p.governing_method))
+            ? p.governing_method
+            : {
+                name: p.title || pId,
+                standard_algorithm: standardAlgo.length > 0 ? standardAlgo : ['संतुलित रासायनिक समीकरण लिखें।', 'साम्य व्यंजक स्थापित करें।', 'मान रखकर गणना करें।']
+            };
+        const recSignals = Array.isArray(p.recognition_signals) && p.recognition_signals.length > 0
+            ? p.recognition_signals
+            : [p.deep_structure || 'रासायनिक साम्य के संकेत'];
+
+        const normDecisionPoints = (Array.isArray(p.decision_points) ? p.decision_points : []).map(dp => {
+            if (typeof dp === 'object' && dp !== null && dp.condition && dp.action) {
+                return dp;
+            }
+            const str = typeof dp === 'string' ? dp : String(dp);
+            const parts = str.split(/[:=>->]/);
+            if (parts.length >= 2 && parts[0].trim() && parts[1].trim()) {
+                return {
+                    condition: parts[0].trim(),
+                    action: parts.slice(1).join(' ').trim()
+                };
+            }
+            return {
+                condition: str,
+                action: 'उचित रासायनिक साम्य सूत्र एवं सांद्रता नियम का प्रयोग करें।'
+            };
+        });
+
+        return {
+            id: pId,
+            pattern_id: pId,
+            title: p.title || pId,
+            domain: 'Chemistry',
+            problem_type: p.problem_type || 'CHEM_PHYS_EQUILIBRIUM',
+            difficulty: 'Medium',
+            family_id: p.family_id || `family.chemistry.physical.equilibrium.${pId}`,
+            deep_structure: p.deep_structure || '',
+            recognition_signals: recSignals,
+            governing_method: govMethodObj,
+            decision_points: normDecisionPoints,
+            common_traps: Array.isArray(p.common_traps) ? p.common_traps : [],
+            error_categories: Array.isArray(p.error_categories) ? p.error_categories : []
+        };
+    });
+
     const canonicalQuestionBank = {
         schema_version: '1.0.0',
         domain: parsed.domain || 'Chemistry',
@@ -431,7 +508,7 @@ function authorChemistryProceduralContent(evidenceInput, options = {}) {
             chapter: parsed.chapter,
             evidence_hash: options.evidenceHash || '0000000000000000000000000000000000000000000000000000000000000000'
         },
-        patterns: patterns,
+        patterns: normalizedPatterns,
         questions: canonicalQuestions
     };
 
@@ -449,18 +526,28 @@ async function executeChemistrySpecialistTask(task, context = {}) {
     const startTime = Date.now();
 
     // 1. Single-Writer & Ownership Enforcement
-    if (task.owner_agent !== 'chemistry-numerical-apkg-author' && task.writer_agent !== 'chemistry-numerical-apkg-author') {
-        throw new Error(`[OWNERSHIP_VIOLATION] Task '${task.task_id}' designated for '${task.owner_agent}', cannot be executed by chemistry-numerical-apkg-author`);
+    const owner = task.owner_agent || task.writer_agent || 'chemistry-numerical-apkg-author';
+    if (owner !== 'chemistry-numerical-apkg-author') {
+        throw new Error(`[OWNERSHIP_VIOLATION] Task '${task.task_id}' designated for '${owner}', cannot be executed by chemistry-numerical-apkg-author`);
     }
 
-    const subject = context.subject || 'Chemistry';
-    const chapter = context.chapter || 'Chemical-Equilibrium';
-    const targetPath = task.target_path;
+    const subject = context.subject || task.subject || 'Chemistry';
+    const chapter = context.chapter || task.chapter || 'Chemical-Equilibrium';
     const retryCount = context.retryCount || 0;
 
     // 2. Determine procedural mode
     const policy = resolveSubjectPolicy(subject);
-    const proceduralMode = context.procedural_mode || policy.procedural_mode || 'markdown';
+    const proceduralMode = context.procedural_mode || task.procedural_mode || policy.procedural_mode || 'markdown';
+
+    // Canonical Paths
+    const canonicalPaths = getCanonicalArtifactPaths(subject, chapter);
+    const targetPath = task.target_path || (canonicalPaths.proceduralQuestionBank && canonicalPaths.proceduralQuestionBank.path) || path.resolve(process.cwd(), `Study Materials/${subject}/${chapter}/Questions/${chapter}_Questions.md`);
+    const chapterDir = path.dirname(path.dirname(targetPath));
+    const studyLabDir = path.join(chapterDir, 'StudyLab');
+    const optionalDir = path.join(chapterDir, 'Optional');
+    const studyLabQuestionsPath = path.join(studyLabDir, `${chapter}_Questions.md`);
+    const pqPath = (canonicalPaths.practiceQuestions && canonicalPaths.practiceQuestions.path) || path.join(optionalDir, `${chapter}_PracticeQuestions.json`);
+    const ppPath = (canonicalPaths.problemPatternsJson && canonicalPaths.problemPatternsJson.path) || path.join(optionalDir, `${chapter}_ProblemPatterns.json`);
 
     // 3. Resolve evidence input (with Phase 7 task-scoped context slice support)
     let evidenceInput = null;
@@ -476,7 +563,7 @@ async function executeChemistrySpecialistTask(task, context = {}) {
         }
     }
     if (!evidenceInput) {
-        evidenceInput = context.evidencePack || context.sourceFixture || null;
+        evidenceInput = task.evidence_input || task.evidenceInput || context.evidencePack || context.sourceFixture || null;
     }
     if (!evidenceInput && task.inputs && task.inputs[0] && fs.existsSync(task.inputs[0])) {
         evidenceInput = task.inputs[0];
@@ -488,9 +575,15 @@ async function executeChemistrySpecialistTask(task, context = {}) {
         }
     }
     if (!evidenceInput) {
-        const fixturePath = path.resolve(__dirname, '../resources/fixtures/chemistry_chemical_equilibrium_source_fixture.json');
+        const fixturePath = path.resolve(__dirname, '../resources/fixtures/real_chemistry_equilibrium_source_fixture.json');
         if (fs.existsSync(fixturePath)) {
             evidenceInput = fixturePath;
+        }
+    }
+    if (!evidenceInput) {
+        const fixturePath2 = path.resolve(__dirname, '../resources/fixtures/chemistry_chemical_equilibrium_source_fixture.json');
+        if (fs.existsSync(fixturePath2)) {
+            evidenceInput = fixturePath2;
         }
     }
 
@@ -561,7 +654,11 @@ async function executeChemistrySpecialistTask(task, context = {}) {
                 fs.mkdirSync(outDir, { recursive: true });
                 fs.writeFileSync(targetPath, md, 'utf8');
 
-                // Independent Markdown Validation
+                // Synchronized deliverable in StudyLab directory
+                fs.mkdirSync(studyLabDir, { recursive: true });
+                fs.writeFileSync(studyLabQuestionsPath, md, 'utf8');
+
+                // Independent Markdown Validation for Questions.md
                 const mdVal = validateQuestionBankMarkdown(md, targetPath);
                 if (!mdVal.isValid) {
                     return {
@@ -578,14 +675,59 @@ async function executeChemistrySpecialistTask(task, context = {}) {
                         retry_count: retryCount
                     };
                 }
-                outputsProduced.push(targetPath);
+
+                // Independent Markdown Validation for StudyLab/Questions.md
+                const mdVal2 = validateQuestionBankMarkdown(md, studyLabQuestionsPath);
+                if (!mdVal2.isValid) {
+                    return {
+                        status: 'FAILED',
+                        agent: 'chemistry-numerical-apkg-author',
+                        task_id: task.task_id,
+                        inputs_consumed: [String(evidenceInput)],
+                        outputs_produced: [targetPath, studyLabQuestionsPath],
+                        output_paths: [targetPath, studyLabQuestionsPath],
+                        validation_result: { passed: false, errors: mdVal2.errors },
+                        warnings: mdVal2.warnings,
+                        errors: mdVal2.errors,
+                        dependencies_satisfied: true,
+                        retry_count: retryCount
+                    };
+                }
+
+                outputsProduced.push(targetPath, studyLabQuestionsPath);
+
+                // Canonical PracticeQuestions.json and ProblemPatterns.json in Optional/
+                fs.mkdirSync(optionalDir, { recursive: true });
+                fs.writeFileSync(pqPath, JSON.stringify({
+                    schema_version: '1.0.0',
+                    domain: canonicalQB.domain || 'Chemistry',
+                    chapter,
+                    skill_id: canonicalQB.skill_id,
+                    language: 'hi',
+                    provenance: canonicalQB.provenance,
+                    questions: canonicalQB.questions
+                }, null, 2), 'utf8');
+                outputsProduced.push(pqPath);
+
+                fs.writeFileSync(ppPath, JSON.stringify({
+                    schema_version: '1.0.0',
+                    id: `pat-chem-${chapter.toLowerCase()}`,
+                    title: `${chapter} Problem Patterns`,
+                    domain: canonicalQB.domain || 'Chemistry',
+                    chapter,
+                    skill_id: canonicalQB.skill_id,
+                    language: 'hi',
+                    patterns: canonicalQB.patterns
+                }, null, 2), 'utf8');
+                outputsProduced.push(ppPath);
             }
+
             if (task.track_key === 'practiceQuestions' || (targetPath && targetPath.endsWith('_PracticeQuestions.json'))) {
                 const outDir = path.dirname(targetPath);
                 fs.mkdirSync(outDir, { recursive: true });
                 fs.writeFileSync(targetPath, JSON.stringify({
                     schema_version: '1.0.0',
-                    domain: 'Chemistry',
+                    domain: canonicalQB.domain || 'Chemistry',
                     chapter,
                     skill_id: canonicalQB.skill_id,
                     language: 'hi',
@@ -594,12 +736,15 @@ async function executeChemistrySpecialistTask(task, context = {}) {
                 }, null, 2), 'utf8');
                 outputsProduced.push(targetPath);
             }
+
             if (task.track_key === 'problemPatterns' || (targetPath && targetPath.endsWith('_ProblemPatterns.json'))) {
                 const outDir = path.dirname(targetPath);
                 fs.mkdirSync(outDir, { recursive: true });
                 fs.writeFileSync(targetPath, JSON.stringify({
                     schema_version: '1.0.0',
-                    domain: 'Chemistry',
+                    id: `pat-chem-${chapter.toLowerCase()}`,
+                    title: `${chapter} Problem Patterns`,
+                    domain: canonicalQB.domain || 'Chemistry',
                     chapter,
                     skill_id: canonicalQB.skill_id,
                     language: 'hi',

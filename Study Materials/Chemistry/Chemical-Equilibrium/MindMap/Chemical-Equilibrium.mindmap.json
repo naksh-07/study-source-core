@@ -1,0 +1,391 @@
+{
+  "id": "chemistry-chemical-equilibrium-mindmap",
+  "title": "रासायनिक एवं आयनिक साम्यावस्था (Chemical & Ionic Equilibrium)",
+  "subtitle": "द्रव्यमान अनुपाती क्रिया, ली-शातेलिए नियम, अभिक्रिया भागफल, मुक्त ऊर्जा एवं आयनिक संतुलन का समग्र मानचित्रण",
+  "subject": "Chemistry",
+  "chapter": "Chemical-Equilibrium",
+  "language": "mixed",
+  "root": {
+    "id": "chem-eq-root",
+    "label": "रासायनिक एवं आयनिक साम्यावस्था (Chemical & Ionic Equilibrium)",
+    "subtitle": "भौतिक रसायन का गतिक एवं ऊष्मागतिक आधार ढाँचा (Physical Chemistry Equilibrium Core)",
+    "description": "उत्क्रमणीय रासायनिक एवं आयनिक प्रक्रमों में साम्य अवस्था, साम्य स्थिरांक (Kc, Kp), ली-शातेलिए का सिद्धांत, अभिक्रिया भागफल (Qc), मुक्त ऊर्जा संबंध (ΔG, ΔG°), ऑस्टवाल्ड तनुता नियम, pH मापक्रम, बफर विलयन एवं विलेयता गुणनफल (Ksp) का समग्र संकल्पनात्मक वर्गीकरण।",
+    "category": "Physical Chemistry",
+    "badge": "Core Physical Chemistry",
+    "color": "#0D9488",
+    "icon": "flask-conical",
+    "tags": [
+      "Chemistry",
+      "PhysicalChemistry",
+      "ChemicalEquilibrium",
+      "IonicEquilibrium",
+      "Thermodynamics",
+      "LeChatelier",
+      "BufferSolutions"
+    ],
+    "keyFacts": [
+      "साम्यावस्था गतिक (Dynamic) होती है जहाँ अग्र एवं पश्च अभिक्रिया की दरें समान (Rf = Rb) होती हैं",
+      "साम्य स्थिरांक Kc तथा Kp केवल तापमान (Temperature) पर निर्भर करते हैं, सांद्रता, दाब या उत्प्रेरक से अप्रभावित रहते हैं",
+      "ली-शातेलिए के नियमानुसार स्थिर आयतन पर अक्रिय गैस मिलाने से साम्य पर कोई प्रभाव नहीं पड़ता",
+      "ऊष्माशोषी (Endothermic) अभिक्रिया में ताप बढ़ाने पर साम्य स्थिरांक K बढ़ता है, जबकि ऊष्माक्षेपी में घटता है",
+      "साम्यावस्था पर ΔG = 0 तथा मानक मुक्त ऊर्जा संबंध ΔG° = -RT ln K होता है",
+      "अत्यंत तनु अम्ल (10^-8 M HCl) का pH सदैव 7 से कम (लगभग 6.98) होता है क्योंकि जल का स्वतः आयनीकरण सम्मिलित होता है"
+    ],
+    "children": [
+      {
+        "id": "branch-chemical-eq",
+        "label": "रासायनिक साम्यावस्था एवं साम्य स्थिरांक (Chemical Equilibrium & Equilibrium Constants)",
+        "subtitle": "द्रव्यमान अनुपाती क्रिया, Kc, Kp एवं समांगी-विषमांगी प्रक्रम",
+        "category": "Chemical Equilibrium",
+        "badge": "Branch 1",
+        "color": "#2563EB",
+        "children": [
+          {
+            "id": "sub-mass-action-kc",
+            "label": "द्रव्यमान अनुपाती क्रिया का नियम एवं Kc (Law of Mass Action & Kc)",
+            "description": "गुलबर्ग तथा वागे का नियम: स्थिर ताप पर रासायनिक अभिक्रिया की दर अभिकारकों की सक्रिय सांद्रताओं के गुणनफल के समानुपाती होती है।",
+            "category": "Equilibrium Law",
+            "children": [
+              {
+                "id": "leaf-kc-expression",
+                "label": "साम्य स्थिरांक व्यंजक एवं गुणधर्म (Kc Expression & Invariance)",
+                "description": "Kc = ([C]^c [D]^d) / ([A]^a [B]^b)। साम्य स्थिरांक केवल तापमान पर निर्भर करता है; प्रारंभिक सांद्रता या उत्प्रेरक से अप्रभावित रहता है।"
+              },
+              {
+                "id": "leaf-ice-method",
+                "label": "ICE सारणी गणना विधि (ICE Table Calculation Method)",
+                "description": "Initial (प्रारंभिक), Change (स्टोइकिओमेट्रिक परिवर्तन), तथा Equilibrium (साम्य) सांद्रताओं को सारणीबद्ध कर अज्ञात साम्य मानों अथवा Kc की सटीक गणना।"
+              }
+            ]
+          },
+          {
+            "id": "sub-kp-deltang",
+            "label": "गैसीय साम्य Kp एवं Δn_g संबंध (Kp & Delta n_g Relation)",
+            "description": "गैसीय साम्यावस्था में आंशिक दाब साम्य स्थिरांक Kp = Kc(RT)^Δn_g, जहाँ R = 0.0821 L·atm/(mol·K) और T केल्विन ताप है।",
+            "category": "Gas Equilibrium",
+            "children": [
+              {
+                "id": "leaf-kp-kc-formula",
+                "label": "Kp = Kc(RT)^Δn_g रूपांतरण सूत्र (Thermodynamic Conversion Formula)",
+                "description": "Δn_g = गैसीय उत्पाद मोल - गैसीय अभिकारक मोल। तापमान अनिवार्य रूप से केल्विन (T = t°C + 273.15) में होना चाहिए।"
+              },
+              {
+                "id": "leaf-deltang-cases",
+                "label": "Δn_g की तीन विशिष्ट स्थितियां (3 Regimes of Delta n_g)",
+                "description": "1. Δn_g = 0 होने पर Kp = Kc (इकाई रहित, जैसे H2+I2<=>2HI); 2. Δn_g > 0 होने पर उच्च ताप पर Kp > Kc; 3. Δn_g < 0 होने पर Kp < Kc।"
+              }
+            ]
+          },
+          {
+            "id": "sub-homo-hetero",
+            "label": "समांगी बनाम विषमांगी साम्यावस्था (Homogeneous vs Heterogeneous Equilibrium)",
+            "description": "समांगी साम्य में सभी घटक समान प्रावस्था में होते हैं; विषमांगी साम्य में ठोस, द्रव तथा गैस प्रावस्थाएं परस्पर साम्य में होती हैं।",
+            "category": "Phase Equilibrium",
+            "children": [
+              {
+                "id": "leaf-pure-solids-activity",
+                "label": "शुद्ध ठोस एवं द्रव की एकांक सक्रियता (Pure Solids & Liquids Unit Activity)",
+                "description": "विषमांगी साम्य (जैसे CaCO3(s) <=> CaO(s) + CO2(g)) में शुद्ध ठोसों व द्रवों की सक्रियता को 1 माना जाता है, अतः Kc = [CO2] में केवल गैसीय घटक सम्मिलित होते हैं।"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "branch-le-chatelier",
+        "label": "ली-शातेलिए का सिद्धांत एवं प्रतिबल निवारण (Le Chatelier's Principle & Stress Response)",
+        "subtitle": "सांद्रता, दाब, ताप, अक्रिय गैस तथा उत्प्रेरक प्रभाव",
+        "category": "Equilibrium Shift",
+        "badge": "Branch 2",
+        "color": "#D97706",
+        "children": [
+          {
+            "id": "sub-concentration-stress",
+            "label": "सांद्रता प्रतिबल एवं विस्थापन (Concentration Stress & Shift)",
+            "description": "साम्य निकाय में किसी घटक की सांद्रता बदलने पर साम्य उस दिशा में विस्थापित होता है जहाँ उस सांद्रता परिवर्तन का प्रभाव निरस्त हो सके।",
+            "category": "Stress Response",
+            "children": [
+              {
+                "id": "leaf-reactant-product-change",
+                "label": "अभिकारक व उत्पाद संवर्धन प्रभाव (Addition & Removal Dynamics)",
+                "description": "अभिकारक मिलाने या उत्पाद हटाने पर साम्य अग्र (Forward) दिशा में जाता है; उत्पाद मिलाने या अभिकारक हटाने पर साम्य पश्च (Reverse) दिशा में जाता है।"
+              }
+            ]
+          },
+          {
+            "id": "sub-pressure-volume-stress",
+            "label": "दाब एवं आयतन प्रतिबल (Pressure & Volume Stress)",
+            "description": "निकाय का बाह्य दाब बढ़ाने (आयतन घटाने) पर साम्य उस दिशा में विस्थापित होता है जहाँ गैसीय मोलों की संख्या कम होती है।",
+            "category": "Stress Response",
+            "children": [
+              {
+                "id": "leaf-gas-mole-shift",
+                "label": "कम गैसीय मोल की ओर विस्थापन नियम (Shift Toward Fewer Gas Moles)",
+                "description": "यदि Δn_g > 0 तो दाब वृद्धि से पश्च दिशा; यदि Δn_g < 0 (जैसे हैबर प्रक्रम) तो दाब वृद्धि से अग्र दिशा; यदि Δn_g = 0 तो दाब परिवर्तन का कोई प्रभाव नहीं पड़ता।"
+              }
+            ]
+          },
+          {
+            "id": "sub-temperature-stress",
+            "label": "तापमान प्रभाव: ऊष्माशोषी बनाम ऊष्माक्षेपी (Temperature: Endo vs Exo)",
+            "description": "ताप बढ़ाने पर साम्य ऊष्माशोषी दिशा में तथा ताप घटाने पर ऊष्माक्षेपी दिशा में विस्थापित होता है; तापमान साम्य स्थिरांक K को परिवर्तित करता है।",
+            "category": "Stress Response",
+            "children": [
+              {
+                "id": "leaf-vant-hoff-shift",
+                "label": "वांट हॉफ समीकरण एवं ताप निर्भरता (Van 't Hoff Equation & Kc Variation)",
+                "description": "d(ln K)/dT = ΔH°/(RT^2)। ऊष्माशोषी (ΔH > 0) में ताप बढ़ाने पर Kc बढ़ता है; ऊष्माक्षेपी (ΔH < 0) में ताप बढ़ाने पर Kc घटता है।"
+              }
+            ]
+          },
+          {
+            "id": "sub-inert-gas-addition",
+            "label": "अक्रिय गैस का योग: स्थिर आयतन बनाम स्थिर दाब (Inert Gas Addition Dynamics)",
+            "description": "अक्रिय गैस मिलाने पर साम्य विस्थापन निकाय के आयतन एवं दाब की सीमाओं (Constraints) पर निर्भर करता है।",
+            "category": "Stress Response",
+            "children": [
+              {
+                "id": "leaf-inert-const-v",
+                "label": "स्थिर आयतन पर अक्रिय गैस: शून्य विस्थापन (Constant Volume: Zero Shift Invariant)",
+                "description": "स्थिर V पर अक्रिय गैस मिलाने पर कुल दाब बढ़ता है परंतु अभिकारकों व उत्पादों के आंशिक दाब (Pi = ni RT/V) और सांद्रताएं नहीं बदलते। अतः साम्य अपरिवर्तित रहता है।"
+              },
+              {
+                "id": "leaf-inert-const-p",
+                "label": "स्थिर दाब पर अक्रिय गैस: अधिक मोल की ओर विस्थापन (Constant Pressure: Shift to More Moles)",
+                "description": "स्थिर P पर अक्रिय गैस मिलाने पर निकाय का आयतन V बढ़ता है, जिससे आंशिक दाब घटते हैं; अतः साम्य अधिक गैसीय मोलों (Δn_g > 0) की दिशा में खिसकता है।"
+              }
+            ]
+          },
+          {
+            "id": "sub-catalyst-neutrality",
+            "label": "उत्प्रेरक की साम्य तटस्थता (Catalyst Neutrality & Ea Lowering)",
+            "description": "उत्प्रेरक अग्र तथा पश्च दोनों अभिक्रियाओं की सक्रियण ऊर्जा (Activation Energy) को समान रूप से घटाता है।",
+            "category": "Stress Response",
+            "children": [
+              {
+                "id": "leaf-catalyst-kinetics",
+                "label": "केवल साम्य प्राप्ति काल न्यूनीकरण (Reduces Time to Equilibrium Only)",
+                "description": "उत्प्रेरक साम्य स्थिरांक Kc या उत्पाद की मात्रा (Yield) को नहीं बदलता; यह केवल साम्यावस्था तक पहुँचने का समय कम करता है।"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "branch-reaction-thermo",
+        "label": "अभिक्रिया भागफल एवं ऊष्मागतिकी (Reaction Quotient & Thermodynamics)",
+        "subtitle": "Qc बनाम Kc दिशा मापदंड, ΔG = ΔG° + RT ln Q, एवं ΔG° = -RT ln K",
+        "category": "Thermodynamics",
+        "badge": "Branch 3",
+        "color": "#059669",
+        "children": [
+          {
+            "id": "sub-qc-kc-criteria",
+            "label": "अभिक्रिया भागफल Qc बनाम Kc दिशा मापदंड (Qc vs Kc Direction Criteria)",
+            "description": "किसी भी तात्क्षणिक समय पर अभिक्रिया मिश्रण की सांद्रताओं का अनुपात अभिक्रिया भागफल Qc कहलाता है।",
+            "category": "Reaction Direction",
+            "children": [
+              {
+                "id": "leaf-direction-forward-backward",
+                "label": "अग्र, पश्च एवं साम्यावस्था स्थितियां (Forward, Backward & Equilibrium Regimes)",
+                "description": "1. Qc < Kc: उत्पाद कम हैं, अभिक्रिया अग्र दिशा में आगे बढ़ेगी; 2. Qc > Kc: उत्पाद अधिक हैं, अभिक्रिया पश्च दिशा में जाएगी; 3. Qc = Kc: निकाय गतिक साम्यावस्था में है।"
+              }
+            ]
+          },
+          {
+            "id": "sub-delta-g-relation",
+            "label": "गिब्स मुक्त ऊर्जा परिवर्तन संबंध (Gibbs Free Energy Relation ΔG = ΔG° + RT ln Q)",
+            "description": "निकाय में किसी क्षण अभिक्रिया की दिशा वास्तविक मुक्त ऊर्जा परिवर्तन ΔG के चिन्ह द्वारा नियंत्रित होती है।",
+            "category": "Thermodynamics",
+            "children": [
+              {
+                "id": "leaf-spontaneity-criterion",
+                "label": "स्वतःप्रवर्तिता मापदंड (Spontaneity Criterion ΔG < 0)",
+                "description": "यदि ΔG < 0 (Qc < K) तो अग्र अभिक्रिया स्वतःप्रवर्तित होती है; यदि ΔG > 0 (Qc > K) तो पश्च अभिक्रिया स्वतःप्रवर्तित होती है।"
+              }
+            ]
+          },
+          {
+            "id": "sub-standard-delta-g-k",
+            "label": "मानक मुक्त ऊर्जा एवं साम्य स्थिरांक संबंध (Standard Free Energy ΔG° = -RT ln K)",
+            "description": "साम्यावस्था पर वास्तविक मुक्त ऊर्जा परिवर्तन शून्य (ΔG = 0) होने से मानक मुक्त ऊर्जा साम्य स्थिरांक से सीधे जुड़ जाती है।",
+            "category": "Thermodynamics",
+            "children": [
+              {
+                "id": "leaf-thermo-equilibrium",
+                "label": "ऊष्मागतिक साम्यावस्था मापदंड (Thermodynamic Equilibrium State: ΔG = 0)",
+                "description": "साम्यावस्था पर ΔG = 0 तथा Q = K, अतः 0 = ΔG° + RT ln K => ΔG° = -RT ln K = -2.303 RT log10 K। ΔG° ऋणात्मक होने पर K > 1 होता है।"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "branch-ionic-eq",
+        "label": "आयनिक साम्यावस्था एवं जलीय विलयन (Ionic Equilibrium & Aqueous Solutions)",
+        "subtitle": "pH/pOH मापक्रम, ऑस्टवाल्ड तनुता नियम, बफर विलयन एवं विलेयता गुणनफल Ksp",
+        "category": "Ionic Equilibrium",
+        "badge": "Branch 4",
+        "color": "#7C3AED",
+        "children": [
+          {
+            "id": "sub-ph-poh-scale",
+            "label": "pH एवं pOH मापक्रम (pH and pOH Scale)",
+            "description": "जलीय विलयनों में हाइड्रोजन एवं हाइड्रॉक्साइड आयन सांद्रता का ऋणात्मक लघुगणक: pH = -log10[H+] तथा pOH = -log10[OH-]।",
+            "category": "Acid-Base",
+            "children": [
+              {
+                "id": "leaf-water-autoionization",
+                "label": "जल का स्वतः आयनीकरण एवं Kw (Water Autoionization & Kw = 10^-14)",
+                "description": "25°C पर Kw = [H+][OH-] = 10^-14 होने से pH + pOH = 14। 10^-8 M HCl का pH जल के स्वतः आयनीकरण (10^-7 M) के योग से 6.98 आता है, 8 नहीं।"
+              }
+            ]
+          },
+          {
+            "id": "sub-ostwald-dilution",
+            "label": "ऑस्टवाल्ड तनुता नियम (Ostwald Dilution Law)",
+            "description": "दुर्बल विद्युत-अपघट्यों (Weak Electrolytes) के वियोजन संतुलन Ka = Cα^2 / (1 - α) का नियम।",
+            "category": "Weak Electrolytes",
+            "children": [
+              {
+                "id": "leaf-alpha-ka-formula",
+                "label": "वियोजन की मात्रा सूत्र α = √(Ka/C) (Degree of Dissociation Formula)",
+                "description": "अत्यल्प वियोजन (α << 1) पर 1 - α ≈ 1, अतः α = √(Ka/C)। विलयन तनु करने (सांद्रता C घटाने) पर दुर्बल विद्युत-अपघट्य का वियोजन α बढ़ता है।"
+              }
+            ]
+          },
+          {
+            "id": "sub-buffer-solutions",
+            "label": "बफर विलयन एवं हेन्डरसन समीकरण (Buffer Solutions & Henderson Equation)",
+            "description": "अल्प मात्रा में बाह्य अम्ल या क्षार मिलाने पर अपने pH में परिवर्तन का प्रभावी विरोध करने वाले विलयन।",
+            "category": "Buffers",
+            "children": [
+              {
+                "id": "leaf-henderson-equation",
+                "label": "हेन्डरसन-हेसेलबाल्च समीकरण (Henderson-Hasselbalch Equation)",
+                "description": "अम्लीय बफर (CH3COOH + CH3COONa) हेतु: pH = pKa + log10([Salt]/[Acid])। जब [Salt] = [Acid] हो तो pH = pKa (अधिकतम बफर क्षमता)।"
+              }
+            ]
+          },
+          {
+            "id": "sub-solubility-product",
+            "label": "अल्प विलेय लवण एवं विलेयता गुणनफल Ksp (Sparingly Soluble Salts & Ksp)",
+            "description": "संतृप्त जलीय विलयन में ठोस लवण तथा उसके घुले हुए आयनों के बीच स्थापित साम्यावस्था।",
+            "category": "Solubility",
+            "children": [
+              {
+                "id": "leaf-precipitation-criteria",
+                "label": "अवक्षेपण मापदंड Qsp बनाम Ksp (Precipitation Criteria Qsp vs Ksp)",
+                "description": "आयनिक गुणनफल Qsp: यदि Qsp < Ksp तो विलयन असंतृप्त; यदि Qsp = Ksp तो संतृप्त साम्यावस्था; यदि Qsp > Ksp तो विलयन अतिसंतृप्त होकर अवक्षेपित (Precipitates) होता है।"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "crossLinks": [
+    {
+      "sourceId": "leaf-vant-hoff-shift",
+      "targetId": "leaf-thermo-equilibrium",
+      "label": "वांट हॉफ समीकरण मानक मुक्त ऊर्जा संबंध ΔG° = -RT ln K और एन्थैल्पी ΔH° द्वारा तापमान पर K की निर्भरता स्थापित करता है",
+      "type": "causality"
+    },
+    {
+      "sourceId": "sub-qc-kc-criteria",
+      "targetId": "leaf-spontaneity-criterion",
+      "label": "अभिक्रिया भागफल Qc तथा Kc का अनुपात वास्तविक मुक्त ऊर्जा ΔG के चिन्ह को नियंत्रित कर दिशा तय करता है",
+      "type": "causality"
+    },
+    {
+      "sourceId": "leaf-alpha-ka-formula",
+      "targetId": "leaf-henderson-equation",
+      "label": "अम्ल वियोजन स्थिरांक Ka ऑस्टवाल्ड तनुता और हेन्डरसन बफर समीकरण दोनों का केंद्रीय साम्य स्थिरांक है",
+      "type": "relationship"
+    },
+    {
+      "sourceId": "leaf-precipitation-criteria",
+      "targetId": "sub-qc-kc-criteria",
+      "label": "विलेयता आयनिक गुणनफल Qsp बनाम Ksp की तुलना सामान्य अभिक्रिया भागफल Qc बनाम Kc दिशा मापदंड का विशेष रूप है",
+      "type": "comparison"
+    },
+    {
+      "sourceId": "leaf-gas-mole-shift",
+      "targetId": "leaf-kp-kc-formula",
+      "label": "गैसीय मोलों का अंतर Δn_g ली-शातेलिए दाब विस्थापन तथा Kp-Kc रूपांतरण घातांक दोनों को निर्धारित करता है",
+      "type": "relationship"
+    }
+  ],
+  "quizQuestions": [
+    {
+      "id": "quiz-chem-eq-01",
+      "nodeId": "leaf-inert-const-v",
+      "nodeLabel": "स्थिर आयतन पर अक्रिय गैस: शून्य विस्थापन (Constant Volume: Zero Shift Invariant)",
+      "question": "स्थिर आयतन (Constant Volume) पर उत्क्रमणीय गैसीय साम्य PCl5(g) <=> PCl3(g) + Cl2(g) में अक्रिय गैस (He) मिलाने पर साम्यावस्था पर क्या प्रभाव पड़ता है?",
+      "options": [
+        "साम्यावस्था पूर्णतः अपरिवर्तित रहती है",
+        "PCl5 का वियोजन बढ़ जाता है (अग्र दिशा)",
+        "PCl5 का वियोजन घट जाता है (पश्च दिशा)",
+        "साम्य स्थिरांक Kc का मान बढ़ जाता है"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "स्थिर आयतन पर अक्रिय गैस मिलाने से कुल दाब अवश्य बढ़ता है, परंतु अभिकारकों तथा उत्पादों के आंशिक दाब (Pi = ni RT/V) और मोलर सांद्रताएं अपरिवर्तित रहती हैं। अतः ली-शातेलिए के नियमानुसार साम्य की स्थिति अप्रभावित रहती है।"
+    },
+    {
+      "id": "quiz-chem-eq-02",
+      "nodeId": "leaf-kp-kc-formula",
+      "nodeLabel": "Kp = Kc(RT)^Δn_g रूपांतरण सूत्र (Thermodynamic Conversion Formula)",
+      "question": "हैबर प्रक्रम N2(g) + 3H2(g) <=> 2NH3(g) के लिए Kp तथा Kc के मध्य सही संबंध क्या है?",
+      "options": [
+        "Kp = Kc(RT)^(-2)",
+        "Kp = Kc(RT)^2",
+        "Kp = Kc(RT)",
+        "Kp = Kc(RT)^(-1)"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "गैसीय मोल परिवर्तन: Δn_g = n_p(g) - n_r(g) = 2 - (1 + 3) = -2। अतः Kp = Kc(RT)^(-2)।"
+    },
+    {
+      "id": "quiz-chem-eq-03",
+      "nodeId": "leaf-thermo-equilibrium",
+      "nodeLabel": "ऊष्मागतिक साम्यावस्था मापदंड (Thermodynamic Equilibrium State: ΔG = 0)",
+      "question": "रासायनिक साम्यावस्था पर गिब्स मुक्त ऊर्जा परिवर्तन (ΔG) तथा मानक मुक्त ऊर्जा परिवर्तन (ΔG°) के मान क्या होते हैं?",
+      "options": [
+        "ΔG = 0 तथा ΔG° = -RT ln K",
+        "ΔG° = 0 तथा ΔG = -RT ln K",
+        "ΔG = ΔG° = 0",
+        "ΔG > 0 तथा ΔG° < 0"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "साम्यावस्था पर निकाय की मुक्त ऊर्जा न्यूनतम होती है, अतः ΔG = 0 तथा Q = K। संबंध ΔG = ΔG° + RT ln Q में मान रखने पर: 0 = ΔG° + RT ln K => ΔG° = -RT ln K प्राप्त होता है।"
+    },
+    {
+      "id": "quiz-chem-eq-04",
+      "nodeId": "leaf-henderson-equation",
+      "nodeLabel": "हेन्डरसन-हेसेलबाल्च समीकरण (Henderson-Hasselbalch Equation)",
+      "question": "0.1 M ऐसीटिक अम्ल (pKa = 4.74) तथा 0.1 M सोडियम ऐसीटेट युक्त बफर विलयन का pH मान हेन्डरसन समीकरण के अनुसार क्या होगा?",
+      "options": [
+        "4.74",
+        "5.74",
+        "3.74",
+        "7.00"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "हेन्डरसन समीकरण: pH = pKa + log10([Salt]/[Acid])। यहाँ [Salt] = [Acid] = 0.1 M होने से log10(1) = 0 हो जाता है, अतः pH = pKa = 4.74।"
+    },
+    {
+      "id": "quiz-chem-eq-05",
+      "nodeId": "leaf-alpha-ka-formula",
+      "nodeLabel": "वियोजन की मात्रा सूत्र α = √(Ka/C) (Degree of Dissociation Formula)",
+      "question": "0.1 M ऐसीटिक अम्ल (CH3COOH, Ka = 1.8 × 10^-5) के वियोजन की मात्रा α (Degree of Dissociation) लगभग कितनी होगी?",
+      "options": [
+        "1.34 × 10^-2 (1.34%)",
+        "1.8 × 10^-4",
+        "0.134",
+        "1.8 × 10^-3"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "ऑस्टवाल्ड तनुता नियम: दुर्बल अम्ल के लिए α = √(Ka / C) = √(1.8 × 10^-5 / 0.1) = √(1.8 × 10^-4) ≈ 1.34 × 10^-2 (1.34%)।"
+    }
+  ]
+}

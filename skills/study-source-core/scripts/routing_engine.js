@@ -237,7 +237,7 @@ function evaluateArtifactRouting(context = {}) {
         routing.bmQa = true;
     }
     
-    if (routing.mindmap && (!isRelational && context.noteWordCount < 300)) {
+    if (routing.mindmap && (!isRelational && context.noteWordCount < 300 && (context.evidenceChars || 0) < 800)) {
         routing.mindmap = false;
         routing.suppressions.mindmap = 'NO_RELATIONAL_TOPOLOGY';
     }
