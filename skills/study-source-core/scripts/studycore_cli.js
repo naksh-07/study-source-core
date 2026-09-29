@@ -159,39 +159,55 @@ function cmdIngest(positional, flags) {
     const chapter = flags.chapter;
 
     if (!sourcePath || !subject || !chapter) {
-        throw new Error('Usage: studycore ingest <sourcePath> --subject <Subject> --chapter <Chapter> [--output <path>] [--page-start <N>] [--page-end <M>] [--lang <hinglish|en|hi|bilingual>]');
+        throw new Error('Usage: studycore ingest <sourcePath> --subject <Subject> --chapter <Chapter> [--output <dir>] [--page-start <N>] [--page-end <M>] [--lang <hinglish|en|hi|bilingual>]');
     }
 
     const vaultRoot = getVaultRoot();
-    const defaultOutput = path.join(vaultRoot, 'Study Materials', subject, chapter, '.build', 'evidence-pack.md');
-    const outputPath = flags.output ? path.resolve(flags.output) : defaultOutput;
+    const chapterDir = path.join(vaultRoot, 'Study Materials', subject, chapter);
+    const defaultOutputDir = path.join(chapterDir, '.build');
+    const outputDir = flags.output ? path.resolve(flags.output) : defaultOutputDir;
+
+    let resolvedSource = path.resolve(sourcePath);
+    if (!fs.existsSync(resolvedSource) && fs.existsSync(path.resolve(vaultRoot, sourcePath))) {
+        resolvedSource = path.resolve(vaultRoot, sourcePath);
+    }
 
     const policy = resolveSubjectPolicy(subject, flags.lang ? { language_policy: flags.lang } : {});
 
-    const ingestResult = ingestSourceToEvidencePack({
-        sourcePath: path.resolve(sourcePath),
-        subjectName: subject,
-        chapterName: chapter,
-        pageStart: flags['page-start'] ? Number(flags['page-start']) : undefined,
-        pageEnd: flags['page-end'] ? Number(flags['page-end']) : undefined
+    const pack = ingestSourceToEvidencePack(resolvedSource, {
+        subject,
+        chapter,
+        page_start: flags['page-start'] ? Number(flags['page-start']) : undefined,
+        page_end: flags['page-end'] ? Number(flags['page-end']) : undefined
     });
 
-    persistEvidencePack(ingestResult, outputPath);
+    const persisted = persistEvidencePack(pack, outputDir);
+    const { initManifest } = require('./artifact_provenance');
+    initManifest(chapterDir, {
+        subject,
+        chapter,
+        evidenceHash: pack.evidence_hash,
+        useBuildDir: true
+    });
 
     const summary = {
         status: 'SUCCESS',
         subject,
         chapter,
         languagePolicy: policy.languagePolicy,
-        outputPath,
-        evidenceHash: ingestResult.evidenceHash || null
+        outputPath: persisted.markdownPath,
+        provenancePath: persisted.provenancePath,
+        evidenceHash: pack.evidence_hash,
+        chunksCount: pack.chunks.length,
+        questionsCount: pack.source_problems.length
     };
 
     if (flags.json) {
         console.log(JSON.stringify(summary, null, 2));
     } else {
         console.log(`✅ Ingested '${sourcePath}' -> ${summary.outputPath}`);
-        console.log(`   Subject Policy : ${subject} (Language: ${summary.languagePolicy ? summary.languagePolicy.mode : 'hinglish'})`);
+        console.log(`   Subject Policy : ${subject} (Language: ${typeof summary.languagePolicy === 'string' ? summary.languagePolicy : (summary.languagePolicy?.mode || 'hinglish')})`);
+        console.log(`   Evidence Hash  : ${summary.evidenceHash}`);
     }
     return summary;
 }
@@ -206,13 +222,14 @@ async function cmdPackage(positional, flags) {
 
     const vaultRoot = getVaultRoot();
     const chapterDir = path.join(vaultRoot, 'Study Materials', subject, chapter);
+    const cleanIntermediates = Boolean(flags.clean);
 
     console.log(`📦 Packaging Declarative Anki Deck for ${subject}::${chapter}...`);
-    await exportChapterToAnki(chapterDir, { cleanIntermediates: true });
+    await exportChapterToAnki(chapterDir, { cleanIntermediates });
 
     if (flags.studylab) {
         console.log(`📦 Packaging StudyLab Procedural Anki Deck for ${subject}::${chapter}...`);
-        await exportStudyLabProceduralAnki(chapterDir, { cleanIntermediates: true });
+        await exportStudyLabProceduralAnki(chapterDir, { cleanIntermediates });
     }
 
     console.log(`✅ Packaging complete for ${subject}::${chapter}.`);
