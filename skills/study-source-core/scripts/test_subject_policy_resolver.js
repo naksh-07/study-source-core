@@ -36,12 +36,14 @@ runTest("Valid Math policy loads successfully", () => {
     const policy = resolveSubjectPolicy("Math");
     if (policy.notes !== true) throw new Error("Expected notes to be true");
     if (policy.practiceQuestions !== true) throw new Error("Expected practiceQuestions to be true");
+    if (policy.language_policy !== 'hinglish') throw new Error(`Expected default language_policy 'hinglish', got '${policy.language_policy}'`);
 });
 
 runTest("Valid Biology policy loads successfully", () => {
     const policy = resolveSubjectPolicy("Biology");
     if (policy.notes !== true) throw new Error("Expected notes to be true");
     if (policy.practiceQuestions !== false) throw new Error("Expected practiceQuestions to be false for Biology");
+    if (policy.language_policy !== 'hinglish') throw new Error(`Expected default language_policy 'hinglish', got '${policy.language_policy}'`);
 });
 
 // C. Every supported subject has a valid runtime policy

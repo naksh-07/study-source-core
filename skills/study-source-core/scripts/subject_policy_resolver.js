@@ -62,12 +62,16 @@ function resolveSubjectPolicy(subject) {
     }
 
     const VALID_PROCEDURAL_MODES = new Set(['markdown', 'apkg', 'both', 'none']);
+    const VALID_LANGUAGE_POLICIES = new Set(['hinglish', 'en', 'hi', 'bilingual']);
     const ALLOWED_CONFIG_KEYS = new Set([
         ...POLICY_SCHEMA_KEYS,
         'procedural_mode',
         'proceduralMode',
         'procedural_apkg',
-        'procedural_question_bank'
+        'procedural_question_bank',
+        'language_policy',
+        'languagePolicy',
+        'language'
     ]);
 
     // Handle aliases before schema validation
@@ -123,6 +127,15 @@ function resolveSubjectPolicy(subject) {
     // Attach aliases to result
     result.procedural_apkg = result.proceduralApkg;
     result.procedural_question_bank = result.proceduralQuestionBank;
+
+    // Validate language_policy if specified, default to 'hinglish' (Hindi-first with technical English in parentheses)
+    const rawLang = normalizedPolicy.language_policy || normalizedPolicy.languagePolicy || normalizedPolicy.language;
+    const langPolicy = rawLang !== undefined ? String(rawLang).toLowerCase() : 'hinglish';
+    if (!VALID_LANGUAGE_POLICIES.has(langPolicy)) {
+        throw new Error(`INVALID_POLICY_SCHEMA: Invalid language_policy '${rawLang}' in policy for '${subject}'. Expected one of: ${Array.from(VALID_LANGUAGE_POLICIES).join(', ')}`);
+    }
+    result.language_policy = langPolicy;
+    result.languagePolicy = langPolicy;
 
     for (const key of Object.keys(policy)) {
         if (!ALLOWED_CONFIG_KEYS.has(key)) {

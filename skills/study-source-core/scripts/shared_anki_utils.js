@@ -29,7 +29,7 @@ function calculateFieldChecksum(sfld) {
  * Initializes standard Anki SQLite schema tables (col, notes, cards, revlog, graves, indices).
  */
 function initializeAnkiSchema(db) {
-    db.run(`
+    const schemaSql = `
         CREATE TABLE col (
             id              integer primary key,
             crt             integer not null,
@@ -101,7 +101,12 @@ function initializeAnkiSchema(db) {
         CREATE INDEX ix_cards_sched on cards (did, queue, due);
         CREATE INDEX ix_revlog_usn on revlog (usn);
         CREATE INDEX ix_revlog_cid on revlog (cid);
-    `);
+    `;
+    if (typeof db.exec === 'function') {
+        db.exec(schemaSql);
+    } else if (typeof db.run === 'function') {
+        db.run(schemaSql);
+    }
 }
 
 /**
@@ -179,9 +184,104 @@ function buildDeckConfigurations(deckId, deckName, description = '') {
 }
 
 /**
- * Packages SQLite database and media files into an APKG ZIP buffer.
+ * Creates an Anki SQLite database.
+ * If diskFilePath is provided, creates a native disk-backed database via better-sqlite3 with zero V8 heap overhead.
+ * If better-sqlite3 is unavailable, returns null (caller can fallback to sql.js).
  */
-async function assembleApkgZip(dbBuffer, mediaFilesMap = new Map()) {
+function createAnkiDatabase(diskFilePath) {
+    if (!diskFilePath) return null;
+    try {
+        const Database = require('better-sqlite3');
+        const fs = require('fs');
+        const path = require('path');
+        const dir = path.dirname(diskFilePath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        if (fs.existsSync(diskFilePath)) fs.unlinkSync(diskFilePath);
+
+        const db = new Database(diskFilePath);
+        db.pragma('journal_mode = WAL');
+        initializeAnkiSchema(db);
+
+        // API parity shims for sql.js caller compatibility
+        const origPrepare = db.prepare.bind(db);
+        db.prepare = function(sql) {
+            const stmt = origPrepare(sql);
+            stmt.free = () => {};
+            return stmt;
+        };
+        db.export = function() {
+            return fs.readFileSync(diskFilePath);
+        };
+        return { db, isNative: true, diskFilePath };
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Assembles an APKG ZIP file by streaming directly to disk (Zero-Heap OOM-safe).
+ * Streams collection.anki2 and media files without buffering them in Node.js memory.
+ */
+async function assembleApkgStream(colDbPathOrBuffer, mediaFilesMap = new Map(), outputPath) {
+    const fs = require('fs');
+    const path = require('path');
+    const outDir = path.dirname(outputPath);
+    if (!fs.existsSync(outDir)) {
+        fs.mkdirSync(outDir, { recursive: true });
+    }
+
+    try {
+        const { ZipArchive } = require('archiver');
+        const output = fs.createWriteStream(outputPath);
+        const zip = new ZipArchive({ zlib: { level: 6 } });
+
+        return await new Promise((resolve, reject) => {
+            output.on('close', resolve);
+            output.on('error', reject);
+            zip.on('error', reject);
+
+            zip.pipe(output);
+
+            // 1. collection.anki2
+            if (typeof colDbPathOrBuffer === 'string') {
+                zip.file(colDbPathOrBuffer, { name: 'collection.anki2' });
+            } else {
+                zip.append(colDbPathOrBuffer, { name: 'collection.anki2' });
+            }
+
+            // 2. Media index and media files
+            const mediaMap = {};
+            let mediaIndex = 0;
+
+            if (mediaFilesMap && mediaFilesMap.size > 0) {
+                for (const [filename, absPath] of mediaFilesMap.entries()) {
+                    const indexStr = mediaIndex.toString();
+                    mediaMap[indexStr] = filename;
+                    if (typeof absPath === 'string' && fs.existsSync(absPath)) {
+                        zip.file(absPath, { name: indexStr });
+                    }
+                    mediaIndex++;
+                }
+            }
+
+            zip.append(JSON.stringify(mediaMap), { name: 'media' });
+            zip.finalize();
+        });
+    } catch (err) {
+        // Fallback: If streaming archiver encounters an error, fallback to JSZip
+        const buffer = (typeof colDbPathOrBuffer === 'string') ? fs.readFileSync(colDbPathOrBuffer) : colDbPathOrBuffer;
+        const zipBuf = await assembleApkgZip(buffer, mediaFilesMap);
+        fs.writeFileSync(outputPath, zipBuf);
+    }
+}
+
+/**
+ * Packages SQLite database and media files into an APKG ZIP buffer (backward-compatible).
+ */
+async function assembleApkgZip(dbBufferOrPath, mediaFilesMap = new Map()) {
+    const fs = require('fs');
+    const dbBuffer = (typeof dbBufferOrPath === 'string') ? fs.readFileSync(dbBufferOrPath) : dbBufferOrPath;
+
     const zip = new JSZip();
     zip.file('collection.anki2', dbBuffer);
 
@@ -189,7 +289,6 @@ async function assembleApkgZip(dbBuffer, mediaFilesMap = new Map()) {
     let mediaIndex = 0;
 
     if (mediaFilesMap && mediaFilesMap.size > 0) {
-        const fs = require('fs');
         for (const [filename, absPath] of mediaFilesMap.entries()) {
             const indexStr = mediaIndex.toString();
             mediaMap[indexStr] = filename;
@@ -213,5 +312,7 @@ module.exports = {
     calculateFieldChecksum,
     initializeAnkiSchema,
     buildDeckConfigurations,
+    createAnkiDatabase,
+    assembleApkgStream,
     assembleApkgZip
 };

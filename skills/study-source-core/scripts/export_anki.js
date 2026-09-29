@@ -40,6 +40,8 @@ const {
     calculateFieldChecksum,
     initializeAnkiSchema,
     buildDeckConfigurations,
+    createAnkiDatabase,
+    assembleApkgStream,
     assembleApkgZip
 } = require('./shared_anki_utils');
 
@@ -367,11 +369,32 @@ async function exportChapterToAnki(chapterDir, options = {}) {
         };
     }
 
-    // 6. Initialize SQLite Database using shared utils
-    const SQL = await initSqlJs();
-    const db = new SQL.Database();
+    // 6. Resolve Output Paths & Initialize SQLite Database (direct on disk via better-sqlite3 with zero heap churn, or sql.js fallback)
+    const outputFilename = options.outputFilename || `${chapterName}_Anki.apkg`;
+    let outputPath = options.outputPath;
+    if (!outputPath) {
+        const targetDir = options.outputDir ? path.resolve(options.outputDir) : resolvedChapterDir;
+        outputPath = path.join(targetDir, outputFilename);
+    }
 
-    initializeAnkiSchema(db);
+    const outputDirname = path.dirname(outputPath);
+    if (!fs.existsSync(outputDirname)) {
+        fs.mkdirSync(outputDirname, { recursive: true });
+    }
+
+    const tempColPath = path.join(outputDirname, `.temp_col_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.anki2`);
+    let dbWrapper = createAnkiDatabase(tempColPath);
+    let db;
+    let isNativeDb = false;
+
+    if (dbWrapper) {
+        db = dbWrapper.db;
+        isNativeDb = true;
+    } else {
+        const SQL = await initSqlJs();
+        db = new SQL.Database();
+        initializeAnkiSchema(db);
+    }
 
     const { decksConfig, dconfConfig, globalConf, nowSecs, nowMs } = buildDeckConfigurations(
         deckId,
@@ -505,28 +528,20 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     insertNoteStmt.free();
     insertCardStmt.free();
 
-    // 10. Export SQLite binary buffer
-    const dbBinaryData = db.export();
-    const dbBuffer = Buffer.from(dbBinaryData);
-    db.close();
-
-    // 11. Assemble Zip Package (.apkg) via shared utility
-    const apkgBuffer = await assembleApkgZip(dbBuffer, mediaFilesMap);
-
-    // 12. Write .apkg file
-    const outputFilename = options.outputFilename || `${chapterName}_Anki.apkg`;
-    let outputPath = options.outputPath;
-    if (!outputPath) {
-        const targetDir = options.outputDir ? path.resolve(options.outputDir) : resolvedChapterDir;
-        outputPath = path.join(targetDir, outputFilename);
+    // 10. Assemble Zip Package (.apkg) via shared streaming utility (Zero Heap OOM)
+    let apkgBuffer;
+    if (isNativeDb) {
+        db.close();
+        await assembleApkgStream(tempColPath, mediaFilesMap, outputPath);
+        try { if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath); } catch (_) {}
+        apkgBuffer = fs.readFileSync(outputPath);
+    } else {
+        const dbBinaryData = db.export();
+        const dbBuffer = Buffer.from(dbBinaryData);
+        db.close();
+        apkgBuffer = await assembleApkgZip(dbBuffer, mediaFilesMap);
+        fs.writeFileSync(outputPath, apkgBuffer);
     }
-
-    const outputDirname = path.dirname(outputPath);
-    if (!fs.existsSync(outputDirname)) {
-        fs.mkdirSync(outputDirname, { recursive: true });
-    }
-
-    fs.writeFileSync(outputPath, apkgBuffer);
 
     // 13. Validate APKG immediately upon assembly before touching any source inputs
     const expectedCounts = {

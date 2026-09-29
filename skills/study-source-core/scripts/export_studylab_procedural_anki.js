@@ -40,6 +40,8 @@ const {
     calculateFieldChecksum,
     initializeAnkiSchema,
     buildDeckConfigurations,
+    createAnkiDatabase,
+    assembleApkgStream,
     assembleApkgZip
 } = require('./shared_anki_utils');
 
@@ -1087,11 +1089,27 @@ async function exportStudyLabProceduralAnki(targetInput, options = {}) {
         throw new Error(`No PracticeQuestions.json or ProblemPatterns.json found for chapter: ${chapterName}`);
     }
 
-    // 3. Initialize SQLite Database via shared utils
-    const SQL = await initSqlJs();
-    const db = new SQL.Database();
+    // 3. Resolve Output Directory & Initialize SQLite Database (direct on disk via better-sqlite3 with zero heap churn, or sql.js fallback)
+    const studyLabDir = options.outputDir || path.join(chapterDir, 'StudyLab');
+    if (!fs.existsSync(studyLabDir)) {
+        fs.mkdirSync(studyLabDir, { recursive: true });
+    }
+    const outputFilename = options.outputFilename || `${chapterName}_StudyLab_Procedural.apkg`;
+    const outputPath = path.join(studyLabDir, outputFilename);
 
-    initializeAnkiSchema(db);
+    const tempColPath = path.join(studyLabDir, `.temp_col_proc_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.anki2`);
+    let dbWrapper = createAnkiDatabase(tempColPath);
+    let db;
+    let isNativeDb = false;
+
+    if (dbWrapper) {
+        db = dbWrapper.db;
+        isNativeDb = true;
+    } else {
+        const SQL = await initSqlJs();
+        db = new SQL.Database();
+        initializeAnkiSchema(db);
+    }
 
     const { decksConfig, dconfConfig, globalConf, nowSecs, nowMs } = buildDeckConfigurations(
         deckId,
@@ -1306,24 +1324,20 @@ async function exportStudyLabProceduralAnki(targetInput, options = {}) {
     insertNoteStmt.free();
     insertCardStmt.free();
 
-    // 5. Export SQLite buffer
-    const dbBinaryData = db.export();
-    const dbBuffer = Buffer.from(dbBinaryData);
-    db.close();
-
-    // 6. Zip archive via shared utility
-    const apkgBuffer = await assembleApkgZip(dbBuffer, new Map());
-
-    // 7. Output directory structure
-    const studyLabDir = options.outputDir || path.join(chapterDir, 'StudyLab');
-    if (!fs.existsSync(studyLabDir)) {
-        fs.mkdirSync(studyLabDir, { recursive: true });
+    // 5. Assemble Zip archive via shared streaming utility (Zero Heap OOM)
+    let apkgBuffer;
+    if (isNativeDb) {
+        db.close();
+        await assembleApkgStream(tempColPath, new Map(), outputPath);
+        try { if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath); } catch (_) {}
+        apkgBuffer = fs.readFileSync(outputPath);
+    } else {
+        const dbBinaryData = db.export();
+        const dbBuffer = Buffer.from(dbBinaryData);
+        db.close();
+        apkgBuffer = await assembleApkgZip(dbBuffer, new Map());
+        fs.writeFileSync(outputPath, apkgBuffer);
     }
-
-    const outputFilename = options.outputFilename || `${chapterName}_StudyLab_Procedural.apkg`;
-    const outputPath = path.join(studyLabDir, outputFilename);
-
-    fs.writeFileSync(outputPath, apkgBuffer);
 
     // 8. Write Companion Manifest
     const manifestFilename = options.manifestFilename || `${chapterName}_StudyLab_Procedural.manifest.json`;
