@@ -97,7 +97,8 @@ function normalizeRawSourceData(data) {
         difficulty: p.difficulty || 2.0,
         exam: (p.provenance && (p.provenance.exam || p.provenance.source)) || p.exam || null,
         source_solution_steps: Array.isArray(p.solution_steps) ? p.solution_steps : (Array.isArray(p.source_solution_steps) ? p.source_solution_steps : []),
-        prerequisites: Array.isArray(p.prerequisites) ? p.prerequisites : []
+        prerequisites: Array.isArray(p.prerequisites) ? p.prerequisites : [],
+        hints: p.hints || (p.progressive_hints ? p.progressive_hints : null)
     }));
 
     return {
@@ -270,23 +271,27 @@ function buildProgressiveHints(prob, pattern, answer) {
     let tier3 = '';
 
     // 1. Authoritative Specialist / LLM Hints Check
-    if (prob && prob.hints && prob.hints.tier1_conceptual && prob.hints.tier2_strategic && prob.hints.tier3_next_step) {
-        tier1 = prob.hints.tier1_conceptual;
-        tier2 = prob.hints.tier2_strategic;
-        tier3 = prob.hints.tier3_next_step;
-    } else if (pattern && pattern.hints && pattern.hints.tier1_conceptual && pattern.hints.tier2_strategic && pattern.hints.tier3_next_step) {
-        tier1 = pattern.hints.tier1_conceptual;
-        tier2 = pattern.hints.tier2_strategic;
-        tier3 = pattern.hints.tier3_next_step;
-    } else if (pattern && (pattern.governing_method || pattern.deep_structure || pattern.title)) {
-        const title = pattern.title || 'गणितीय संक्रिया';
-        const method = pattern.governing_method || 'चरणबद्ध मानक विधि';
-        const deepStruct = pattern.deep_structure || 'मूलभूत अवधारणा';
-        tier1 = `संकल्पना एवं सिद्धांत: ${title} के अंतर्गत ${deepStruct} का स्मरण करें।`;
-        tier2 = `विधि एवं रणनीति: समस्या के समाधान हेतु ${method} का अनुप्रयोग करें।`;
-        tier3 = `सेटअप एवं संक्रिया: अज्ञात राशि के लिए समीकरण स्थापित करें और मान प्रतिस्थापित कर गणना पूर्ण करें।`;
-    } else {
-        throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Question '${prob && (prob.id || prob.source_id)}' lacks 3-tier progressive hints. Scripts are not permitted to invent generic hints.`);
+    if (prob && prob.hints) {
+        tier1 = prob.hints.tier1_conceptual || prob.hints.tier1_approach || prob.hints.concept || '';
+        tier2 = prob.hints.tier2_strategic || prob.hints.tier2_formula || prob.hints.strategy || '';
+        tier3 = prob.hints.tier3_next_step || prob.hints.tier3_setup || prob.hints.method || '';
+    }
+    if ((!tier1 || !tier2 || !tier3) && pattern && pattern.hints) {
+        tier1 = tier1 || pattern.hints.tier1_conceptual || pattern.hints.tier1_approach || '';
+        tier2 = tier2 || pattern.hints.tier2_strategic || pattern.hints.tier2_formula || '';
+        tier3 = tier3 || pattern.hints.tier3_next_step || pattern.hints.tier3_setup || '';
+    }
+    if (!tier1 || !tier2 || !tier3) {
+        if (pattern && (pattern.governing_method || pattern.deep_structure || pattern.title)) {
+            const title = pattern.title || 'गणितीय संक्रिया';
+            const method = pattern.governing_method || 'चरणबद्ध मानक विधि';
+            const deepStruct = pattern.deep_structure || 'मूलभूत अवधारणा';
+            tier1 = tier1 || `संकल्पना एवं सिद्धांत: ${title} के अंतर्गत ${deepStruct} का स्मरण करें।`;
+            tier2 = tier2 || `विधि एवं रणनीति: समस्या के समाधान हेतु ${method} का अनुप्रयोग करें।`;
+            tier3 = tier3 || `सेटअप एवं संक्रिया: अज्ञात राशि के लिए समीकरण स्थापित करें और मान प्रतिस्थापित कर गणना पूर्ण करें।`;
+        } else {
+            throw new Error(`[MISSING_AUTHORITATIVE_HINTS] Question '${prob && (prob.id || prob.source_id)}' lacks 3-tier progressive hints. Scripts are not permitted to invent generic hints.`);
+        }
     }
 
     // Explicit Anti-Leak Assertion Check (Fail Closed - No Silent Overwriting)
@@ -303,7 +308,10 @@ function buildProgressiveHints(prob, pattern, answer) {
     return {
         tier1_conceptual: tier1,
         tier2_strategic: tier2,
-        tier3_next_step: tier3
+        tier3_next_step: tier3,
+        tier1_approach: tier1,
+        tier2_formula: tier2,
+        tier3_setup: tier3
     };
 }
 

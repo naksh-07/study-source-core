@@ -1022,7 +1022,12 @@ runTest('T4.1.1', 'Authentic LCM-HCF fixture end-to-end cardinality reconciliati
             difficulty: 2.0,
             exam: 'RRB ALP',
             year: 2018,
-            shift: `Shift ${(i % 3) + 1}`
+            shift: `Shift ${(i % 3) + 1}`,
+            hints: {
+                tier1_approach: 'दी गई दोनों संख्याओं का अभाज्य गुणनखंडन कर अधिकतम घात वाले अभाज्य गुणनखंडों का गुणनफल ज्ञात करें।',
+                tier2_formula: '\\text{LCM}(a, b) = \\prod p_i^{\\max(k_i)}',
+                tier3_setup: 'दी गई संख्याओं को अभाज्य गुणनखंडों के रूप में व्यक्त करें और प्रत्येक अभाज्य आधार की अधिकतम घात का चयन करें।'
+            }
         });
     }
 

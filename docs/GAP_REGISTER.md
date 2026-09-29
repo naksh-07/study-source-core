@@ -32,6 +32,11 @@ Every identified gap is tracked with:
 | **GAP-10** | Provenance / Data | **P1 Critical** | 11-Field Content Lineage Record (CLR) Persistence | Phase 2 | **Resolved** (Milestone 1) |
 | **GAP-11** | Tooling / Adapter | **P2 High** | Antigravity Native Subagent Registration Adapter | Phase 10 | **Resolved** (Phase 10) |
 | **GAP-12** | Certification / CI | **P1 Critical** | ADV-01..15 Independent Certification Pipeline Integration | Phase 9 | **Resolved** (Milestone 4) |
+| **GAP-13** | Schema / Anti-Leak | **P0 Critical** | Canonical Contracts Deep Anti-Leak & Parameter Space Audit | Audit Track 1 | **Resolved** (Track 1) |
+| **GAP-14** | Vault / Parity | **P1 High** | Production Vault Sibling Parity for Map/Europe | Audit Track 4 | **Resolved** (Track 4) |
+| **GAP-15** | Fixtures / Hints | **P1 High** | Test Fixture Pedagogical Completeness & 3-Tier Hints | Audit Track 3 | **Resolved** (Track 3) |
+| **GAP-16** | Routing / Matrix | **P2 High** | 9-Subject Matrix Routing & Zero Silent Omission | Audit Track 5 | **Resolved** (Track 5) |
+| **GAP-17** | Windows / Lifecycle | **P2 High** | Windows File Handles & Transient Lifecycle Retries | Audit Track 6 | **Resolved** (Track 6) |
 
 ---
 
@@ -277,6 +282,76 @@ Every identified gap is tracked with:
 - **Resolution Details**: Created standalone 4-Gate adversarial certifier CLI (`skills/study-source-core/scripts/run_adversarial_certification.js`) implementing independent binary packaging audit: Gate 1 (Physical Completion Evidence verification), Gate 2 (Adversarial Security Matrix ADV-01..15), Gate 3 (Low-Level Binary Packaging PKG-01..15 SQLite schema & Model ID isolation), and Gate 4 (Cross-Artifact Semantic Consistency). Added CLI test harness `test_adversarial_certification_cli.js` (4/4 PASS, 100%) and wired CLI into `package.json` under `"scripts": { "certify": "node scripts/run_adversarial_certification.js" }` and test runner targets.
 - **Verification Method**:
   - `npm run certify -- <chapterDir>` executes 4-Gate audit and outputs structured sign-off report with exit code 0 on pass or code 1 on failure. Verified via `test_adversarial_certification_cli.js` in CI.
+
+---
+
+### GAP-13: Canonical Contracts Deep Anti-Leak & Parameter Space Audit
+- **Category**: Schema / Anti-Leak
+- **Severity**: **P0 Critical**
+- **Evidence**:
+  - `studylab-canonical-contracts.json` contained 533 contracts, 1,004 parameters, and 1,599 hints that required systematic anti-leak and DAG acyclicity verification after ADR-18 fail-closed invariant introduction.
+- **Intended Resolution**:
+  - Scan all 533 contracts for premature numerical/option leakage in Tier 1 & 2 hints, cycle detection in solution DAGs, and parameter domain hazards.
+- **Target Phase**: **Audit Track 1**
+- **Status**: **Resolved** (Track 1)
+- **Resolution Details**: Created `scripts/audit_canonical_contracts_antileak.js`. Scanned all 533 contracts (1,004 params, 1,599 hints). Verified 0 hint leaks, 0 DAG cycles, and 0 parameter hazards. Refined `sn1_vs_sn2` regex check to avoid false positives. Authored formal report at `docs/audits/CANONICAL_CONTRACTS_LEAK_AUDIT_REPORT.md`.
+- **Verification Method**: `node scripts/audit_canonical_contracts_antileak.js` (100% PASS).
+
+---
+
+### GAP-14: Production Vault Sibling Parity for Map/Europe
+- **Category**: Vault / Parity
+- **Severity**: **P1 High**
+- **Evidence**:
+  - `Study Materials/Map/Europe` lacked canonical `MindMap` (`Europe.mindmap.json`) and `SlideDeck` (`Europe_SlideDeckPrompt.md`), causing regression test failures.
+- **Intended Resolution**:
+  - Author complete sibling deliverables adhering to `map-schema.md` (depth $\ge 3$) and `slide-deck-core-rules.md` (12 mandatory sections).
+- **Target Phase**: **Audit Track 4**
+- **Status**: **Resolved** (Track 4)
+- **Resolution Details**: Subagents `core-mindmap` and `core-slide-deck` authored `Europe.mindmap.json` (42 nodes, 4 branches, depth 3, interactive quiz) and `Europe_SlideDeckPrompt.md` (12 mandatory sections, 8 slides). Both verified via `slide_deck_prompt_audit.js` (100% pass).
+- **Verification Method**: `node scripts/slide_deck_prompt_audit.js "Study Materials/Map/Europe/SlideDeck/Europe_SlideDeckPrompt.md"` (100% PASS).
+
+---
+
+### GAP-15: Test Fixture Pedagogical Completeness & 3-Tier Hints
+- **Category**: Fixtures / Pedagogical Integrity
+- **Severity**: **P1 High**
+- **Evidence**:
+  - `math_lcm_hcf_source_fixture.json` lacked authentic 3-tier progressive hints, triggering `[MISSING_AUTHORITATIVE_HINTS]` fail-closed errors under ADR-18.
+- **Intended Resolution**:
+  - Enrich all fixture candidate problems with authentic bilingual 3-tier hints without synthetic fallbacks.
+- **Target Phase**: **Audit Track 3**
+- **Status**: **Resolved** (Track 3)
+- **Resolution Details**: Subagent `math-apkg-author` enriched `math_lcm_hcf_source_fixture.json` and `fresh_math_ap_source_fixture.json` with genuine bilingual progressive hints (Tier 1 Approach, Tier 2 Formula, Tier 3 Setup) with zero answer reveals.
+- **Verification Method**: `node scripts/test_e2e_lightweight_question_bank.js` (45/45 PASS, 100%).
+
+---
+
+### GAP-16: 9-Subject Matrix Routing & Zero Silent Omission
+- **Category**: Routing / Gating Matrix
+- **Severity**: **P2 High**
+- **Evidence**:
+  - 63-cell matrix across 9 subjects and 7 deliverable tracks required deterministic eligibility and suppression code verification.
+- **Intended Resolution**:
+  - Audit all 63 cells to ensure zero silent omissions and explicit canonical suppression codes (`NO_IO_CANDIDATES`, `NO_DECLARATIVE_CARDS_AVAILABLE`, etc.).
+- **Target Phase**: **Audit Track 5**
+- **Status**: **Resolved** (Track 5)
+- **Resolution Details**: Created `scripts/test_subject_routing_matrix.js`. Audited all 63 cells: 49 eligible, 14 suppressed, 0 failed. Authored `docs/audits/SUBJECT_ROUTING_MATRIX_AUDIT.md`.
+- **Verification Method**: `node scripts/test_subject_routing_matrix.js` (63/63 PASS, 100%).
+
+---
+
+### GAP-17: Windows File Handles & Transient Lifecycle Retries
+- **Category**: Windows / Concurrency Lifecycle
+- **Severity**: **P2 High**
+- **Evidence**:
+  - Rapid successive packaging operations could encounter transient Windows `EBUSY`/`EPERM` locks or unclosed `sql.js` database handles.
+- **Intended Resolution**:
+  - Implement `safeUnlinkSync` and `safeRmdirSync` with synchronous exponential backoff, ensure all `sql.js` handles call `db.close()`, and stress-test 10 rapid cycles.
+- **Target Phase**: **Audit Track 6**
+- **Status**: **Resolved** (Track 6)
+- **Resolution Details**: Enhanced `cleanup_transients.js` with exponential-backoff retries. Closed SQLite instance in `mcq_blackbox_validator.js`. Created `scripts/test_track6_transient_lifecycle.js` and confirmed 10/10 rapid packaging stress cycles passed without error. Authored `docs/audits/WINDOWS_TRANSIENT_LIFECYCLE_AUDIT.md`.
+- **Verification Method**: `node scripts/test_track6_transient_lifecycle.js` (10/10 PASS, 100%).
 
 ---
 

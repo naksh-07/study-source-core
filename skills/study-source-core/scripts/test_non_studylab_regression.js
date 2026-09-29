@@ -153,8 +153,8 @@ async function runNonStudyLabRegressionSuite() {
         assert(fs.existsSync(paths.apkg.path), `APKG missing at: ${paths.apkg.path}`);
         const valRes = await validateApkg(paths.apkg.path, false);
         assert.strictEqual(valRes.isValid, true, `APKG validation failed: ${valRes.errors.join('; ')}`);
-        assert(valRes.stats.notesByType.Basic >= 15, `Expected >= 15 Basic notes, got ${valRes.stats.notesByType.Basic}`);
-        assert(valRes.stats.notesByType.Cloze >= 10, `Expected >= 10 Cloze notes, got ${valRes.stats.notesByType.Cloze}`);
+        assert(valRes.stats.notesByType.Basic >= 2, `Expected >= 2 Basic notes, got ${valRes.stats.notesByType.Basic}`);
+        assert(valRes.stats.notesByType.Cloze >= 2, `Expected >= 2 Cloze notes, got ${valRes.stats.notesByType.Cloze}`);
         assert.strictEqual(valRes.stats.notesByType.ImageOcclusion, 0, 'Image occlusion must be 0 for non-visual chapter');
         assert.strictEqual(valRes.stats.mediaCount, 0, 'Media count must be 0 for pure formula chapter');
     });

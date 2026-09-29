@@ -1,0 +1,459 @@
+{
+  "id": "europe-mindmap",
+  "title": "यूरोप महाद्वीप : राजनीतिक एवं भौगोलिक मानचित्र (Europe Continent: Political & Physical Map)",
+  "subtitle": "यूरोप का समग्र स्थलाकृतिक, राजनीतिक एवं जलप्रणालीय मानचित्रण (Comprehensive Topographical, Political & Hydrographic Mapping)",
+  "subject": "Map",
+  "chapter": "Europe",
+  "language": "mixed",
+  "root": {
+    "id": "europe-root",
+    "label": "यूरोप महाद्वीप (Europe Continent)",
+    "subtitle": "भौगोलिक एवं राजनीतिक संरचना (Geographical & Political Structure)",
+    "description": "यूरोप महाद्वीप का विस्तृत मानचित्र, पर्वतमालाएं, नदियां, जलसंधियां एवं क्षेत्रीय विभाजन",
+    "category": "Continent",
+    "badge": "World Map",
+    "color": "#1E40AF",
+    "icon": "globe",
+    "tags": [
+      "Europe",
+      "Geography",
+      "Map"
+    ],
+    "keyFacts": [
+      "यूरोप और एशिया को यूराल पर्वत एवं काकेशस पर्वत अलग करते हैं",
+      "माउंट एल्ब्रस (Mt. Elbrus, 5642m) यूरोप की सर्वोच्च चोटी है",
+      "डेन्यूब नदी 10 देशों से होकर बहती है और काला सागर में गिरती है",
+      "वोल्गा नदी यूरोप की सबसे लंबी नदी है जो कैस्पियन सागर में गिरती है",
+      "ग्रीनविच प्रधान मध्याह्न रेखा (0° Longitude) ब्रिटेन, फ्रांस और स्पेन से गुजरती है"
+    ],
+    "children": [
+      {
+        "id": "branch-relief-mountains",
+        "label": "स्थलाकृतिक उच्चावच एवं पर्वतमालाएँ (Topographic Relief & Mountains)",
+        "subtitle": "प्रमुख पर्वतमालाएं एवं सर्वोच्च शिखर (Major Mountain Ranges & Peaks)",
+        "category": "Relief",
+        "badge": "Mountains",
+        "color": "#B45309",
+        "children": [
+          {
+            "id": "sub-alps-system",
+            "label": "आल्प्स पर्वत प्रणाली (Alps Mountain System)",
+            "subtitle": "मध्य यूरोप का मुख्य मोड़दार पर्वत (Fold Mountains of Central Europe)",
+            "children": [
+              {
+                "id": "node-mont-blanc",
+                "label": "मोंट ब्लांक सर्वोच्च शिखर (Mont Blanc Peak)",
+                "subtitle": "आल्प्स की सर्वोच्च चोटी (4,808 मी, फ्रांस/इटली सीमा)",
+                "badge": "Peak 4808m",
+                "keyFacts": [
+                  "आल्प्स की सबसे ऊंची चोटी",
+                  "फ्रांस और इटली की सीमा पर स्थित"
+                ]
+              },
+              {
+                "id": "node-alps-extent",
+                "label": "मध्य यूरोपीय विस्तार (Central European Extent)",
+                "subtitle": "फ्रांस, स्विट्जरलैंड, इटली, ऑस्ट्रिया (Alpine Nations)",
+                "keyFacts": [
+                  "राइन और रोन नदियों का उद्गम क्षेत्र"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-ural-caucasus",
+            "label": "यूराल एवं काकेशस (Ural & Caucasus Ranges)",
+            "subtitle": "यूरोप-एशिया महाद्वीपीय सीमा (Europe-Asia Continental Divide)",
+            "children": [
+              {
+                "id": "node-ural-divide",
+                "label": "यूराल: महाद्वीपीय विभाजक (Ural: Continental Divide)",
+                "subtitle": "रूस में उत्तर-दक्षिण विस्तार (North-South Divide)",
+                "keyFacts": [
+                  "यूरोप और एशिया के बीच प्राकृतिक सीमा बनाता है"
+                ]
+              },
+              {
+                "id": "node-elbrus-peak",
+                "label": "माउंट एल्ब्रस शिखर (Mount Elbrus Peak)",
+                "subtitle": "यूरोप की सर्वोच्च चोटी (5,642 मी, काकेशस पर्वत)",
+                "badge": "Highest Peak 5642m",
+                "keyFacts": [
+                  "रूस के काकेशस क्षेत्र में स्थित",
+                  "यूरोप महाद्वीप का उच्चतम बिंदु"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-pyrenees-apennines",
+            "label": "पिरेनीज एवं अन्य श्रेणियाँ (Pyrenees & Other Ranges)",
+            "subtitle": "प्रायद्वीपीय पर्वत श्रेणियां (Peninsular Mountain Ranges)",
+            "children": [
+              {
+                "id": "node-pyrenees-border",
+                "label": "पिरेनीज: फ्रांस-स्पेन सीमा (Pyrenees: France-Spain Border)",
+                "subtitle": "इबेरियन प्रायद्वीप विभाजक (Iberian Peninsula Border)",
+                "keyFacts": [
+                  "फ्रांस और स्पेन के बीच प्राकृतिक सीमा",
+                  "ऐंडोरा देश इसी में स्थित है"
+                ]
+              },
+              {
+                "id": "node-apennines-italy",
+                "label": "एपेनाइन्स: इटली रीढ़ (Apennines: Italian Spine)",
+                "subtitle": "इटली का उत्तर से दक्षिण विस्तार (Peninsular Italy)",
+                "keyFacts": [
+                  "इटली प्रायद्वीप की रीढ़ मानी जाने वाली पर्वतमाला"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "branch-drainage-rivers",
+        "label": "अपवाह तंत्र एवं प्रमुख नदियाँ (Drainage System & Rivers)",
+        "subtitle": "यूरोप की जलप्रणाली एवं नदी बेसिन (European River Basins & Flow)",
+        "category": "Hydrography",
+        "badge": "Rivers",
+        "color": "#0284C7",
+        "children": [
+          {
+            "id": "sub-danube-system",
+            "label": "डेन्यूब नदी तंत्र (Danube River System)",
+            "subtitle": "अंतरराष्ट्रीय व्यापारिक नदी (Transboundary European River)",
+            "children": [
+              {
+                "id": "node-danube-origin",
+                "label": "ब्लैक फॉरेस्ट उद्गम (Black Forest Origin)",
+                "subtitle": "जर्मनी से उद्गम (Origin in Germany)",
+                "keyFacts": [
+                  "जर्मनी के ब्लैक फॉरेस्ट पर्वत से निकलती है"
+                ]
+              },
+              {
+                "id": "node-danube-capitals",
+                "label": "चार राजधानियों से प्रवाह (Four Capitals Course)",
+                "subtitle": "वियना, ब्रातिस्लावा, बुडापेस्ट, बेलग्रेड (10 Nations)",
+                "badge": "4 Capitals / 10 Nations",
+                "keyFacts": [
+                  "10 देशों से बहने वाली यूरोप की दूसरी सबसे लंबी नदी",
+                  "वियना (ऑस्ट्रिया), ब्रातिस्लावा (स्लोवाकिया), बुडापेस्ट (हंगरी), बेलग्रेड (सर्बिया)"
+                ]
+              },
+              {
+                "id": "node-danube-delta",
+                "label": "काला सागर मुहाना (Black Sea Delta)",
+                "subtitle": "रोमानिया/यूक्रेन में डेल्टा (Discharge into Black Sea)",
+                "keyFacts": [
+                  "काला सागर में विशाल डेल्टा बनाती है"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-volga-system",
+            "label": "वोल्गा नदी तंत्र (Volga River System)",
+            "subtitle": "यूरोप की सबसे लंबी नदी (Longest River of Europe)",
+            "children": [
+              {
+                "id": "node-volga-length",
+                "label": "यूरोप की सबसे लंबी नदी (Longest River of Europe)",
+                "subtitle": "लंबाई 3,530 किमी (Russia Flow)",
+                "badge": "Longest 3530km",
+                "keyFacts": [
+                  "यूरोप की सबसे लंबी नदी",
+                  "पूर्णतः रूस के भीतर प्रवाहित"
+                ]
+              },
+              {
+                "id": "node-volga-drainage",
+                "label": "कैस्पियन सागर विसर्जन (Caspian Sea Drainage)",
+                "subtitle": "अंतःस्थलीय अपवाह बेसिन (Inland Drainage Basin)",
+                "keyFacts": [
+                  "विश्व की सबसे बड़ी झील कैस्पियन सागर में गिरती है"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-rhine-western",
+            "label": "राइन एवं पश्चिमी नदियाँ (Rhine & Western Rivers)",
+            "subtitle": "औद्योगिक एवं आर्थिक जलमार्ग (Industrial Waterways)",
+            "children": [
+              {
+                "id": "node-rhine-waterway",
+                "label": "राइन: व्यस्ततम जलमार्ग (Rhine: Busiest Waterway)",
+                "subtitle": "स्विस आल्प्स से उत्तरी सागर (Rotterdam Port)",
+                "keyFacts": [
+                  "यूरोप का सबसे व्यस्त अंतर्देशीय जलमार्ग",
+                  "रॉटरडैम के पास उत्तरी सागर में विसर्जन"
+                ]
+              },
+              {
+                "id": "node-seine-thames",
+                "label": "सीन एवं टेम्स नदियाँ (Seine & Thames Rivers)",
+                "subtitle": "पेरिस व लंदन की जीवनरेखा (Paris & London Lifelines)",
+                "keyFacts": [
+                  "सीन नदी पेरिस से होकर बहती है",
+                  "टेम्स नदी लंदन से होकर बहती है"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "branch-seas-straits",
+        "label": "सीमांत सागर एवं प्रमुख जलसंधियाँ (Marginal Seas & Straits)",
+        "subtitle": "तटीय जल निकाय, जलडमरूमध्य व रणनीतिक नहरें (Coastal Seas, Chokepoints & Canals)",
+        "category": "Maritime",
+        "badge": "Maritime",
+        "color": "#0D9488",
+        "children": [
+          {
+            "id": "sub-southern-seas",
+            "label": "दक्षिणी सीमांत सागर (Southern Marginal Seas)",
+            "subtitle": "भूमध्य सागर एवं संलग्न बेसिन (Mediterranean & Basins)",
+            "children": [
+              {
+                "id": "node-mediterranean",
+                "label": "भूमध्य सागर (Mediterranean Sea)",
+                "subtitle": "यूरोप, एशिया व अफ्रीका के मध्य (Intercontinental Sea)",
+                "keyFacts": [
+                  "यूरोप को अफ्रीका महाद्वीप से अलग करता है",
+                  "21 से अधिक तटीय देश"
+                ]
+              },
+              {
+                "id": "node-black-sea",
+                "label": "काला सागर बेसिन (Black Sea Basin)",
+                "subtitle": "6 सीमावर्ती देश: ROBUGE (6 Bordering Nations)",
+                "badge": "ROBUGE 6 Nations",
+                "keyFacts": [
+                  "रूस, यूक्रेन, रोमानिया, बुल्गारिया, तुर्की, जॉर्जिया",
+                  "केर्च जलडमरूमध्य द्वारा अज़ोव सागर से जुड़ा"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-northern-seas",
+            "label": "उत्तरी सीमांत सागर (Northern Marginal Seas)",
+            "subtitle": "बाल्टिक, उत्तरी एवं नार्वेजियन सागर (Baltic & North Sea)",
+            "children": [
+              {
+                "id": "node-baltic-sea",
+                "label": "बाल्टिक सागर (Baltic Sea)",
+                "subtitle": "9 सीमावर्ती देश (Northern European Basin)",
+                "keyFacts": [
+                  "स्वीडन, फिनलैंड, रूस, एस्टोनिया, लातविया, लिथुआनिया, पोलैंड, जर्मनी, डेनमार्क"
+                ]
+              },
+              {
+                "id": "node-north-sea",
+                "label": "उत्तरी सागर (North Sea)",
+                "subtitle": "ब्रिटेन और मुख्यभूमि के मध्य (Rich Fishery & Oil)",
+                "keyFacts": [
+                  "तेल एवं प्राकृतिक गैस के विशाल भंडार",
+                  "डोगर बैंक प्रमुख मत्स्य क्षेत्र"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-strategic-straits",
+            "label": "प्रमुख जलडमरूमध्य व नहरें (Key Straits & Canals)",
+            "subtitle": "रणनीतिक समुद्री चोकपॉइंट्स (Strategic Maritime Chokepoints)",
+            "children": [
+              {
+                "id": "node-gibraltar",
+                "label": "जिब्राल्टर जलडमरूमध्य (Strait of Gibraltar)",
+                "subtitle": "भूमध्य सागर की कुंजी (Mediterranean to Atlantic)",
+                "badge": "Chokepoint",
+                "keyFacts": [
+                  "भूमध्य सागर और अटलांटिक महासागर को जोड़ता है",
+                  "स्पेन (यूरोप) और मोरक्को (अफ्रीका) को अलग करता है"
+                ]
+              },
+              {
+                "id": "node-bosphorus-dardanelles",
+                "label": "बोस्फोरस व डार्डनेल्स (Bosphorus & Dardanelles)",
+                "subtitle": "तुर्की जलसंधि प्रणाली (Turkish Straits System)",
+                "keyFacts": [
+                  "बोस्फोरस: काला सागर को मरमरा सागर से जोड़ता है",
+                  "डार्डनेल्स: मरमरा सागर को एजियन सागर से जोड़ता है"
+                ]
+              },
+              {
+                "id": "node-dover",
+                "label": "डोवर जलडमरूमध्य (Strait of Dover)",
+                "subtitle": "इंग्लिश चैनल को उत्तरी सागर से (UK to France)",
+                "keyFacts": [
+                  "इंग्लिश चैनल और उत्तरी सागर को जोड़ता है",
+                  "ब्रिटेन को फ्रांस से अलग करता है"
+                ]
+              },
+              {
+                "id": "node-kiel-canal",
+                "label": "कील नहर (Kiel Canal)",
+                "subtitle": "जर्मनी: उत्तरी सागर से बाल्टिक (North Sea to Baltic)",
+                "badge": "Strategic Canal",
+                "keyFacts": [
+                  "जर्मनी में स्थित कृत्रिम जलमार्ग",
+                  "उत्तरी सागर को बाल्टिक सागर से सीधे जोड़ती है"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "branch-political-regions",
+        "label": "राजनीतिक प्रभाग एवं देश (Political Divisions & Nations)",
+        "subtitle": "यूरोपीय उप-क्षेत्र एवं सीमावर्ती विशेषताएं (Sub-regions & Boundary Characteristics)",
+        "category": "Political",
+        "badge": "Geopolitics",
+        "color": "#7C3AED",
+        "children": [
+          {
+            "id": "sub-transcontinental",
+            "label": "अंतर्महाद्वीपीय देश (Transcontinental Nations)",
+            "subtitle": "यूरोप एवं एशिया दोनों में विस्तृत (Spanning Europe & Asia)",
+            "children": [
+              {
+                "id": "node-russia-turkey",
+                "label": "रूस एवं तुर्की (Russia & Turkey)",
+                "subtitle": "यूरेशियाई संप्रभु राष्ट्र (Eurasian Sovereign States)",
+                "keyFacts": [
+                  "रूस का यूराल से पश्चिम का भाग यूरोप में है",
+                  "तुर्की का थ्रेस (इस्तांबुल) भाग यूरोप में है"
+                ]
+              },
+              {
+                "id": "node-prime-meridian",
+                "label": "ग्रीनविच देश (Prime Meridian Nations)",
+                "subtitle": "0° देशांतर पर स्थित 3 देश (UK, France, Spain)",
+                "badge": "0° Longitude",
+                "keyFacts": [
+                  "यूरोप के तीन देश ग्रीनविच रेखा पर स्थित हैं: ब्रिटेन, फ्रांस और स्पेन"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-western-central",
+            "label": "पश्चिमी व मध्य यूरोप (Western & Central Europe)",
+            "subtitle": "औद्योगिक एवं आर्थिक केंद्र (Economic Core Nations)",
+            "children": [
+              {
+                "id": "node-western-powers",
+                "label": "ब्रिटेन, फ्रांस, जर्मनी (UK, France, Germany)",
+                "subtitle": "प्रमुख पश्चिमी शक्तियां (Major Western Powers)",
+                "keyFacts": [
+                  "यूरोप की प्रमुख अर्थव्यवस्थाएं एवं औद्योगिक केंद्र"
+                ]
+              },
+              {
+                "id": "node-alpine-states",
+                "label": "स्विट्जरलैंड एवं ऑस्ट्रिया (Switzerland & Austria)",
+                "subtitle": "स्थलरुद्ध पर्वतीय देश (Landlocked Alpine States)",
+                "keyFacts": [
+                  "आल्प्स पर्वत श्रृंखला में स्थित स्थलरुद्ध (Landlocked) देश"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sub-nordic-baltic",
+            "label": "नॉर्डिक व बाल्टिक क्षेत्र (Nordic & Baltic Regions)",
+            "subtitle": "उत्तरी यूरोपीय राष्ट्र (Northern European Regions)",
+            "children": [
+              {
+                "id": "node-nordic-scandinavia",
+                "label": "स्कैंडिनेवियाई देश (Scandinavian Nations)",
+                "subtitle": "नॉर्वे, स्वीडन, डेनमार्क (Fjords & Glacial Relief)",
+                "keyFacts": [
+                  "नॉर्वे अपने प्रसिद्ध फ्योर्ड (Fjords) तटों के लिए विख्यात है"
+                ]
+              },
+              {
+                "id": "node-baltic-trio",
+                "label": "बाल्टिक त्रयी (Baltic Trio States)",
+                "subtitle": "एस्टोनिया, लातविया, लिथुआनिया (Baltic Republics)",
+                "keyFacts": [
+                  "बाल्टिक सागर के पूर्वी तट पर स्थित तीन देश"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "crossLinks": [
+    {
+      "sourceId": "node-danube-delta",
+      "targetId": "node-black-sea",
+      "label": "में गिरती है (flows into)",
+      "type": "relationship"
+    },
+    {
+      "sourceId": "node-gibraltar",
+      "targetId": "node-mediterranean",
+      "label": "जोड़ता है (connects)",
+      "type": "relationship"
+    },
+    {
+      "sourceId": "node-ural-divide",
+      "targetId": "node-russia-turkey",
+      "label": "विभाजित करता है (divides)",
+      "type": "relationship"
+    }
+  ],
+  "quizQuestions": [
+    {
+      "id": "quiz-europe-01",
+      "nodeId": "node-danube-capitals",
+      "nodeLabel": "चार राजधानियों से प्रवाह (Four Capitals Course)",
+      "question": "डेन्यूब नदी (Danube River) कितने देशों की राजधानियों से होकर गुजरती है?",
+      "options": [
+        "2 राजधानियाँ",
+        "3 राजधानियाँ",
+        "4 राजधानियाँ",
+        "5 राजधानियाँ"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "डेन्यूब नदी 4 देशों की राजधानियों (वियना, ब्रातिस्लावा, बुडापेस्ट, बेलग्रेड) से होकर बहती है तथा कुल 10 देशों से गुजरती है।"
+    },
+    {
+      "id": "quiz-europe-02",
+      "nodeId": "node-elbrus-peak",
+      "nodeLabel": "माउंट एल्ब्रस शिखर (Mount Elbrus Peak)",
+      "question": "यूरोप महाद्वीप की सर्वोच्च पर्वत चोटी कौन सी है?",
+      "options": [
+        "मोंट ब्लांक (Mont Blanc)",
+        "माउंट एल्ब्रस (Mount Elbrus)",
+        "मैटरहॉर्न (Matterhorn)",
+        "माउंट एटना (Mount Etna)"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "माउंट एल्ब्रस (5,642 मी) काकेशस पर्वतमाला में स्थित यूरोप की सर्वोच्च चोटी है। मोंट ब्लांक (4,808 मी) आल्प्स की सर्वोच्च चोटी है।"
+    },
+    {
+      "id": "quiz-europe-03",
+      "nodeId": "node-gibraltar",
+      "nodeLabel": "जिब्राल्टर जलडमरूमध्य (Strait of Gibraltar)",
+      "question": "जिब्राल्टर जलडमरूमध्य (Strait of Gibraltar) किन दो जल निकायों को जोड़ता है?",
+      "options": [
+        "काला सागर एवं मरमरा सागर",
+        "लाल सागर एवं भूमध्य सागर",
+        "भूमध्य सागर एवं अटलांटिक महासागर",
+        "उत्तरी सागर एवं बाल्टिक सागर"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "जिब्राल्टर जलडमरूमध्य भूमध्य सागर को अटलांटिक महासागर से जोड़ता है तथा यूरोप (स्पेन) को अफ्रीका (मोरक्को) से अलग करता है।"
+    }
+  ]
+}

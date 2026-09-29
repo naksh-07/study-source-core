@@ -57,6 +57,38 @@ function computeTaskFingerprint(evidenceHash, taskConfig, generatorVersion = '2.
 }
 
 /**
+ * Resolves the designated STEM / domain specialist agent for a given subject.
+ * Supports canonical subjects and aliases (e.g. Maths, Mathematics, Logical Reasoning).
+ */
+function getDomainSpecialistAgent(subject) {
+    if (!subject || typeof subject !== 'string') return null;
+    const manifestPath = path.join(__dirname, '..', 'resources', 'subject-skill-manifest.json');
+    if (!fs.existsSync(manifestPath)) return null;
+    try {
+        const m = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        if (m && m.subjects) {
+            if (m.subjects[subject] && m.subjects[subject].specialist_agent) {
+                return m.subjects[subject].specialist_agent;
+            }
+            const lower = subject.toLowerCase();
+            for (const [canon, data] of Object.entries(m.subjects)) {
+                if (canon.toLowerCase() === lower && data.specialist_agent) {
+                    return data.specialist_agent;
+                }
+                if (Array.isArray(data.aliases)) {
+                    for (const alias of data.aliases) {
+                        if (alias.toLowerCase() === lower && data.specialist_agent) {
+                            return data.specialist_agent;
+                        }
+                    }
+                }
+            }
+        }
+    } catch (e) {}
+    return null;
+}
+
+/**
  * Builds the explicit execution Task Graph DAG for a given chapter context.
  */
 function buildExecutionTaskGraph(context = {}) {
@@ -78,18 +110,7 @@ function buildExecutionTaskGraph(context = {}) {
 
     const routing = evaluateArtifactRouting(context);
     const paths = getCanonicalArtifactPaths(subject, chapter, effectiveCustomRoot);
-    let domainSpecialist = specialist_agent;
-    if (!domainSpecialist) {
-        try {
-            const manifestPath = path.join(__dirname, '..', 'resources', 'subject-skill-manifest.json');
-            if (fs.existsSync(manifestPath)) {
-                const m = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-                if (m && m.subjects && m.subjects[subject]) {
-                    domainSpecialist = m.subjects[subject].specialist_agent;
-                }
-            }
-        } catch (e) {}
-    }
+    let domainSpecialist = specialist_agent || getDomainSpecialistAgent(subject);
 
     const tasks = [];
     const singleWriterMap = new Map(); // filepath -> task_id
@@ -1090,6 +1111,7 @@ function createSpecialistTaskDispatcher(context = {}) {
 
 module.exports = {
     REQUIRED_HANDOFF_FIELDS,
+    getDomainSpecialistAgent,
     buildExecutionTaskGraph,
     computeTaskFingerprint,
     validateStructuredHandoff,

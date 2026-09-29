@@ -26,7 +26,7 @@ const {
     validateLevel7PracticeDepth
 } = require('./validate_studylab_levels_1_6');
 
-const { getVaultRoot } = require('./path_resolver');
+const { getVaultRoot, resolveChapterDir } = require('./path_resolver');
 const VAULT_ROOT = getVaultRoot(__dirname);
 
 const PROOF_OUTPUT_PATH = path.resolve(VAULT_ROOT, 'artifacts_qa/final_core_audit/l1-l7-proof.json');
@@ -116,7 +116,16 @@ async function main() {
     ];
 
     for (const pkg of productionPackages) {
-        const fullPath = path.resolve(VAULT_ROOT, pkg.relPath);
+        let fullPath = path.resolve(VAULT_ROOT, pkg.relPath);
+        if (!fs.existsSync(fullPath)) {
+            try {
+                const chapterDir = resolveChapterDir(pkg.subject, pkg.topic, VAULT_ROOT);
+                const alt = path.join(chapterDir, 'StudyLab', `${pkg.topic}_StudyLab_Procedural.apkg`);
+                if (fs.existsSync(alt)) {
+                    fullPath = alt;
+                }
+            } catch (e) {}
+        }
         if (!fs.existsSync(fullPath)) {
             console.log(`\n  ℹ️ Package not generated on disk: ${pkg.subject} / ${pkg.topic} (skipping)`);
             continue;

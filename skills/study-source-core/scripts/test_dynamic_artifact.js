@@ -31,6 +31,8 @@ runTest("Dynamic Artifact is routed and executed without Core code changes", () 
             writer_agent: 'test-agent',
             validator: 'test_validator.js',
             artifactKey: 'testArtifact',
+            output_dir: 'TestArtifacts',
+            file_pattern: 'TestArtifacts/{chapter}_test.txt',
             dependencies: []
         };
         fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2), 'utf8');

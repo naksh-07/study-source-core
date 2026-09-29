@@ -72,6 +72,8 @@ async function validateMcqBlackBox(apkgPath) {
         console.warn(`⚠️ Warning: No MCQ questions found in APKG to validate.`);
     }
 
+    db.close();
+
     console.log(`\n====================================================`);
     if (allValid && mcqCount > 0) {
         console.log(`✅ SUCCESS: All ${mcqCount} MCQs contain discrete rendered options in the payload.`);

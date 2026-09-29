@@ -49,6 +49,54 @@ function isTransientFilename(filename, isSuccess = true) {
 }
 
 /**
+ * Safely unlinks a file with exponential-backoff retry to absorb transient Windows EBUSY/EPERM/EACCES locks.
+ */
+function safeUnlinkSync(filePath, maxRetries = 5, initialDelayMs = 25) {
+    let delay = initialDelayMs;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+            return true;
+        } catch (err) {
+            if (['EBUSY', 'EPERM', 'EACCES'].includes(err.code) && attempt < maxRetries) {
+                const waitTill = Date.now() + delay;
+                while (Date.now() < waitTill) {}
+                delay *= 2;
+            } else {
+                throw err;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Safely removes an empty directory with exponential-backoff retry to absorb transient Windows EBUSY/EPERM locks.
+ */
+function safeRmdirSync(dirPath, maxRetries = 5, initialDelayMs = 25) {
+    let delay = initialDelayMs;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            if (fs.existsSync(dirPath)) {
+                fs.rmdirSync(dirPath);
+            }
+            return true;
+        } catch (err) {
+            if (['EBUSY', 'EPERM', 'EACCES', 'ENOTEMPTY'].includes(err.code) && attempt < maxRetries) {
+                const waitTill = Date.now() + delay;
+                while (Date.now() < waitTill) {}
+                delay *= 2;
+            } else {
+                throw err;
+            }
+        }
+    }
+    return false;
+}
+
+/**
  * Safely cleans transient files from the target directory and its scratch subdirectories.
  * 
  * @param {Object} [options]
@@ -120,7 +168,7 @@ function cleanTransients(options = {}) {
             if (entry.isFile() && entry.name.endsWith('.tmp')) {
                 const absFile = path.join(targetDir, entry.name);
                 if (!dryRun) {
-                    fs.unlinkSync(absFile);
+                    safeUnlinkSync(absFile);
                 }
                 summary.deletedFiles.push(absFile);
             }
@@ -167,7 +215,7 @@ function cleanDirectoryTransients(dirPath, isSuccess, dryRun, verbose, summary) 
                 const remaining = fs.readdirSync(fullPath);
                 if (remaining.length === 0 && !fullPath.includes('fixtures')) {
                     if (!dryRun) {
-                        fs.rmdirSync(fullPath);
+                        safeRmdirSync(fullPath);
                     }
                 }
             } catch (e) {}
@@ -192,7 +240,7 @@ function cleanDirectoryTransients(dirPath, isSuccess, dryRun, verbose, summary) 
         // Check if file is transient
         if (isTransientFilename(entry.name, isSuccess)) {
             if (!dryRun) {
-                fs.unlinkSync(fullPath);
+                safeUnlinkSync(fullPath);
             }
             summary.deletedFiles.push(fullPath);
             if (verbose) {
@@ -233,5 +281,7 @@ if (require.main === module) {
 
 module.exports = {
     cleanTransients,
-    isTransientFilename
+    isTransientFilename,
+    safeUnlinkSync,
+    safeRmdirSync
 };

@@ -18,16 +18,18 @@ This document establishes the **Master 6-Track Audit & Bug Hunting Roadmap**. Ea
 
 ---
 
-## 2. Master 6-Track Audit Matrix
+## 2. Master 6-Track Audit Matrix (Execution Complete)
 
-| Track | Priority | Target Subsystem | Core Bug / Risk Surface | Estimated Scope |
-|---|---|---|---|---|
-| **Track 1** | **P0 (Critical)** | Canonical Contracts Registry (`studylab-canonical-contracts.json`) | Latent answer leakage in Tier 1/2 hints; unbounded parameter domains | 533 contracts, 55k+ lines |
-| **Track 2** | **P0 (Critical)** | Standalone Test Suites & Invariant Alignment | Stale test assertions, missing helpers, fail-closed fixture rejections | 12+ standalone test scripts |
-| **Track 3** | **P1 (High)** | Test Fixtures Pedagogical Completeness | Missing 3-tier hints in question inventories (`[MISSING_AUTHORITATIVE_HINTS]`) | 6 subject fixtures |
-| **Track 4** | **P1 (High)** | Production Vault & Pluralization Parity | `Math` vs `Maths` path mismatches; missing sibling artifacts in `Map/Europe` | 3 production chapters |
-| **Track 5** | **P2 (Medium)** | 9-Subject Matrix Routing & Gating | Non-STEM track suppression codes; zero silent omission verification | 9 subjects $\times$ 7 tracks |
-| **Track 6** | **P2 (Medium)** | Windows File Handles & Transient Lifecycle | Dangling `sql.js` handles causing `EBUSY` / `EPERM` locks during cleanup | Packagers & cleanups |
+| Track | Priority | Target Subsystem | Core Bug / Risk Surface | Status | Formal Audit Report |
+|---|---|---|---|---|---|
+| **Track 1** | **P0 (Critical)** | Canonical Contracts Registry (`studylab-canonical-contracts.json`) | Latent answer leakage in Tier 1/2 hints; unbounded parameter domains | 🟢 **COMPLETED** | [`CANONICAL_CONTRACTS_LEAK_AUDIT_REPORT.md`](CANONICAL_CONTRACTS_LEAK_AUDIT_REPORT.md) |
+| **Track 2** | **P0 (Critical)** | Standalone Test Suites & Invariant Alignment | Stale test assertions, missing helpers, fail-closed fixture rejections | 🟢 **COMPLETED** | [`MASTER_AUDIT_EXECUTION_REPORT.md`](MASTER_AUDIT_EXECUTION_REPORT.md) |
+| **Track 3** | **P1 (High)** | Test Fixtures Pedagogical Completeness | Missing 3-tier hints in question inventories (`[MISSING_AUTHORITATIVE_HINTS]`) | 🟢 **COMPLETED** | [`MASTER_AUDIT_EXECUTION_REPORT.md`](MASTER_AUDIT_EXECUTION_REPORT.md) |
+| **Track 4** | **P1 (High)** | Production Vault & Pluralization Parity | `Math` vs `Maths` path mismatches; missing sibling artifacts in `Map/Europe` | 🟢 **COMPLETED** | [`MASTER_AUDIT_EXECUTION_REPORT.md`](MASTER_AUDIT_EXECUTION_REPORT.md) |
+| **Track 5** | **P2 (Medium)** | 9-Subject Matrix Routing & Gating | Non-STEM track suppression codes; zero silent omission verification | 🟢 **COMPLETED** | [`SUBJECT_ROUTING_MATRIX_AUDIT.md`](SUBJECT_ROUTING_MATRIX_AUDIT.md) |
+| **Track 6** | **P2 (Medium)** | Windows File Handles & Transient Lifecycle | Dangling `sql.js` handles causing `EBUSY` / `EPERM` locks during cleanup | 🟢 **COMPLETED** | [`WINDOWS_TRANSIENT_LIFECYCLE_AUDIT.md`](WINDOWS_TRANSIENT_LIFECYCLE_AUDIT.md) |
+
+> 📜 **Master Execution Synthesis**: Full details across all 6 tracks are published in [`docs/audits/MASTER_AUDIT_EXECUTION_REPORT.md`](MASTER_AUDIT_EXECUTION_REPORT.md).
 
 ---
 

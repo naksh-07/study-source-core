@@ -167,7 +167,8 @@ function createSourceQuestionItem(params, context = {}) {
         provenance: canonicalProvenance,
         prerequisites,
         solution_steps: solutionSteps,
-        raw_fingerprint: rawFingerprint
+        raw_fingerprint: rawFingerprint,
+        hints: params.hints || null
     };
 }
 

@@ -111,7 +111,15 @@
       "prerequisites": [
         "math.arithmetic.prime_factors",
         "math.factors.hcf_lcm_basics"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "दी गई संख्याओं का अभाज्य गुणनखंडन (Prime Factorization) करें। HCF के लिए केवल उभयनिष्ठ अभाज्य गुणनखंडों की न्यूनतम घात तथा LCM के लिए सभी अभाज्य गुणनखंडों की अधिकतम घात का चयन करें।",
+        "tier2_formula": "\\text{HCF} = \\prod p_i^{\\min(a_i)}, \\quad \\text{LCM} = \\prod p_i^{\\max(a_i)}",
+        "tier3_setup": "प्रत्येक संख्या को अभाज्य आधारों (2, 3, 7) की घातों में व्यक्त करें: आधार 2, 3 और 7 की न्यूनतम और अधिकतम घातें पहचानकर अलग-अलग गुणनफल स्थापित करें।",
+        "tier1_conceptual": "दी गई संख्याओं का अभाज्य गुणनखंडन (Prime Factorization) करें। HCF के लिए केवल उभयनिष्ठ अभाज्य गुणनखंडों की न्यूनतम घात तथा LCM के लिए सभी अभाज्य गुणनखंडों की अधिकतम घात का चयन करें।",
+        "tier2_strategic": "\\text{HCF} = \\prod p_i^{\\min(a_i)}, \\quad \\text{LCM} = \\prod p_i^{\\max(a_i)}",
+        "tier3_next_step": "प्रत्येक संख्या को अभाज्य आधारों (2, 3, 7) की घातों में व्यक्त करें: आधार 2, 3 और 7 की न्यूनतम और अधिकतम घातें पहचानकर अलग-अलग गुणनफल स्थापित करें।"
+      }
     },
     {
       "source_id": "pyq-rrb-groupd-2018-s3-q42",
@@ -135,7 +143,15 @@
       "prerequisites": [
         "math.factors.lcm_calculation",
         "math.division.remainder_rule"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "जब किसी संख्या को कई भाजकों से विभाजित करने पर प्रत्येक दशा में एक समान शेषफल बचे, तो अभीष्ट न्यूनतम संख्या उन भाजकों के लघुत्तम समापवर्त्य (LCM) और उस समान शेषफल के योग के बराबर होती है।",
+        "tier2_formula": "\\text{अभीष्ट संख्या} = \\text{LCM}(d_1, d_2, d_3, \\dots) + r",
+        "tier3_setup": "सर्वप्रथम सभी भाजक संख्याओं का अभाज्य गुणनखंडन करके उनका लघुत्तम समापवर्त्य (LCM) ज्ञात करें, फिर उसमें दिए गए शेषफल को जोड़ें।",
+        "tier1_conceptual": "जब किसी संख्या को कई भाजकों से विभाजित करने पर प्रत्येक दशा में एक समान शेषफल बचे, तो अभीष्ट न्यूनतम संख्या उन भाजकों के लघुत्तम समापवर्त्य (LCM) और उस समान शेषफल के योग के बराबर होती है।",
+        "tier2_strategic": "\\text{अभीष्ट संख्या} = \\text{LCM}(d_1, d_2, d_3, \\dots) + r",
+        "tier3_next_step": "सर्वप्रथम सभी भाजक संख्याओं का अभाज्य गुणनखंडन करके उनका लघुत्तम समापवर्त्य (LCM) ज्ञात करें, फिर उसमें दिए गए शेषफल को जोड़ें।"
+      }
     },
     {
       "source_id": "pyq-rrb-alp-2018-s2-q09",
@@ -153,7 +169,15 @@
       "prerequisites": [
         "math.algebra.basic_multiplication",
         "math.factors.product_identity"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "किन्हीं दो धनात्मक संख्याओं के लिए उनके महत्तम समापवर्तक (HCF) और लघुत्तम समापवर्त्य (LCM) का गुणनफल सदैव उन दोनों संख्याओं के परस्पर गुणनफल के बराबर होता है।",
+        "tier2_formula": "\\text{LCM}(a, b) \\times \\text{HCF}(a, b) = a \\times b \\implies \\text{LCM} = \\frac{a \\times b}{\\text{HCF}}",
+        "tier3_setup": "\\text{LCM} = \\frac{\\text{संख्याओं का गुणनफल}}{\\text{HCF}} संबंध में दिए गए गुणनफल को महत्तम समापवर्तक से विभाजित करें।",
+        "tier1_conceptual": "किन्हीं दो धनात्मक संख्याओं के लिए उनके महत्तम समापवर्तक (HCF) और लघुत्तम समापवर्त्य (LCM) का गुणनफल सदैव उन दोनों संख्याओं के परस्पर गुणनफल के बराबर होता है।",
+        "tier2_strategic": "\\text{LCM}(a, b) \\times \\text{HCF}(a, b) = a \\times b \\implies \\text{LCM} = \\frac{a \\times b}{\\text{HCF}}",
+        "tier3_next_step": "\\text{LCM} = \\frac{\\text{संख्याओं का गुणनफल}}{\\text{HCF}} संबंध में दिए गए गुणनफल को महत्तम समापवर्तक से विभाजित करें।"
+      }
     },
     {
       "source_id": "pyq-ssc-cgl-2020-t1-q18",
@@ -178,7 +202,15 @@
       "prerequisites": [
         "math.ratio.proportions",
         "math.factors.coprime_lcm"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "यदि दो संख्याएँ सह-अभाज्य अनुपात में दी गई हों, तो संख्याओं को एक उभयनिष्ठ चर गुणक के रूप में मानें। उनका LCM अनुपात के पदों और उस उभयनिष्ठ गुणक (HCF) के गुणनफल के बराबर होता है।",
+        "tier2_formula": "\\text{यदि } a : b = x : y \\text{ (सह-अभाज्य), तब } \\text{LCM} = x \\times y \\times H",
+        "tier3_setup": "अनुपात के दोनों पदों के गुणनफल से अज्ञात गुणक का समीकरण बनाएं, फिर दिए गए LCM से तुलना करके गुणक ज्ञात कर छोटे अनुपातिक पद से गुणा करें।",
+        "tier1_conceptual": "यदि दो संख्याएँ सह-अभाज्य अनुपात में दी गई हों, तो संख्याओं को एक उभयनिष्ठ चर गुणक के रूप में मानें। उनका LCM अनुपात के पदों और उस उभयनिष्ठ गुणक (HCF) के गुणनफल के बराबर होता है।",
+        "tier2_strategic": "\\text{यदि } a : b = x : y \\text{ (सह-अभाज्य), तब } \\text{LCM} = x \\times y \\times H",
+        "tier3_next_step": "अनुपात के दोनों पदों के गुणनफल से अज्ञात गुणक का समीकरण बनाएं, फिर दिए गए LCM से तुलना करके गुणक ज्ञात कर छोटे अनुपातिक पद से गुणा करें।"
+      }
     },
     {
       "source_id": "pyq-rrb-ntpc-2019-s1-q33",
@@ -196,7 +228,15 @@
       "prerequisites": [
         "math.factors.product_identity",
         "math.arithmetic.division"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "दो संख्याओं के गुणनफल और उनके LCM तथा HCF के बीच मूलभूत गुणनफल सर्वसमिका (Product Identity) का प्रयोग करें।",
+        "tier2_formula": "N_1 \\times N_2 = \\text{LCM} \\times \\text{HCF} \\implies N_2 = \\frac{\\text{LCM} \\times \\text{HCF}}{N_1}",
+        "tier3_setup": "दिए गए LCM और HCF के गुणनफल को ज्ञात पहली संख्या से भाग देकर अज्ञात दूसरी संख्या का मान प्राप्त करें।",
+        "tier1_conceptual": "दो संख्याओं के गुणनफल और उनके LCM तथा HCF के बीच मूलभूत गुणनफल सर्वसमिका (Product Identity) का प्रयोग करें।",
+        "tier2_strategic": "N_1 \\times N_2 = \\text{LCM} \\times \\text{HCF} \\implies N_2 = \\frac{\\text{LCM} \\times \\text{HCF}}{N_1}",
+        "tier3_next_step": "दिए गए LCM और HCF के गुणनफल को ज्ञात पहली संख्या से भाग देकर अज्ञात दूसरी संख्या का मान प्राप्त करें।"
+      }
     }
   ]
 }

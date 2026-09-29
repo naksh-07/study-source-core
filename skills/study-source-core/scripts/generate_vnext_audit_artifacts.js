@@ -1,4 +1,4 @@
-﻿/**
+/**
  * StudySourceCore vNext Audit Artifacts Generator (`generate_vnext_audit_artifacts.js`)
  * 
  * Generates the 7 mandatory machine-readable JSON reports:
@@ -17,12 +17,19 @@ const fs = require('fs');
 const path = require('path');
 const { buildExecutionTaskGraph, executeTaskWorkflow } = require('./orchestration_engine');
 const { getVaultRoot, resolveChapterDir, getCanonicalArtifactPaths } = require('./path_resolver');
+const { computeSha256 } = require('./artifact_provenance');
 
 const VAULT_ROOT = getVaultRoot(__dirname);
 const OUTPUT_DIR = path.resolve(VAULT_ROOT, 'artifacts_qa/studysourcecore_vnext');
 
 async function generateAuditArtifacts() {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+
+    let evidenceHash = '80f894fa70043f13fd0522f9366bb260bce6943eab90e88e92bb70b29016a188';
+    const evidencePath = path.resolve(VAULT_ROOT, 'scratch/evidence-pack.md');
+    if (fs.existsSync(evidencePath)) {
+        evidenceHash = computeSha256(fs.readFileSync(evidencePath, 'utf8'));
+    }
 
     // Build task graph for real production Mathematics fixture (LCM-HCF)
     const mathPaths = getCanonicalArtifactPaths('Maths', 'LCM-HCF');
@@ -32,7 +39,7 @@ async function generateAuditArtifacts() {
         basicCandidateCount: 20,
         clozeCandidateCount: 15,
         practiceQuestionsCount: 8,
-        evidenceHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+        evidenceHash: evidenceHash
     });
 
     const mathRun = await executeTaskWorkflow(mathGraph, async (task, retryCount) => {

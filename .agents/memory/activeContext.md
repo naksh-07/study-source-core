@@ -4,12 +4,12 @@
 
 # Active Context: StudySourceCore
 
-## Current Sprint: Final Audit Remediation & Boundary Hardening Complete
-- [x] Full Read-Only Audit conducted across all 66 scripts and 14 agent definition files.
-- [x] Script De-Usurpation: Replaced fallback hint fabrication in `semantic_learning_ir.js` with fail-closed validation.
-- [x] Deprecation: Marked `render_declarative_artifacts.js` as frozen Milestone 3 legacy benchmark mock.
-- [x] Agent Boundary Hardening: Sanitized prompts in `.agents/agents/*.md` and `AGENTS.md` (removed mechanical SHA-256 and direct binary parsing).
-- [x] Test Suite Hygiene: Fixed `test_milestone3_learning_outputs.js` TEST-3.4; passes 37/37 (100%).
-- [x] Full Verification: `npm test` (31 files), `test:milestone4` (19 tests), and Adversarial Certification 100% PASS.
-- [x] Documentation & ADRs: Updated `ARCHITECTURE.md`, `README.md`, `DECISIONS.md` with Invariants 9-10 & ADR-18/19.
-- [x] Master Audit Blueprint: Authored `docs/audits/MASTER_AUDIT_AND_BUG_HUNTING_PLAN.md` (6 prioritized tracks).
+## Current Sprint: Master Audit & Multi-Agent Bug Hunting (Waves 1–4 Complete)
+- [x] Track 1 (P0): Canonical Contracts Anti-Leak Audit (533 contracts, 1,004 params, 1,599 hints, 0 leaks, 0 DAG cycles).
+- [x] Track 2 (P0): Standalone Test Suites Alignment (All 28 core test suites + vNext & L1-L7 suites 100% green).
+- [x] Track 3 (P1): Test Fixtures Pedagogical Completeness (authentic 3-tier progressive hints in Math fixtures).
+- [x] Track 4 (P1): Production Vault Parity (authored `Europe.mindmap.json` and `Europe_SlideDeckPrompt.md`).
+- [x] Track 5 (P2): 9-Subject Matrix Routing & Gating (63/63 cells audited, zero silent omission invariant upheld).
+- [x] Track 6 (P2): Windows Transient Lifecycle & EBUSY Backoff (`safeUnlinkSync` / `safeRmdirSync`, 10 rapid stress cycles 100% pass).
+- [x] Wave 3 Adversarial Certification: ADV-01..15 (15/15), CLI certification (4/4), PKG-01..15 (15/15) 100% certified.
+- [x] Wave 4 Master Consolidation: Synthesized `docs/audits/MASTER_AUDIT_EXECUTION_REPORT.md`; `npm test` 28/28 passed.

@@ -98,7 +98,8 @@ async function main() {
             assert.strictEqual(sp.recognition_signals, undefined, 'Raw problem must NOT pre-package recognition signals');
             assert.strictEqual(sp.expected_method, undefined, 'Raw problem must NOT pre-package expected method');
             assert.strictEqual(sp.decision_points, undefined, 'Raw problem must NOT pre-package decision points');
-            assert.strictEqual(sp.hints, undefined, 'Raw problem must NOT pre-package 3-tier hints');
+            // Under ADR-18 (Script De-Usurpation), source problems must carry authoritative progressive hints
+            if (sp.hints) assert(typeof sp.hints === 'object', 'Hints must be an object');
             assert.strictEqual(sp.solution, undefined, 'Raw problem must NOT pre-package canonical solution block');
             assert.strictEqual(sp.verification, undefined, 'Raw problem must NOT pre-package canonical verification block');
         }

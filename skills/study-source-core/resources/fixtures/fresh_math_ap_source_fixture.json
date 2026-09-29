@@ -116,7 +116,15 @@
       "prerequisites": [
         "arithmetic_progression",
         "linear_equations"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "Identify the first term and common difference of the sequence, then set up the general nth-term relation for the given term value.",
+        "tier2_formula": "a_n = a + (n - 1)d",
+        "tier3_setup": "Substitute the initial term, the calculated negative common difference, and the target term value into the linear equation, then isolate the term index n.",
+        "tier1_conceptual": "Identify the first term and common difference of the sequence, then set up the general nth-term relation for the given term value.",
+        "tier2_strategic": "a_n = a + (n - 1)d",
+        "tier3_next_step": "Substitute the initial term, the calculated negative common difference, and the target term value into the linear equation, then isolate the term index n."
+      }
     },
     {
       "source_id": "PYQ_CBSE_2022_AP_02",
@@ -140,7 +148,15 @@
       "prerequisites": [
         "arithmetic_progression",
         "fraction_arithmetic"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "Determine the constant step size (common difference) between consecutive terms and apply the standard formula for a designated term index.",
+        "tier2_formula": "a_n = a + (n - 1)d",
+        "tier3_setup": "Calculate the fractional common difference as the difference between the second and first terms, substitute the first term and index 11 into the general term formula.",
+        "tier1_conceptual": "Determine the constant step size (common difference) between consecutive terms and apply the standard formula for a designated term index.",
+        "tier2_strategic": "a_n = a + (n - 1)d",
+        "tier3_next_step": "Calculate the fractional common difference as the difference between the second and first terms, substitute the first term and index 11 into the general term formula."
+      }
     },
     {
       "source_id": "PYQ_SSC_2022_AP_03",
@@ -164,7 +180,15 @@
       "prerequisites": [
         "arithmetic_progression",
         "series_summation"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "Compute the common difference and apply the arithmetic series summation formula for the specified number of terms.",
+        "tier2_formula": "S_n = \\frac{n}{2}[2a + (n - 1)d]",
+        "tier3_setup": "Substitute the first term, the negative common difference, and the number of terms into the bracketed summation expression before multiplying by half of n.",
+        "tier1_conceptual": "Compute the common difference and apply the arithmetic series summation formula for the specified number of terms.",
+        "tier2_strategic": "S_n = \\frac{n}{2}[2a + (n - 1)d]",
+        "tier3_next_step": "Substitute the first term, the negative common difference, and the number of terms into the bracketed summation expression before multiplying by half of n."
+      }
     },
     {
       "source_id": "PYQ_CBSE_2021_AP_04",
@@ -190,7 +214,15 @@
       "prerequisites": [
         "arithmetic_progression",
         "quadratic_equations"
-      ]
+      ],
+      "hints": {
+        "tier1_approach": "Formulate a quadratic equation in the unknown term count using the arithmetic progression sum formula, and solve for positive integer roots.",
+        "tier2_formula": "S_n = \\frac{n}{2}[2a + (n - 1)d]",
+        "tier3_setup": "Substitute the initial value, difference, and total sum into the series sum equation, rearrange into standard quadratic form an^2 + bn + c = 0, and factorize.",
+        "tier1_conceptual": "Formulate a quadratic equation in the unknown term count using the arithmetic progression sum formula, and solve for positive integer roots.",
+        "tier2_strategic": "S_n = \\frac{n}{2}[2a + (n - 1)d]",
+        "tier3_next_step": "Substitute the initial value, difference, and total sum into the series sum equation, rearrange into standard quadratic form an^2 + bn + c = 0, and factorize."
+      }
     }
   ]
 }

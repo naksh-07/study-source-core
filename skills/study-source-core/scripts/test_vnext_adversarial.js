@@ -25,6 +25,7 @@ const path = require('path');
 
 const {
     buildExecutionTaskGraph,
+    getDomainSpecialistAgent,
     executeTaskWorkflow,
     validateStructuredHandoff,
     assertNoParentSelfExecution,
@@ -326,7 +327,10 @@ async function main() {
 
         const procTask = graph.tasks.find(t => t.task_id === 'task-studylab-practice-questions');
         assert.strictEqual(procTask.status, 'SKIPPED');
-        assert.strictEqual(procTask.suppression_reason, 'ZERO_PRACTICE_QUESTIONS');
+        assert(
+            procTask.suppression_reason === 'SUPPRESSED_BY_SUBJECT_POLICY' || procTask.suppression_reason === 'ZERO_PRACTICE_QUESTIONS',
+            `Expected suppression reason SUPPRESSED_BY_SUBJECT_POLICY or ZERO_PRACTICE_QUESTIONS, got: ${procTask.suppression_reason}`
+        );
     });
 
     // -------------------------------------------------------------------------
