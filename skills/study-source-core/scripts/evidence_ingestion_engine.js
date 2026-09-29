@@ -328,6 +328,14 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
 
                 try {
                     const pyArgs = [extractorScript, '--pdf', path.resolve(sourceInput), '--subject', subject, '--chapter', chapter];
+                    const pageStart = options.page_start !== undefined ? options.page_start : options.pageStart;
+                    const pageEnd = options.page_end !== undefined ? options.page_end : options.pageEnd;
+                    if (pageStart !== undefined && pageStart !== null) {
+                        pyArgs.push('--page-start', String(pageStart));
+                    }
+                    if (pageEnd !== undefined && pageEnd !== null) {
+                        pyArgs.push('--page-end', String(pageEnd));
+                    }
                     const stdout = execFileSync(pythonPath, pyArgs, { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 });
                     sourceFixture = JSON.parse(stdout);
                     rawSourceContent = stdout;
@@ -588,6 +596,8 @@ if (require.main === module) {
     let subject = 'General';
     let chapter = 'Overview';
     let scratchDir = path.join(__dirname, '../scratch');
+    let pageStart = undefined;
+    let pageEnd = undefined;
 
     for (let i = 0; i < args.length; i++) {
         if ((args[i] === '--source' || args[i] === '--pdf') && args[i + 1]) {
@@ -602,16 +612,22 @@ if (require.main === module) {
         } else if (args[i] === '--scratch' && args[i + 1]) {
             scratchDir = args[i + 1];
             i++;
+        } else if (args[i] === '--page-start' && args[i + 1]) {
+            pageStart = parseInt(args[i + 1], 10);
+            i++;
+        } else if (args[i] === '--page-end' && args[i + 1]) {
+            pageEnd = parseInt(args[i + 1], 10);
+            i++;
         }
     }
 
     if (!sourcePath) {
-        console.error('Usage: node evidence_ingestion_engine.js --source <path-to-pdf-or-json-or-md> [--subject <subj>] [--chapter <chap>] [--scratch <dir>]');
+        console.error('Usage: node evidence_ingestion_engine.js --source <path-to-pdf-or-json-or-md> [--subject <subj>] [--chapter <chap>] [--scratch <dir>] [--page-start <n>] [--page-end <n>]');
         process.exit(1);
     }
 
     try {
-        const evidencePack = ingestSourceToEvidencePack(sourcePath, { subject, chapter });
+        const evidencePack = ingestSourceToEvidencePack(sourcePath, { subject, chapter, page_start: pageStart, page_end: pageEnd });
         const persisted = persistEvidencePack(evidencePack, scratchDir);
         console.log(JSON.stringify({
             status: 'SUCCESS',

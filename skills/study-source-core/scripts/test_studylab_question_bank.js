@@ -438,6 +438,31 @@ runTest('Validator rejects Tier 2 hint leaking the final answer', () => {
     assert(res.errors.some(e => e.includes('[HINT_ANSWER_LEAKAGE]')), 'Should detect HINT_ANSWER_LEAKAGE in Tier 2');
 });
 
+runTest('Validator rejects Tier 3 hint leaking the final answer', () => {
+    const leakT3 = JSON.parse(JSON.stringify(sampleValidCanonical));
+    leakT3.questions[0].correct_answer = '180';
+    leakT3.questions[0].hints.tier3_next_step = '2160 / 12 = 180 प्राप्त होता है।';
+    const res = validateQuestionBankContent(leakT3);
+    assert.strictEqual(res.isValid, false);
+    assert(res.errors.some(e => e.includes('[HINT_ANSWER_LEAKAGE]') && e.includes('Tier 3')), 'Should detect HINT_ANSWER_LEAKAGE in Tier 3');
+});
+
+runTest('Validator rejects missing pedagogical dimensions (recognition_signals, expected_method, decision_points, trap, error_category)', () => {
+    const missingDims = JSON.parse(JSON.stringify(sampleValidCanonical));
+    missingDims.questions[0].recognition_signals = [];
+    missingDims.questions[0].expected_method = '';
+    missingDims.questions[0].decision_points = [];
+    missingDims.questions[0].trap = '';
+    missingDims.questions[0].error_category = [];
+    const res = validateQuestionBankContent(missingDims);
+    assert.strictEqual(res.isValid, false);
+    assert(res.errors.some(e => e.includes('[MISSING_RECOGNITION_SIGNALS]')), 'Should detect MISSING_RECOGNITION_SIGNALS');
+    assert(res.errors.some(e => e.includes('[MISSING_EXPECTED_METHOD]')), 'Should detect MISSING_EXPECTED_METHOD');
+    assert(res.errors.some(e => e.includes('[MISSING_DECISION_POINTS]')), 'Should detect MISSING_DECISION_POINTS');
+    assert(res.errors.some(e => e.includes('[MISSING_TRAP]')), 'Should detect MISSING_TRAP');
+    assert(res.errors.some(e => e.includes('[MISSING_ERROR_CATEGORY]')), 'Should detect MISSING_ERROR_CATEGORY');
+});
+
 runTest('Non-leaking strategic hint passes anti-leak check', () => {
     assert.strictEqual(hintLeaksAnswer('सूत्र: LCM = (संख्याओं का गुणनफल) / HCF स्थापित करें।', '180'), false);
     assert.strictEqual(hintLeaksAnswer('2160 को 12 से विभाजित करने की तैयारी करें।', '180'), false);

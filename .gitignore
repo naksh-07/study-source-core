@@ -26,3 +26,6 @@ artifacts_qa/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+*.temp_col_*.anki2
+.temp_col_*.anki2

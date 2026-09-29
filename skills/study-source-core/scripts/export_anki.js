@@ -211,6 +211,72 @@ function parseTsvFile(filePath) {
 }
 
 /**
+ * Normalizes flashcard text for cross-format (Basic vs Cloze) 1:1 duplicate fact detection.
+ */
+function normalizeFactText(str) {
+    return String(str || '')
+        .replace(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g, '$1')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+}
+
+/**
+ * Filters Basic flashcards that are 1:1 verbatim or near-verbatim duplicates of Cloze flashcards
+ * (same target answer AND overlapping question/statement stem), retaining the Cloze card.
+ */
+function deduplicateBasicAgainstCloze(basicRows, clozeRows) {
+    if (!Array.isArray(basicRows) || !Array.isArray(clozeRows) || basicRows.length === 0 || clozeRows.length === 0) {
+        return { filteredBasicRows: basicRows || [], removedCount: 0 };
+    }
+
+    const clozeFacts = clozeRows.map(row => {
+        const rawText = String(row.col0 || '');
+        const strippedSentence = normalizeFactText(rawText);
+        const targets = Array.from(rawText.matchAll(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g))
+            .map(m => normalizeFactText(m[1]))
+            .filter(Boolean);
+        const stemWithoutTargets = normalizeFactText(rawText.replace(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g, ' '));
+        const stemTokens = stemWithoutTargets.split(' ').filter(t => t.length > 2);
+        return { strippedSentence, targets, stemTokens };
+    });
+
+    const filteredBasicRows = [];
+    let removedCount = 0;
+
+    for (const bRow of basicRows) {
+        const bFront = normalizeFactText(bRow.col0);
+        const bBack = normalizeFactText(bRow.col1);
+        const bCombined = `${bFront} ${bBack}`.trim();
+
+        const isDuplicate = clozeFacts.some(cf => {
+            if (!cf.strippedSentence) return false;
+            if (bFront === cf.strippedSentence || bCombined === cf.strippedSentence) {
+                return true;
+            }
+            const answerMatchesTarget = cf.targets.some(t => t && (bBack === t || bBack.startsWith(t + ' ')));
+            if (answerMatchesTarget && cf.stemTokens.length >= 2) {
+                const matchedTokens = cf.stemTokens.filter(tok => bFront.includes(tok));
+                if (matchedTokens.length / cf.stemTokens.length >= 0.6) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        if (isDuplicate) {
+            removedCount++;
+        } else {
+            filteredBasicRows.push(bRow);
+        }
+    }
+
+    return { filteredBasicRows, removedCount };
+}
+
+/**
  * Packages all chapter flashcards (Basic + Cloze + IO) into a unified .apkg deck.
  * 
  * @param {string} chapterDir - Path to chapter directory (e.g. "Study Materials/Map/Europe")
@@ -305,11 +371,18 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     }
 
     // 3. Parse Basic TSV
-    const basicRows = hasBasic ? parseTsvFile(basicTsvPath) : [];
-    console.log(`  📦 Basic Cards Loaded: ${basicRows.length}`);
+    const rawBasicRows = hasBasic ? parseTsvFile(basicTsvPath) : [];
 
     // 4. Parse Cloze TSV
     const clozeRows = hasCloze ? parseTsvFile(clozeTsvPath) : [];
+
+    // 4b. Deduplicate 1:1 Basic vs Cloze fact collisions (retaining Cloze)
+    const { filteredBasicRows: basicRows, removedCount: dedupedBasicCount } =
+        options.deduplicateFacts === false
+            ? { filteredBasicRows: rawBasicRows, removedCount: 0 }
+            : deduplicateBasicAgainstCloze(rawBasicRows, clozeRows);
+
+    console.log(`  📦 Basic Cards Loaded: ${basicRows.length}${dedupedBasicCount > 0 ? ` (${dedupedBasicCount} 1:1 Cloze duplicate(s) filtered)` : ''}`);
     console.log(`  📦 Cloze Notes Loaded: ${clozeRows.length}`);
 
     // 5. Parse Image Occlusion JSON & collect media (Strict Media Check)
@@ -629,5 +702,6 @@ module.exports = {
     extractClozeOrdinals,
     generateDeterministicGuid,
     calculateFieldChecksum,
-    parseTsvFile
+    parseTsvFile,
+    deduplicateBasicAgainstCloze
 };

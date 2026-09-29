@@ -1,5 +1,60 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
-  <rect width="800" height="600" fill="#e0f2fe"/>
-  <path d="M 150 100 L 650 100 L 600 500 L 200 450 Z" fill="#bbf7d0" stroke="#15803d" stroke-width="2"/>
-  <text x="350" y="300" font-family="Arial" font-size="24" fill="#1e3a8a">Europe Map</text>
+  <defs>
+    <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#7dd3fc"/>
+    </linearGradient>
+    <linearGradient id="landGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#bbf7d0"/>
+    </linearGradient>
+  </defs>
+  <!-- Ocean Background & Graticule Grid -->
+  <rect width="800" height="600" fill="url(#oceanGrad)"/>
+  <g stroke="#93c5fd" stroke-width="0.8" stroke-dasharray="4,4">
+    <line x1="0" y1="120" x2="800" y2="120"/>
+    <line x1="0" y1="240" x2="800" y2="240"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="0" y1="480" x2="800" y2="480"/>
+    <line x1="160" y1="0" x2="160" y2="600"/>
+    <line x1="320" y1="0" x2="320" y2="600"/>
+    <line x1="480" y1="0" x2="480" y2="600"/>
+    <line x1="640" y1="0" x2="640" y2="600"/>
+  </g>
+  <!-- Continental Europe Main Landmass & Peninsulas -->
+  <path id="continental-mainland" d="M 90 480 L 70 410 L 140 390 L 185 330 L 245 280 L 290 220 L 350 235 L 440 210 L 580 120 L 690 90 L 710 380 L 640 435 L 550 410 L 470 485 L 415 440 L 385 510 L 355 495 L 325 425 L 240 420 L 175 495 Z" fill="url(#landGrad)" stroke="#15803d" stroke-width="2.2"/>
+  <!-- Scandinavian Peninsula -->
+  <path id="scandinavia" d="M 275 205 L 315 65 L 395 45 L 425 145 L 375 195 L 325 215 Z" fill="#bbf7d0" stroke="#15803d" stroke-width="2"/>
+  <!-- British Isles -->
+  <path id="great-britain" d="M 155 245 L 185 195 L 215 255 L 205 305 L 165 300 Z" fill="#bbf7d0" stroke="#15803d" stroke-width="1.8"/>
+  <path id="ireland" d="M 115 255 L 142 245 L 145 285 L 118 290 Z" fill="#bbf7d0" stroke="#15803d" stroke-width="1.8"/>
+  <!-- Inland Seas (Black Sea & Caspian Sea) -->
+  <ellipse id="black-sea" cx="565" cy="415" rx="60" ry="30" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+  <ellipse id="caspian-sea" cx="725" cy="435" rx="35" ry="65" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+  <!-- Major Mountain Ranges -->
+  <polyline id="ural-mountains" points="675,95 670,165 680,235 672,305 668,350" fill="none" stroke="#7c2d12" stroke-width="5" stroke-linecap="round"/>
+  <polyline id="alps-mountains" points="265,375 305,360 345,365 375,375" fill="none" stroke="#7c2d12" stroke-width="5" stroke-linecap="round"/>
+  <polyline id="pyrenees-mountains" points="145,400 185,412 215,418" fill="none" stroke="#7c2d12" stroke-width="4.5" stroke-linecap="round"/>
+  <polyline id="caucasus-mountains" points="625,415 665,432 700,445" fill="none" stroke="#7c2d12" stroke-width="4.5" stroke-linecap="round"/>
+  <polyline id="carpathian-mountains" points="415,340 455,330 485,355 465,385" fill="none" stroke="#7c2d12" stroke-width="4" stroke-linecap="round"/>
+  <!-- Major Rivers -->
+  <path id="danube-river" d="M 310 340 Q 385 355 445 385 T 505 405" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+  <path id="volga-river" d="M 555 195 Q 625 235 635 315 T 705 390" fill="none" stroke="#1d4ed8" stroke-width="3.2"/>
+  <path id="rhine-river" d="M 295 360 Q 280 315 265 275" fill="none" stroke="#1d4ed8" stroke-width="2.8"/>
+  <!-- Cartographic Labels -->
+  <g font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e3a8a">
+    <text x="28" y="36">यूरोप का भौतिक मानचित्र (Europe Physical Map)</text>
+    <text x="615" y="215" fill="#7c2d12">Ural Mts (यूराल)</text>
+    <text x="285" y="352" fill="#7c2d12">Alps (आल्प्स)</text>
+    <text x="135" y="395" fill="#7c2d12">Pyrenees</text>
+    <text x="618" y="462" fill="#7c2d12">Caucasus (काकेशस)</text>
+    <text x="425" y="322" fill="#7c2d12">Carpathians</text>
+    <text x="395" y="398" fill="#1d4ed8">Danube (डेन्यूब)</text>
+    <text x="570" y="285" fill="#1d4ed8">Volga (वोल्गा)</text>
+    <text x="220" y="315" fill="#1d4ed8">Rhine (राइन)</text>
+    <text x="310" y="135" fill="#14532d">Scandinavia</text>
+    <text x="95" y="455" fill="#14532d">Iberia</text>
+    <text x="335" y="475" fill="#14532d">Italy</text>
+    <text x="445" y="460" fill="#14532d">Balkans</text>
+  </g>
 </svg>

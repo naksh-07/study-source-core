@@ -219,9 +219,16 @@ function discoverAssets(options = {}) {
         throw new Error('MISSING_REQUIRED_CONTEXT: subject and chapter must be provided');
     }
 
+    if (String(subject).includes('..') || String(chapter).includes('..') || path.isAbsolute(String(subject)) || /[\/\\]/.test(String(subject))) {
+        throw new Error(`[PATH_TRAVERSAL_ERROR] Invalid subject or chapter name containing path traversal tokens: subject="${subject}", chapter="${chapter}"`);
+    }
+
     // Resolve the diagrams root
-    const root = diagramsRoot || path.join(__dirname, '..', 'Sources', 'Diagrams');
-    const subjectDir = path.join(root, subject);
+    const root = path.resolve(diagramsRoot || path.join(__dirname, '..', 'Sources', 'Diagrams'));
+    const subjectDir = path.resolve(root, subject);
+    if (!subjectDir.startsWith(root + path.sep) && subjectDir !== root) {
+        throw new Error(`[PATH_TRAVERSAL_ERROR] Subject directory escapes diagrams root: ${subjectDir}`);
+    }
 
     // Check if subject directory exists
     if (!fs.existsSync(subjectDir)) {

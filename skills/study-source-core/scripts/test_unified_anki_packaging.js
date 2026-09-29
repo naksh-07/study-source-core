@@ -469,6 +469,39 @@ async function main() {
         assert.strictEqual(val.stats.notesByType.ImageOcclusion, 1, 'Exact 1 IO note must be present');
     });
 
+    await runTest('Negative 14: Basic vs Cloze 1:1 verbatim duplicate fact is filtered while retaining Cloze and distinct Basic cards', async () => {
+        const chapter = 'test_basic_cloze_dedup';
+        const dir = setupScratchChapter(chapter);
+        const basicDir = path.join(dir, 'Basic');
+        const clozeDir = path.join(dir, 'Cloze');
+        fs.mkdirSync(basicDir, { recursive: true });
+        fs.mkdirSync(clozeDir, { recursive: true });
+
+        fs.writeFileSync(
+            path.join(basicDir, `${chapter}_Basic.tsv`),
+            [
+                'Front\tBack\tTags',
+                'दो संख्याओं का गुणनफल किसके बराबर होता है?\tLCM \\times HCF\tMath::LCM',
+                'भिन्नों का LCM निकालने का सूत्र क्या है?\tLCM(अंश) / HCF(हर)\tMath::LCM'
+            ].join('\n') + '\n',
+            'utf8'
+        );
+        fs.writeFileSync(
+            path.join(clozeDir, `${chapter}_Cloze.tsv`),
+            [
+                'Text\tExtra\tTags',
+                'दो संख्याओं का गुणनफल {{c1::LCM \\times HCF}} के बराबर होता है।\tगुणनफल सर्वसमिका\tMath::LCM',
+                'सह-अभाज्य संख्याओं का HCF सदैव {{c1::1}} होता है।\tपरिभाषा\tMath::LCM'
+            ].join('\n') + '\n',
+            'utf8'
+        );
+
+        const res = await exportChapterToAnki(dir, { chapter, subject: 'Math', cleanIntermediates: false });
+        assert.strictEqual(res.success, true);
+        assert.strictEqual(res.counts.basicNotes, 1, '1:1 duplicate Basic card must be filtered, leaving 1 distinct Basic card');
+        assert.strictEqual(res.counts.clozeNotes, 2, 'Both Cloze cards must be retained');
+    });
+
     // -------------------------------------------------------------------------
     // SUMMARY
     // -------------------------------------------------------------------------

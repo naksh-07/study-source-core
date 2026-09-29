@@ -125,13 +125,17 @@ function validateImageOcclusionContent(contentOrData, filePath = 'in-memory') {
             if (card.asset.source_type && !VALID_SOURCE_TYPES.has(card.asset.source_type)) {
                 warnings.push(`${cardPath}.asset.source_type '${card.asset.source_type}' is unrecognized.`);
             }
-            // Phase 6: SHA-256 integrity check
+            // Phase 6: SHA-256 integrity check (Blocking Error)
             if (card.asset.sha256) {
-                if (typeof card.asset.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(card.asset.sha256)) {
-                    warnings.push(`${cardPath}.asset.sha256 is not a valid SHA-256 hash.`);
+                if (typeof card.asset.sha256 !== 'string' || !/^[a-f0-9]{64}$/i.test(card.asset.sha256)) {
+                    const msg = `${cardPath}.asset.sha256 is not a valid 64-character hex SHA-256 hash.`;
+                    errors.push(msg);
+                    warnings.push(msg);
                 }
             } else if (card.asset.source_type && ['approved_local', 'source_embedded', 'source_extracted', 'user_supplied'].includes(card.asset.source_type)) {
-                warnings.push(`${cardPath}.asset is missing sha256 hash for provenance '${card.asset.source_type}'. Integrity cannot be verified.`);
+                const msg = `${cardPath}.asset is missing sha256 hash for provenance '${card.asset.source_type}'. Integrity cannot be verified.`;
+                errors.push(msg);
+                warnings.push(msg);
             }
             // Phase 6: Provenance note check
             if (!card.asset.provenance_note || (typeof card.asset.provenance_note === 'string' && card.asset.provenance_note.trim() === '')) {

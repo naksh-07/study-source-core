@@ -30,7 +30,9 @@ const PROCEDURAL_TRACK_KEYS = new Set([
     'proceduralQuestionBank',
     'procedural_question_bank',
     'problemPatterns',
-    'practiceQuestions'
+    'problemPatternsJson',
+    'practiceQuestions',
+    'practiceQuestionsJson'
 ]);
 
 /**
@@ -208,7 +210,10 @@ function evaluateArtifactRouting(context = {}) {
     const isRelational = context.visualProfile && context.visualProfile.dominant_structures && context.visualProfile.dominant_structures.length > 0;
     const isGraphEligible = (context.noteWordCount >= THRESHOLDS.GRAPH_MIN_WORDS) || (context.evidenceChars >= THRESHOLDS.GRAPH_MIN_CHARS) || isRelational;
 
-    if (!isGraphEligible && !hasVaultTargets && !isRelational) {
+    if (finalPolicy.bmGraph === false) {
+        routing.bmGraph = false;
+        routing.suppressions.bmGraph = 'SUPPRESSED_BY_SUBJECT_POLICY';
+    } else if (!isGraphEligible && !hasVaultTargets && !isRelational) {
         routing.bmGraph = false;
         routing.suppressions.bmGraph = 'NO_CANDIDATE_GRAPH_TARGETS'; // fallback simple suppression
     } else if (!hasVaultTargets && !isRelational) {
@@ -222,7 +227,10 @@ function evaluateArtifactRouting(context = {}) {
     }
 
     const isQaEligible = (context.noteWordCount >= THRESHOLDS.QA_MIN_WORDS) || context.isComplexDomain;
-    if (!isQaEligible) {
+    if (finalPolicy.bmQa === false) {
+        routing.bmQa = false;
+        routing.suppressions.bmQa = 'SUPPRESSED_BY_SUBJECT_POLICY';
+    } else if (!isQaEligible) {
         routing.bmQa = false;
         routing.suppressions.bmQa = 'TRIVIAL_CONTENT_BELOW_QA_THRESHOLD';
     } else {

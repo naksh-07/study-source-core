@@ -712,9 +712,17 @@ console.log('\n--- NEGATIVE / ADVERSARIAL TESTS ---\n');
         }]
     };
     const result = validateImageOcclusionContent(testManifest);
-    // Should pass validation but with warnings about invalid hash
-    assert(result.isValid === true && result.warnings.some(w => w.includes('sha256')),
-        60, 'Negative: IO Validator warns on invalid SHA-256 hash format');
+    // Should fail validation with blocking error about invalid hash
+    assert(result.isValid === false && result.errors.some(e => e.includes('sha256')),
+        60, 'Negative: IO Validator rejects invalid SHA-256 hash format');
+
+    let traversalBlocked = false;
+    try {
+        discoverAssets({ subject: '../../etc', chapter: 'Test' });
+    } catch (e) {
+        traversalBlocked = e.message.includes('PATH_TRAVERSAL_ERROR');
+    }
+    assert(traversalBlocked, 601, 'Negative: Asset Discovery blocks path traversal in subject/chapter');
 }
 
 // ═══════════════════════════════════════════════════════════

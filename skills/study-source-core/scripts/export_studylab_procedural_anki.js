@@ -386,13 +386,18 @@ function resolveDeclarativeContract(item, linkedPattern, rootData, options = {})
         }
     }
 
-    // 3. Fallback: Synthesize from item/pattern/rootData
+    // 3. Fail-Closed Invariant: Prohibit silent fabrication of synthetic contracts with arbitrary bounds
+    const explicitArchetypes = item.archetypes || (linkedPattern ? linkedPattern.archetypes : null);
+    if (!explicitArchetypes && options.allowSyntheticFallback !== true) {
+        throw new Error(`[CANONICAL_CONTRACT_REQUIRED] No canonical contract found in registry for keys [${candidateKeys.join(', ')}], and synthetic contract fabrication is prohibited.`);
+    }
+
     const dom = (rootData && rootData.domain ? rootData.domain.toLowerCase() : (item.domain ? item.domain.toLowerCase() : 'mathematics'));
     const chap = (rootData && (rootData.chapter || rootData.title) ? (rootData.chapter || rootData.title).toLowerCase().replace(/[^a-z0-9_-]/g, '_') : 'general');
     const fallbackFamily = item.problem_family || (linkedPattern ? linkedPattern.problem_family : `family.${dom}.${chap}`);
     const fallbackSchema = item.schema_id || (linkedPattern ? linkedPattern.schema_id : `schema.${dom}.${chap}.v1`);
 
-    const archSource = item.archetypes || (linkedPattern ? linkedPattern.archetypes : null) || [
+    const archSource = explicitArchetypes || [
         {
             archetype_id: `arch.${dom}.${chap}.default`,
             difficulty_level: typeof item.difficulty === 'number' ? Math.max(1, Math.min(5, Math.round(item.difficulty))) : 1,

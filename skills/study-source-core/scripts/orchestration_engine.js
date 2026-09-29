@@ -816,7 +816,11 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
                             });
                             task.contextSlice = contextPlan.context_slice_content;
                             task.contextPlan = contextPlan;
-                        } catch (e) {}
+                        } catch (e) {
+                            if (e && e.message && e.message.includes('CONTEXT_PROVENANCE_FAILURE')) {
+                                throw e;
+                            }
+                        }
                     }
                 } else {
                     taskStatusMap.set(task.task_id, 'FAILED');

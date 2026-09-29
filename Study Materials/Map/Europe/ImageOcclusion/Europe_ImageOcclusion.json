@@ -16,7 +16,8 @@
         "path": "media/europe_map.svg",
         "width": 800,
         "height": 600,
-        "source_type": "source_provided"
+        "source_type": "source_provided",
+        "sha256": "37a57b724ed26bfc6b05bdee552e98cb96a2e168e24f32ed2e139e3eb0211451"
       },
       "mode": "hide_all_guess_one",
       "regions": [
@@ -24,88 +25,100 @@
           "id": "reg-01",
           "shape": "rectangle",
           "coordinates": [
-            25,
+            10,
             10,
             12,
             12
           ],
-          "label": "क्षेत्र 1",
-          "answer": "Region 1"
+          "label": "पाइरेनीज़ पर्वत (Pyrenees)",
+          "answer": "पाइरेनीज़ पर्वत (फ्रांस-स्पेन सीमा)"
         },
         {
           "id": "reg-02",
           "shape": "rectangle",
           "coordinates": [
-            40,
+            25,
             10,
             12,
             12
           ],
-          "label": "क्षेत्र 2",
-          "answer": "Region 2"
+          "label": "आल्प्स पर्वतमाला (Alps)",
+          "answer": "आल्प्स पर्वतमाला (मोंट ब्लांक)"
         },
         {
           "id": "reg-03",
           "shape": "rectangle",
           "coordinates": [
-            55,
+            40,
             10,
             12,
             12
           ],
-          "label": "क्षेत्र 3",
-          "answer": "Region 3"
+          "label": "यूराल पर्वत (Ural Mountains)",
+          "answer": "यूराल पर्वत (यूरोप-एशिया सीमा)"
         },
         {
           "id": "reg-04",
           "shape": "rectangle",
           "coordinates": [
-            70,
+            55,
             10,
             12,
             12
           ],
-          "label": "क्षेत्र 4",
-          "answer": "Region 4"
+          "label": "काकेशस पर्वत (Caucasus)",
+          "answer": "काकेशस पर्वत (माउंट एल्ब्रुस)"
         },
         {
           "id": "reg-05",
           "shape": "rectangle",
           "coordinates": [
+            70,
             10,
-            30,
             12,
             12
           ],
-          "label": "क्षेत्र 5",
-          "answer": "Region 5"
+          "label": "कार्पेथियन पर्वत (Carpathians)",
+          "answer": "कार्पेथियन पर्वत (मध्य यूरोप)"
         },
         {
           "id": "reg-06",
           "shape": "rectangle",
           "coordinates": [
-            25,
+            10,
             30,
             12,
             12
           ],
-          "label": "क्षेत्र 6",
-          "answer": "Region 6"
+          "label": "डेन्यूब नदी (Danube River)",
+          "answer": "डेन्यूब नदी (10 देशों से बहने वाली)"
         },
         {
           "id": "reg-07",
           "shape": "rectangle",
           "coordinates": [
+            25,
+            30,
+            12,
+            12
+          ],
+          "label": "वोल्गा नदी (Volga River)",
+          "answer": "वोल्गा नदी (यूरोप की सबसे लंबी नदी)"
+        },
+        {
+          "id": "reg-08",
+          "shape": "rectangle",
+          "coordinates": [
             40,
             30,
             12,
             12
           ],
-          "label": "क्षेत्र 7",
-          "answer": "Region 7"
+          "label": "राइन नदी (Rhine River)",
+          "answer": "राइन नदी (व्यस्ततम जलमार्ग)"
         },
         {
-          "id": "reg-08",
+          "id": "reg-09",
           "shape": "rectangle",
           "coordinates": [
             55,
@@ -113,11 +126,11 @@
             12,
             12
           ],
-          "label": "क्षेत्र 8",
-          "answer": "Region 8"
+          "label": "स्कैंडिनेवियाई प्रायद्वीप",
+          "answer": "स्कैंडिनेवियाई प्रायद्वीप (नॉर्वे-स्वीडन)"
         },
         {
-          "id": "reg-09",
+          "id": "reg-10",
           "shape": "rectangle",
           "coordinates": [
             70,
@@ -125,11 +138,11 @@
             12,
             12
           ],
-          "label": "क्षेत्र 9",
-          "answer": "Region 9"
+          "label": "आइबेरियन प्रायद्वीप",
+          "answer": "आइबेरियन प्रायद्वीप (स्पेन-पुर्तगाल)"
         },
         {
-          "id": "reg-10",
+          "id": "reg-11",
           "shape": "rectangle",
           "coordinates": [
             10,
@@ -137,11 +150,11 @@
             12,
             12
           ],
-          "label": "क्षेत्र 10",
-          "answer": "Region 10"
+          "label": "एपेनाइन प्रायद्वीप",
+          "answer": "एपेनाइन प्रायद्वीप (इटली)"
         },
         {
-          "id": "reg-11",
+          "id": "reg-12",
           "shape": "rectangle",
           "coordinates": [
             25,
@@ -149,11 +162,11 @@
             12,
             12
           ],
-          "label": "क्षेत्र 11",
-          "answer": "Region 11"
+          "label": "बाल्कन प्रायद्वीप",
+          "answer": "बाल्कन प्रायद्वीप (दक्षिण-पूर्वी यूरोप)"
         },
         {
-          "id": "reg-12",
+          "id": "reg-13",
           "shape": "rectangle",
           "coordinates": [
             40,
@@ -161,11 +174,11 @@
             12,
             12
           ],
-          "label": "क्षेत्र 12",
-          "answer": "Region 12"
+          "label": "जिब्राल्टर जलसंधि",
+          "answer": "जिब्राल्टर जलसंधि (भूमध्य सागर की कुंजी)"
         },
         {
-          "id": "reg-13",
+          "id": "reg-14",
           "shape": "rectangle",
           "coordinates": [
             55,
@@ -173,11 +186,11 @@
             12,
             12
           ],
-          "label": "क्षेत्र 13",
-          "answer": "Region 13"
+          "label": "डोवर जलसंधि / इंग्लिश चैनल",
+          "answer": "डोवर जलसंधि (ब्रिटेन-फ्रांस)"
         },
         {
-          "id": "reg-14",
+          "id": "reg-15",
           "shape": "rectangle",
           "coordinates": [
             70,
@@ -185,20 +198,8 @@
             12,
             12
           ],
-          "label": "क्षेत्र 14",
-          "answer": "Region 14"
-        },
-        {
-          "id": "reg-15",
-          "shape": "rectangle",
-          "coordinates": [
-            10,
-            70,
-            12,
-            12
-          ],
-          "label": "क्षेत्र 15",
-          "answer": "Region 15"
+          "label": "बोस्पोरस जलसंधि",
+          "answer": "बोस्पोरस जलसंधि (काला सागर-मरमरा सागर)"
         }
       ]
     }

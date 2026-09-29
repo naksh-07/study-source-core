@@ -192,7 +192,7 @@ function validateQuestionBankContent(data, filePath = 'in-memory') {
                 errors.push(`[MISSING_HINTS] '${tag}' is missing Hint Tier 3 (Step-by-Step Method).`);
             }
 
-            // Anti-leak check for Tier 1 and Tier 2
+            // Anti-leak check for Tier 1, Tier 2, and Tier 3
             const answer = q.correct_answer !== undefined ? q.correct_answer : (q.correct_option || q.answer);
             if (t1 && hintLeaksAnswer(t1, answer)) {
                 errors.push(`[HINT_ANSWER_LEAKAGE] '${tag}' Hint Tier 1 leaks the final answer '${answer}'.`);
@@ -200,20 +200,53 @@ function validateQuestionBankContent(data, filePath = 'in-memory') {
             if (t2 && hintLeaksAnswer(t2, answer)) {
                 errors.push(`[HINT_ANSWER_LEAKAGE] '${tag}' Hint Tier 2 leaks the final answer '${answer}'.`);
             }
+            if (t3 && hintLeaksAnswer(t3, answer)) {
+                errors.push(`[HINT_ANSWER_LEAKAGE] '${tag}' Hint Tier 3 leaks the final answer '${answer}'.`);
+            }
         }
 
-        // Solution check
+        // Recognition Signals check (Dimension 7)
+        const recSignals = q.recognition_signals;
+        if (!Array.isArray(recSignals) || recSignals.length === 0) {
+            errors.push(`[MISSING_RECOGNITION_SIGNALS] '${tag}' is missing required 'recognition_signals' array.`);
+        }
+
+        // Expected Method check (Dimension 8)
+        const expMethod = q.expected_method || q.governing_method || q.method;
+        if (!expMethod || (typeof expMethod === 'string' && expMethod.trim() === '')) {
+            errors.push(`[MISSING_EXPECTED_METHOD] '${tag}' is missing required 'expected_method'.`);
+        }
+
+        // Decision Points check (Dimension 9)
+        const decPoints = q.decision_points;
+        if (!Array.isArray(decPoints) || decPoints.length === 0) {
+            errors.push(`[MISSING_DECISION_POINTS] '${tag}' is missing required 'decision_points' array.`);
+        }
+
+        // Trap check (Dimension 10)
+        const trapVal = q.trap || q.common_trap || (Array.isArray(q.common_traps) && q.common_traps[0]);
+        if (!trapVal || (typeof trapVal === 'string' && trapVal.trim() === '')) {
+            errors.push(`[MISSING_TRAP] '${tag}' is missing required 'trap' description.`);
+        }
+
+        // Error Category check (Dimension 11)
+        const errCat = q.error_category || q.error_categories;
+        if (!Array.isArray(errCat) || errCat.length === 0) {
+            errors.push(`[MISSING_ERROR_CATEGORY] '${tag}' is missing required 'error_category' array.`);
+        }
+
+        // Solution check (Dimension 15)
         const sol = q.solution || q.explanation;
         if (!sol || typeof sol !== 'string' || sol.trim() === '') {
             errors.push(`[MISSING_SOLUTION] '${tag}' is missing step-by-step solution.`);
         }
 
-        // Verification check
+        // Verification check (Dimension 16)
         if (!q.verification || typeof q.verification !== 'string' || q.verification.trim() === '') {
             errors.push(`[MISSING_VERIFICATION] '${tag}' is missing verification / sanity check.`);
         }
 
-        // Prerequisites check
+        // Prerequisites check (Dimension 17)
         if (!Array.isArray(q.prerequisites) || q.prerequisites.length === 0) {
             errors.push(`[MISSING_PREREQUISITES] '${tag}' is missing prerequisites array.`);
         }
