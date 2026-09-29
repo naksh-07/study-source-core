@@ -6,6 +6,7 @@
     "doctor": "npm run doctor --prefix skills/study-source-core",
     "test": "npm test --prefix skills/study-source-core",
     "smoke": "npm run smoke --prefix skills/study-source-core",
+    "telemetry": "npm run telemetry --prefix skills/study-source-core",
     "certify": "npm run certify --prefix skills/study-source-core --"
   }
 }

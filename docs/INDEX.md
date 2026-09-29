@@ -87,7 +87,8 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 ### Layer D: Quality Assurance & Independent Certification
 - [`docs/VALIDATION_AND_CERTIFICATION.md`](VALIDATION_AND_CERTIFICATION.md) — Multi-tier verification harness and contract validators.
 - [`docs/SECURITY_AND_TRUST.md`](SECURITY_AND_TRUST.md) — Path traversal defense, SHA-256 cryptographic provenance, and fail-closed invariants.
-- [`skills/study-source-core/scripts/run_master_smoke_test.js`](../skills/study-source-core/scripts/run_master_smoke_test.js) — 17-Gate Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`).
+- [`skills/study-source-core/scripts/telemetry_engine.js`](../skills/study-source-core/scripts/telemetry_engine.js) — Telemetry & Observability Engine (Structured Spans, Token Economy, SQLite WAL Store, and Calibration Analytics).
+- [`skills/study-source-core/scripts/run_master_smoke_test.js`](../skills/study-source-core/scripts/run_master_smoke_test.js) — 18-Gate Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`).
 - [`skills/study-source-core/scripts/test_final_audit_harness.js`](../skills/study-source-core/scripts/test_final_audit_harness.js) — 10-Gate Master Final Audit and Freeze Verification Harness.
 
 ---
@@ -107,10 +108,16 @@ The workspace maintains production-ready chapter deliverables structured as foll
 ## 4. Verification & Testing Commands
 
 ```bash
-# Run the 17-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4s)
+# Run the 18-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4.5s)
 npm run smoke
 
-# Run all 46 Vitest test suites (100% green, ~5.5s)
+# Inspect Runtime Telemetry, Token Economy & Production Calibration Scorecard
+npm run telemetry
+
+# Inspect Live Telemetry Span Timeline
+node skills/study-source-core/scripts/studycore_cli.js telemetry --spans
+
+# Run all 47 Vitest test suites (100% green, ~6.5s)
 npm test
 
 # Run the 10-Gate Master Final Audit Harness

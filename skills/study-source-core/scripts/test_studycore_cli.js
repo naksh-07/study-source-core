@@ -33,6 +33,14 @@ async function main() {
     assert.strictEqual(verifyRes.status, 'SUCCESS', 'verify Map Europe should succeed');
     assert.ok(verifyRes.results.length >= 5, 'verify Map Europe should run at least 5 validators');
     console.log('✅ [CLI-3] studycore verify Map Europe passes all artifact validators');
+
+    // 4. Telemetry and Calibration command
+    const telRes = await runCli(['telemetry', '--json']);
+    assert.ok(telRes && telRes.status, 'telemetry report should return a valid status');
+    assert.ok(Array.isArray(telRes.recommendations), 'telemetry recommendations should be an array');
+    const spansRes = await runCli(['telemetry', '--spans', '--json']);
+    assert.ok(Array.isArray(spansRes), 'telemetry spans should return an array');
+    console.log('✅ [CLI-4] studycore telemetry returns structured calibration scorecard and spans');
 }
 
 main().catch(err => {

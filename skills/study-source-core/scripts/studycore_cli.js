@@ -31,6 +31,7 @@ const { validateImageOcclusionContent } = require('./validate_image_occlusion');
 const { auditNoteContract } = require('./note_contract_audit');
 const { validateMapContent } = require('./validate_map');
 const { auditSlideDeckPrompt } = require('./slide_deck_prompt_audit');
+const { telemetry, TELEMETRY_LAYERS, SPAN_STATUS } = require('./telemetry_engine');
 
 function parseFlags(args) {
     const positional = [];
@@ -355,9 +356,121 @@ async function cmdVerify(positional, flags) {
     return summary;
 }
 
+function cmdTelemetry(positional, flags) {
+    const subCmd = positional[0] || (flags.summary ? 'summary' : (flags.spans || flags.traces ? 'spans' : (flags.clear ? 'clear' : 'summary')));
+
+    if (flags.clear || subCmd === 'clear') {
+        const res = telemetry.clear();
+        if (!flags.json) {
+            console.log(`✅ [Telemetry] ${res.message}`);
+        } else {
+            console.log(JSON.stringify(res, null, 2));
+        }
+        return res;
+    }
+
+    if (flags.spans || flags.traces || subCmd === 'spans' || subCmd === 'traces') {
+        const spans = telemetry.getSpans({ limit: parseInt(flags.limit || '15', 10) });
+        if (flags.json) {
+            console.log(JSON.stringify(spans, null, 2));
+            return spans;
+        }
+
+        console.log('\n================================================================================');
+        console.log('STUDYSOURCECORE — RECENT TELEMETRY SPANS (LIVE TRACE TIMELINE)');
+        console.log('================================================================================');
+        if (spans.length === 0) {
+            console.log('No telemetry spans found. Run `npm run smoke` or `studycore verify` to seed traces.');
+            return [];
+        }
+
+        console.log(`| Status  | Layer         | Span Name                             | Duration | Model   | Tokens (In/Out) |`);
+        console.log(`|---------|---------------|---------------------------------------|----------|---------|-----------------|`);
+        for (const s of spans) {
+            const statusIcon = s.status === 'SUCCESS' ? '✅' : (s.status === 'FAILED' ? '❌' : (s.status === 'SKIPPED' ? '⏭️' : '⏳'));
+            const layerPadded = (s.layer || '').padEnd(13).slice(0, 13);
+            const namePadded = (s.name || '').padEnd(37).slice(0, 37);
+            const dur = (s.duration_ms !== null && s.duration_ms !== undefined ? `${s.duration_ms}ms` : '-').padStart(8);
+            const model = (s.model_class || '-').padEnd(7);
+            const tokens = `${s.tokens_in || 0} / ${s.tokens_out || 0}`.padStart(15);
+            console.log(`| ${statusIcon}      | ${layerPadded} | ${namePadded} | ${dur} | ${model} | ${tokens} |`);
+        }
+        console.log('================================================================================\n');
+        return spans;
+    }
+
+    // Default: Calibration Report & System Health Scorecard
+    const report = telemetry.getCalibrationReport();
+    if (flags.json) {
+        console.log(JSON.stringify(report, null, 2));
+        return report;
+    }
+
+    if (flags.export) {
+        const outPath = typeof flags.export === 'string' ? path.resolve(flags.export) : path.resolve(process.cwd(), 'scratch/telemetry_calibration_report.json');
+        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        fs.writeFileSync(outPath, JSON.stringify(report, null, 2), 'utf8');
+        console.log(`✅ [Telemetry] Exported calibration report to: ${outPath}`);
+    }
+
+    console.log('\n================================================================================');
+    console.log('STUDYSOURCECORE — PRODUCTION CALIBRATION & OBSERVABILITY SCORECARD');
+    console.log('================================================================================');
+    console.log(`Status        : ${report.status}`);
+    console.log(`Total Spans   : ${report.total_spans}`);
+    console.log(`Token Load    : ${report.token_economy.total_tokens} tokens total (Avg: ${report.token_economy.avg_tokens_per_llm_call} per LLM invocation)`);
+    console.log(`Latencies     : P50: ${report.latencies.p50_ms}ms | P90: ${report.latencies.p90_ms}ms | Max: ${report.latencies.max_ms}ms`);
+    console.log(`Pass Rate     : ${report.failure_analysis.success_count} Passed / ${report.failure_analysis.failed_count} Failed / ${report.failure_analysis.skipped_count} Skipped`);
+
+    console.log('\n--- LLM Specialist Subagents Calibration ---');
+    const subagentKeys = Object.keys(report.subagents);
+    if (subagentKeys.length === 0) {
+        console.log('  No subagent invocations recorded yet.');
+    } else {
+        console.log('| Agent Name                     | Invocations | Retries | P50 (ms) | Tokens (In/Out) |');
+        console.log('|--------------------------------|-------------|---------|----------|-----------------|');
+        for (const [agent, d] of Object.entries(report.subagents)) {
+            const agentPadded = agent.padEnd(30).slice(0, 30);
+            const inv = String(d.invocations).padStart(11);
+            const ret = String(d.retries).padStart(7);
+            const p50 = `${d.p50_ms}ms`.padStart(8);
+            const tok = `${d.tokens_in} / ${d.tokens_out}`.padStart(15);
+            console.log(`| ${agentPadded} | ${inv} | ${ret} | ${p50} | ${tok} |`);
+        }
+    }
+
+    console.log('\n--- Deterministic Validators & Packaging Tools ---');
+    const toolEntries = Object.entries({ ...report.tools, ...report.validators });
+    if (toolEntries.length === 0) {
+        console.log('  No validator or tool executions recorded yet.');
+    } else {
+        console.log('| Component Name                 | Executions | Failures | Avg Latency |');
+        console.log('|--------------------------------|------------|----------|-------------|');
+        for (const [name, d] of toolEntries) {
+            const namePadded = name.padEnd(30).slice(0, 30);
+            const cnt = String(d.count).padStart(10);
+            const fail = String(d.failures).padStart(8);
+            const avg = `${d.avg_ms}ms`.padStart(11);
+            console.log(`| ${namePadded} | ${cnt} | ${fail} | ${avg} |`);
+        }
+    }
+
+    console.log('\n--- Calibration & Production Readiness Recommendations ---');
+    if (report.recommendations.length === 0) {
+        console.log('  ✅ System is calibrated. No anomalies detected.');
+    } else {
+        for (const rec of report.recommendations) {
+            console.log(`  💡 ${rec}`);
+        }
+    }
+    console.log('================================================================================\n');
+
+    return report;
+}
+
 function printHelp() {
     console.log(`
-StudySourceCore CLI (v1.2.0-beta.1)
+StudySourceCore CLI (v1.2.0-beta.2)
 
 Commands:
   studycore status [--json]
@@ -371,6 +484,9 @@ Commands:
 
   studycore verify [<Subject> <Chapter>] [--all] [--json]
       Validate all present chapter deliverables or run the 10-gate Final Audit Harness (--all).
+
+  studycore telemetry [--summary] [--spans] [--export <path>] [--clear] [--json]
+      Inspect runtime telemetry, LLM token load, subagent latencies, and calibration recommendations.
 `.trim());
 }
 
@@ -392,6 +508,9 @@ async function runCli(argv = process.argv.slice(2)) {
             return await cmdPackage(positional, flags);
         case 'verify':
             return await cmdVerify(positional, flags);
+        case 'telemetry':
+        case 'metrics':
+            return cmdTelemetry(positional, flags);
         default:
             throw new Error(`Unknown command '${command}'. Run 'studycore --help' for available commands.`);
     }

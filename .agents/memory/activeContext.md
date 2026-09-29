@@ -21,5 +21,8 @@
 - [x] Phase 11: Master Smoke Test & Anti-Tamper Integrity Harness (100% Complete):
   - [x] Implemented `run_master_smoke_test.js` (`npm run smoke`) with 5 pillars, 17 zero-mock gates (17/17 PASS).
   - [x] Fixed `mcp_server.js` procedural contract query functions (`getContractByKeySync`, `getAllContractsSync`).
-  - [x] Added `options.silent` to `note_contract_audit.js` for pure JSON CLI output.
   - [x] Documented GAP-29 in `docs/GAP_REGISTER.md`, updated `docs/INDEX.md`, `README.md`, and `SKILL.md`.
+- [x] Phase 12: Telemetry & Production Calibration System (`npm run telemetry`):
+  - [x] Implemented `telemetry_engine.js` with high-res spans, token load estimation, latency percentiles, and SQLite WAL + streaming JSONL sinks.
+  - [x] Integrated telemetry into `orchestration_engine.js` (mission & subagent worker spans), `studycore_cli.js` (`telemetry` command with `--summary`, `--spans`, `--export`), and `run_master_smoke_test.js` (Gate 4.3).
+  - [x] Verified full Vitest test suite (`47/47` suites PASS in ~6.5s) and Master Smoke Test (`18/18` gates PASS in ~4.5s).

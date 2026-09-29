@@ -30,6 +30,7 @@ const {
     CURRENT_PIPELINE_VERSION
 } = require('./execution_state');
 const { AntigravityHostAdapter } = require('./antigravity_adapter');
+const { telemetry, TELEMETRY_LAYERS, SPAN_STATUS } = require('./telemetry_engine');
 
 /**
  * Standard required fields in specialist handoff contract.
@@ -496,6 +497,19 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
         });
     }
 
+    // Start Root Mission Telemetry Span
+    const missionSpan = telemetry.startSpan({
+        traceId: graph.mission_id || graph.missionRunId || `mission_${Date.now()}`,
+        layer: TELEMETRY_LAYERS.ORCHESTRATOR,
+        name: `orchestrator:mission:${graph.chapter}`,
+        subject: graph.subject,
+        chapter: graph.chapter,
+        metadata: {
+            total_tasks: graph.tasks.length,
+            isResume
+        }
+    });
+
     // Initialize/Reconstruct statuses
     for (const task of graph.tasks) {
         let initialStatus = task.status;
@@ -722,6 +736,29 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
                 timestamp: new Date().toISOString()
             });
 
+            // Start Specialist/Tool Telemetry Span
+            const taskLayer = task.wave === 'WAVE_2' 
+                ? TELEMETRY_LAYERS.SCRIPT_TOOL 
+                : (task.wave === 'WAVE_3' ? TELEMETRY_LAYERS.VALIDATOR : TELEMETRY_LAYERS.SUBAGENT);
+
+            const taskSpan = telemetry.startSpan({
+                traceId: graph.mission_id || graph.missionRunId,
+                parentSpanId: missionSpan.spanId,
+                layer: taskLayer,
+                name: `${task.owner_agent}:${task.task_id}`,
+                subject: graph.subject,
+                chapter: graph.chapter,
+                modelClass: modelRouting.model_class,
+                contextStrategy: (contextPlan && contextPlan.context_strategy) || 'TASK_SCOPED',
+                tokensIn: (contextPlan && contextPlan.estimated_context_size && contextPlan.estimated_context_size.estimated_tokens) || 0,
+                attempt: currentAttempt + 1,
+                metadata: {
+                    wave: task.wave,
+                    target_path: task.target_path,
+                    validator: task.validation_rule
+                }
+            });
+
             try {
                 // Execute worker with hard timeout cap
                 handoff = await executeWithTimeout(
@@ -753,12 +790,14 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
                     taskStatusMap.set(task.task_id, statusToSet);
 
                     if (isSuppressed) {
+                        taskSpan.skip((handoff && handoff.warnings && handoff.warnings[0]) || 'SUPPRESSED');
                         skippedCount++;
                         updateTaskState(executionState, task.task_id, {
                             status: 'SKIPPED',
                             suppression_reason: (handoff && handoff.warnings && handoff.warnings[0]) || 'SUPPRESSED'
                         });
                     } else {
+                        taskSpan.end({ metadata: { bytes: completionVal.fileSize || 0 } });
                         completedCount++;
                         checkpointTaskComplete(executionState, task.task_id, {
                             output_paths: handoff.output_paths,
@@ -795,6 +834,12 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
                     throw new Error(`[COMPLETION_EVIDENCE_ERROR] ${completionVal.errors.join('; ')}`);
                 }
             } catch (err) {
+                taskSpan.fail(err, {
+                    metadata: {
+                        attempt: currentAttempt + 1,
+                        validator: task.validation_rule
+                    }
+                });
                 currentAttempt++;
                 task.current_retries = currentAttempt;
                 hostAdapter.collapseWorker(workerState.worker_id, 'FAILED');
@@ -1033,6 +1078,26 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
 
     if (storageDir) {
         saveExecutionState(executionState, storageDir);
+    }
+
+    // End Root Mission Telemetry Span
+    if (overallVerdict === 'SUCCESS' || overallVerdict === 'PARTIAL_SUCCESS') {
+        missionSpan.end({
+            metadata: {
+                completed_tasks: completedCount,
+                skipped_tasks: skippedCount,
+                failed_tasks: failedCount,
+                peak_concurrency: peakObservedConcurrency
+            }
+        });
+    } else {
+        missionSpan.fail(new Error(`Mission completed with verdict ${overallVerdict}`), {
+            metadata: {
+                completed_tasks: completedCount,
+                failed_tasks: failedCount,
+                blocked_tasks: blockedCount
+            }
+        });
     }
 
     return {

@@ -243,16 +243,19 @@ StudySourceCore/ (Workspace Root)
    > [!NOTE]
    > Dependencies (`@modelcontextprotocol/sdk`, `ajv`, `jszip`, `sql.js`) are installed in `skills/study-source-core/node_modules/`. All package commands, test suites, and MCP tools run against this local environment.
 
-3. **Verify Environment and Test Harness**:
-   Verify your environment and run the full test suite:
+3. **Verify Environment, Smoke Test & Telemetry Harness**:
+   Verify your environment, inspect calibration telemetry, and run test suites:
    ```bash
    # Run environment diagnostics
    npm run doctor
 
-   # Run the 17-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4s)
+   # Run the 18-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4.5s)
    npm run smoke
 
-   # Run all 46 automated Vitest test suites (100% passing, ~5.5s)
+   # Inspect runtime telemetry, token economy & production calibration scorecard
+   npm run telemetry
+
+   # Run all 47 automated Vitest test suites (100% passing, ~6.5s)
    npm test
    ```
 

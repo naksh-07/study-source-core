@@ -13,6 +13,7 @@
     "test:milestone4": "node scripts/test_phase8_model_isolation_closed_boundary.js && node scripts/test_completion_evidence_gate.js && node scripts/test_adversarial_auditor.js && node scripts/test_adversarial_certification_cli.js",
     "test:phase10": "node scripts/test_phase10_concurrency_and_recovery.js && node scripts/test_phase10_runtime_adversarial.js",
     "smoke": "node scripts/run_master_smoke_test.js",
+    "telemetry": "node scripts/studycore_cli.js telemetry",
     "certify": "node scripts/run_adversarial_certification.js"
   },
   "dependencies": {

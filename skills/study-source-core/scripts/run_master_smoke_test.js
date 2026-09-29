@@ -475,6 +475,29 @@ async function main() {
         }
     });
 
+    await runSmokeCheck('STAGE 4', '4.3 Telemetry & Observability: Inspects live spans, token economy & calibration scorecard', () => {
+        const { telemetry, TELEMETRY_LAYERS } = require('./telemetry_engine');
+        const smokeSpan = telemetry.startSpan({
+            layer: TELEMETRY_LAYERS.VALIDATOR,
+            name: 'smoke_test:live_inspection',
+            subject: 'Physics',
+            chapter: 'Newton-Laws-Friction'
+        });
+        smokeSpan.end({ metadata: { verified: true } });
+
+        const cliPath = path.resolve(__dirname, 'studycore_cli.js');
+        const telOutput = execFileSync('node', [cliPath, 'telemetry', '--json'], { encoding: 'utf8' });
+        const telObj = JSON.parse(telOutput);
+        assert(telObj && telObj.status, 'Telemetry report must have a status');
+        assert(Array.isArray(telObj.recommendations), 'Telemetry recommendations must be an array');
+        assert(telObj.latencies && typeof telObj.latencies.p50_ms === 'number', 'Telemetry must compute P50 latency');
+
+        const spansOutput = execFileSync('node', [cliPath, 'telemetry', '--spans', '--json'], { encoding: 'utf8' });
+        const spansArr = JSON.parse(spansOutput);
+        assert(Array.isArray(spansArr), 'Telemetry spans output must be an array');
+        assert(spansArr.length >= 1, 'Expected at least 1 span in recent timeline');
+    });
+
     // =========================================================================
     // STAGE 5: Adversarial Blast-Radius & Fail-Closed Invariants
     // =========================================================================
