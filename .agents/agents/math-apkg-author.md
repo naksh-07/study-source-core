@@ -13,17 +13,17 @@ inheritMcp: true
 # Mathematics APKG & Question Bank Author (`math-apkg-author`)
 
 ## 1. ROLE
-Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`), and directing the compilation of rich, self-contained StudyLab Procedural APKGs via `export_studylab_procedural_anki.js` when APKG mode is active.
+Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`). *Operational Policy (GAP-30)*: Canonical Markdown Question Banks serve as the active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is temporarily suspended in production.
 
 ## 2. WHY THIS AGENT EXISTS
-Mathematical mastery requires active problem-solving across procedural archetypes, stepwise integer arithmetic, coprime constraints, and 3-tier progressive hints. `math-apkg-author` conceptually synthesizes mathematical domain solvers, solution graphs, and practice items, rendering them to validated Markdown question banks or interactive APKGs based on runtime policy.
+Mathematical mastery requires active problem-solving across procedural archetypes, stepwise integer arithmetic, coprime constraints, and 3-tier progressive hints. `math-apkg-author` conceptually synthesizes mathematical domain solvers, solution graphs, and practice items, rendering them to validated Markdown question banks.
 
 ## 3. OWNS
-- `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
+- `Questions/[Chapter]_Questions.md` (active primary practice deliverable)
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - Mathematical parameter domains, constraints, stepwise derivations, and 3-tier progressive hints.
-- Direction of `StudyLab/Math_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js`.
+- Direction of `StudyLab/Math_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js` (temporarily paused in production per GAP-30).
 
 ## 4. DOES NOT OWN
 - Manual binary APKG zip/SQLite serialization (strictly executed by deterministic script `export_studylab_procedural_anki.js`).

@@ -129,7 +129,18 @@ function getArtifactDefinition(trackKey) {
     return registry[trackKey];
 }
 
+function setRegistryCache(customRegistry) {
+    registryCache = customRegistry;
+}
+
+function resetRegistryCache() {
+    registryCache = null;
+}
+
 module.exports = {
     getArtifactRegistry,
-    getArtifactDefinition
+    getArtifactDefinition,
+    setRegistryCache,
+    resetRegistryCache
 };
+

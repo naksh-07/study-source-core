@@ -20,14 +20,14 @@ StudySourceCore is the master orchestration engine that transforms raw education
 ## 2. Input / Output
 
 - **Input**: Authorized study source (PDF/markdown) → single immutable Evidence Pack (`scratch/evidence-pack.md`) with SHA-256 hash.
-- **Output**: Chapter-first deliverable tree under `Study Materials/[Subject]/[Chapter]/` containing Notes, Anki APKG, StudyLab Procedural APKG, MindMap, SlideDeck, and audit reports.
+- **Output**: Chapter-first deliverable tree under `Study Materials/[Subject]/[Chapter]/` containing Notes, Declarative Anki APKG, Canonical Markdown Question Bank (`Questions.md`), MindMap, SlideDeck, and audit reports. *(Note: Binary Procedural APKG compilation is temporarily suspended in production; canonical Markdown Question Banks serve as the active primary practice deliverable).*
 
 ## 3. Lifecycle (3-Wave Pipeline)
 
 | Wave | Mode | What Happens |
 |------|------|--------------|
-| **1** | Parallel (max 4 concurrent) | Specialist subagents author Notes, Anki TSVs, IO manifests, MindMaps, SlideDecks, StudyLab JSONs |
-| **2** | Sequential | Packaging tools compile APKGs (`export_anki_package` / `export_studylab_procedural_package` or CLI `export_anki.js`) |
+| **1** | Parallel (max 4 concurrent) | Specialist subagents author Notes, Anki TSVs, IO manifests, MindMaps, SlideDecks, StudyLab Question Banks (`Questions.md`) |
+| **2** | Sequential | Packaging tools compile Declarative APKGs (`export_anki.js` / `export_anki_package`). Procedural APKG packaging is paused in production in favor of Wave 1 Question Banks. |
 | **3** | Post-packaging | QA audits (`bm-qa`, `bm-graph`, `adversarial-apkg-reviewer`) and physical validation (`validate_artifact`) |
 
 > Full specification → [`resources/workflow.md`](./resources/workflow.md)

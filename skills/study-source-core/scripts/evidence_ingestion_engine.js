@@ -515,6 +515,28 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
         }
     }
 
+    if (problemPatterns.length > 0) {
+        mdLines.push('## 4. Problem Pattern Archetypes');
+        for (const p of problemPatterns) {
+            mdLines.push(`### Pattern: ${p.title || p.pattern_id} (${p.pattern_id})`);
+            if (p.family_id) mdLines.push(`- Family ID: ${p.family_id}`);
+            if (p.deep_structure) mdLines.push(`- Deep Structure: ${p.deep_structure}`);
+            if (p.governing_method) mdLines.push(`- Governing Method: ${p.governing_method}`);
+            if (Array.isArray(p.decision_points) && p.decision_points.length > 0) {
+                mdLines.push('- Decision Points:');
+                for (const dp of p.decision_points) mdLines.push(`  - ${dp}`);
+            }
+            if (Array.isArray(p.common_traps) && p.common_traps.length > 0) {
+                mdLines.push('- Common Traps:');
+                for (const ct of p.common_traps) mdLines.push(`  - ${ct}`);
+            }
+            if (Array.isArray(p.error_categories) && p.error_categories.length > 0) {
+                mdLines.push(`- Error Categories: ${p.error_categories.join(', ')}`);
+            }
+            mdLines.push('');
+        }
+    }
+
     if (sourceInventory && sourceInventory.questions.length > 0) {
         mdLines.push(renderInventoryToEvidenceMarkdown(sourceInventory));
     } else if (rawPracticeProblems.length > 0) {

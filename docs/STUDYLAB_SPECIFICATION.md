@@ -132,6 +132,9 @@ When a student encounters an impasse, hints are served sequentially without leak
 
 ## 6. Procedural APKG Packaging (Model `1600000004`)
 
+> [!IMPORTANT]
+> **Production Status (GAP-30)**: Automated binary Procedural APKG packaging is temporarily suspended in production in favor of **canonical Markdown Question Banks (`Questions.md`)**. Specialist subagents generate comprehensive, Git-versioned Question Banks containing all 5 pedagogical dimensions and non-leaking hints. The binary packaging specification below remains active for explicit on-demand exports and schema verification.
+
 ### Dedicated Anki Model Architecture
 StudyLab packages do not use standard basic or cloze card models. They compile exclusively into **Model `1600000004` (StudyLab Procedural Anchor)**:
 

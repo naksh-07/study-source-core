@@ -1,0 +1,15 @@
+Front	Back	Tags
+समांतर श्रेणी (Arithmetic Progression) की परिभाषा क्या है?	संख्याओं का ऐसा अनुक्रम जिसमें किन्हीं भी दो क्रमागत पदों का अंतर सदैव एकसमान (अचर) रहता है, उसे समांतर श्रेणी (AP) कहते हैं।	Math::ArithmeticProgression::Basic
+समांतर श्रेणी में सार्व अंतर (Common Difference, d) का मान किस प्रकार का हो सकता है?	सार्व अंतर d धनात्मक (positive, d > 0), ऋणात्मक (negative, d < 0), अथवा शून्य (zero, d = 0) हो सकता है।	Math::ArithmeticProgression::Basic
+समांतर श्रेणी के n-वें पद (General Term, an) का मानक सूत्र क्या है?	$a_n = a + (n - 1)d$, जहाँ a प्रथम पद, d सार्व अंतर और n पद संख्या (n in N) है।	Math::ArithmeticProgression::Basic
+समांतर श्रेणी के अंत से n-वाँ पद (nth term from the end) ज्ञात करने का सूत्र क्या है?	$a'_n = l - (n - 1)d$, जहाँ l श्रेणी का अंतिम पद तथा d सार्व अंतर है।	Math::ArithmeticProgression::Basic
+समांतर श्रेणी के प्रथम n पदों के योगफल (Sum of first n terms, Sn) का मानक सूत्र क्या है?	$S_n = \frac{n}{2}[2a + (n - 1)d]$, जहाँ a प्रथम पद, d सार्व अंतर और n पदों की संख्या है।	Math::ArithmeticProgression::Basic
+जब समांतर श्रेणी का प्रथम पद a और अंतिम पद l ज्ञात हों, तब योगफल Sn का सूत्र क्या होता है?	$S_n = \frac{n}{2}(a + l)$	Math::ArithmeticProgression::Basic
+यदि प्रथम n पदों का योगफल Sn दिया हो, तो n-वाँ पद an किस प्रकार प्राप्त होता है?	$a_n = S_n - S_{n-1}$ (जहाँ $n \ge 2$) तथा प्रथम पद $a_1 = S_1$ होता है।	Math::ArithmeticProgression::Basic
+प्रथम n विषम प्राकृत संख्याओं (1 + 3 + 5 + ... + (2n - 1)) का योगफल क्या होता है?	$S_n = n^2$ (उदा. प्रथम 3 विषम संख्याओं का योग: $1 + 3 + 5 = 9 = 3^2$)	Math::ArithmeticProgression::Basic
+तीन राशियाँ a, b, c समांतर श्रेणी (AP) में होने का आवश्यक एवं पर्याप्त प्रतिबंध क्या है?	$2b = a + c$, जहाँ b को a तथा c का समांतर माध्य (Arithmetic Mean, $b = \frac{a+c}{2}$) कहते हैं।	Math::ArithmeticProgression::Basic
+तीन क्रमागत पदों का योगफल ज्ञात होने पर उन्हें सममित रूप में किस प्रकार माना जाता है?	$(a - d), a, (a + d)$, जिससे पदों का योग $3a$ हो जाता है और d तुरंत निरस्त हो जाता है।	Math::ArithmeticProgression::Basic
+चार क्रमागत पदों को सममित रूप में किस प्रकार माना जाता है और उनके बीच सार्व अंतर क्या होता है?	$(a - 3d), (a - d), (a + d), (a + 3d)$, और यहाँ क्रमागत पदों के बीच सार्व अंतर $2d$ होता है।	Math::ArithmeticProgression::Basic
+यदि किसी AP में m वें पद का m गुना, n वें पद के n गुने के बराबर हो (m != n), तो (m + n) वाँ पद क्या होगा?	$a_{m+n} = 0$ (सदैव शून्य होता है)।	Math::ArithmeticProgression::Basic
+दो संख्याओं a तथा b के मध्य प्रविष्ट किए गए k समांतर माध्यों (Arithmetic Means) का योगफल क्या होता है?	$k \times \frac{a + b}{2}$ (अर्थात k गुना a तथा b का एकल समांतर माध्य)।	Math::ArithmeticProgression::Basic
+दो समांतर श्रेणियों के योगफलों के अनुपात से उनके m-वें पदों का अनुपात ज्ञात करने के लिए n के स्थान पर क्या प्रतिस्थापित किया जाता है?	$n \to (2m - 1)$ प्रतिस्थापित किया जाता है।	Math::ArithmeticProgression::Basic

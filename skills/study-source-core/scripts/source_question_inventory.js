@@ -359,6 +359,16 @@ function renderInventoryToEvidenceMarkdown(inventory) {
         if (Array.isArray(q.prerequisites) && q.prerequisites.length > 0) {
             lines.push(`- Prerequisites: ${q.prerequisites.join(', ')}`);
         }
+
+        if (q.hints && typeof q.hints === 'object') {
+            lines.push('- Hints:');
+            const t1 = q.hints.tier1_approach || q.hints.tier1_conceptual || q.hints.concept;
+            const t2 = q.hints.tier2_formula || q.hints.tier2_strategic || q.hints.strategy;
+            const t3 = q.hints.tier3_setup || q.hints.tier3_next_step || q.hints.method;
+            if (t1) lines.push(`  - Tier 1: ${t1}`);
+            if (t2) lines.push(`  - Tier 2: ${t2}`);
+            if (t3) lines.push(`  - Tier 3: ${t3}`);
+        }
         lines.push('');
     }
 

@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0.0",
+  "domain": "Math",
+  "chapter": "Arithmetic-Progression",
+  "skill_id": "math.number_system.lcm_hcf",
+  "language": "hi",
+  "problem_patterns": [
+    {
+      "pattern_id": "PAT_AP_01",
+      "title": "Nth Term Forward Calculation & Index Solving",
+      "decision_points": [
+        "Compute common difference d = a_2 - a_1 noting sign",
+        "Formulate linear equation in index n",
+        "Assert n is a positive integer"
+      ],
+      "common_traps": [
+        "Off-by-one error using n instead of (n - 1)",
+        "Sign errors when common difference d is negative"
+      ],
+      "error_categories": [
+        "ERR_OFF_BY_ONE",
+        "ERR_NEGATIVE_DIFFERENCE",
+        "ERR_ARITHMETIC"
+      ],
+      "family_id": "nth_term_determination",
+      "deep_structure": "Linear relationship between term value and integer index n in an AP",
+      "governing_method": "Apply a_n = a + (n-1)d, isolate unknown variable, verify integer validity of index n",
+      "_readingDP": false,
+      "_readingTraps": true
+    },
+    {
+      "pattern_id": "PAT_AP_02",
+      "title": "Boundary Terms, Term from End & Sign Inversion",
+      "decision_points": [
+        "Distinguish counting from beginning versus counting from terminal end",
+        "Solve inequality a + (n-1)d < 0 and round up to next integer for index"
+      ],
+      "common_traps": [
+        "Inverting inequality sign incorrectly when dividing by negative common difference",
+        "Failing to subtract from last term l when counting from the end"
+      ],
+      "error_categories": [
+        "ERR_INEQUALITY_INVERSION",
+        "ERR_END_TERM_REFERENCE",
+        "ERR_INTEGER_CEILING"
+      ],
+      "family_id": "reverse_and_boundary_terms",
+      "deep_structure": "Positional calculation from the terminal end or finding the first negative/positive term boundary",
+      "governing_method": "Use a'_m = l - (m-1)d or set inequality a_n < 0 to solve for minimal integer index n",
+      "_readingDP": false,
+      "_readingTraps": true
+    },
+    {
+      "pattern_id": "PAT_AP_03",
+      "title": "Algebraic Conditions & Symmetrical Term Selections",
+      "decision_points": [
+        "Use symmetrical variables (a-d, a, a+d) when sum of terms is known to cancel d",
+        "Use (a-3d, a-d, a+d, a+3d) with step 2d for 4 symmetrical terms"
+      ],
+      "common_traps": [
+        "Assuming step is d instead of 2d when using symmetrical 4-term representation",
+        "Algebraic expansion errors in product relations"
+      ],
+      "error_categories": [
+        "ERR_SYMMETRICAL_STEP",
+        "ERR_SIMULTANEOUS_SOLVE",
+        "ERR_ALGEBRAIC_EXPANSION"
+      ],
+      "family_id": "algebraic_relations_and_symmetry",
+      "deep_structure": "Linear equations formed by multi-term constraints or symmetrical choices (a-d, a, a+d)",
+      "governing_method": "Apply 2b = a + c for 3 terms, or solve simultaneous equations for unknown a and d",
+      "_readingDP": false,
+      "_readingTraps": true
+    },
+    {
+      "pattern_id": "PAT_AP_04",
+      "title": "Series Summation & Quadratic Term Count Determination",
+      "decision_points": [
+        "Check whether last term l is known to use S_n = (n/2)(a+l)",
+        "Factorize quadratic equation in n and interpret dual positive integer roots"
+      ],
+      "common_traps": [
+        "Discarding valid second root when terms from first to second root sum to zero",
+        "Omission of 1/2 factor in sum formula"
+      ],
+      "error_categories": [
+        "ERR_QUADRATIC_ROOT_SELECTION",
+        "ERR_SUMMATION_FACTOR",
+        "ERR_DUAL_ROOT_INTERPRETATION"
+      ],
+      "family_id": "summation_series_ap",
+      "deep_structure": "Summation S_n leading to linear or quadratic relations in term count n",
+      "governing_method": "Use S_n = (n/2)[2a + (n-1)d], rearrange to an^2 + bn + c = 0, select valid positive integer roots",
+      "_readingDP": false,
+      "_readingTraps": true
+    },
+    {
+      "pattern_id": "PAT_AP_05",
+      "title": "Sum Function Decomposition & Ratio of Sums/Terms",
+      "decision_points": [
+        "Differentiate S_n algebraic form to get common difference d = 2A",
+        "Replace dummy index n with 2m - 1 to relate sum ratio to m-th term ratio"
+      ],
+      "common_traps": [
+        "Directly substituting m instead of 2m - 1 in ratio of sums",
+        "Sign error when expanding S_{n-1}"
+      ],
+      "error_categories": [
+        "ERR_RATIO_SUBSTITUTION_MAPPING",
+        "ERR_SUM_DIFFERENCE_EXPANSION",
+        "ERR_COEFFICIENT_EXTRACTION"
+      ],
+      "family_id": "sum_function_and_ratio_transformation",
+      "deep_structure": "Extracting nth term from sum S_n or transforming ratio of sums to ratio of terms via n -> 2m - 1",
+      "governing_method": "Use a_n = S_n - S_{n-1} or substitute n = 2m - 1 into ratio of sums expression",
+      "_readingDP": false,
+      "_readingTraps": true
+    },
+    {
+      "pattern_id": "PAT_AP_06",
+      "title": "Real-World Contexts, Arithmetic Means & Geometric Applications",
+      "decision_points": [
+        "Identify whether the asked quantity is a specific installment (a_n) or total amount (S_n)",
+        "Calculate step difference D = (b - a)/(k + 1) for k inserted arithmetic means"
+      ],
+      "common_traps": [
+        "Confusing total sum S_n with a specific term a_n in word problems",
+        "Dividing by k instead of (k + 1) for inserted arithmetic means"
+      ],
+      "error_categories": [
+        "ERR_WORD_PROBLEM_MODELING",
+        "ERR_AM_DENOMINATOR",
+        "ERR_TERM_VS_SUM_CONFUSION"
+      ],
+      "family_id": "applied_word_problems_and_means",
+      "deep_structure": "Translating physical distributions, installments, or inserted means into formal AP parameters",
+      "governing_method": "Model initial quantity as a, uniform increase as d, and total as S_n; apply AM insertion formula",
+      "_readingDP": false,
+      "_readingTraps": true
+    }
+  ]
+}

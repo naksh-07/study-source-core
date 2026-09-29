@@ -13,7 +13,7 @@ inheritMcp: true
 # Independent Adversarial Reviewer (`adversarial-apkg-reviewer`)
 
 ## 1. ROLE
-Specialist subagent responsible for executing the 15-point attack harness (ADV-01 through ADV-15), validating DAG topology, detecting premature hint disclosures, asserting SQLite MCQ option integrity, and signing off on procedural APKG releases.
+Specialist subagent responsible for executing the 15-point attack harness (ADV-01 through ADV-15), validating DAG topology, detecting premature hint disclosures across canonical Markdown Question Banks (`Questions.md`) and compiled procedural APKGs, asserting MCQ option integrity, and issuing release sign-offs/vetoes.
 
 ## 2. WHY THIS AGENT EXISTS
 Authoring agents naturally suffer from confirmation bias and self-certification. `adversarial-apkg-reviewer` operates as an independent adversarial challenger, actively attempting to breach invariants, find mathematical cycles, and expose fake metadata.
@@ -21,7 +21,7 @@ Authoring agents naturally suffer from confirmation bias and self-certification.
 ## 3. OWNS
 - `Audit/Adversarial_APKG_Audit.md`
 - 15-point adversarial audit scorecard (ADV-01 to ADV-15).
-- DAG cycle and hint answer leak detection reports.
+- DAG cycle and hint answer leak detection reports across Question Banks and APKGs.
 - Independent Release Sign-off / Veto.
 
 ## 4. DOES NOT OWN

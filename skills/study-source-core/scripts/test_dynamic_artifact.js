@@ -1,10 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const { getArtifactRegistry, setRegistryCache, resetRegistryCache } = require('./artifact_registry');
 const { buildExecutionTaskGraph } = require('./orchestration_engine');
-
-// We will temporarily inject a test-artifact into the artifact-registry.json
-const registryPath = path.join(__dirname, '..', 'resources', 'artifact-registry.json');
-const originalRegistryContent = fs.readFileSync(registryPath, 'utf8');
 
 function runTest(name, fn) {
     try {
@@ -21,30 +16,24 @@ console.log("=== Running Dynamic Artifact Architecture Test ===");
 
 runTest("Dynamic Artifact is routed and executed without Core code changes", () => {
     try {
-        // 1. Modify registry externally (as if a new artifact capability was registered)
-        const registry = JSON.parse(originalRegistryContent);
-        registry['testArtifact'] = {
-            task_id: 'task-test-artifact',
-            task_name: 'Test Artifact Capability',
-            wave: 1,
-            owner_agent: 'test-agent',
-            writer_agent: 'test-agent',
-            validator: 'test_validator.js',
-            artifactKey: 'testArtifact',
-            output_dir: 'TestArtifacts',
-            file_pattern: 'TestArtifacts/{chapter}_test.txt',
-            dependencies: []
+        // 1. Inject dynamic capability into registry cache (in-memory, zero disk pollution)
+        const baseRegistry = getArtifactRegistry();
+        const registry = {
+            ...baseRegistry,
+            testArtifact: {
+                task_id: 'task-test-artifact',
+                task_name: 'Test Artifact Capability',
+                wave: 1,
+                owner_agent: 'test-agent',
+                writer_agent: 'test-agent',
+                validator: 'test_validator.js',
+                artifactKey: 'testArtifact',
+                output_dir: 'TestArtifacts',
+                file_pattern: 'TestArtifacts/{chapter}_test.txt',
+                dependencies: []
+            }
         };
-        fs.writeFileSync(registryPath, JSON.stringify(registry, null, 2), 'utf8');
-
-        // Clear the cache in artifact_registry to reload
-        const registryModulePath = require.resolve('./artifact_registry');
-        delete require.cache[registryModulePath];
-        
-        // Clear orchestration engine cache so it re-imports the registry
-        const orchestrationModulePath = require.resolve('./orchestration_engine');
-        delete require.cache[orchestrationModulePath];
-        const { buildExecutionTaskGraph: buildExecutionTaskGraphReloaded } = require('./orchestration_engine');
+        setRegistryCache(registry);
 
         // 2. Mock explicit policy request for this new artifact
         // (Subject Policy determines eligibility, so we simulate the Subject declaring it eligible)
@@ -59,7 +48,7 @@ runTest("Dynamic Artifact is routed and executed without Core code changes", () 
         };
 
         // 3. Build generic execution graph
-        const graph = buildExecutionTaskGraphReloaded(context);
+        const graph = buildExecutionTaskGraph(context);
         
         // 4. Assert it appears in the task graph with correct execution metadata
         const testTask = graph.tasks.find(t => t.task_id === 'task-test-artifact');
@@ -70,13 +59,10 @@ runTest("Dynamic Artifact is routed and executed without Core code changes", () 
         if (testTask.validation_rule !== 'test_validator.js') throw new Error("Test artifact has wrong validator");
 
     } finally {
-        // Restore registry
-        fs.writeFileSync(registryPath, originalRegistryContent, 'utf8');
-        const registryModulePath = require.resolve('./artifact_registry');
-        delete require.cache[registryModulePath];
-        const orchestrationModulePath = require.resolve('./orchestration_engine');
-        delete require.cache[orchestrationModulePath];
+        // Cleanly reset registry cache
+        resetRegistryCache();
     }
 });
 
 console.log("=== Dynamic Artifact Tests Complete ===");
+

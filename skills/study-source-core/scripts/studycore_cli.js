@@ -143,7 +143,7 @@ function cmdStatus(flags) {
             a.slideDeck ? 'Deck✅' : 'Deck⚪',
             a.questionBank ? 'QBank✅' : 'QBank⚪',
             a.declarativeApkg ? 'Anki.apkg✅' : 'Anki.apkg⚪',
-            a.proceduralApkg ? 'StudyLab.apkg✅' : 'StudyLab.apkg⚪'
+            a.proceduralApkg ? 'StudyLab.apkg✅' : 'StudyLab.apkg⚪(Paused)'
         ].join(' | ');
 
         console.log(`• [${ch.subject} / ${ch.chapter}] (${ch.presentCount}/9 deliverables)`);
@@ -231,6 +231,7 @@ async function cmdPackage(positional, flags) {
     await exportChapterToAnki(chapterDir, { cleanIntermediates });
 
     if (flags.studylab) {
+        console.log(`ℹ️  [PRODUCTION_NOTICE] Procedural APKG generation is temporarily suspended in production in favor of canonical Markdown Question Banks ('Questions.md'). Packaging on-demand...`);
         console.log(`📦 Packaging StudyLab Procedural Anki Deck for ${subject}::${chapter}...`);
         await exportStudyLabProceduralAnki(chapterDir, { cleanIntermediates });
     }

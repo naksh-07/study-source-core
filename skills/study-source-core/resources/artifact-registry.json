@@ -132,6 +132,8 @@
     "proceduralApkg": {
         "task_id": "task-export-studylab-anki",
         "task_name": "StudyLab Procedural APKG Packaging",
+        "status": "TEMPORARILY_SUSPENDED",
+        "production_alternative": "proceduralQuestionBank",
         "wave": 1,
         "owner_agent": "$DOMAIN_SPECIALIST",
         "writer_agent": "$DOMAIN_SPECIALIST",
@@ -146,6 +148,7 @@
     "proceduralQuestionBank": {
         "task_id": "task-studylab-question-bank",
         "task_name": "StudyLab Procedural Question Bank",
+        "status": "ACTIVE_PRODUCTION_PRIMARY",
         "wave": 1,
         "owner_agent": "$DOMAIN_SPECIALIST",
         "writer_agent": "$DOMAIN_SPECIALIST",

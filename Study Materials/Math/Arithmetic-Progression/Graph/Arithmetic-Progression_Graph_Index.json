@@ -1,0 +1,34 @@
+{
+  "chapter": "Arithmetic-Progression",
+  "subject": "Math",
+  "status": "linked",
+  "outgoing_links": [
+    {
+      "target": "Math/LCM-HCF",
+      "predicate": "foundational_arithmetic",
+      "context": "संख्या पद्धति एवं सार्व विभाजक नियमों के आधार पर समांतर श्रेणी का सार्व अंतर"
+    },
+    {
+      "target": "Physics/Newton-Laws-Friction",
+      "predicate": "kinematic_analogy",
+      "context": "नियत त्वरण गति में समान समय अंतरालों में तय की गई दूरियों का समांतर श्रेणी संबंध"
+    }
+  ],
+  "internal_anchors": [
+    "अध्याय परिचय एवं मूलभूत संकल्पना",
+    "समांतर श्रेणी का सामान्य पद (an)",
+    "प्रथम n पदों का योगफल (Sn)",
+    "प्रमुख समस्या प्रतिरूप एवं मानक समाधान विधियाँ",
+    "सीमांत शर्तें एवं परीक्षक के सामान्य जाल",
+    "त्वरित पुनरावृत्ति सूत्र सारणी",
+    "वैचारिक संबंध एवं अगली कड़ियाँ"
+  ],
+  "metrics": {
+    "total_words": 1850,
+    "total_links": 2,
+    "unique_targets": 2,
+    "link_density": "0.11%",
+    "self_links": 0,
+    "generic_slop_links": 0
+  }
+}

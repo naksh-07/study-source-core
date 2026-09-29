@@ -54,21 +54,19 @@ function hintLeaksAnswer(hintText, answer) {
 
     // Check for explicit declaration of answer in Hindi or English
     const explicitPatterns = [
-        new RegExp(`(?:final\\s+)?(?:answer|उत्तर|correct\\s*option|सही\\s*विकल्प|ans|result|परिणाम)\\s*(?:is|है|होगा|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}`, 'i'),
-        new RegExp(`(?:final\\s*answer|अंतिम\\s*उत्तर)\\s*(?:is|होगा|है|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}`, 'i'),
-        new RegExp(`=\\s*${escapeRegex(ansStr)}(?:\\s|[.,;!?)]|$)`, 'm'),
-        new RegExp(`(?:yields|gives|equals|बराबर|प्राप्त\\s*होता\\s*है|प्राप्त\\s*होगा)\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}`, 'i')
+        new RegExp(`(?:final\\s+)?(?:answer|उत्तर|correct\\s*option|सही\\s*विकल्प|ans|result|परिणाम)\\s*(?:is|है|होगा|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}(?:\\s*(?:is|है|होगा|था|।|\\.))?(?!\\w)`, 'i'),
+        new RegExp(`(?:final\\s*answer|अंतिम\\s*उत्तर)\\s*(?:is|होगा|है|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}(?:\\s*(?:is|है|होगा|था|।|\\.))?(?!\\w)`, 'i'),
+        new RegExp(`(?:yields|gives|equals|बराबर|प्राप्त\\s*होता\\s*है|प्राप्त\\s*होगा)\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}(?:\\s*(?:is|है|होगा|था|।|\\.))?(?!\\w)`, 'i'),
+        new RegExp(`(?:\\\\therefore|hence|अतः|परिणामस्वरूप|\\bans\\b|\\bresult\\b|\\btarget\\b|\\bउत्तर\\b)[^.!?\\n]{0,25}[:=]\\s*${escapeRegex(ansStr)}(?!\\w)`, 'i')
     ];
 
     for (const pat of explicitPatterns) {
         if (pat.test(hintText)) return true;
     }
 
-    // For standalone numerical values, check if preceded by '=' or result indicator
-    if (!isNaN(Number(ansStr)) && Math.abs(Number(ansStr)) > 0) {
-        const numEqPattern = new RegExp(`=\\s*${escapeRegex(ansStr)}\\b`);
-        if (numEqPattern.test(hintText)) return true;
-    }
+    // Arithmetic calculation yielding the answer, e.g. 2160 / 12 = 180 or 18 - 21 = -3
+    const calcPattern = new RegExp(`[+\\-*\\/^]\\s*\\d+\\s*=\\s*${escapeRegex(ansStr)}(?!\\w)`, 'i');
+    if (calcPattern.test(hintText)) return true;
 
     return false;
 }
@@ -110,6 +108,10 @@ function validateQuestionBankContent(data, filePath = 'in-memory') {
     if (data.questions.length === 0) {
         errors.push(`[EMPTY_QUESTION_BANK] Question bank in '${filePath}' contains 0 questions.`);
         return { isValid: false, errors, warnings };
+    }
+
+    if (data.questions.length < 15) {
+        warnings.push(`[WARN: QUESTION_DENSITY_LOW] Question bank in '${filePath}' contains only ${data.questions.length} questions. Recommended >= 20 for student practice.`);
     }
 
     const seenIds = new Set();

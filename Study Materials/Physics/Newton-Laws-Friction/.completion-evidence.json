@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "overall_verdict": "SUCCESS",
+    "chapter": "Newton-Laws-Friction",
+    "subject": "Physics",
+    "completed_count": 8,
+    "artifact_count": 8,
+    "verified_timestamp": "2026-09-29T17:04:16.908Z",
+    "schema_version": "1.0.0"
+  },
+  "artifacts": [
+    {
+      "task_id": "task-notes",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Notes\\Newton-Laws-Friction_Notes.md",
+      "bytes": 38011,
+      "sha256": "948456946d03512eec76a214a125b62e7f5d0af64c0211b41ea6f1b249592cbf",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-basic",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Basic\\Newton-Laws-Friction_Basic.tsv",
+      "bytes": 9235,
+      "sha256": "9e5296ca643b7f4f6f53f93fd0aa6da68d6fb266dee602d17545ab6d0d517470",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-cloze",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Cloze\\Newton-Laws-Friction_Cloze.tsv",
+      "bytes": 8468,
+      "sha256": "af81ca9f69f4ed6eb80d2c75ddbd0a2a239581c3c09442b2d9012433c5ef13f3",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-mindmap",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\MindMap\\Newton-Laws-Friction.mindmap.json",
+      "bytes": 12295,
+      "sha256": "617f2539b5c7ab593d4eae7577094fd780284649b075f6e2bc9314ac00bef750",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-slidedeck",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\SlideDeck\\Newton-Laws-Friction_SlideDeckPrompt.md",
+      "bytes": 29119,
+      "sha256": "9a83afaeb0f8f593be6b01fd16beab10a35d99dafc46b72be09f8d88d537d76a",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-qbank",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\StudyLab\\Newton-Laws-Friction_Questions.md",
+      "bytes": 7564,
+      "sha256": "51a5d0a0fb047ed109aa03420451f115fed4751154721dbde9a79db04bd42760",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-anki-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Newton-Laws-Friction_Anki.apkg",
+      "bytes": 10504,
+      "sha256": "49e6507a41e537addaf07127ec9ff2051e60f3d205f9ab13c48e39c72d570822",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-studylab-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\StudyLab\\Newton-Laws-Friction_StudyLab_Procedural.apkg",
+      "bytes": 6673,
+      "sha256": "27303eaccf75bdedf2f0d6543baf2b93f23f413f73a96c16f4aa24a893abb7ba",
+      "physical_status": "VERIFIED_ON_DISK"
+    }
+  ]
+}

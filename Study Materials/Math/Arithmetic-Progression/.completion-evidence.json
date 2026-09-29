@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "overall_verdict": "SUCCESS",
+    "chapter": "Arithmetic-Progression",
+    "subject": "Math",
+    "completed_count": 9,
+    "artifact_count": 9,
+    "verified_timestamp": "2026-09-29T19:48:10.587Z",
+    "schema_version": "1.0.0"
+  },
+  "artifacts": [
+    {
+      "task_id": "task-notes",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Notes\\Arithmetic-Progression_Notes.md",
+      "bytes": 17315,
+      "sha256": "edba9c755536e7e768166d2e9ab0396a6e1acbb921390f6387addd3af0175f13",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-basic",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Basic\\Arithmetic-Progression_Basic.tsv",
+      "bytes": 5344,
+      "sha256": "e8ce7f427b888e7965adf76362687992dc2618da72507d12301b34d034b46359",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-cloze",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Cloze\\Arithmetic-Progression_Cloze.tsv",
+      "bytes": 6303,
+      "sha256": "1f8ea2dec3f507dfc4098ecde6d7f9d6a7728abec1164aad67cd179443c76143",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-mindmap",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\MindMap\\Arithmetic-Progression.mindmap.json",
+      "bytes": 8334,
+      "sha256": "6f9b00826570588362e32361a0c6354f167f3f79d1a298bb09dd20ec230377be",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-slidedeck",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\SlideDeck\\Arithmetic-Progression_SlideDeckPrompt.md",
+      "bytes": 11585,
+      "sha256": "6ae3645fe0e0bdb9b4278b870ae0eb0277174940cf4784679e4913b47fa1d5da",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-qbank",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\StudyLab\\Arithmetic-Progression_Questions.md",
+      "bytes": 13503,
+      "sha256": "4ded961ef2b953256df84206264efe33d220376d3ccb69ba534c280d9ca24032",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-anki-apkg",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Arithmetic-Progression_Anki.apkg",
+      "bytes": 9120,
+      "sha256": "a49315e70bbc22502179dcbcd16e1c967183d89f22e89740c691267f0b4b391c",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-graph",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Graph\\Arithmetic-Progression_Graph_Index.json",
+      "bytes": 1633,
+      "sha256": "353e6b0308c057daaaac2be7946b993f69e6dc27b658868386bdabed38077137",
+      "physical_status": "VERIFIED_ON_DISK"
+    },
+    {
+      "task_id": "task-qa",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Audit\\QA_Report.md",
+      "bytes": 4732,
+      "sha256": "3f002a2dc26549fe95ababb67672a738a63f5c7bba5421cdcdc310a28817e64d",
+      "physical_status": "VERIFIED_ON_DISK"
+    }
+  ]
+}

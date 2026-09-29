@@ -26,7 +26,10 @@ const DEFAULT_MATH_ERROR_MAP = {
     'prime_factorization': ['ERR_01', 'ERR_02', 'ERR_06'],
     'product_identity': ['ERR_01', 'ERR_03', 'ERR_05', 'ERR_06'],
     'remainder_rule': ['ERR_02', 'ERR_06', 'ERR_07'],
-    'ratio_decomposition': ['ERR_03', 'ERR_06', 'ERR_08']
+    'ratio_decomposition': ['ERR_03', 'ERR_06', 'ERR_08'],
+    'nth_term_determination': ['ERR_OFF_BY_ONE', 'ERR_NEGATIVE_DIFFERENCE', 'ERR_ARITHMETIC'],
+    'summation_series_ap': ['ERR_QUADRATIC_ROOT_SELECTION', 'ERR_SUMMATION_FACTOR', 'ERR_CALCULATION'],
+    'arithmetic_progression': ['ERR_01', 'ERR_02', 'ERR_06']
 };
 
 /**
@@ -228,6 +231,20 @@ function parseMarkdownEvidencePackText(text) {
             } else if (line.startsWith('- Prerequisites:')) {
                 currentItem._readingStatement = false;
                 currentItem.prerequisites = line.substring(16).split(',').map(s => s.trim()).filter(Boolean);
+            } else if (line.startsWith('- Hints:')) {
+                currentItem._readingStatement = false;
+                currentItem._readingSteps = false;
+                currentItem._readingHints = true;
+                currentItem.hints = currentItem.hints || {};
+            } else if (currentItem._readingHints && line.startsWith('  - Tier 1:')) {
+                currentItem.hints.tier1_conceptual = line.substring(11).trim();
+                currentItem.hints.tier1_approach = currentItem.hints.tier1_conceptual;
+            } else if (currentItem._readingHints && line.startsWith('  - Tier 2:')) {
+                currentItem.hints.tier2_strategic = line.substring(11).trim();
+                currentItem.hints.tier2_formula = currentItem.hints.tier2_strategic;
+            } else if (currentItem._readingHints && line.startsWith('  - Tier 3:')) {
+                currentItem.hints.tier3_next_step = line.substring(11).trim();
+                currentItem.hints.tier3_setup = currentItem.hints.tier3_next_step;
             } else if (/^[\s-]*\([A-Za-z0-9]+\)\s*/.test(line)) {
                 currentItem._readingStatement = false;
                 const optText = line.replace(/^[\s-]*\([A-Za-z0-9]+\)\s*/, '').trim();
@@ -365,11 +382,11 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
         // 3. Recognition Signals
         let recSignals = pattern.deep_structure ? [pattern.deep_structure] : [];
         if (recSignals.length === 0) {
-            recSignals = ['प्रश्न में LCM/HCF अथवा विभाज्यता के प्रारूप की पहचान करें'];
+            recSignals = [`प्रश्न में ${parsed.chapter || 'गणित'} के मूलभूत संबंधों एवं चरों की पहचान करें`];
         }
 
         // 4. Expected Method
-        const expectedMethod = pattern.governing_method || 'मानक अभाज्य गुणनखंडन तथा सर्वसमिका विधि लागू करें';
+        const expectedMethod = pattern.governing_method || `मानक ${parsed.chapter || 'बीजगणितीय'} विश्लेषणात्मक संक्रिया विधि लागू करें`;
 
         // 5. Decision Points
         const decisionPoints = (pattern.decision_points && pattern.decision_points.length > 0)
@@ -379,7 +396,7 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
         // 6. Traps
         const trap = (pattern.common_traps && pattern.common_traps.length > 0)
             ? pattern.common_traps[0]
-            : 'अभाज्य गुणनखंडन अथवा सह-अभाज्य युग्मों की गणना में त्रुटि';
+            : 'गणना अथवा सूत्र प्रतिस्थापन में पदों एवं चिन्हों की त्रुटि';
 
         // 7. Error Categories
         const errorCats = (pattern.error_categories && pattern.error_categories.length > 0)
@@ -401,9 +418,10 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
         const verification = `उत्तर की पुष्टि: गणना मान ${answer} को मूल प्रतिबंधों में प्रतिस्थापित करने पर संबंध संतुष्ट होता है।`;
 
         // 11. Prerequisites
+        const defaultPrereq = `math.${(parsed.chapter || 'general').toLowerCase().replace(/[^a-z0-9_]/g, '_')}.basics`;
         const prerequisites = (Array.isArray(rawQ.prerequisites) && rawQ.prerequisites.length > 0)
             ? rawQ.prerequisites
-            : ['math.factors.hcf_lcm_basics'];
+            : [defaultPrereq];
 
         canonicalQuestions.push({
             id: qId,
@@ -432,8 +450,8 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
     const canonicalQuestionBank = {
         schema_version: '1.0.0',
         domain: parsed.domain || 'Mathematics',
-        chapter: parsed.chapter || 'LCM-HCF',
-        skill_id: parsed.skill_id || 'math.number_system.lcm_hcf',
+        chapter: parsed.chapter || 'Arithmetic-Progression',
+        skill_id: parsed.skill_id || `math.${(parsed.chapter || 'general').toLowerCase().replace(/[^a-z0-9_]/g, '_')}`,
         language: 'hi',
         provenance: {
             source: parsed.source_title,

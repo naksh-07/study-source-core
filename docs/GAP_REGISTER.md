@@ -49,6 +49,8 @@ Every identified gap is tracked with:
 | **GAP-27** | UI / MCP | **P2 High** | Anki Dark Mode (`.nightMode`) CSS & MCP Server v1.1.0 Expansion | Adversarial Audit | **Resolved** (v1.1.0) |
 | **GAP-28** | Multi-Agent / Tools | **P1 Critical** | Subagent Tool Frontmatter, Wave 3 Auto-Context Resolution & Sibling Parity | Orchestration Audit | **Resolved** (`v1.1.0`) |
 | **GAP-29** | Testing / Anti-Tamper | **P0 Blocker** | Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`) | Verification & Integrity | **Resolved** (`v1.2.0-beta.2`) |
+| **GAP-30** | Packaging / StudyLab | **P1 High** | Temporary Production Suspension of Procedural APKG in Favor of Markdown Question Banks (`Questions.md`) | Production Policy | **Resolved** (`v1.2.0-beta.3`) |
+| **GAP-31** | Validation / Math | **P1 Critical** | Mathematical Parameter Anti-Leak Recalibration, Dynamic Fallbacks & Question Density Guards | Phase 15 | **Resolved** (`v1.2.0-beta.4`) |
 
 ---
 
@@ -487,6 +489,35 @@ Every identified gap is tracked with:
 
 ---
 
+### GAP-30: Temporary Production Suspension of Procedural APKG in Favor of Canonical Markdown Question Banks
+- **Category**: Packaging, Policy & StudyLab Delivery
+- **Severity**: **P1 High**
+- **Evidence**: Binary Procedural APKGs (`_StudyLab_Procedural.apkg` with Model `1600000004`) contain JSON-encoded procedural problem graphs and dynamic execution contracts in card fields. Standard desktop/mobile Anki clients cannot render interactive step-by-step hint progression natively without custom JavaScript webview scaffolding. In contrast, canonical Markdown Question Banks (`Questions.md`) authored by specialist subagents are immediately readable, searchable, Git-trackable, durable, and fully validated across all 5 pedagogical dimensions (`Recognition Signals`, `Expected Method`, `Decision Points`, `Common Trap`, `Error Category`), solution DAGs, and 3-tier non-leaking hints.
+- **Resolution Details**:
+  1. Designated canonical Markdown Question Banks (`Questions.md` / `_Questions.md` under `StudyLab/` or `Questions/`) as the active primary practice deliverable across all 4 STEM domains (Math, Reasoning, Physics, Chemistry).
+  2. Temporarily paused automated binary Procedural APKG production packaging (`export_studylab_procedural_anki.js`), annotating `"status": "TEMPORARILY_SUSPENDED"` and `"production_alternative": "proceduralQuestionBank"` in `artifact-registry.json`.
+  3. Calibrated `studycore_cli.js` (`cmdStatus`, `cmdPackage`, `cmdVerify`) so that missing procedural APKG files are displayed as `StudyLab⚪(Paused)` and do not fail chapter release gates when `QBank✅` is valid.
+  4. Updated master agents registry (`AGENTS.md`, `.agents/AGENTS.md`), specialist definitions (`.agents/agents/*.md`), and root documentation (`README.md`, `SKILL.md`).
+- **Verification Method**: `studycore verify Physics Newton-Laws-Friction` (Question Bank PASS), `npm run smoke` (18/18 gates PASS), `npm test` (47/47 suites PASS).
+
+### GAP-31: Mathematical Parameter Leak False-Positives, Hardcoded Specialist Fallbacks & Question Density Enforcement
+- **Category**: Validation / Mathematical Specialization / Practice Density
+- **Severity**: **P1 Critical**
+- **Evidence**: 
+  1. `validate_studylab_question_bank.js` regex `=\s*${escapeRegex(ansStr)}` triggered false-positive `[HINT_ANSWER_LEAKAGE_FATAL]` whenever an input parameter in a problem statement (e.g. $a = 2$, $d = -3$) matched the numerical answer, even though the hint was merely stating an input, not computing or leaking the answer.
+  2. `author_math_studylab.js` contained hardcoded fallback strings referencing LCM/HCF concepts and `math.factors.hcf_lcm_basics` if problem patterns lacked explicit fields, corrupting non-LCM math chapters.
+  3. The validator and authoring engine lacked question density thresholds, allowing minimal 4-question test fixtures to pass release certification without alerting callers that the question bank was undersized for student practice.
+  4. `cross_artifact_checker.js` checked `ppData.patterns` instead of `problem_patterns`, causing pattern resolution failures in Gate 4.
+- **Resolution Details**:
+  1. Recalibrated `hintLeaksAnswer` in `scripts/validate_studylab_question_bank.js` to distinguish explicit concluding answers (`final answer is`, `उत्तर =`, `\therefore n =`) and arithmetic evaluation results (`18 - 21 = -3`) from standard input parameter assignments (`a = 2`, `d = -3`).
+  2. Replaced hardcoded LCM/HCF fallbacks in `scripts/author_math_studylab.js` with dynamic, chapter-derived values (e.g. `math.arithmetic_progression.basics`).
+  3. Added `[WARN: QUESTION_DENSITY_LOW]` when question count $< 15$.
+  4. Fixed `checkPracticeQuestionsConsistency` in `scripts/cross_artifact_checker.js` to resolve `(ppData.patterns || ppData.problem_patterns).map(p => p.id || p.pattern_id)`.
+  5. Authored and certified an authentic 26-question distinct Math chapter (`Arithmetic-Progression`) with 100% 4-option MCQs from CBSE/SSC/CDS, 27 Anki cards, and full 4-gate release certification.
+- **Verification Method**: `run_adversarial_certification.js --chapter Arithmetic-Progression --subject Math` (4/4 PASS), `studycore verify Math Arithmetic-Progression` (7/7 PASS), `npm run smoke` (18/18 PASS), `npm test` (47/47 PASS).
+
+---
+
 ## 4. Remediation Schedule & Roadmap Alignment
 
 | Phase | Scheduled Gaps | Key Milestone |
@@ -502,3 +533,6 @@ Every identified gap is tracked with:
 | **Phase 9** | **GAP-05, GAP-08, GAP-12, GAP-13, GAP-29** | Independent Adversarial Certification Harness (ADV-01..15) & 17-Gate Anti-Tamper Smoke Harness |
 | **Phase 10** | **GAP-07, GAP-11, GAP-25, GAP-28** | Antigravity Realignment, Subagent Tool Parity, Concurrency & Sibling Completion |
 | **v1.2-beta.2**| *All 29 Gaps Closed* | Full Production & Master Smoke Anti-Tamper Certification Baseline |
+| **v1.2-beta.3**| **GAP-30** | Question Bank Primary Delivery & Temporary Procedural APKG Production Suspension |
+| **v1.2-beta.4**| **GAP-31** | Math Parameter Anti-Leak Recalibration, Dynamic Fallbacks & 26-Question Distinct Practice Suite |
+

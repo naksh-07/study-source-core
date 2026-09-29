@@ -4,7 +4,7 @@
 > **Product Charter**: [`PRODUCT.md`](./PRODUCT.md)  
 > **Implementation Roadmap**: [`ROADMAP.md`](./ROADMAP.md)  
 > **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md)  
-> **Version**: v1.2.0-beta.2 Production Baseline  
+> **Version**: v1.2.0-beta.4 Production Baseline  
 > **Status**: Certified / Production Baseline  
 > **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution
 
@@ -26,7 +26,6 @@ Raw Source (PDF / Markdown)
 ┌──────────────────────────────────────────────────────────────┐
 │  Parent Orchestrator — Evidence Extraction + Routing Engine  │
 │  Produces: scratch/evidence-pack.md  (SHA-256 locked)        │
-└────────────────────────┬─────────────────────────────────────┘
                          │
         ┌────────────────┴─────────────────┐
         ▼                                 ▼
@@ -36,13 +35,14 @@ STANDARD TRACK                    STUDYLAB TRACK
   core-basic-anki                   reasoning-apkg-author
   core-cloze-anki                   physics-numerical-apkg-author
   core-image-occlusion              chemistry-numerical-apkg-author
-  core-mindmap
+  core-mindmap                      (Canonical Question Banks: Questions.md)
   core-slide-deck
         │                                 │
         └──────────────┬──────────────────┘
                        ▼
           WAVE 2: Sequential Packaging
-          export_anki.js + export_studylab_procedural_anki.js
+          export_anki.js (Declarative APKG)
+          [Procedural APKG Packaging Paused in Production]
                        │
                        ▼
           WAVE 3: QA & Physical Audit
@@ -56,15 +56,16 @@ STANDARD TRACK                    STUDYLAB TRACK
 
 ## Deliverables Generated (per chapter)
 
-| Track | Output | Format |
-|---|---|---|
-| Notes | `Notes/<Chapter>_Notes.md` | Obsidian Markdown + YAML frontmatter |
-| Basic Flashcards | `Basic/<Chapter>_Basic.tsv` | 3-column TSV → Anki import |
-| Cloze Flashcards | `Cloze/<Chapter>_Cloze.tsv` | Cloze `{{c1::}}` TSV → Anki import |
-| Image Occlusion | `ImageOcclusion/<Chapter>_IO.json` | SVG bounding-box manifest |
-| MindMap | `MindMap/<Chapter>_MindMap.md` | Mermaid + JSON concept tree |
-| Slide Deck | `SlideDeck/<Chapter>_SlideDeck.md` | Marp presentation |
-| StudyLab APKG | `StudyLab/<Chapter>_StudyLab_Procedural.apkg` | Anki `.apkg` binary (Level 1–7 hints) |
+| Track | Output | Format | Status |
+|---|---|---|---|
+| Notes | `Notes/<Chapter>_Notes.md` | Obsidian Markdown + YAML frontmatter | Active Primary |
+| Basic Flashcards | `Basic/<Chapter>_Basic.tsv` | 3-column TSV → Anki import | Active Primary |
+| Cloze Flashcards | `Cloze/<Chapter>_Cloze.tsv` | Cloze `{{c1::}}` TSV → Anki import | Active Primary |
+| Image Occlusion | `ImageOcclusion/<Chapter>_IO.json` | SVG bounding-box manifest | Active Primary |
+| MindMap | `MindMap/<Chapter>_MindMap.md` | Mermaid + JSON concept tree | Active Primary |
+| Slide Deck | `SlideDeck/<Chapter>_SlideDeck.md` | Marp presentation | Active Primary |
+| Practice Question Bank | `StudyLab/<Chapter>_Questions.md` | Canonical Markdown Question Bank (5 dimensions, DAGs, 3-tier hints) | Active Primary |
+| Procedural APKG | `StudyLab/<Chapter>_StudyLab_Procedural.apkg` | Anki `.apkg` binary (Level 1–7 hints) | Temporarily Paused (GAP-30) |
 
 ---
 
@@ -156,12 +157,15 @@ StudySourceCore coordinates **14 specialized, single-responsibility subagents** 
 
 ### StudyLab Procedural Specialists (Wave 1)
 
-| Agent | Domain | Suppression Code |
-|---|---|---|
-| `math-apkg-author` | 59 Math topics — coprime constraints, Solution DAGs, 3-tier hints | `ZERO_MATH_CANDIDATES` |
-| `reasoning-apkg-author` | 30 Reasoning topics — syllogisms, seating, matrix puzzles | `ZERO_REASONING_CANDIDATES` |
-| `physics-numerical-apkg-author` | 40 Physics topics — calculational only, 6-stage pipeline | `DESCRIPTIVE_ONLY_NO_NUMERICALS` |
-| `chemistry-numerical-apkg-author` | Chemistry — stoichiometry, ICE tables, mechanisms | `DESCRIPTIVE_ROTE_NO_CALCULATIONS` |
+> [!NOTE]
+> **Operational Policy (GAP-30)**: In automated production runs, specialists author canonical Markdown Question Banks (`Questions.md`) as the active primary practice deliverable. Procedural APKG compilation is temporarily paused in production.
+
+| Agent | Domain | Primary Deliverable | Suppression Code |
+|---|---|---|---|
+| `math-apkg-author` | 59 Math topics — coprime constraints, Solution DAGs, 3-tier hints | `StudyLab/<Chapter>_Questions.md` | `ZERO_MATH_CANDIDATES` |
+| `reasoning-apkg-author` | 30 Reasoning topics — syllogisms, seating, matrix puzzles | `StudyLab/<Chapter>_Questions.md` | `ZERO_REASONING_CANDIDATES` |
+| `physics-numerical-apkg-author` | 40 Physics topics — calculational only, 6-stage pipeline | `StudyLab/<Chapter>_Questions.md` | `DESCRIPTIVE_ONLY_NO_NUMERICALS` |
+| `chemistry-numerical-apkg-author` | Chemistry — stoichiometry, ICE tables, mechanisms | `StudyLab/<Chapter>_Questions.md` | `DESCRIPTIVE_ROTE_NO_CALCULATIONS` |
 
 ### Downstream QA & Audit (Wave 3)
 
@@ -383,7 +387,7 @@ All core commands are executed from `skills/study-source-core`:
 # Navigate to core engine skill
 cd skills/study-source-core
 
-# Run master test suite (27 suites, 100% passing)
+# Run master test suite (47 suites, 100% passing)
 npm test
 
 # Run standalone 4-Gate Adversarial Certification CLI on a target chapter

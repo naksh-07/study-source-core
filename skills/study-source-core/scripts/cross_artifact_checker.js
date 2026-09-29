@@ -41,12 +41,19 @@ function extractEntityFacts(text, artifactName) {
     const cleaned = cleanContentForExtraction(text);
 
     // 1. Number + Unit pairings with surrounding entity context
+    const IGNORED_ENTITIES = new Set([
+        'year', 'exam', 'status', 'page', 'id', 'code', 'shift', 'step', 'tier', 'date',
+        'mod', 'crt', 'version', 'time', 'val', 'pyq', 'ref', 'prompt', 'question',
+        'title', 'description', 'name', 'explanation', 'text', 'extra', 'front', 'back',
+        'tags', 'concept', 'notes', 'solution', 'hint', 'option', 'options', 'difficulty'
+    ]);
+
     let match;
     const numRe = new RegExp(NUMBER_WITH_UNIT.source, 'gi');
     while ((match = numRe.exec(cleaned)) !== null) {
         const entity = match[1].toLowerCase().trim();
         const value = match[2].toLowerCase().trim();
-        if (entity.length >= 2) {
+        if (entity.length >= 2 && !IGNORED_ENTITIES.has(entity)) {
             facts.push({
                 artifact: artifactName,
                 entity,
@@ -59,11 +66,10 @@ function extractEntityFacts(text, artifactName) {
 
     // 2. Entity + Year pairings
     const yearRe = new RegExp(ENTITY_YEAR_PATTERN.source, 'gi');
-    const IGNORED_YEAR_ENTITIES = new Set(['year', 'exam', 'status', 'page', 'id', 'code', 'shift', 'step', 'tier', 'date', 'mod', 'crt', 'version', 'time', 'val', 'pyq', 'ref']);
     while ((match = yearRe.exec(cleaned)) !== null) {
         const entity = match[1].toLowerCase().trim();
         const year = match[2].trim();
-        if (entity.length >= 2 && !IGNORED_YEAR_ENTITIES.has(entity)) {
+        if (entity.length >= 2 && !IGNORED_ENTITIES.has(entity)) {
             facts.push({
                 artifact: artifactName,
                 entity,
@@ -251,21 +257,45 @@ function checkCrossArtifactIntegrity(chapterDir, options = {}) {
 
             if (valuesMap.size > 1) {
                 const entries = Array.from(valuesMap.entries());
-                const valA = entries[0][0];
-                const artsA = Array.from(new Set(entries[0][1])).join(', ');
-                const valB = entries[1][0];
-                const artsB = Array.from(new Set(entries[1][1])).join(', ');
+                // Only consider it a cross-artifact conflict if different artifacts disagree
+                let conflictA = null;
+                let conflictB = null;
 
-                divergences.push({
-                    entity: key,
-                    message: `Cross-artifact divergence detected on '${key}': [${artsA}] says '${valA}' vs [${artsB}] says '${valB}'.`,
-                    conflict: {
-                        artifactA: artsA,
-                        valueA: valA,
-                        artifactB: artsB,
-                        valueB: valB
+                for (let i = 0; i < entries.length; i++) {
+                    for (let j = i + 1; j < entries.length; j++) {
+                        const setA = new Set(entries[i][1]);
+                        const setB = new Set(entries[j][1]);
+                        const artsA = Array.from(setA);
+                        const artsB = Array.from(setB);
+
+                        // If both values are only produced by the exact same single artifact, it's intra-artifact variance (not cross-artifact divergence)
+                        if (artsA.length === 1 && artsB.length === 1 && artsA[0] === artsB[0]) {
+                            continue;
+                        }
+
+                        // Verify that the two artifact sets differ
+                        const isDifferentArtifactSource = artsA.some(a => !setB.has(a)) || artsB.some(b => !setA.has(b));
+                        if (isDifferentArtifactSource) {
+                            conflictA = { val: entries[i][0], arts: artsA.join(', ') };
+                            conflictB = { val: entries[j][0], arts: artsB.join(', ') };
+                            break;
+                        }
                     }
-                });
+                    if (conflictA && conflictB) break;
+                }
+
+                if (conflictA && conflictB) {
+                    divergences.push({
+                        entity: key,
+                        message: `Cross-artifact divergence detected on '${key}': [${conflictA.arts}] says '${conflictA.val}' vs [${conflictB.arts}] says '${conflictB.val}'.`,
+                        conflict: {
+                            artifactA: conflictA.arts,
+                            valueA: conflictA.val,
+                            artifactB: conflictB.arts,
+                            valueB: conflictB.val
+                        }
+                    });
+                }
             }
         }
     }
@@ -511,7 +541,8 @@ function checkPracticeQuestionsConsistency(chapterDir, options = {}) {
         }
 
         // 3. Pattern linkage resolution
-        const knownPatternIds = new Set((ppData.patterns || []).map(p => p.id));
+        const rawPatterns = Array.isArray(ppData.patterns) ? ppData.patterns : (Array.isArray(ppData.problem_patterns) ? ppData.problem_patterns : []);
+        const knownPatternIds = new Set(rawPatterns.map(p => p.id || p.pattern_id).filter(Boolean));
         if (Array.isArray(pqData.questions)) {
             pqData.questions.forEach(q => {
                 if (q.pattern_id && !knownPatternIds.has(q.pattern_id)) {

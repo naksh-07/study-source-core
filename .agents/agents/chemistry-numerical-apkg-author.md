@@ -13,17 +13,17 @@ inheritMcp: true
 # Chemistry Numerical & Mechanism APKG & Question Bank Author (`chemistry-numerical-apkg-author`)
 
 ## 1. ROLE
-Specialist subagent responsible for authoring calculational and mechanistic Chemistry problem patterns, practice questions, canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`), and directing the compilation of StudyLab Procedural APKGs via `export_studylab_procedural_anki.js` when APKG mode is active (stoichiometry, chemical equilibrium, pH/buffers, reaction mechanisms).
+Specialist subagent responsible for authoring calculational and mechanistic Chemistry problem patterns, practice questions, and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) strictly for calculational/mechanistic topics (stoichiometry, chemical equilibrium, pH/buffers, reaction mechanisms). *Operational Policy (GAP-30)*: Canonical Markdown Question Banks serve as the active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is temporarily suspended in production.
 
 ## 2. WHY THIS AGENT EXISTS
-Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, Nernst equation, titration) and multi-step organic reaction pathways ($S_N1/S_N2$, carbocation stability). `chemistry-numerical-apkg-author` structures chemical logic without diluting it with rote descriptive facts, rendering to validated Markdown question banks or interactive APKGs based on runtime policy.
+Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, Nernst equation, titration) and multi-step organic reaction pathways ($S_N1/S_N2$, carbocation stability). `chemistry-numerical-apkg-author` structures chemical logic without diluting it with rote descriptive facts, rendering to validated Markdown question banks.
 
 ## 3. OWNS
-- `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
+- `Questions/[Chapter]_Questions.md` (active primary practice deliverable)
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - Stoichiometric balances, ICE tables, equilibrium constant calculations, and reaction coordinate graphs.
-- Direction of `StudyLab/Chemistry_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js`.
+- Direction of `StudyLab/Chemistry_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js` (temporarily paused in production per GAP-30).
 
 ## 4. DOES NOT OWN
 - Manual binary APKG zip/SQLite serialization (strictly executed by deterministic script `export_studylab_procedural_anki.js`).

@@ -1,0 +1,136 @@
+{
+  "id": "math-arithmetic-progression-mindmap",
+  "title": "समांतर श्रेणी: संकल्पना एवं अनुप्रयोग (Arithmetic Progression: Concepts & Applications)",
+  "subtitle": "n-वाँ पद, सार्व अंतर, श्रेणी योगफल, द्विघात समीकरण संबंध एवं समस्या प्रतिरूप",
+  "subject": "Math",
+  "chapter": "Arithmetic-Progression",
+  "language": "mixed",
+  "root": {
+    "id": "ap-root",
+    "label": "समांतर श्रेणी (Arithmetic Progression - AP)",
+    "subtitle": "बीजगणित एवं अनुक्रम-श्रेणी का आधार स्तंभ (Foundation of Sequences & Series)",
+    "description": "सार्व अंतर d, सामान्य पद an = a + (n-1)d, प्रथम n पदों का योग Sn = (n/2)[2a + (n-1)d] अथवा (n/2)(a + l), तथा प्रमुख समस्या प्रतिरूपों का विस्तृत वैचारिक मानचित्र।",
+    "category": "Algebra",
+    "badge": "Sequences & Series",
+    "color": "#1E3A8A",
+    "icon": "calculator",
+    "tags": ["Math", "Algebra", "ArithmeticProgression", "Series", "NCERT"],
+    "keyFacts": [
+      "किन्हीं भी दो क्रमागत पदों का अंतर d = a_{k+1} - a_k सदैव स्थिर रहता है",
+      "सार्व अंतर d धनात्मक, ऋणात्मक अथवा शून्य हो सकता है",
+      "n-वाँ पद an = a + (n - 1)d जहाँ n धनात्मक पूर्णांक (n in N) है",
+      "प्रथम n पदों का योग Sn = (n/2)[2a + (n - 1)d] या Sn = (n/2)(a + l) होता है",
+      "योगफल और पद संबंध: an = Sn - Sn-1 (n >= 2) एवं a1 = S1",
+      "द्विघात योगफल गुणधर्म: Sn = An^2 + Bn में सार्व अंतर d = 2A होता है"
+    ],
+    "children": [
+      {
+        "id": "branch-foundations",
+        "label": "मूलभूत परिभाषा एवं सार्व अंतर (Foundations & Common Difference)",
+        "subtitle": "अनुक्रम की पहचान और अंतर की प्रकृति",
+        "category": "Foundations",
+        "badge": "Core Concept",
+        "color": "#2563EB",
+        "children": [
+          {
+            "id": "sub-ap-definition",
+            "label": "समांतर श्रेणी की परिभाषा (AP Definition)",
+            "description": "संख्याओं की ऐसी सूची जिसमें प्रत्येक पद अपने पिछले पद में एक निश्चित संख्या d जोड़कर प्राप्त होता है: a, a+d, a+2d, ..."
+          },
+          {
+            "id": "sub-common-difference",
+            "label": "सार्व अंतर के प्रकार (Forms of Difference d)",
+            "description": "d धनात्मक होने पर श्रेणी वर्धमान (increasing), ऋणात्मक होने पर ह्रासमान (decreasing), तथा शून्य होने पर स्थिर (constant) रहती है।"
+          }
+        ]
+      },
+      {
+        "id": "branch-general-term",
+        "label": "सामान्य पद एवं n-वाँ पद (General Term - an)",
+        "subtitle": "an = a + (n-1)d और अंतिम पद से गणना",
+        "category": "Nth Term",
+        "badge": "Formula",
+        "color": "#059669",
+        "children": [
+          {
+            "id": "sub-nth-term-formula",
+            "label": "n-वाँ पद सूत्र (an = a + (n - 1)d)",
+            "description": "जहाँ a प्रथम पद, d सार्व अंतर, और n पद सूचकांक (n in N) है। यदि कुल n पद हों तो l = an अंतिम पद कहलाता है।"
+          },
+          {
+            "id": "sub-nth-from-end",
+            "label": "अंत से n-वाँ पद (Nth Term from End)",
+            "description": "परिमित श्रेणी में अंतिम पद l से पीछे की ओर गणना: a'n = l - (n - 1)d।"
+          }
+        ]
+      },
+      {
+        "id": "branch-summation",
+        "label": "श्रेणी का योगफल (Sum of n Terms - Sn)",
+        "subtitle": "गॉसियन युग्मन और द्विघात प्रकृति",
+        "category": "Summation",
+        "badge": "Series Sum",
+        "color": "#D97706",
+        "children": [
+          {
+            "id": "sub-standard-sum-formula",
+            "label": "मानक योगफल सूत्र (Sn = n/2 [2a + (n-1)d])",
+            "description": "जब प्रथम पद a और सार्व अंतर d ज्ञात हों। गॉसियन युग्मन विधि पर आधारित।"
+          },
+          {
+            "id": "sub-last-term-sum",
+            "label": "अंतिम पद योगफल रूप (Sn = n/2 (a + l))",
+            "description": "जब प्रथम पद a और अंतिम पद l ज्ञात हों। औसत पद को पद संख्या से गुणा करने के समतुल्य।"
+          },
+          {
+            "id": "sub-sn-an-relation",
+            "label": "Sn और an संबंध (an = Sn - Sn-1)",
+            "description": "योगफल व्यंजक से n-वाँ पद प्राप्त करना। यदि Sn = An^2 + Bn तो d = 2A और a = A + B।"
+          }
+        ]
+      },
+      {
+        "id": "branch-problem-patterns",
+        "label": "प्रतियोगी समस्या प्रतिरूप (Problem Patterns & Traps)",
+        "subtitle": "PAT_AP_01 और PAT_AP_02 की समाधान तकनीक",
+        "category": "Exam Patterns",
+        "badge": "PYQ Strategies",
+        "color": "#DC2626",
+        "children": [
+          {
+            "id": "sub-pat-01-linear",
+            "label": "पद संख्या निर्धारण (PAT_AP_01)",
+            "description": "an दिया होने पर रैखिक समीकरण a + (n-1)d = an से n का मान ज्ञात करना। n का पूर्णांक होना अनिवार्य।"
+          },
+          {
+            "id": "sub-pat-02-quadratic",
+            "label": "योगफल से पद संख्या द्विघात समीकरण (PAT_AP_02)",
+            "description": "Sn = (n/2)[2a + (n-1)d] से द्विघात समीकरण प्राप्त कर मूल ज्ञात करना। d < 0 होने पर दोहरे मूल संभव।"
+          },
+          {
+            "id": "sub-traps-pitfalls",
+            "label": "सामान्य जाल एवं निवारण (Examiner Traps)",
+            "description": "ऑफ-बाई-वन त्रुटि (a + nd नहीं, a + (n-1)d), ऋणात्मक d में चिन्ह भूलना, और विषम पदों में a-d, a, a+d का चयन।"
+          }
+        ]
+      }
+    ]
+  },
+  "crossLinks": [
+    {
+      "sourceId": "sub-nth-term-formula",
+      "targetId": "sub-pat-01-linear",
+      "label": "सीधा प्रयोग (Direct Application)"
+    },
+    {
+      "sourceId": "sub-standard-sum-formula",
+      "targetId": "sub-pat-02-quadratic",
+      "label": "द्विघात रूपांतरण (Quadratic Conversion)"
+    },
+    {
+      "sourceId": "sub-sn-an-relation",
+      "targetId": "sub-nth-term-formula",
+      "label": "व्युत्पन्न संबंध (Derivative Relation)"
+    }
+  ]
+}

@@ -74,7 +74,7 @@ Every artifact modality for a given subject is assigned one of four definitive p
 │ **Reasoning**                   │ LOW      │ UNSUPP.  │ LOW      │ CONDIT.  │ LOW      │ LOW      │ CORE     │ CORE   │
 └─────────────────────────────────┴──────────┴──────────┴──────────┴──────────┴──────────┴──────────┴──────────┴────────┘
 ```
-*\*For Chemistry and Physics, Procedural APKG and Question Bank are CORE for calculational/mechanistic topics, and UNSUPPORTED for purely descriptive theory topics.*  
+*\*For Chemistry, Math, Physics, and Reasoning: Canonical Markdown Question Banks (`Questions.md`) are the ACTIVE PRIMARY procedural deliverable in production; binary Procedural APKG packaging is temporarily suspended under GAP-30.*  
 *\*Political Science is canonically registered as `Political Science` with alias `Polity`.*
 
 ---
@@ -92,7 +92,7 @@ Every artifact modality for a given subject is assigned one of four definitive p
 ### 4.2 Chemistry (`chemistry-study`)
 - **Epistemology**: Split domain: Physical chemistry is calculational; Organic is mechanistic; Inorganic is descriptive and periodic.
 - **Pedagogical Strategy**:
-  - *Procedural APKG & Question Bank (CORE for Calculational)*: Physical chemistry stoichiometry, gas laws, chemical equilibrium ICE tables, pH calculations, and Nernst equations require the 4-stage procedural pipeline authored by `chemistry-numerical-apkg-author`.
+  - *Canonical Markdown Question Bank (CORE for Calculational)*: Physical chemistry stoichiometry, gas laws, chemical equilibrium ICE tables, pH calculations, and Nernst equations require the 4-stage procedural pipeline authored by `chemistry-numerical-apkg-author` in `Questions.md`. *(Procedural APKG packaging is temporarily suspended under GAP-30)*.
   - *Cloze & Notes (CORE)*: Chemical formulas, periodic trends, reaction conditions, and IUPAC nomenclature.
   - *Suppression Rule*: Purely descriptive inorganic chapters (e.g., mineral ores, color tests) suppress the procedural package with `DESCRIPTIVE_ROTE_NO_CALCULATIONS`.
 
@@ -121,14 +121,14 @@ Every artifact modality for a given subject is assigned one of four definitive p
 ### 4.6 Mathematics (`math-study`)
 - **Epistemology**: Purely procedural, deductive, algorithmic, and quantitative.
 - **Pedagogical Strategy**:
-  - *StudyLab Procedural APKG & Question Bank (CORE)*: The absolute primary deliverable. Implements canonical problem patterns, solution DAGs, coprime constraints, and 3-tier hints authored by `math-apkg-author`.
+  - *Canonical Markdown Question Bank (CORE)*: The absolute primary deliverable. Implements canonical problem patterns, solution DAGs, coprime constraints, and 3-tier hints authored by `math-apkg-author` in `Questions.md`. *(Procedural APKG packaging is temporarily suspended under GAP-30)*.
   - *Basic Flashcards (LOW / UNSUPPORTED)*: Rote Q&A cards for math formulas are discouraged because formula recall without method selection creates false fluency.
   - *Knowledge Notes (CONDITIONAL)*: Short reference summaries of formulas and decision trees; never narrative essays.
 
 ### 4.7 Physics (`physics-study`)
 - **Epistemology**: Dual domain: Theoretical principles (Newton's laws, Thermodynamics) and rigorous numerical calculations (Kinematics, Circuits, Optics).
 - **Pedagogical Strategy**:
-  - *Procedural APKG & Question Bank (CORE for Numericals)*: All calculational chapters (incline planes, projectile motion, resistance networks, lens formulas) execute the 6-stage numerical pipeline (FBD, Coordinates, Law, Solve, SI units, Sanity check) via `physics-numerical-apkg-author`.
+  - *Canonical Markdown Question Bank (CORE for Numericals)*: All calculational chapters (incline planes, projectile motion, resistance networks, lens formulas) execute the 6-stage numerical pipeline (FBD, Coordinates, Law, Solve, SI units, Sanity check) via `physics-numerical-apkg-author` into `Questions.md`. *(Procedural APKG packaging is temporarily suspended under GAP-30)*.
   - *Cloze & Basic (CORE for Theory)*: Physical laws, SI unit definitions, and dimensional formulas.
   - *Suppression Rule*: Chapters without numerical problems suppress procedural packaging with `DESCRIPTIVE_ONLY_NO_NUMERICALS`.
 
@@ -143,7 +143,7 @@ Every artifact modality for a given subject is assigned one of four definitive p
 ### 4.9 Reasoning (`reasoning-study`)
 - **Epistemology**: Formal deductive logic, spatial puzzles, syllogisms, seating arrangements, and pattern recognition.
 - **Pedagogical Strategy**:
-  - *StudyLab Procedural APKG & Question Bank (CORE)*: Problem patterns, constraint classification (Fixed vs. Variable), and step-by-step deduction trees authored by `reasoning-apkg-author`.
+  - *Canonical Markdown Question Bank (CORE)*: Problem patterns, constraint classification (Fixed vs. Variable), and step-by-step deduction trees authored by `reasoning-apkg-author` in `Questions.md`. *(Procedural APKG packaging is temporarily suspended under GAP-30)*.
   - *Basic Flashcards (UNSUPPORTED)*: Logic cannot be memorized as factual flashcards. Suppressed with `NON_PROCEDURAL_DOMAIN`.
 
 ### 4.10 Canonical Domain Boundaries & Non-Canonical Domains

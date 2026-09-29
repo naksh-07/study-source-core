@@ -26,3 +26,12 @@
   - [x] Implemented `telemetry_engine.js` with high-res spans, token load estimation, latency percentiles, and SQLite WAL + streaming JSONL sinks.
   - [x] Integrated telemetry into `orchestration_engine.js` (mission & subagent worker spans), `studycore_cli.js` (`telemetry` command with `--summary`, `--spans`, `--export`), and `run_master_smoke_test.js` (Gate 4.3).
   - [x] Verified full Vitest test suite (`47/47` suites PASS in ~6.5s) and Master Smoke Test (`18/18` gates PASS in ~4.5s).
+- [x] Phase 13: Physics Chapter Generation & Verification (`Study Materials/Physics/Newton-Laws-Friction`): 8/8 deliverables generated & verified.
+- [x] Phase 14: Question Bank Primary Delivery Policy & GAP-30 Resolution:
+  - [x] Formally designated canonical Markdown Question Banks (`Questions.md`) as active primary practice deliverable; paused procedural APKG in automated production runs.
+  - [x] Synchronized `artifact-registry.json`, `studycore_cli.js`, `README.md`, `SKILL.md`, `AGENTS.md`, `.agents/AGENTS.md`, `.agents/agents/*.md`, and documentation suite (`docs/`).
+  - [x] Isolated dynamic registry test harness (`test_dynamic_artifact.js` via in-memory cache) ensuring zero disk mutation during parallel runs.
+  - [x] Phase 15: Mathematics Student-Grade Chapter & Pipeline Hardening (`Math/Arithmetic-Progression`):
+  - [x] Hardened `validate_studylab_question_bank.js` (anti-false-positive regex, density warning), `author_math_studylab.js` (dynamic fallbacks), and `cross_artifact_checker.js` (pattern linkage).
+  - [x] Authored & certified 26 distinct non-redundant MCQs (100% 4-option MCQs from CBSE/SSC/CDS) covering 6 pattern families, 27 Anki cards, comprehensive Notes, MindMap, and SlideDeck.
+  - [x] Certified: 4-Gate Adversarial Certification (`run_adversarial_certification.js`), 18-gate Master Smoke Test (`18/18`), and Vitest (`47/47`) passed 100%.
