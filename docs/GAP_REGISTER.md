@@ -47,6 +47,8 @@ Every identified gap is tracked with:
 | **GAP-25** | Orchestration / Lineage | **P1 Critical** | Re-Throw `CONTEXT_PROVENANCE_FAILURE` & Routing Policy Guards | Adversarial Audit | **Resolved** (`2275762`) |
 | **GAP-26** | Ingestion / PDF | **P1 Critical** | PyMuPDF/OCR Page-Range Slicing (`--page-start` / `--page-end`) | Adversarial Audit | **Resolved** (`2275762`) |
 | **GAP-27** | UI / MCP | **P2 High** | Anki Dark Mode (`.nightMode`) CSS & MCP Server v1.1.0 Expansion | Adversarial Audit | **Resolved** (v1.1.0) |
+| **GAP-28** | Multi-Agent / Tools | **P1 Critical** | Subagent Tool Frontmatter, Wave 3 Auto-Context Resolution & Sibling Parity | Orchestration Audit | **Resolved** (`v1.1.0`) |
+| **GAP-29** | Testing / Anti-Tamper | **P0 Blocker** | Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`) | Verification & Integrity | **Resolved** (`v1.2.0-beta.2`) |
 
 ---
 
@@ -468,6 +470,23 @@ Every identified gap is tracked with:
 
 ---
 
+### GAP-29: Master Smoke Test & Anti-Tamper Architectural Integrity Harness
+- **Category**: Testing, Verification & Anti-Tamper Enforcement
+- **Severity**: **P0 Blocker**
+- **Evidence**: Agents/subagents had a recurring tendency during automated sessions to edit validator script assertions or lower thresholds to artificially make tests green, later causing catastrophic downstream failures in production. Additionally:
+  1. `scripts/mcp_server.js` crashed on `query_procedural_contract` due to importing undefined methods (`getContractById`, `getContractsByDomain`).
+  2. `scripts/note_contract_audit.js` logged noisy stdout banners even when `--json` flag was active, corrupting CLI JSON output.
+  3. Pre-existing bundled `.apkg` files in `Study Materials/` lacked `.nightMode` CSS across certain models.
+- **Resolution Details**:
+  1. Engineered a comprehensive 17-gate end-to-end smoke harness in `skills/study-source-core/scripts/run_master_smoke_test.js` (`npm run smoke`) validating every subject track (Physics, Math, Map/Geography, Chemistry, Reasoning), all CLI verbs (`status`, `ingest`, `package`, `verify`), all 6 MCP tools, raw SQLite schema inspection on `.apkg` packages, adversarial validation (ADV-01..15), and strict anti-leak gates with zero mocks.
+  2. Wired `"smoke": "node scripts/run_master_smoke_test.js"` in both workspace root and `skills/study-source-core` `package.json`.
+  3. Fixed `scripts/mcp_server.js` to synchronously bind `getContractByKeySync` and `getAllContractsSync`.
+  4. Added `{ silent: true }` parameter in `scripts/note_contract_audit.js` and wired it into `scripts/studycore_cli.js` during `--json` operations.
+  5. Re-compiled all production Anki packages with dark mode CSS across all model definitions.
+- **Verification Method**: `npm run smoke` (17/17 gates PASS in ~4.2s), `npm test` (46/46 suites PASS), `node skills/study-source-core/scripts/test_final_audit_harness.js` (10/10 PASS).
+
+---
+
 ## 4. Remediation Schedule & Roadmap Alignment
 
 | Phase | Scheduled Gaps | Key Milestone |
@@ -480,6 +499,6 @@ Every identified gap is tracked with:
 | **Phase 6** | **GAP-22** | Fail-Closed Visual Learning Pipeline, Path Traversal & IO SHA-256 Gate |
 | **Phase 7** | **GAP-02, GAP-20, GAP-21** | StudyLab Procedural Compilers, Fail-Closed Contracts & 17-Dim QB Validator |
 | **Phase 8** | **GAP-03, GAP-18, GAP-27** | Zero-Heap Streaming Binary Packaging Compilers & Dark Mode CSS |
-| **Phase 9** | **GAP-05, GAP-08, GAP-12, GAP-13** | Independent Adversarial Certification Harness (ADV-01..15) |
+| **Phase 9** | **GAP-05, GAP-08, GAP-12, GAP-13, GAP-29** | Independent Adversarial Certification Harness (ADV-01..15) & 17-Gate Anti-Tamper Smoke Harness |
 | **Phase 10** | **GAP-07, GAP-11, GAP-25, GAP-28** | Antigravity Realignment, Subagent Tool Parity, Concurrency & Sibling Completion |
-| **v1.1 Final**| *All 28 Gaps Closed* | Full Production & Adversarial Re-Audit Certification |
+| **v1.2-beta.2**| *All 29 Gaps Closed* | Full Production & Master Smoke Anti-Tamper Certification Baseline |

@@ -4,7 +4,7 @@
 > **Product Charter**: [`PRODUCT.md`](./PRODUCT.md)  
 > **Implementation Roadmap**: [`ROADMAP.md`](./ROADMAP.md)  
 > **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md)  
-> **Version**: v1.0 Production Baseline  
+> **Version**: v1.2.0-beta.2 Production Baseline  
 > **Status**: Certified / Production Baseline  
 > **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution
 
@@ -249,7 +249,10 @@ StudySourceCore/ (Workspace Root)
    # Run environment diagnostics
    npm run doctor
 
-   # Run the master automated test suite (27 test suites, 100% passing)
+   # Run the 17-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4s)
+   npm run smoke
+
+   # Run all 46 automated Vitest test suites (100% passing, ~5.5s)
    npm test
    ```
 
@@ -281,7 +284,7 @@ npm --prefix skills/study-source-core run doctor
 
 ## Model Context Protocol (MCP) Server Setup
 
-StudySourceCore includes a native Model Context Protocol (MCP) server located at [`skills/study-source-core/scripts/mcp_server.js`](skills/study-source-core/scripts/mcp_server.js). It exposes 4 deterministic compilation, validation, and policy tools via `stdio` transport:
+StudySourceCore includes a native Model Context Protocol (MCP) server located at [`skills/study-source-core/scripts/mcp_server.js`](skills/study-source-core/scripts/mcp_server.js). It exposes 6 deterministic compilation, validation, and policy tools via `stdio` transport:
 
 | MCP Tool | Description |
 |---|---|
@@ -289,6 +292,8 @@ StudySourceCore includes a native Model Context Protocol (MCP) server located at
 | `export_studylab_procedural_package` | Compiles STEM StudyLab practice questions, solution DAGs, and 3-tier progressive hints into an interactive procedural `.apkg` package. |
 | `validate_artifact` | Validates artifacts against pedagogical contracts (TSVs, StudyLab JSONs, LaTeX math syntax, Mermaid diagrams, APKG SQLite integrity). |
 | `resolve_subject_policy` | Resolves authoritative artifact eligibility rules and domain suppressions for any academic subject. |
+| `ingest_source_to_evidence_pack` | Deterministically slices and extracts source text via PyMuPDF/OCR into SHA-256 evidence packs. |
+| `query_procedural_contract` | Queries canonical contracts, solution DAG molds, and hint specifications directly from SQLite WAL `procedural.db`. |
 
 ### Antigravity Configuration (`mcp_config.json`)
 

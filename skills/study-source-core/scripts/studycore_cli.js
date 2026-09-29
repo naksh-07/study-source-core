@@ -260,7 +260,7 @@ async function cmdVerify(positional, flags) {
         {
             name: 'Notes Contract',
             file: path.join(chapterDir, 'Notes', `${norm}_Notes.md`),
-            run: (file) => auditNoteContract(file)
+            run: (file) => auditNoteContract(file, { silent: Boolean(flags.json) })
         },
         {
             name: 'Basic TSV',

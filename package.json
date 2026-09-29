@@ -1,10 +1,11 @@
 {
   "name": "study-source-core-workspace",
-  "version": "1.2.0-beta.1",
+  "version": "1.2.0-beta.2",
   "private": true,
   "scripts": {
     "doctor": "npm run doctor --prefix skills/study-source-core",
     "test": "npm test --prefix skills/study-source-core",
+    "smoke": "npm run smoke --prefix skills/study-source-core",
     "certify": "npm run certify --prefix skills/study-source-core --"
   }
 }

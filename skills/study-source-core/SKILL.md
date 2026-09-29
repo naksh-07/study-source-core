@@ -80,6 +80,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 | Anki core rules & model IDs | [`resources/anki-core-rules.md`](./resources/anki-core-rules.md) |
 | Note architecture | [`resources/note-architecture.md`](./resources/note-architecture.md) |
 | Subject domain knowledge | [`subject-skills/<Subject>/SKILL.md`](./subject-skills) |
+| Master Smoke Test Harness | [`scripts/run_master_smoke_test.js`](./scripts/run_master_smoke_test.js) |
 
 ## 9. Stop Rules
 

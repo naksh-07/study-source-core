@@ -26,13 +26,12 @@ const { auditNoteContract } = require('./note_contract_audit');
 const { validateLatexContent } = require('./latex_validator');
 const { validateMermaidContent } = require('./mermaid_validator');
 const { resolveSubjectPolicy } = require('./subject_policy_resolver');
-const { ingestSourceToEvidencePack, persistEvidencePack } = require('./evidence_ingestion_engine');
-const { getContractById, getContractsByDomain } = require('./procedural_db_client');
+const { getContractByKeySync, getAllContractsSync } = require('./procedural_db_client');
 
 // Initialize MCP Server
 const server = new McpServer({
     name: "studysource-core",
-    version: "1.2.0-beta.1"
+    version: "1.2.0-beta.2"
 });
 
 // Tool 1: Compile Standard Anki Package
@@ -280,20 +279,23 @@ server.tool(
     async ({ familyId, domain }) => {
         try {
             if (familyId) {
-                const contract = getContractById(familyId);
+                const contract = getContractByKeySync(familyId);
                 return {
                     content: [{ type: "text", text: JSON.stringify({ found: !!contract, contract }, null, 2) }]
                 };
             }
             if (domain) {
-                const contracts = getContractsByDomain(domain);
+                const all = getAllContractsSync();
+                const matched = Object.entries(all)
+                    .filter(([k, v]) => (v.domain && v.domain.toLowerCase() === domain.toLowerCase()) || k.toLowerCase().startsWith(domain.toLowerCase()))
+                    .map(([k, v]) => ({ key: k, contract: v }));
                 return {
                     content: [{
                         type: "text",
                         text: JSON.stringify({
                             domain,
-                            count: contracts.length,
-                            family_ids: contracts.map(c => c.contract?.family_id || c.family_id)
+                            count: matched.length,
+                            family_ids: matched.map(c => c.key)
                         }, null, 2)
                     }]
                 };
@@ -315,7 +317,7 @@ server.tool(
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error("[StudySourceCore MCP] Server v1.2.0-beta.1 listening on stdio.");
+    console.error("[StudySourceCore MCP] Server v1.2.0-beta.2 listening on stdio.");
 }
 
 main().catch(err => {

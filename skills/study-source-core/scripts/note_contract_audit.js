@@ -24,7 +24,7 @@ const THRESHOLDS = {
 const fs = require('fs');
 const path = require('path');
 
-function auditNoteContract(filePath) {
+function auditNoteContract(filePath, options = {}) {
   if (!fs.existsSync(filePath)) {
     console.error(`[ERROR] File not found: ${filePath}`);
     process.exit(1);
@@ -155,32 +155,34 @@ function auditNoteContract(filePath) {
 
   // Summary Report
   const fileName = path.basename(filePath);
-  console.log('======================================================');
-  console.log(`  KNOWLEDGE NOTE CONTRACT AUDIT: ${fileName}`);
-  console.log('======================================================');
-  console.log(`Path: ${filePath}`);
-  console.log(`Frontmatter: ${frontmatterClosed ? 'Present (deep YAML validation: use yaml_validator.js)' : (lines[0]?.trim() === '---' ? 'Malformed (unclosed)' : 'None')}`);
-  console.log(`H1 Count: ${h1Count} | Heading Jump Valid: ${issues.filter(i => i.includes('Skipped heading')).length === 0}`);
-  console.log(`Duplicate H2: ${h2Seen.size} unique | Bolding: ${boldPct.toFixed(1)}% | Emojis: ${emojiMatches.length}`);
-  console.log('------------------------------------------------------');
+  if (!options.silent) {
+    console.log('======================================================');
+    console.log(`  KNOWLEDGE NOTE CONTRACT AUDIT: ${fileName}`);
+    console.log('======================================================');
+    console.log(`Path: ${filePath}`);
+    console.log(`Frontmatter: ${frontmatterClosed ? 'Present (deep YAML validation: use yaml_validator.js)' : (lines[0]?.trim() === '---' ? 'Malformed (unclosed)' : 'None')}`);
+    console.log(`H1 Count: ${h1Count} | Heading Jump Valid: ${issues.filter(i => i.includes('Skipped heading')).length === 0}`);
+    console.log(`Duplicate H2: ${h2Seen.size} unique | Bolding: ${boldPct.toFixed(1)}% | Emojis: ${emojiMatches.length}`);
+    console.log('------------------------------------------------------');
 
-  if (issues.length > 0) {
-    console.log(`❌ ISSUES FOUND (${issues.length}):`);
-    issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    if (issues.length > 0) {
+      console.log(`❌ ISSUES FOUND (${issues.length}):`);
+      issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    }
+
+    if (warnings.length > 0) {
+      console.log(`⚠️  WARNINGS (${warnings.length}):`);
+      warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
+    }
+
+    if (issues.length === 0 && warnings.length === 0) {
+      console.log('✅ ALL CONTRACT CHECKS PASSED: Conforms to Knowledge Note Contract.');
+    } else if (issues.length === 0) {
+      console.log('✅ CONTRACT PASSED WITH MINOR WARNINGS.');
+    }
+
+    console.log('======================================================\n');
   }
-
-  if (warnings.length > 0) {
-    console.log(`⚠️  WARNINGS (${warnings.length}):`);
-    warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
-  }
-
-  if (issues.length === 0 && warnings.length === 0) {
-    console.log('✅ ALL CONTRACT CHECKS PASSED: Conforms to Knowledge Note Contract.');
-  } else if (issues.length === 0) {
-    console.log('✅ CONTRACT PASSED WITH MINOR WARNINGS.');
-  }
-
-  console.log('======================================================\n');
 
   return {
     hasFrontmatter: frontmatterClosed,

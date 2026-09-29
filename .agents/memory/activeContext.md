@@ -17,10 +17,9 @@
 - [x] Phase 7 (Polish & MCP v1.1.0): Anki Dark Mode CSS (`.nightMode` on Models `1600000001`–`1600000003`), Atomic APKG streaming temp-file rename (`shared_anki_utils.js`), MCP Server v1.1.0 (`ingest_source_to_evidence_pack`, `query_procedural_contract`, `languagePolicy`, extended `validate_artifact`), and `docs/GAP_REGISTER.md` (`GAP-18` to `GAP-27`) synchronized.
 - [x] Phase 8 (DX & CI Seal - Option A): Added `.github/workflows/ci.yml` (Python 3.12 + Node 22 + Vitest + 10-gate Final Audit Harness), unified CLI [`studycore_cli.js`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/studycore_cli.js) (`status`, `ingest`, `package`, `verify`) with [`test_studycore_cli.js`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/skills/study-source-core/scripts/test_studycore_cli.js) (`46/46` Vitest suites), and deduplicated `computeSha256` across `context_planner.js` & `source_question_inventory.js`.
 - [x] Phase 9 (Production Delivery - Option B): Executed full Wave 1–3 pipeline for `Physics/Newton-Laws-Friction`: generated and validated `Notes`, `Basic`, `Cloze`, `Questions.md`, `Newton-Laws-Friction_Anki.apkg` (23 cards), and `Newton-Laws-Friction_StudyLab_Procedural.apkg` (Levels 1–7 PASS).
-- [x] Phase 10: Architectural Realignment & Orchestration Harness Seal (100% Complete):
-  - [x] Stream 1: Equipped all 14 `.agents/agents/*.md` definitions with `tools: [write_to_file, replace, run_command, view_file, list_dir, send_message]` + `inheritMcp: true`; archived duplicate root `agents/`.
-  - [x] Stream 2: Auto-populated `candidateVaultTargets` & `noteWordCount` in `orchestration_engine.js` for Wave 3 auto-context.
-  - [x] Stream 3: Completed `Physics/Newton-Laws-Friction` deliverables (MindMap JSON, SlideDeck Prompt, Graph Index, QA Report; verified 8/8 deliverables PASS).
-  - [x] Stream 4: 46/46 Vitest suites PASS, 10/10 Master Final Audit Harness Gates PASS, updated `docs/INDEX.md` and `docs/GAP_REGISTER.md` (GAP-28 closed).
-
-
+- [x] Phase 10: Architectural Realignment & Subagent Write Tools (GAP-28 closed, v1.2.0-beta.1 tagged & pushed).
+- [x] Phase 11: Master Smoke Test & Anti-Tamper Integrity Harness (100% Complete):
+  - [x] Implemented `run_master_smoke_test.js` (`npm run smoke`) with 5 pillars, 17 zero-mock gates (17/17 PASS).
+  - [x] Fixed `mcp_server.js` procedural contract query functions (`getContractByKeySync`, `getAllContractsSync`).
+  - [x] Added `options.silent` to `note_contract_audit.js` for pure JSON CLI output.
+  - [x] Documented GAP-29 in `docs/GAP_REGISTER.md`, updated `docs/INDEX.md`, `README.md`, and `SKILL.md`.

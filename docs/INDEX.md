@@ -3,7 +3,7 @@
 > **Canonical Architecture**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
 > **Master Agent Index**: [`.agents/AGENTS.md`](../.agents/AGENTS.md)  
 > **Primary Antigravity Skill**: [`skills/study-source-core/SKILL.md`](../skills/study-source-core/SKILL.md)  
-> **Status**: Certified / 100% Verified Production Baseline  
+> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.2`)  
 > **Author**: `naksh-07` (Suraj)
 
 ---
@@ -76,7 +76,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 - [`ROADMAP.md`](../ROADMAP.md) — Engineering phases, test milestones, and v1.0/v1.1 feature timelines.
 - [`docs/STUDYLAB_SPECIFICATION.md`](STUDYLAB_SPECIFICATION.md) — Formal specification for StudyLab STEM procedural practice engines.
 - [`docs/ANKI_INTEGRATION.md`](ANKI_INTEGRATION.md) — Anki database schema (`collection.anki2`), dark mode CSS, and zero-heap streaming binary compilers.
-- [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-28, all closed).
+- [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-29, all closed).
 
 ### Layer C: Pedagogical Design & Learning Theory
 - [`docs/LEARNING_PRINCIPLES.md`](LEARNING_PRINCIPLES.md) — Cognitive load theory, desirable difficulties, active recall, and spaced retrieval.
@@ -87,6 +87,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 ### Layer D: Quality Assurance & Independent Certification
 - [`docs/VALIDATION_AND_CERTIFICATION.md`](VALIDATION_AND_CERTIFICATION.md) — Multi-tier verification harness and contract validators.
 - [`docs/SECURITY_AND_TRUST.md`](SECURITY_AND_TRUST.md) — Path traversal defense, SHA-256 cryptographic provenance, and fail-closed invariants.
+- [`skills/study-source-core/scripts/run_master_smoke_test.js`](../skills/study-source-core/scripts/run_master_smoke_test.js) — 17-Gate Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`).
 - [`skills/study-source-core/scripts/test_final_audit_harness.js`](../skills/study-source-core/scripts/test_final_audit_harness.js) — 10-Gate Master Final Audit and Freeze Verification Harness.
 
 ---
@@ -106,7 +107,10 @@ The workspace maintains production-ready chapter deliverables structured as foll
 ## 4. Verification & Testing Commands
 
 ```bash
-# Run all 46 Vitest test suites (100% green)
+# Run the 17-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4s)
+npm run smoke
+
+# Run all 46 Vitest test suites (100% green, ~5.5s)
 npm test
 
 # Run the 10-Gate Master Final Audit Harness
