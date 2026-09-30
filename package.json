@@ -1,6 +1,6 @@
 {
   "name": "study-source-core-workspace",
-  "version": "1.2.0-beta.2",
+  "version": "1.2.0-beta.5",
   "private": true,
   "scripts": {
     "doctor": "npm run doctor --prefix skills/study-source-core",

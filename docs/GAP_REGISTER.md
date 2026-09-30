@@ -51,6 +51,9 @@ Every identified gap is tracked with:
 | **GAP-29** | Testing / Anti-Tamper | **P0 Blocker** | Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`) | Verification & Integrity | **Resolved** (`v1.2.0-beta.2`) |
 | **GAP-30** | Packaging / StudyLab | **P1 High** | Temporary Production Suspension of Procedural APKG in Favor of Markdown Question Banks (`Questions.md`) | Production Policy | **Resolved** (`v1.2.0-beta.3`) |
 | **GAP-31** | Validation / Math | **P1 Critical** | Mathematical Parameter Anti-Leak Recalibration, Dynamic Fallbacks & Question Density Guards | Phase 15 | **Resolved** (`v1.2.0-beta.4`) |
+| **GAP-32** | Multi-Agent / Governance | **P0 Blocker** | Subagent Write Tool Execution & Parent Self-Execution Ban Enforcement | Phase 17 | **Resolved** (`v1.2.0-beta.5`) |
+| **GAP-33** | Validation / Cross-Artifact | **P1 Critical** | LaTeX Math Block Extraction & State Variable False-Positive Divergence Filter | Phase 17 | **Resolved** (`v1.2.0-beta.5`) |
+| **GAP-34** | Orchestration / State Machine | **P1 Critical** | Suppressed Subagent State Machine Transition (`RUNNING -> SKIPPED`) & Track Key Routing | Phase 17 | **Resolved** (`v1.2.0-beta.5`) |
 
 ---
 
@@ -516,6 +519,45 @@ Every identified gap is tracked with:
   5. Authored and certified an authentic 26-question distinct Math chapter (`Arithmetic-Progression`) with 100% 4-option MCQs from CBSE/SSC/CDS, 27 Anki cards, and full 4-gate release certification.
 - **Verification Method**: `run_adversarial_certification.js --chapter Arithmetic-Progression --subject Math` (4/4 PASS), `studycore verify Math Arithmetic-Progression` (7/7 PASS), `npm run smoke` (18/18 PASS), `npm test` (47/47 PASS).
 
+### GAP-32: Subagent Write Tool Execution & Parent Self-Execution Ban Enforcement
+- **Category**: Multi-Agent Governance / Tool Execution / Antigravity Dispatch
+- **Severity**: **P0 Blocker**
+- **Evidence**:
+  1. Subagent definitions discoverable in `.agents/agents/*.md` lacked explicit `tools:` declarations in their YAML frontmatter prior to commit `ea623b3`.
+  2. Subagents spawned via `invoke_subagent` lacked write permissions (`write_to_file`, `replace_file_content`, `run_command`), preventing them from persisting deliverables directly to disk.
+  3. Consequently, previous parent sessions inadvertently bypassed `invoke_subagent` and authored deliverables directly using parent `write_to_file`, breaching the Parent Self-Execution Ban.
+- **Resolution Details**:
+  1. Equipped all 14 subagent definitions (`.agents/agents/*.md`) with explicit `tools: [view_file, write_to_file, replace_file_content, run_command, send_message]` via `register_antigravity_subagents.js`.
+  2. Implemented `studycore dispatch <Subject> <Chapter> [--wave 1|2|3]` in `studycore_cli.js` to provide deterministic, deduplicated subagent launch payloads.
+  3. Hardened Section 9 Stop Rules in `SKILL.md` to explicitly forbid monolithic parent writing and require subagents to write directly to disk.
+  4. Executed full 8-subagent autonomous production pipeline for `Chemistry/Chemical-Equilibrium` with all 8 agents visible in the UI sidebar.
+- **Verification Method**: Live UI sidebar execution of 8 subagents, Master Smoke Test Gate 5.4 (`assertNoParentSelfExecution`), `npm run smoke` (18/18 PASS), `npm test` (47/47 PASS).
+
+### GAP-33: LaTeX Math Block Extraction & State Variable False-Positive Divergence Filter
+- **Category**: Validation / Cross-Artifact Consistency / Chemical Reasoning
+- **Severity**: **P1 Critical**
+- **Evidence**:
+  1. `cross_artifact_checker.js` extracted entity facts using regex without stripping LaTeX math expressions (`$...$`, `$$...$$`, `\[...\]`, `\(...\)`).
+  2. In Chemistry chapters, chemical formulas like `[OH^-] = 10^{-8} \text{ M}` or `\log_{10}(0.1)` were parsed as entity `oh` or `log10` with value `8 m` (meters) or `0.1 m`, falsely colliding with other problems having `0.005 M`.
+  3. Authentic practice questions inherently vary state quantities and problem parameters (e.g. $T = 300\text{ K}$ in one question vs $60^\circ\text{C}$ in another), which the checker treated as chapter-wide factual divergences.
+- **Resolution Details**:
+  1. Updated `cleanContentForExtraction` in `cross_artifact_checker.js` to strip all LaTeX math blocks (`$$...$$`, `$...$`, `\[...\]`, `\(...\)`).
+  2. Added problem parameters and state variables (`तापमान`, `temperature`, `temp`, `दाब`, `pressure`, `आयतन`, `volume`, `सांद्रता`, `concentration`, `द्रव्यमान`, `mass`, `चाल`, `गति`, `वेग`, `speed`, `velocity`, `त्वरण`, `acceleration`, `दूरी`, `distance`, `विस्थापन`, `displacement`, `कार्य`, `work`, `ऊर्जा`, `energy`, `बल`, `force`, `समय`, `आवृति`, `frequency`, `कोण`, `angle`, `अनुपात`, `ratio`, `log`, `log10`, `ln`, `oh`, `ka`, `kb`, `kw`, `kc`, `kp`, `qc`, `qp`, `ph`, `poh`, `mol`, `mole`, `moles`, `10`, `rt`, `delta`, `deltang`) to `IGNORED_ENTITIES`.
+- **Verification Method**: `run_adversarial_certification.js --chapter Chemical-Equilibrium --subject Chemistry` (Gate 4 PASS), `npm run smoke` (18/18 PASS), `npm test` (47/47 PASS).
+
+### GAP-34: Suppressed Subagent State Machine Transition (`RUNNING -> SKIPPED`) & Track Key Routing
+- **Category**: Orchestration / State Machine & Chemical Specialist Routing
+- **Severity**: **P1 Critical**
+- **Evidence**:
+  1. `execution_state.js` did not include `SKIPPED` in `PERMITTED_TRANSITIONS.RUNNING`. When a running task was suppressed or skipped (e.g. `core-notes` or `export_anki`), `updateTaskState` threw `[INVALID_STATE_TRANSITION]`.
+  2. `author_chemistry_studylab.js` unconditionally wrote Markdown to `targetPath`, corrupting `PracticeQuestions.json` and `ProblemPatterns.json` with Markdown frontmatter when `task.target_path` pointed to JSON deliverables.
+  3. `studycore_cli.js verify` did not persist `.completion-evidence.json` upon successful verification of chapter deliverables.
+- **Resolution Details**:
+  1. Added `SKIPPED` to `PERMITTED_TRANSITIONS.RUNNING` in `skills/study-source-core/scripts/execution_state.js`.
+  2. Updated `executeChemistrySpecialistTask` in `author_chemistry_studylab.js` to branch on `task.track_key`, ensuring JSON ASTs are written to `PracticeQuestions.json` and `ProblemPatterns.json`, and Markdown is written to `Questions.md`.
+  3. Updated `studycore_cli.js verify` to automatically generate canonical `.completion-evidence.json` with byte sizes and SHA-256 hashes upon 100% verification of chapter deliverables.
+- **Verification Method**: `node skills/study-source-core/scripts/test_chemistry_production_path.js` (40/40 PASS), `run_adversarial_certification.js --chapter Chemical-Equilibrium --subject Chemistry` (Gate 1 PASS, 4/4 PASS), `npm test` (47/47 PASS).
+
 ---
 
 ## 4. Remediation Schedule & Roadmap Alignment
@@ -535,4 +577,5 @@ Every identified gap is tracked with:
 | **v1.2-beta.2**| *All 29 Gaps Closed* | Full Production & Master Smoke Anti-Tamper Certification Baseline |
 | **v1.2-beta.3**| **GAP-30** | Question Bank Primary Delivery & Temporary Procedural APKG Production Suspension |
 | **v1.2-beta.4**| **GAP-31** | Math Parameter Anti-Leak Recalibration, Dynamic Fallbacks & 26-Question Distinct Practice Suite |
+| **v1.2-beta.5**| **GAP-32, GAP-33, GAP-34** | Autonomous Subagent Write Tool Enforcement, Cross-Artifact LaTeX Filter & Chemistry 25-MCQ Release |
 

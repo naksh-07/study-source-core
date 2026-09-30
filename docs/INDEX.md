@@ -3,7 +3,7 @@
 > **Canonical Architecture**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
 > **Master Agent Index**: [`.agents/AGENTS.md`](../.agents/AGENTS.md)  
 > **Primary Antigravity Skill**: [`skills/study-source-core/SKILL.md`](../skills/study-source-core/SKILL.md)  
-> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.4`)  
+> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.5`)  
 > **Author**: `naksh-07` (Suraj)
 
 ---
@@ -76,7 +76,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 - [`ROADMAP.md`](../ROADMAP.md) — Engineering phases, test milestones, and v1.0/v1.1 feature timelines.
 - [`docs/STUDYLAB_SPECIFICATION.md`](STUDYLAB_SPECIFICATION.md) — Formal specification for StudyLab STEM procedural practice engines.
 - [`docs/ANKI_INTEGRATION.md`](ANKI_INTEGRATION.md) — Anki database schema (`collection.anki2`), dark mode CSS, and zero-heap streaming binary compilers.
-- [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-31, all closed).
+- [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-34, all closed).
 
 ### Layer C: Pedagogical Design & Learning Theory
 - [`docs/LEARNING_PRINCIPLES.md`](LEARNING_PRINCIPLES.md) — Cognitive load theory, desirable difficulties, active recall, and spaced retrieval.
@@ -104,6 +104,7 @@ The workspace maintains production-ready chapter deliverables structured as foll
 | **Math** | `LCM-HCF` | 6 Deliverables (Notes, Basic TSV, Cloze TSV, Question Bank Markdown, Declarative APKG, StudyLab Procedural APKG) | `Notes✅ Basic✅ Cloze✅ QBank✅ Anki✅ StudyLab✅` |
 | **Physics** | `Newton-Laws-Friction` | 8 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, Question Bank, Declarative APKG, StudyLab Procedural APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab✅` |
 | **Reasoning** | `Syllogism` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
+| **Chemistry** | `Chemical-Equilibrium` | 8 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
 
 > [!NOTE]
 > **Operational Policy (GAP-30)**: For all procedural STEM subjects (Math, Physics, Chemistry, Reasoning), **canonical Markdown Question Banks (`Questions.md`)** serve as the active primary practice deliverable. Binary Procedural APKG packaging is temporarily paused in automated production runs in favor of human-readable, verifiable Markdown Question Banks with full pedagogical dimensions and 3-tier hints.

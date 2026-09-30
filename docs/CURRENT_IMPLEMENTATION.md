@@ -7,15 +7,25 @@ This document provides a factual, transparent assessment of the StudySourceCore 
 It details the code, scripts, schemas, subagent definitions, and test suites that are actively implemented, passing, and functional in the repository today.
 
 ### Baseline Health Summary
-- **Core Test Suite**: **27 of 27 test suites passing (100% pass rate)** via `npm test`.
+- **Core Test Suite**: **47 of 47 test suites passing (100% pass rate)** via `npm test`.
+- **Master Smoke Test & Anti-Tamper Integrity**: **18 of 18 zero-mock gates passing (100% pass rate)** via `npm run smoke`.
 - **Targeted Test Suites**:
+  - `npm run smoke`: 18-gate zero-mock architectural anti-tamper and 5-domain end-to-end verification.
+  - `npm run telemetry`: Live span tracing, token load budgeting, and latency percentile scorecard.
+  - `npm run certify -- --chapter <Chapter> --subject <Subject>`: Standalone 4-Gate Adversarial Certification CLI.
   - `npm run test:milestone4`: Closed-boundary model isolation, physical completion evidence gate, and adversarial certification.
   - `npm run test:phase10`: Concurrency clamping (MAX_CONCURRENT_WORKERS = 4), crash-resilient atomic checkpoints, and runtime adversarial matrix.
-  - `npm run certify -- <chapterDir>`: Standalone 4-Gate Adversarial Certification CLI.
-- **Primary Runtime Engine**: Node.js v18+ (ES modules and CommonJS interop).
-- **Core Dependencies**: `ajv` (JSON Schema validation), `jszip` (zip packaging), `sql.js` (pure WebAssembly/JS SQLite engine), `@modelcontextprotocol/sdk` (MCP server integration).
-- **Active Packaging Standard**: **Dual APKG (v1.0)** emitting `<Chapter>_Anki.apkg` (Models 1600000001–1600000003) and `StudyLab/<Chapter>_StudyLab_Procedural.apkg` (Model 1600000004) with strictly isolated Model IDs.
-- **Deficiencies & Resolutions**: Fully tracked in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md).
+- **Primary Runtime Engine**: Node.js v20+ / v22+ LTS (ES modules and CommonJS interop).
+- **Core Dependencies**: `ajv` (JSON Schema validation), `archiver` + `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `@modelcontextprotocol/sdk` (MCP server integration).
+- **Active Primary Practice Deliverable**: Canonical Markdown Question Banks (`Questions.md` / `StudyLab/*_Questions.md`) adhering to GAP-30 with all 5 pedagogical dimensions and non-leaking hints; procedural APKGs temporarily paused in production.
+- **Certified Chapter Catalog**: 6 fully verified production chapters:
+  1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
+  2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG.
+  3. `Math / Arithmetic-Progression`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, 26 distinct 4-option MCQs across 6 pattern families, Anki APKG.
+  4. `Physics / Newton-Laws-Friction`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, Question Bank, 23-card Anki APKG, StudyLab APKG.
+  5. `Reasoning / Syllogism`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, 25 distinct 4-option MCQs across 5 pattern families, Anki APKG, Graph Index, QA Report.
+  6. `Chemistry / Chemical-Equilibrium`: Notes (2,911 words), Basic TSV, Cloze TSV, MindMap (38 nodes), SlideDeck (8 slides), 25 distinct 4-option MCQs across 5 pattern families, Anki APKG, Graph Index, QA Report (Authored by 8 live subagents, 4/4 Adversarial Certification PASS).
+- **Deficiencies & Resolutions**: Fully tracked in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) (GAP-01 through GAP-34, 100% resolved).
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "study-source-core",
-  "version": "1.2.0-beta.2",
+  "version": "1.2.0-beta.5",
   "bin": {
     "studycore": "./scripts/studycore_cli.js"
   },

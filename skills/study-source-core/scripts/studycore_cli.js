@@ -696,7 +696,7 @@ function cmdTelemetry(positional, flags) {
 
 function printHelp() {
     console.log(`
-StudySourceCore CLI (v1.2.0-beta.2)
+StudySourceCore CLI (v1.2.0-beta.5)
 
 Commands:
   studycore status [--json]

@@ -85,7 +85,7 @@ async function runSmokeCheck(sectionName, checkName, testFn) {
 async function main() {
     console.log('================================================================================');
     console.log('STUDYSOURCECORE — MASTER SMOKE TEST & ARCHITECTURAL INTEGRITY HARNESS');
-    console.log('Target Version: v1.2.0-beta.2 | Zero Mocks | Zero Compromise');
+    console.log('Target Version: v1.2.0-beta.5 | Zero Mocks | Zero Compromise');
     console.log('================================================================================\n');
 
     fs.mkdirSync(SCRATCH_DIR, { recursive: true });

@@ -4,7 +4,7 @@
 > **Product Charter**: [`PRODUCT.md`](./PRODUCT.md)  
 > **Implementation Roadmap**: [`ROADMAP.md`](./ROADMAP.md)  
 > **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md)  
-> **Version**: v1.2.0-beta.4 Production Baseline  
+> **Version**: v1.2.0-beta.5 Production Baseline  
 > **Status**: Certified / Production Baseline  
 > **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution
 
@@ -390,8 +390,11 @@ cd skills/study-source-core
 # Run master test suite (47 suites, 100% passing)
 npm test
 
+# Run the 18-gate Master Smoke Test (Zero Mocks, 100% passing)
+npm run smoke
+
 # Run standalone 4-Gate Adversarial Certification CLI on a target chapter
-npm run certify -- "Study Materials/Math/LCM-HCF"
+npm run certify -- --chapter Chemical-Equilibrium --subject Chemistry
 
 # Run Milestone 4 Packaging & Model Isolation verification suite
 npm run test:milestone4
@@ -402,6 +405,40 @@ npm run test:phase10
 # Test Model Context Protocol (MCP) server
 node scripts/test_mcp_server.js
 ```
+
+---
+
+## Unified CLI Driver (`studycore`) & Production Chapter Catalog
+
+StudySourceCore provides a unified CLI driver [`studycore_cli.js`](skills/study-source-core/scripts/studycore_cli.js) to manage the entire study artifact lifecycle:
+
+```bash
+# Check status of all chapters across the production vault
+node skills/study-source-core/scripts/studycore_cli.js status
+
+# Dispatch genuine specialist subagents for a chapter (Wave 1, 2, or 3)
+node skills/study-source-core/scripts/studycore_cli.js dispatch <Subject> <Chapter> [--wave 1|2|3]
+
+# Package declarative Anki APKG
+node skills/study-source-core/scripts/studycore_cli.js package <Subject> <Chapter>
+
+# Verify all deliverables for a chapter and emit canonical .completion-evidence.json
+node skills/study-source-core/scripts/studycore_cli.js verify <Subject> <Chapter>
+
+# Run independent 4-gate adversarial certification on a chapter
+node skills/study-source-core/scripts/run_adversarial_certification.js --chapter <Chapter> --subject <Subject>
+```
+
+### Certified Production Vault Catalog (6 Chapters Across 5 Domains)
+
+| Domain | Chapter | Notes | Flashcards | MindMap | Deck | Question Bank (GAP-30) | APKG | Certification |
+|---|---|---|---|---|---|---|---|---|
+| **Geography** | `Europe` | ✅ Comprehensive | ✅ 20 Basic + 20 Cloze | ✅ MindMap | ✅ SlideDeck | ⚪ N/A (Visual) | ✅ 40-Note Unified | 🟢 4/4 PASS |
+| **Mathematics** | `LCM-HCF` | ✅ Verified | ✅ 20 Basic + 20 Cloze | ⚪ Suppressed | ⚪ Suppressed | ✅ Practice Qs | ✅ Dual APKGs | 🟢 4/4 PASS |
+| **Mathematics** | `Arithmetic-Progression` | ✅ 2,400+ words | ✅ 20 Basic + 20 Cloze | ✅ 34 Nodes | ✅ 8 Slides | ✅ 26 MCQs (CBSE/SSC/CDS) | ✅ 27-Card APKG | 🟢 4/4 PASS |
+| **Physics** | `Newton-Laws-Friction` | ✅ 3,100+ words | ✅ 20 Basic + 20 Cloze | ✅ 36 Nodes | ✅ 8 Slides | ✅ 25 Numerical MCQs | ✅ 23-Card + Procedural | 🟢 4/4 PASS |
+| **Reasoning** | `Syllogism` | ✅ 2,600+ words | ✅ 20 Basic + 20 Cloze | ✅ 32 Nodes | ✅ 8 Slides | ✅ 25 MCQs (SSC/RRB/IBPS) | ✅ 34-Card APKG | 🟢 4/4 PASS |
+| **Chemistry** | `Chemical-Equilibrium` | ✅ 2,911 words | ✅ 20 Basic + 20 Cloze | ✅ 38 Nodes | ✅ 8 Slides | ✅ 25 MCQs (JEE/NEET/SSC) | ✅ 40-Card APKG | 🟢 4/4 PASS |
 
 ---
 
