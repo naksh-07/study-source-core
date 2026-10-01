@@ -2,21 +2,22 @@
 
 ## 1. Overview & Baseline State
 
-This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.0 Production Baseline (Phases 0–10 Certified)**.
+This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0-beta.5 Production Baseline**.
 
 It details the code, scripts, schemas, subagent definitions, and test suites that are actively implemented, passing, and functional in the repository today.
 
 ### Baseline Health Summary
-- **Core Test Suite**: **47 of 47 test suites passing (100% pass rate)** via `npm test`.
-- **Master Smoke Test & Anti-Tamper Integrity**: **18 of 18 zero-mock gates passing (100% pass rate)** via `npm run smoke`.
+- **Core Test Suite**: **47 of 47 test suites passing (100% pass rate)** via `npm test` using Vitest 4 in ~6.5 seconds.
+- **Master Smoke Test & Anti-Tamper Integrity**: **18 of 18 zero-mock gates passing (100% pass rate)** via `npm run smoke` in ~4.5 seconds.
 - **Targeted Test Suites**:
   - `npm run smoke`: 18-gate zero-mock architectural anti-tamper and 5-domain end-to-end verification.
   - `npm run telemetry`: Live span tracing, token load budgeting, and latency percentile scorecard.
   - `npm run certify -- --chapter <Chapter> --subject <Subject>`: Standalone 4-Gate Adversarial Certification CLI.
   - `npm run test:milestone4`: Closed-boundary model isolation, physical completion evidence gate, and adversarial certification.
   - `npm run test:phase10`: Concurrency clamping (MAX_CONCURRENT_WORKERS = 4), crash-resilient atomic checkpoints, and runtime adversarial matrix.
+  - `npm run test:legacy`: Direct Node runner executing the original 28 standalone validation scripts.
 - **Primary Runtime Engine**: Node.js v20+ / v22+ LTS (ES modules and CommonJS interop).
-- **Core Dependencies**: `ajv` (JSON Schema validation), `archiver` + `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `@modelcontextprotocol/sdk` (MCP server integration).
+- **Core Dependencies**: `ajv` (JSON Schema validation), `archiver` + `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `zod` (runtime schema parsing), `@modelcontextprotocol/sdk` (MCP server integration), `vitest` (isolated worker runner).
 - **Active Primary Practice Deliverable**: Canonical Markdown Question Banks (`Questions.md` / `StudyLab/*_Questions.md`) adhering to GAP-30 with all 5 pedagogical dimensions and non-leaking hints; procedural APKGs temporarily paused in production.
 - **Certified Chapter Catalog**: 6 fully verified production chapters:
   1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
@@ -153,6 +154,22 @@ The implementation logic is partitioned into focused, single-responsibility scri
 | `latex_validator.js` | Audits LaTeX math blocks for balanced delimiters (`$...$`, `$$...$$`) and syntax errors. | `[CURRENT]` Production | Regex parser |
 | `source_invariant_checker.js` | Verifies evidence SHA-256 hashes against original source documents. | `[CURRENT]` Production | Node `crypto` |
 
+### 3.7 Model Context Protocol & Evidence Ingestion
+| Script File | Purpose | Active Status | Primary Dependencies |
+|---|---|---|---|
+| `mcp_server.js` | Exposes 6 deterministic tools via stdio (`export_anki_package`, `export_studylab_procedural_package`, `validate_artifact`, `resolve_subject_policy`, `ingest_source_to_evidence_pack`, `query_procedural_contract`). | `[CURRENT]` Production | `@modelcontextprotocol/sdk`, `zod`, `better-sqlite3` |
+| `evidence_ingestion_engine.js` | Multi-format source extractor (PDF/OCR/JSON/Markdown) with physical page coordinate tracking and SHA-256 chunking. | `[CURRENT]` Production | Node `crypto`, `fs`, `child_process` |
+| `extract_pdf_source.py` | PyMuPDF-based text and visual asset extractor with Tesseract OCR fallback for scanned pages. | `[CURRENT]` Production | Python `fitz`, `pytesseract` |
+| `procedural_db_client.js` | High-performance synchronous client for `procedural.db` using WAL mode and 5000ms busy timeout. | `[CURRENT]` Production | `better-sqlite3` |
+
+### 3.8 Unified CLI Driver & Observability
+| Script File | Purpose | Active Status | Primary Dependencies |
+|---|---|---|---|
+| `studycore_cli.js` | Unified CLI driver (`doctor`, `status`, `ingest`, `dispatch`, `package`, `verify`, `telemetry`). | `[CURRENT]` Production | Node `path`, `fs`, child processes |
+| `telemetry_engine.js` | Observability engine tracking execution spans, token budgets, SQLite WAL metrics, and latency percentiles. | `[CURRENT]` Production | `better-sqlite3`, Node `crypto` |
+| `run_master_smoke_test.js` | 18-gate zero-mock architectural anti-tamper and end-to-end multi-agent verification harness (`npm run smoke`). | `[CURRENT]` Production | `@modelcontextprotocol/sdk`, Node `assert` |
+| `doctor.js` | Automated environment diagnostic scanner verifying dependencies, Node/npm versions, and write permissions. | `[CURRENT]` Production | Node `child_process`, `fs` |
+
 ---
 
 ## 4. Active Machine Schemas & Contracts (`resources/`)
@@ -172,69 +189,82 @@ The implementation logic is partitioned into focused, single-responsibility scri
 
 ## 5. Test Suite Status & Execution (`package.json`)
 
-The official test suite is executed via `npm test` inside `skills/study-source-core/`. All 27 test suites run deterministically and pass (100% pass rate):
+The primary test harness runs via Vitest 4 with an isolated worker pool, executing all 47 test suites deterministically in ~6.5 seconds (100% pass rate):
 
 ```bash
 cd skills/study-source-core
+
+# Execute all 47 automated test suites via Vitest
 npm test
+
+# Run the 18-gate zero-mock Master Smoke Test & Anti-Tamper Harness
+npm run smoke
+
+# Inspect live telemetry, span tracing & token budgets
+npm run telemetry
+
+# Run standalone 4-Gate Adversarial Certification CLI on a target chapter
+npm run certify -- --chapter Chemical-Equilibrium --subject Chemistry
+
+# Run Milestone 4 Packaging & Model Isolation verification suite
+npm run test:milestone4
+
+# Run Phase 10 Antigravity Host Adapter, Concurrency & Recovery suite
+npm run test:phase10
+
+# Run legacy 28-script sequential test chain
+npm run test:legacy
 ```
 
-### Passing Test Inventory (27 of 27)
+### Core Test Inventory (Sample of Key Verified Suites)
 1. `test_foundation_layer.js`: Validates Draft-07 Semantic Learning IR schemas, 11-field Content Lineage Records (CLR), and chunked evidence pack ingestion.
 2. `test_subject_policy_resolver.js`: Validates subject policy resolution, matrix states, and alias handling across all 9 subjects.
 3. `test_routing.js`: Asserts subagent dispatch routing matches subject policies and evidence profiles.
 4. `test_orchestration.js`: Tests DAG execution, wave sequencing, and Single-Writer enforcement.
 5. `test_artifact_registry.js`: Validates integrity of `artifact-registry.json` against all artifact rules.
-6. `test_change_isolation.js`: Asserts changes do not breach freeze boundaries or mutate frozen contracts.
-7. `test_change_isolation_vnext.js`: Hardens change isolation checks for upcoming orchestration extensions.
-8. `test_contracts.js`: Validates all canonical JSON schemas against Ajv and test fixtures.
-9. `test_regression.js`: Tests backward compatibility of basic and cloze card TSV generators.
-10. `test_vnext_orchestration.js`: Tests vNext subagent DAG routing and task dependency resolution.
-11. `test_r1_r5_verification.js`: Validates Release Criteria R1 through R5 (physical existence, schemas, counts).
-12. `test_studylab_question_bank.js`: Validates Markdown Question Bank rendering and parsing.
-13. `test_math_production_path.js`: Tests end-to-end Math procedural authoring, hint validation, and APKG export.
-14. `test_physics_production_path.js`: Tests end-to-end Physics numerical calculational authoring and export.
-15. `test_chemistry_production_path.js`: Tests end-to-end Chemistry stoichiometry/equilibrium authoring and export.
-16. `test_reasoning_production_path.js`: Tests end-to-end Reasoning puzzle deduction DAG authoring and export.
-17. `test_phase7_context_routing.js`: Validates context bundle sizing and token budgeting per subagent.
-18. `test_phase8_independent_verification.js`: Validates independent adversarial APKG verification logic.
-19. `test_unified_anki_packaging.js`: Validates experimental unified packaging prototype (v1.1 candidate).
-20. `test_milestone2_stream1.js`: Validates Milestone 2 KU reservation engine, deduplication, and pedagogical compiler.
-21. `test_milestone2_semantic_layer.js`: Validates Milestone 2 semantic QA engine, subject boundaries, and hint distractor semantics.
-22. `test_phase8_model_isolation_closed_boundary.js`: Asserts Model ID isolation between Declarative (Models 1600000001–3) and Procedural (Model 1600000004) APKGs.
-23. `test_completion_evidence_gate.js`: Asserts 4-point Physical Verification Protocol release gate (`.completion-evidence.json`).
-24. `test_adversarial_auditor.js`: Executes the complete 15-point adversarial attack harness (ADV-01 through ADV-15).
-25. `test_adversarial_certification_cli.js`: Tests standalone 4-Gate adversarial certifier CLI and exit codes.
-26. `test_phase10_concurrency_and_recovery.js`: Tests BoundedConcurrencyPool, task recovery, and checkpoint durability.
-27. `test_phase10_runtime_adversarial.js`: Executes 18-point Runtime Adversarial Matrix (RT-01 through RT-18).
-
-### Additional Executable Commands
-```bash
-# Packaging and Adversarial Verification Suite
-npm run test:milestone4
-
-# Antigravity Host Adapter, Concurrency & Checkpoint Recovery Suite
-npm run test:phase10
-
-# Standalone 4-Gate Adversarial Certification CLI
-npm run certify -- <chapterDirectory>
-```
+6. `test_change_isolation.js` & `test_change_isolation_vnext.js`: Asserts changes do not breach freeze boundaries or mutate frozen contracts.
+7. `test_contracts.js`: Validates all canonical JSON schemas against Ajv and test fixtures.
+8. `test_regression.js`: Tests backward compatibility of basic and cloze card TSV generators.
+9. `test_vnext_orchestration.js`: Tests vNext subagent DAG routing and task dependency resolution.
+10. `test_r1_r5_verification.js`: Validates Release Criteria R1 through R5 (physical existence, schemas, counts).
+11. `test_studylab_question_bank.js`: Validates Markdown Question Bank rendering and parsing.
+12. `test_math_production_path.js`: Tests end-to-end Math procedural authoring, hint validation, and APKG export.
+13. `test_physics_production_path.js`: Tests end-to-end Physics numerical calculational authoring and export.
+14. `test_chemistry_production_path.js`: Tests end-to-end Chemistry stoichiometry/equilibrium authoring and export.
+15. `test_reasoning_production_path.js`: Tests end-to-end Reasoning puzzle deduction DAG authoring and export.
+16. `test_phase7_context_routing.js`: Validates context bundle sizing and token budgeting per subagent.
+17. `test_phase8_independent_verification.js`: Validates independent adversarial APKG verification logic.
+18. `test_unified_anki_packaging.js`: Validates experimental unified packaging prototype (v1.1 candidate).
+19. `test_milestone2_stream1.js` & `test_milestone2_semantic_layer.js`: Validates KU reservations, deduplication, and pedagogical compilation.
+20. `test_phase8_model_isolation_closed_boundary.js`: Asserts Model ID isolation between Declarative (Models 1600000001–3) and Procedural (Model 1600000004) APKGs.
+21. `test_completion_evidence_gate.js`: Asserts 4-point Physical Verification Protocol release gate (`.completion-evidence.json`).
+22. `test_adversarial_auditor.js`: Executes the complete 15-point adversarial attack harness (ADV-01 through ADV-15).
+23. `test_adversarial_certification_cli.js`: Tests standalone 4-Gate adversarial certifier CLI and exit codes.
+24. `test_phase10_concurrency_and_recovery.js`: Tests BoundedConcurrencyPool, task recovery, and checkpoint durability.
+25. `test_phase10_runtime_adversarial.js`: Executes 18-point Runtime Adversarial Matrix (RT-01 through RT-18).
+26. `test_telemetry.js`: Validates structured span tracing, token budgeting, and calibration metrics.
+27. `test_mcp_server.js`: Connects to MCP Server via stdio and asserts tool discovery & execution across all deterministic tools.
 
 ---
 
 ## 6. Baseline Tooling & Dependencies
 
 Defined in `skills/study-source-core/package.json`:
-- `"ajv": "^8.20.0"`: Strict JSON Schema draft-07/2020-12 validator.
-- `"jszip": "^3.10.1"`: Pure JavaScript ZIP archive generation for `.apkg` packages.
-- `"sql.js": "^1.14.2"`: Pure WebAssembly port of SQLite 3, used to build Anki databases without native binary compilation.
-- `"@modelcontextprotocol/sdk": "^1.30.0"`: MCP server SDK for tool exposure to Antigravity.
+- `"@modelcontextprotocol/sdk": "^1.30.0"`: Standard Model Context Protocol SDK exposing the 6 deterministic tools to Antigravity and Claude Desktop.
+- `"ajv": "^8.20.0"`: Strict JSON Schema Draft-07 / 2020-12 validator.
+- `"archiver": "^8.0.0"`: High-performance streaming zip archive generator for APKG packaging.
+- `"better-sqlite3": "^12.11.1"`: Synchronous, native C++ SQLite driver for high-throughput WAL querying of `procedural.db` and telemetry logs.
+- `"jszip": "^3.10.1"`: Pure JavaScript ZIP archive generation for declarative `.apkg` packages.
+- `"sql.js": "^1.14.2"`: Pure WebAssembly port of SQLite 3 for environment-agnostic database compilation.
+- `"vitest": "^4.1.11"`: Isolated worker test runner executing 47 suites in ~6.5 seconds.
+- `"zod": "^3.24.0"`: TypeScript-first runtime schema declaration and validation library.
 
 ---
 
 ## 7. Release State & Roadmap Transition
 
-The v1.0 Production Baseline is complete, passing all 27 automated test suites and achieving 4-Gate adversarial certification:
-- Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across all completed Phases 0 through 10.
-- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-12.
-- Future enhancements (including Unified Single APKG packaging) are formally governed under ADR-17 and scheduled for the v1.1 horizon.
+The **v1.2.0-beta.5 Production Baseline** is certified, passing all 47 automated test suites, passing the 18-gate zero-mock smoke test, and achieving 4-Gate adversarial certification across 6 production chapters:
+- Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 10.
+- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-34 (100% resolved and verified).
+- Refer to [`docs/MCP_SERVER_API.md`](./MCP_SERVER_API.md) for full documentation of the 6 deterministic MCP tools.
+- Production question delivery is standardized on canonical Markdown Question Banks (`Questions.md`) under GAP-30.

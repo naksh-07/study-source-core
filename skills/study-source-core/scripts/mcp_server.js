@@ -27,6 +27,7 @@ const { validateLatexContent } = require('./latex_validator');
 const { validateMermaidContent } = require('./mermaid_validator');
 const { resolveSubjectPolicy } = require('./subject_policy_resolver');
 const { getContractByKeySync, getAllContractsSync } = require('./procedural_db_client');
+const { ingestSourceToEvidencePack, persistEvidencePack } = require('./evidence_ingestion_engine');
 
 // Initialize MCP Server
 const server = new McpServer({

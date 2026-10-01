@@ -75,9 +75,10 @@ npm --prefix skills/study-source-core run doctor
 5. **Implement Code or Contracts**:
    Maintain temporal labeling (`[CURRENT]` vs `[TARGET]`) and adhere to Single-Writer and Parent Self-Execution rules.
 6. **Run the Verification Suite**:
-   From `skills/study-source-core` (or using `npm --prefix skills/study-source-core test` from root), ensure all 27 core test suites pass with zero regressions:
+   From `skills/study-source-core` (or using `npm --prefix skills/study-source-core test` from root), ensure all 47 core test suites pass with zero regressions via Vitest, and verify zero-mock anti-tamper integrity:
    ```bash
    npm test
+   npm run smoke
    ```
 7. **Submit PR with Architectural Rationale**:
    Document changes against the corresponding Roadmap Phase or Gap ID.
@@ -148,22 +149,27 @@ cd skills/study-source-core
 # Verify environment health first
 npm run doctor
 
-# Execute all 27 automated test suites
+# Execute all 47 automated test suites via Vitest
 npm test
+
+# Run the 18-gate zero-mock architectural smoke test
+npm run smoke
 ```
-The test command runs all 27 standard verification test suites:
+The test suite covers:
 - Draft-07 Semantic Learning IR, CLRs, and evidence pack chunking
-- Subject policy resolution and domain boundary enforcement
+- Subject policy resolution and domain boundary enforcement across all 9 subjects
 - Subagent routing and orchestration DAGs with bounded concurrency
-- Artifact registry schema validation
+- Artifact registry schema validation and path resolution
 - Change isolation and freeze boundary compliance
 - Backward compatibility regressions
 - Track B (Math), Track C (Reasoning), Track D (Physics), Track E (Chemistry) procedural paths
-- Markdown Question Bank rendering and parsing
+- Markdown Question Bank rendering, density thresholds, and non-leaking hint verification
 - Closed-boundary model isolation (Models 1600000001–3 vs 1600000004)
 - 4-point Physical Verification Protocol release gate (`.completion-evidence.json`)
 - 15-point independent adversarial attack harness (ADV-01 through ADV-15)
 - Runtime adversarial matrix and crash-resilient atomic checkpoint recovery
+- Telemetry span tracing and SQLite WAL persistence
+- Model Context Protocol (MCP) stdio server tool discovery & execution across all 6 tools
 
 ### Running Additional Verification Suites
 ```bash
@@ -174,7 +180,10 @@ npm run test:milestone4
 npm run test:phase10
 
 # Standalone 4-Gate Adversarial Certification CLI on a target chapter
-npm run certify -- "Study Materials/Math/LCM-HCF"
+npm run certify -- --chapter Chemical-Equilibrium --subject Chemistry
+
+# Inspect Telemetry & Calibration Scorecards
+npm run telemetry
 ```
 
 ### Running Targeted Track Tests
@@ -205,7 +214,8 @@ Use standard conventional commit messages:
 
 ### PR Review Checklist
 Every PR will be reviewed against:
-- [ ] No regression in `npm test` (all 27 test suites pass).
+- [ ] No regression in `npm test` (all 47 test suites pass via Vitest).
+- [ ] `npm run smoke` passes with 18/18 zero-mock gates green.
 - [ ] No violation of the Single-Writer Rule or Parent Self-Execution Ban.
 - [ ] Any architectural change has a corresponding accepted ADR.
 - [ ] New/updated files use explicit temporal labeling (`[CURRENT]`, `[TARGET]`, `[DEFERRED]`).

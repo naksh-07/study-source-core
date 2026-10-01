@@ -33,7 +33,9 @@ async function runTest() {
     if (!toolNames.includes('export_anki_package') ||
         !toolNames.includes('export_studylab_procedural_package') ||
         !toolNames.includes('validate_artifact') ||
-        !toolNames.includes('resolve_subject_policy')) {
+        !toolNames.includes('resolve_subject_policy') ||
+        !toolNames.includes('ingest_source_to_evidence_pack') ||
+        !toolNames.includes('query_procedural_contract')) {
         throw new Error("Missing expected tools in listTools response!");
     }
     console.log("✅ Tool discovery test passed!");
@@ -89,6 +91,19 @@ async function runTest() {
     if (fs.existsSync(sampleTsvPath)) {
         fs.unlinkSync(sampleTsvPath);
     }
+
+    // Test 5: Call query_procedural_contract by domain
+    console.log("\n[Test 5] Calling 'query_procedural_contract' for physics...");
+    const contractCall = await client.callTool({
+        name: "query_procedural_contract",
+        arguments: { domain: "physics" }
+    });
+    const contractResult = JSON.parse(contractCall.content[0].text);
+    console.log("Procedural DB contract query result:", contractResult);
+    if (!contractResult || typeof contractResult.count !== 'number') {
+        throw new Error("query_procedural_contract failed!");
+    }
+    console.log("✅ Procedural DB contract query test passed!");
 
     await client.close();
     console.log("\n🎉 ALL MCP TESTS PASSED SUCCESSFULLY!\n");

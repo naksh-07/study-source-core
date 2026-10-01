@@ -81,6 +81,9 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 | Note architecture | [`resources/note-architecture.md`](./resources/note-architecture.md) |
 | Subject domain knowledge | [`subject-skills/<Subject>/SKILL.md`](./subject-skills) |
 | Master Smoke Test Harness | [`scripts/run_master_smoke_test.js`](./scripts/run_master_smoke_test.js) |
+| Model Context Protocol (MCP) Server | [`scripts/mcp_server.js`](./scripts/mcp_server.js) |
+| MCP Server API Specification | [`docs/MCP_SERVER_API.md`](../../docs/MCP_SERVER_API.md) |
+| Telemetry & Observability Engine | [`scripts/telemetry_engine.js`](./scripts/telemetry_engine.js) |
 
 ## 9. Stop Rules & Autonomous Execution Guardrails
 

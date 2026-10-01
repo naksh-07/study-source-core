@@ -26,30 +26,31 @@ Raw Source (PDF / Markdown)
 ┌──────────────────────────────────────────────────────────────┐
 │  Parent Orchestrator — Evidence Extraction + Routing Engine  │
 │  Produces: scratch/evidence-pack.md  (SHA-256 locked)        │
-                         │
-        ┌────────────────┴─────────────────┐
-        ▼                                 ▼
-STANDARD TRACK                    STUDYLAB TRACK
-(Parallel Wave 1)                 (Parallel Wave 1)
-  core-notes                        math-apkg-author
-  core-basic-anki                   reasoning-apkg-author
-  core-cloze-anki                   physics-numerical-apkg-author
-  core-image-occlusion              chemistry-numerical-apkg-author
-  core-mindmap                      (Canonical Question Banks: Questions.md)
+└──────────────────────────────┬───────────────────────────────┘
+                               │
+        ┌──────────────────────┴───────────────────────┐
+        ▼                                             ▼
+STANDARD TRACK                                  STUDYLAB TRACK
+(Parallel Wave 1)                               (Parallel Wave 1)
+  core-notes                                      math-apkg-author
+  core-basic-anki                                 reasoning-apkg-author
+  core-cloze-anki                                 physics-numerical-apkg-author
+  core-image-occlusion                            chemistry-numerical-apkg-author
+  core-mindmap                                    (Canonical Question Banks: Questions.md)
   core-slide-deck
-        │                                 │
-        └──────────────┬──────────────────┘
-                       ▼
-          WAVE 2: Sequential Packaging
-          export_anki.js (Declarative APKG)
-          [Procedural APKG Packaging Paused in Production]
-                       │
-                       ▼
-          WAVE 3: QA & Physical Audit
-          bm-qa · bm-graph · adversarial-apkg-reviewer
-                       │
-                       ▼
-         ✅ Verified Sibling Deliverables
+        │                                             │
+        └──────────────────────┬──────────────────────┘
+                               ▼
+                  WAVE 2: Sequential Packaging
+                  export_anki.js (Declarative APKG)
+                  [Procedural APKG Packaging Paused in Production]
+                               │
+                               ▼
+                  WAVE 3: QA & Physical Audit
+                  bm-qa · bm-graph · adversarial-apkg-reviewer
+                               │
+                               ▼
+                 ✅ Verified Sibling Deliverables
 ```
 
 ---
@@ -291,7 +292,7 @@ npm --prefix skills/study-source-core run doctor
 
 ## Model Context Protocol (MCP) Server Setup
 
-StudySourceCore includes a native Model Context Protocol (MCP) server located at [`skills/study-source-core/scripts/mcp_server.js`](skills/study-source-core/scripts/mcp_server.js). It exposes 6 deterministic compilation, validation, and policy tools via `stdio` transport:
+StudySourceCore includes a native Model Context Protocol (MCP) server located at [`skills/study-source-core/scripts/mcp_server.js`](skills/study-source-core/scripts/mcp_server.js). It exposes 6 deterministic compilation, validation, evidence ingestion, and contract querying tools via `stdio` transport (complete specification: [`docs/MCP_SERVER_API.md`](./docs/MCP_SERVER_API.md)):
 
 | MCP Tool | Description |
 |---|---|
@@ -357,7 +358,7 @@ For Claude Desktop, add the same configuration block to `claude_desktop_config.j
 
 ### Verifying the MCP Server
 
-You can verify that the MCP server initializes correctly and exposes all 4 tools by executing the built-in MCP test client:
+You can verify that the MCP server initializes correctly and exposes all 6 deterministic tools by executing the built-in MCP test client:
 
 ```bash
 cd skills/study-source-core
@@ -371,11 +372,20 @@ Connecting to MCP Server via stdio transport...
 Connected successfully!
 
 [Test 1] Listing available tools...
-Discovered tools: [ 'export_anki_package', 'export_studylab_procedural_package', 'validate_artifact', 'resolve_subject_policy' ]
+Discovered tools: [
+  'export_anki_package',
+  'export_studylab_procedural_package',
+  'validate_artifact',
+  'resolve_subject_policy',
+  'ingest_source_to_evidence_pack',
+  'query_procedural_contract'
+]
 ✅ Tool discovery test passed!
 ...
 🎉 ALL MCP TESTS PASSED SUCCESSFULLY!
 ```
+
+> For exhaustive input schemas, example request payloads, and return structures for all 6 tools, consult [`docs/MCP_SERVER_API.md`](./docs/MCP_SERVER_API.md).
 
 ---
 
@@ -565,10 +575,11 @@ See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record 
 
 ## Tech Stack
 
-- **Runtime**: Node.js (ES Modules)
-- **Schema Validation**: AJV v8 (Draft-07 JSON Schema)
-- **APKG Compilation**: `jszip` + `sql.js` (SQLite in-process)
-- **MCP Server**: `@modelcontextprotocol/sdk` — exposes `export_anki_package`, `export_studylab_procedural_package`, `validate_artifact`, `resolve_subject_policy`
+- **Runtime**: Node.js v20+ / v22+ LTS (ES Modules & CommonJS interop)
+- **Schema & Type Validation**: `ajv` v8 (Draft-07 JSON Schema) + `zod` (`^3.24.0`)
+- **APKG Binary Compilers**: `better-sqlite3` + `archiver` (zero-heap streaming compiler) alongside `sql.js` (WebAssembly) & `jszip`
+- **MCP Server**: `@modelcontextprotocol/sdk` (`^1.30.0`) — exposes `export_anki_package`, `export_studylab_procedural_package`, `validate_artifact`, `resolve_subject_policy`, `ingest_source_to_evidence_pack`, `query_procedural_contract` (see [`docs/MCP_SERVER_API.md`](./docs/MCP_SERVER_API.md))
+- **Test Framework**: `vitest` v4 (47 isolated suites passing 100% green in ~6.5s)
 - **AI Platform**: Google Antigravity (AGY) with Gemini models
 - **Presentation**: Marp (Markdown to slides)
 - **Vault**: Obsidian (PKM with Wikilinks)

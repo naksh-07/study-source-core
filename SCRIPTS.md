@@ -35,6 +35,11 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `note_contract_audit.js` | `AUDIT` | Node.js | Verifies YAML frontmatter metadata, required structural sections, and note architecture. | `core-notes` | `ACTIVE` |
 | `path_resolver.js` | `UTILITY` | Node.js | Normalizes paths across Windows backslashes and POSIX forward slashes. | All scripts and agents | `ACTIVE` |
 | `pdf_inventory.py` | `UTILITY` | Python 3 | Extracts page counts, metadata, and structural outlines from source PDFs during intake. | `project_orchestrator` | `ACTIVE` |
+| `mcp_server.js` | `UTILITY / MCP` | Node.js | Exposes 6 deterministic compilation, validation, and policy tools via stdio for Antigravity & Claude. | Antigravity Host / MCP Clients | `ACTIVE` |
+| `studycore_cli.js` | `CLI / DRIVER` | Node.js | Unified CLI management tool for status, ingestion, subagent dispatch, packaging, verification, and telemetry. | User / Subagents / Scripts | `ACTIVE` |
+| `telemetry_engine.js` | `OBSERVABILITY` | Node.js | Tracks live span execution, token economics, latency percentiles, and SQLite WAL telemetry logging. | All Engine Components | `ACTIVE` |
+| `evidence_ingestion_engine.js` | `INGESTION` | Node.js | Ingests PDF/OCR/JSON/Markdown sources with physical coordinates and SHA-256 chunk hashing. | `studycore` / MCP Server | `ACTIVE` |
+| `procedural_db_client.js` | `DATABASE` | Node.js | High-performance synchronous client for `procedural.db` using better-sqlite3 and WAL mode. | Procedural Authors / MCP | `ACTIVE` |
 | `render_studylab_question_bank.js` | `RENDERER` | Node.js | Deterministically renders canonical StudyLab procedural questions into Obsidian Markdown. | Procedural Specialists (Wave 1) | `ACTIVE` |
 | `resolve_visual_asset.js` | `UTILITY` | Node.js | Resolves local visual image paths and computes asset cryptographic hashes. | `core-image-occlusion` | `ACTIVE` |
 | `routing_engine.js` | `ROUTING` | Node.js | Evaluates chapter content and computes required artifact tracks and subagent dispatch. | `project_orchestrator` | `ACTIVE` |
@@ -65,7 +70,8 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | Script / Command | Category | Runner | Purpose & Invariants Asserted | Invoker | Status |
 |---|---|---|---|---|---|
 | `npm run doctor` | `MAINTENANCE & HEALTH` | npm / Node.js | Validates Node.js (>= 18), npm (>= 9), Git, dependency tree, workspace paths, permissions, and MCP readiness. | Developer / CI Runner | `ACTIVE` |
-| `scripts/test_mcp_server.js` | `VERIFICATION` | Node.js | Client verification test suite discovering and executing all 4 MCP server tools over stdio transport. | Developer / CI Runner | `ACTIVE` |
+| `scripts/run_master_smoke_test.js` | `VERIFICATION` | Node.js | 18-Gate zero-mock architectural integrity and anti-tamper smoke test harness (`npm run smoke`). | Developer / CI Runner | `ACTIVE` |
+| `scripts/test_mcp_server.js` | `VERIFICATION` | Node.js | Client verification test suite discovering and executing all 6 MCP server tools over stdio transport. | Developer / CI Runner | `ACTIVE` |
 | `scripts/test_adversarial_auditor.js` | `TRANSIENT_TEST` | Node.js | 15-Point adversarial attack suite testing tamper detection, schema corruptions, and anti-leak rules. | `adversarial-apkg-reviewer` / CI | `FROZEN` |
 | `scripts/test_contracts.js` | `TRANSIENT_TEST` | Node.js | Master contract suite covering 111 end-to-end invariant checks across all pipeline artifacts. | CI Test Runner | `FROZEN` |
 | `scripts/test_final_audit_harness.js` | `TRANSIENT_TEST` | Node.js | Final audit harness verifying complete pipeline deliverable integrity and quality gates. | `bm-qa` / CI Test Runner | `FROZEN` |

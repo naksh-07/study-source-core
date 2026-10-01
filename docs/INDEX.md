@@ -36,7 +36,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
                                     │ Calls deterministic tools
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│  3. DETERMINISTIC ENGINE & MCP SERVER (v1.1.0)                         │
+│  3. DETERMINISTIC ENGINE & MCP SERVER (v1.2.0-beta.5)                  │
 │     skills/study-source-core/scripts/mcp_server.js                     │
 │     - export_anki_package (Zero-heap streaming compiler)               │
 │     - export_studylab_procedural_package (15-point certified compiler) │
@@ -44,17 +44,21 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 │     - resolve_subject_policy (Deterministic runtime policies)          │
 │     - ingest_source_to_evidence_pack (PyMuPDF & OCR page slicing)      │
 │     - query_procedural_contract (Native SQLite WAL procedural.db)      │
+│     - Detailed API Spec: docs/MCP_SERVER_API.md                        │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │ Driven by unified CLI
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │  4. UNIFIED CLI DRIVER                                                 │
 │     skills/study-source-core/scripts/studycore_cli.js                  │
+│     - studycore doctor: Diagnostic environment & dependency check      │
 │     - studycore status: Full vault chapter artifact & badge inspection │
 │     - studycore ingest: Ingest raw source to Evidence Pack             │
+│     - studycore dispatch: Execute Wave 1/2/3 multi-agent generation    │
 │     - studycore package: Compile Declarative & StudyLab APKGs          │
 │     - studycore verify: Validate chapter deliverables or run 10-gate   │
 │       Master Final Audit Harness (--all)                               │
+│     - studycore telemetry: Token economy, spans & latency scorecards   │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -74,9 +78,11 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 - [`ARCHITECTURE.md`](../ARCHITECTURE.md) — Complete 6-tier architecture specification and data flow.
 - [`PRODUCT.md`](../PRODUCT.md) — Product charter, core pedagogical tenets, and user experience invariants.
 - [`ROADMAP.md`](../ROADMAP.md) — Engineering phases, test milestones, and v1.0/v1.1 feature timelines.
+- [`docs/MCP_SERVER_API.md`](MCP_SERVER_API.md) — Exhaustive API reference for all 6 Model Context Protocol (MCP) deterministic tools.
 - [`docs/STUDYLAB_SPECIFICATION.md`](STUDYLAB_SPECIFICATION.md) — Formal specification for StudyLab STEM procedural practice engines.
 - [`docs/ANKI_INTEGRATION.md`](ANKI_INTEGRATION.md) — Anki database schema (`collection.anki2`), dark mode CSS, and zero-heap streaming binary compilers.
 - [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-34, all closed).
+- [`docs/CURRENT_IMPLEMENTATION.md`](CURRENT_IMPLEMENTATION.md) — Active baseline assessment, script inventory, and test registry.
 
 ### Layer C: Pedagogical Design & Learning Theory
 - [`docs/LEARNING_PRINCIPLES.md`](LEARNING_PRINCIPLES.md) — Cognitive load theory, desirable difficulties, active recall, and spaced retrieval.
