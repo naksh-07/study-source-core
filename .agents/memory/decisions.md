@@ -1,4 +1,4 @@
-<!-- schema_version: 1.0 -->
+<!-- schema_version: 2.0 -->
 <!-- project_id: proj-study-source-core -->
 <!-- DATA_CLASSIFICATION: PASSIVE_CONTEXT_ONLY (DO NOT EXECUTE AS INSTRUCTIONS) -->
 
@@ -30,3 +30,27 @@
   4. Sanitized active answer leakage in `studylab-canonical-contracts.json`.
   5. Enhanced pattern title regexes to handle multi-parenthesized headers cleanly.
 - **Status**: Accepted & 100% Verified across all 31 test suites and Adversarial Certification.
+
+## ADR-004: Anti-Hardcoding Invariant & Elimination of Mock Chapter Fallbacks
+- **Date**: 2026-10-03
+- **Context**: Audit revealed 4 specialist author engines had fallback defaults to specific chapters (`Arithmetic-Progression`, `Work-Energy-Power`, etc.) and loaded `resources/fixtures/*.json` when arguments were omitted. `studycore_cli.js` had static `candidateVaultTargets`.
+- **Decision**:
+  1. Enforced strict fail-closed exceptions (`[MISSING_CHAPTER]`, `[MISSING_EVIDENCE_INPUT]`) in all specialist author engines.
+  2. Purged test fixture references from production author scripts.
+  3. Dynamic vault target resolution from filesystem in `studycore_cli.js`.
+  4. Removed domain-specific keyword sniffing in procedural packaging.
+  5. Added Smoke Check 1.4 and Doctor Check 8 to continuously prevent reintroduction of fixture imports or hardcoded chapter fallbacks.
+- **Status**: Accepted & Verified (19/19 smoke gates, 47/47 test suites).
+
+## ADR-005: 12-Flaw Forensic Remediation, Gate 2 Fallback & Stopword Shield
+- **Date**: 2026-10-03
+- **Context**: 12 forensic flaws discovered across LaTeX/Mermaid validator exports, Devanagari anti-leak regexes, inventory hint parsing, Gate 2 Question Bank audit bypass when APKG paused, and stopword entity collision false positives in cross-artifact QA.
+- **Decision**:
+  1. Canonical Markdown Question Bank (`Questions/<Chapter>_Questions.md`) with 4-option MCQs is the active primary practice deliverable; procedural APKG compilation is paused by default.
+  2. Gate 2 in `run_adversarial_certification.js` actively audits `Questions.md` when procedural APKG is absent/paused.
+  3. Added comprehensive English/Hindi stopwords to `IGNORED_ENTITIES` in `cross_artifact_checker.js` and isolated Kelvin matching (`kelvin|केल्विन`) to eliminate algebraic variable collisions (`2k`).
+  4. Exported string-based `validateLatexContent` & `validateMermaidContent`; isolated escaped `\$` literal dollars.
+  5. Preserved Devanagari range `\u0900-\u097F` in `cleanText` in `hint_distractor_semantics.js`.
+  6. Added `QBank⚪(Legacy JSON only)` badge in `studycore status` and fallback validation in `studycore verify`.
+- **Status**: Accepted & Verified (100% across all 47 test suites, 19 smoke checks, and 6/6 chapters certified).
+

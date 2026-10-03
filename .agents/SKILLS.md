@@ -119,3 +119,28 @@ StudySourceCore employs a modular, hierarchical skills architecture designed to 
 2. **Controlled Change**: Subject skills and resource contracts in `skills/study-source-core/resources/*.md` may be updated to refine pedagogical heuristics, provided they maintain backward compatibility with existing validators.
 3. **Single Source of Truth**: No skill may inline duplicate copies of the Universal Language Contract, MCQ Hard Invariant, or Hint Invariant. All skills must reference canonical anchors in `RESOURCES.md`.
 4. **Deduplication Rule**: When modifying skills, ensure that all references point directly to canonical paths in `skills/study-source-core/resources/` or `skills/study-source-core/`.
+
+---
+
+## 7. Antigravity Native Skills Discovery Bridge (`.agents/skills.json`)
+
+To enable Google Antigravity to discover and mount project-local skills directly from the repository's `skills/` folder without manual path registration or global configuration copying, the repository provides a native bridge manifest:
+
+- **Path**: `.agents/skills.json`
+- **Schema**: `https://antigravity.google/schemas/skills-config.json`
+- **Specification**:
+  ```json
+  {
+    "$schema": "https://antigravity.google/schemas/skills-config.json",
+    "entries": [
+      {
+        "path": "skills"
+      }
+    ]
+  }
+  ```
+
+### Single Source of Truth & Ban on Global Mirror Shadows
+- **SSoT Guarantee**: All skill definitions, subject DNA prompts, and schemas reside canonically inside the repository's `skills/` directory.
+- **Global Shadowing Ban**: Maintaining duplicate copies of `study-source-core` in global configuration paths (e.g. `~/.gemini/config/skills/study-source-core`) is strictly prohibited. Shadowing leads to silent desynchronization where improvements in the repository are ignored by the host runtime.
+- **Verification via Doctor Check 7**: `npm run doctor` automatically audits `.agents/skills.json` to confirm that the native bridge is present, structurally valid, and actively mapped.

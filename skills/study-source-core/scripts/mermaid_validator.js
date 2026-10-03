@@ -145,13 +145,7 @@ function validateMermaidBlock(block, issues, warnings) {
   }
 }
 
-function validateFile(filePath) {
-  if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
-  }
-
-  const content = fs.readFileSync(filePath, 'utf8');
+function validateMermaidContent(content, filePath = 'content.md') {
   const blocks = extractMermaidBlocks(content);
   const issues = [];
   const warnings = [];
@@ -186,7 +180,17 @@ function validateFile(filePath) {
   }
   console.log('======================================================\n');
 
-  return { blocks: blocks.length, issues, warnings, passed: issues.length === 0 };
+  return { blocks: blocks.length, issues, warnings, passed: issues.length === 0, isValid: issues.length === 0 };
+}
+
+function validateFile(filePath) {
+  if (!fs.existsSync(filePath)) {
+    console.error(`[ERROR] File not found: ${filePath}`);
+    process.exit(1);
+  }
+
+  const content = fs.readFileSync(filePath, 'utf8');
+  return validateMermaidContent(content, filePath);
 }
 
 if (require.main === module) {
@@ -199,4 +203,5 @@ if (require.main === module) {
   process.exit(result.passed ? 0 : 1);
 }
 
-module.exports = { validateFile, extractMermaidBlocks, validateMermaidBlock };
+module.exports = { validateFile, extractMermaidBlocks, validateMermaidBlock, validateMermaidContent };
+

@@ -5,26 +5,26 @@
     "subject": "Reasoning",
     "completed_count": 9,
     "artifact_count": 9,
-    "verified_timestamp": "2026-09-29T20:12:40.514Z",
+    "verified_timestamp": "2026-10-03T13:15:38.662Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
     {
-      "task_id": "task-notes",
+      "task_id": "task-notes-contract",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Notes\\Syllogism_Notes.md",
       "bytes": 23844,
       "sha256": "6f69e3b97d47fe140ef8f3365d28aacf3ad09580da2abe65dad0564d27f3ce73",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-basic",
+      "task_id": "task-basic-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Basic\\Syllogism_Basic.tsv",
       "bytes": 6757,
       "sha256": "9e9f56bd24bd798d7d13d31c585973685749de908b97bd8591beb88d8f361b52",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-cloze",
+      "task_id": "task-cloze-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Cloze\\Syllogism_Cloze.tsv",
       "bytes": 6962,
       "sha256": "8e7badd651a6f0ad4a3a86d875fd30b489fde6be8a54cb016ab4643a0faf218b",
@@ -45,14 +45,14 @@
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-qbank",
-      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\StudyLab\\Syllogism_Questions.md",
+      "task_id": "task-question-bank",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Questions\\Syllogism_Questions.md",
       "bytes": 32379,
       "sha256": "189780f676d4e01f42566bc5fb17d8f9ac79554cde3c01b46cc9b4b9106edc31",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-anki-apkg",
+      "task_id": "task-declarative-apkg",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Syllogism_Anki.apkg",
       "bytes": 10098,
       "sha256": "4a0801f5021254b6366bb1c869a9919a089ccd9a558bffa13beba9680f749c8a",

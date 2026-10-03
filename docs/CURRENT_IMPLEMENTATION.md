@@ -2,31 +2,32 @@
 
 ## 1. Overview & Baseline State
 
-This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0-beta.5 Production Baseline**.
+This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0-beta.6 Production Baseline**.
 
 It details the code, scripts, schemas, subagent definitions, and test suites that are actively implemented, passing, and functional in the repository today.
 
 ### Baseline Health Summary
-- **Core Test Suite**: **47 of 47 test suites passing (100% pass rate)** via `npm test` using Vitest 4 in ~6.5 seconds.
-- **Master Smoke Test & Anti-Tamper Integrity**: **18 of 18 zero-mock gates passing (100% pass rate)** via `npm run smoke` in ~4.5 seconds.
+- **Core Test Suite**: **47 of 47 test suites passing (100% pass rate)** via `npm test` using sequential fail-closed harness `scripts/run_all_tests.js` in ~18 seconds.
+- **Master Smoke Test & Anti-Tamper Integrity**: **19 of 19 zero-mock gates passing (100% pass rate)** via `npm run smoke` in ~5.5 seconds.
+- **Environment Doctor Diagnostics**: 8 automated checks passing via `npm run doctor` (validating Node.js, npm, git, dependencies, paths, permissions, MCP server, `.agents/skills.json` discovery, and production scripts anti-mock purity).
 - **Targeted Test Suites**:
-  - `npm run smoke`: 18-gate zero-mock architectural anti-tamper and 5-domain end-to-end verification.
+  - `npm run smoke`: 19-gate zero-mock architectural anti-tamper, anti-hardcoding, and 5-domain end-to-end verification.
   - `npm run telemetry`: Live span tracing, token load budgeting, and latency percentile scorecard.
-  - `npm run certify -- --chapter <Chapter> --subject <Subject>`: Standalone 4-Gate Adversarial Certification CLI.
+  - `npm run certify -- --chapter <Chapter> --subject <Subject>`: Standalone 4-Gate Adversarial Certification CLI (with Gate 2 Question Bank fallback).
   - `npm run test:milestone4`: Closed-boundary model isolation, physical completion evidence gate, and adversarial certification.
   - `npm run test:phase10`: Concurrency clamping (MAX_CONCURRENT_WORKERS = 4), crash-resilient atomic checkpoints, and runtime adversarial matrix.
   - `npm run test:legacy`: Direct Node runner executing the original 28 standalone validation scripts.
 - **Primary Runtime Engine**: Node.js v20+ / v22+ LTS (ES modules and CommonJS interop).
-- **Core Dependencies**: `ajv` (JSON Schema validation), `archiver` + `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `zod` (runtime schema parsing), `@modelcontextprotocol/sdk` (MCP server integration), `vitest` (isolated worker runner).
-- **Active Primary Practice Deliverable**: Canonical Markdown Question Banks (`Questions.md` / `StudyLab/*_Questions.md`) adhering to GAP-30 with all 5 pedagogical dimensions and non-leaking hints; procedural APKGs temporarily paused in production.
+- **Core Dependencies**: `ajv` (JSON Schema validation), `archiver` + `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `zod` (runtime schema parsing), `@modelcontextprotocol/sdk` (MCP server integration).
+- **Active Primary Practice Deliverable**: Canonical Markdown Question Banks (`Questions/<Chapter>_Questions.md`) adhering to GAP-30/ADR-22 with strict 4-option MCQs (`(A)`, `(B)`, `(C)`, `(D)`) and non-leaking hints; procedural APKGs permanently paused by default in production. Gate 2 in adversarial certification actively audits Question Banks.
 - **Certified Chapter Catalog**: 6 fully verified production chapters:
   1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
-  2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG.
+  2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG (`QBank⚪(Legacy JSON only)` status).
   3. `Math / Arithmetic-Progression`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, 26 distinct 4-option MCQs across 6 pattern families, Anki APKG.
   4. `Physics / Newton-Laws-Friction`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, Question Bank, 23-card Anki APKG, StudyLab APKG.
   5. `Reasoning / Syllogism`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, 25 distinct 4-option MCQs across 5 pattern families, Anki APKG, Graph Index, QA Report.
   6. `Chemistry / Chemical-Equilibrium`: Notes (2,911 words), Basic TSV, Cloze TSV, MindMap (38 nodes), SlideDeck (8 slides), 25 distinct 4-option MCQs across 5 pattern families, Anki APKG, Graph Index, QA Report (Authored by 8 live subagents, 4/4 Adversarial Certification PASS).
-- **Deficiencies & Resolutions**: Fully tracked in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) (GAP-01 through GAP-34, 100% resolved).
+- **Deficiencies & Resolutions**: Fully tracked in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) (GAP-01 through GAP-39, 100% resolved).
 
 ---
 
@@ -67,11 +68,12 @@ StudySourceCore/
 │   ├── DATA_FLOW.md                 # End-to-end 6-stage transformation pipeline
 │   ├── EXECUTION_LIFECYCLE.md       # 3-Wave execution protocol & concurrency limits
 │   ├── FREEZE_MAP.md                # 5-Tier component governance & freeze boundaries
-│   ├── DECISIONS.md                 # Architecture Decision Records (ADR-01 through ADR-17)
+│   ├── DECISIONS.md                 # Architecture Decision Records (ADR-01 through ADR-20)
 │   ├── TROUBLESHOOTING.md           # Diagnostic decision trees & error triage
 │   ├── SKILLS.md                    # Skills Registry
 │   ├── RESOURCES.md                 # Schemas & Contracts Index
 │   ├── SCRIPTS.md                   # Executable Scripts Registry
+│   ├── skills.json                  # Native Antigravity skills discovery config ("skills")
 │   └── agents/                      # 14 specialist subagent definition prompts
 │
 ├── skills/
@@ -102,7 +104,7 @@ The implementation logic is partitioned into focused, single-responsibility scri
 | `execution_state.js` | Manages persistent orchestration checkpoint state with atomic writes (.tmp $\to$ fsync $\to$ rename) and SHA-256 state checksum. | `[CURRENT]` Production | Node `fs`, `path`, `crypto` |
 | `antigravity_adapter.js` | Antigravity host adapter decoupling tasks, workers, and conversations; enforces Parent Self-Execution Ban. | `[CURRENT]` Production | `orchestration_engine.js` |
 | `register_antigravity_subagents.js` | Compiles Antigravity-compatible subagent tool definitions from `.agents/agents/*.md`. | `[CURRENT]` Production | Node `fs`, `path` |
-| `path_resolver.js` | Computes standardized file paths for all chapter artifacts based on registry rules. | `[CURRENT]` Production | `artifact_registry.js` |
+| `path_resolver.js` | Computes standardized file paths for all chapter artifacts based on registry rules; traverses upward with multi-marker detection (`Study Materials`+`Sources`, `.agents`, `agents`, `.git`+`skills`) and prioritizes `STUDYCORE_VAULT_ROOT` environment override. | `[CURRENT]` Production | `artifact_registry.js` |
 | `artifact_registry.js` | Authoritative reader and validator for `artifact-registry.json`. | `[CURRENT]` Production | `path_resolver.js` |
 
 ### 3.2 Ingestion, Lineage & Semantic Learning IR
@@ -263,8 +265,9 @@ Defined in `skills/study-source-core/package.json`:
 
 ## 7. Release State & Roadmap Transition
 
-The **v1.2.0-beta.5 Production Baseline** is certified, passing all 47 automated test suites, passing the 18-gate zero-mock smoke test, and achieving 4-Gate adversarial certification across 6 production chapters:
-- Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 10.
-- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-34 (100% resolved and verified).
+The **v1.2.0-beta.6 Production Baseline** is certified, passing all 47 automated test suites, passing the 18-gate zero-mock smoke test, achieving 4-Gate adversarial certification across 6 production chapters, and passing all 7 Environment Doctor checks:
+- Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 18.
+- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-35 (100% resolved and verified).
 - Refer to [`docs/MCP_SERVER_API.md`](./MCP_SERVER_API.md) for full documentation of the 6 deterministic MCP tools.
 - Production question delivery is standardized on canonical Markdown Question Banks (`Questions.md`) under GAP-30.
+- Workspace skills discovery is standardized via native `.agents/skills.json` under GAP-35.

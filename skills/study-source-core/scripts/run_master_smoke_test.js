@@ -85,7 +85,7 @@ async function runSmokeCheck(sectionName, checkName, testFn) {
 async function main() {
     console.log('================================================================================');
     console.log('STUDYSOURCECORE — MASTER SMOKE TEST & ARCHITECTURAL INTEGRITY HARNESS');
-    console.log('Target Version: v1.2.0-beta.5 | Zero Mocks | Zero Compromise');
+    console.log('Target Version: v1.2.0-beta.6 | Zero Mocks | Zero Compromise');
     console.log('================================================================================\n');
 
     fs.mkdirSync(SCRATCH_DIR, { recursive: true });
@@ -174,6 +174,36 @@ async function main() {
                 lastIndex = idx;
             }
         }
+    });
+
+    await runSmokeCheck('STAGE 1', '1.4 Anti-Hardcoding & Zero-Mock Production Audit: Asserts zero fixture leaks or mock fallbacks', () => {
+        const productionAuthorEngines = [
+            'author_physics_studylab.js',
+            'author_math_studylab.js',
+            'author_chemistry_studylab.js',
+            'author_reasoning_studylab.js',
+            'studycore_cli.js'
+        ];
+
+        for (const file of productionAuthorEngines) {
+            const filePath = path.resolve(__dirname, file);
+            assert(fs.existsSync(filePath), `Script missing: ${file}`);
+            const code = fs.readFileSync(filePath, 'utf8');
+
+            // Assert zero references to resources/fixtures in production authoring scripts
+            assert(!code.includes('resources/fixtures'), `Mock fixture leak found in production script ${file}`);
+            
+            // Assert zero hardcoded demo chapter fallbacks
+            assert(!code.includes("|| 'LCM-HCF'"), `Hardcoded chapter fallback 'LCM-HCF' found in ${file}`);
+            assert(!code.includes("|| 'Work-Energy-Power'"), `Hardcoded chapter fallback 'Work-Energy-Power' found in ${file}`);
+            assert(!code.includes("|| 'Chemical-Equilibrium'"), `Hardcoded chapter fallback 'Chemical-Equilibrium' found in ${file}`);
+            assert(!code.includes("|| 'Syllogism-And-Seating-Arrangement'"), `Hardcoded chapter fallback 'Syllogism-And-Seating-Arrangement' found in ${file}`);
+        }
+
+        // Assert studycore_cli.js does not hardcode candidateVaultTargets
+        const cliPath = path.resolve(__dirname, 'studycore_cli.js');
+        const cliCode = fs.readFileSync(cliPath, 'utf8');
+        assert(!cliCode.includes("'Math/Arithmetic-Progression'"), `Hardcoded vault target 'Math/Arithmetic-Progression' found in studycore_cli.js`);
     });
 
     // =========================================================================
@@ -266,7 +296,9 @@ async function main() {
         const clozePath = path.join(physDir, 'Cloze/Newton-Laws-Friction_Cloze.tsv');
         const mapPath = path.join(physDir, 'MindMap/Newton-Laws-Friction.mindmap.json');
         const slidePath = path.join(physDir, 'SlideDeck/Newton-Laws-Friction_SlideDeckPrompt.md');
-        const qbPath = path.join(physDir, 'StudyLab/Newton-Laws-Friction_Questions.md');
+        const qbPath = fs.existsSync(path.join(physDir, 'Questions/Newton-Laws-Friction_Questions.md'))
+            ? path.join(physDir, 'Questions/Newton-Laws-Friction_Questions.md')
+            : path.join(physDir, 'StudyLab/Newton-Laws-Friction_Questions.md');
         const ankiPath = path.join(physDir, 'Newton-Laws-Friction_Anki.apkg');
         const procApkgPath = path.join(physDir, 'StudyLab/Newton-Laws-Friction_StudyLab_Procedural.apkg');
 

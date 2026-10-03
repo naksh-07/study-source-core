@@ -91,11 +91,22 @@ if (missingPackages.length > 0) {
 
 // 3. Python 3 (Optional intake helper)
 let pythonVersion = null;
-for (const pyCmd of ['python', 'python3']) {
+const pyCandidates = [
+  path.join(skillDir, '.venv', 'Scripts', 'python.exe'),
+  path.join(skillDir, '.venv', 'bin', 'python'),
+  path.join(skillDir, '..', '..', '.venv', 'Scripts', 'python.exe'),
+  path.join(skillDir, '..', '..', '.venv', 'bin', 'python'),
+  'python',
+  'python3'
+];
+for (const pyCmd of pyCandidates) {
+  if (typeof pyCmd === 'string' && (pyCmd.includes('/') || pyCmd.includes('\\')) && !fs.existsSync(pyCmd)) {
+    continue;
+  }
   try {
     const res = spawnSync(pyCmd, ['--version'], {
       encoding: 'utf8',
-      shell: true,
+      shell: !path.isAbsolute(pyCmd),
       windowsHide: true
     });
     if (res.status === 0) {
@@ -251,6 +262,77 @@ if (gitVersion) {
     status: 'FAIL',
     message: `Git not found (git --version failed)`,
     blocking: true
+  });
+}
+
+// 7. Antigravity Skill Discovery Config (.agents/skills.json)
+const skillsJsonPath = path.join(repoRoot, '.agents', 'skills.json');
+if (!fs.existsSync(skillsJsonPath)) {
+  checks.push({
+    status: 'WARN',
+    message: 'Antigravity discovery config missing (.agents/skills.json not found; external skills/ folder won\'t be discovered in clean clones)',
+    blocking: false
+  });
+} else {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(skillsJsonPath, 'utf8'));
+    const hasSkillsEntry = parsed && Array.isArray(parsed.entries) && parsed.entries.some(e => e.path === 'skills');
+    if (hasSkillsEntry) {
+      checks.push({
+        status: 'PASS',
+        message: 'Antigravity discovery config (.agents/skills.json -> "skills")',
+        blocking: false
+      });
+    } else {
+      checks.push({
+        status: 'WARN',
+        message: 'Antigravity discovery config (.agents/skills.json exists but missing "skills" entry)',
+        blocking: false
+      });
+    }
+  } catch {
+    checks.push({
+      status: 'FAIL',
+      message: 'Antigravity discovery config (.agents/skills.json is malformed JSON)',
+      blocking: true
+    });
+  }
+}
+
+// 8. Production Scripts Purity & Anti-Hardcoding
+const scriptsDir = path.join(skillDir, 'scripts');
+const authorScripts = [
+  'author_physics_studylab.js',
+  'author_math_studylab.js',
+  'author_chemistry_studylab.js',
+  'author_reasoning_studylab.js',
+  'studycore_cli.js'
+];
+const purityViolations = [];
+for (const scriptFile of authorScripts) {
+  const sPath = path.join(scriptsDir, scriptFile);
+  if (fs.existsSync(sPath)) {
+    const sCode = fs.readFileSync(sPath, 'utf8');
+    if (sCode.includes('resources/fixtures')) {
+      purityViolations.push(`${scriptFile} references test fixtures`);
+    }
+    if (sCode.includes("|| 'LCM-HCF'") || sCode.includes("|| 'Work-Energy-Power'") ||
+        sCode.includes("|| 'Chemical-Equilibrium'") || sCode.includes("|| 'Syllogism-And-Seating-Arrangement'")) {
+      purityViolations.push(`${scriptFile} contains hardcoded chapter fallback`);
+    }
+  }
+}
+if (purityViolations.length > 0) {
+  checks.push({
+    status: 'FAIL',
+    message: `Production scripts purity (${purityViolations.join('; ')})`,
+    blocking: true
+  });
+} else {
+  checks.push({
+    status: 'PASS',
+    message: 'Production scripts purity (zero fixture leaks or hardcoded chapter fallbacks)',
+    blocking: false
   });
 }
 

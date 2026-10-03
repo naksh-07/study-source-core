@@ -4,7 +4,7 @@
 > **Product Charter**: [`PRODUCT.md`](./PRODUCT.md)  
 > **Implementation Roadmap**: [`ROADMAP.md`](./ROADMAP.md)  
 > **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md)  
-> **Version**: v1.2.0-beta.5 Production Baseline  
+> **Version**: v1.2.0-beta.6 Production Baseline  
 > **Status**: Certified / Production Baseline  
 > **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution
 
@@ -65,8 +65,8 @@ STANDARD TRACK                                  STUDYLAB TRACK
 | Image Occlusion | `ImageOcclusion/<Chapter>_IO.json` | SVG bounding-box manifest | Active Primary |
 | MindMap | `MindMap/<Chapter>_MindMap.md` | Mermaid + JSON concept tree | Active Primary |
 | Slide Deck | `SlideDeck/<Chapter>_SlideDeck.md` | Marp presentation | Active Primary |
-| Practice Question Bank | `StudyLab/<Chapter>_Questions.md` | Canonical Markdown Question Bank (5 dimensions, DAGs, 3-tier hints) | Active Primary |
-| Procedural APKG | `StudyLab/<Chapter>_StudyLab_Procedural.apkg` | Anki `.apkg` binary (Level 1–7 hints) | Temporarily Paused (GAP-30) |
+| Practice Question Bank | `Questions/<Chapter>_Questions.md` | Canonical Markdown Question Bank (5 dimensions, DAGs, 3-tier hints) | Active Primary |
+| Procedural APKG | `StudyLab/<Chapter>_StudyLab_Procedural.apkg` | Anki `.apkg` binary (Level 1–7 hints) | Temporarily Paused (GAP-30 / ADR-22) |
 
 ---
 
@@ -77,7 +77,7 @@ StudySourceCore/
 ├── README.md                       ← Master repository overview and quickstart
 ├── PRODUCT.md                      ← Product Charter, 10 Immutable Principles, non-goals
 ├── ARCHITECTURE.md                 ← Canonical 6-Tier Architecture & Contract Matrix
-├── ROADMAP.md                      ← Master 11-Phase Roadmap (Phases 0–10 Certified)
+├── ROADMAP.md                      ← Master 23-Phase Roadmap (Phases 0–22 Certified)
 ├── CONTRIBUTING.md                 ← Developer workflow, testing, PR guidelines
 │
 ├── docs/                           ← Tier 1: Canonical Technical Specifications
@@ -106,11 +106,12 @@ StudySourceCore/
 │   ├── DATA_FLOW.md                ← End-to-End Pipeline & Message Schemas
 │   ├── EXECUTION_LIFECYCLE.md      ← 3-Wave Protocol, Concurrency Caps, Timeouts
 │   ├── FREEZE_MAP.md               ← 5-Tier Component Governance
-│   ├── DECISIONS.md                ← Architectural Decision Records (ADR-01–ADR-17)
-│   ├── TROUBLESHOOTING.md          ← Diagnostic Trees for 8 Failure Classes
+│   ├── DECISIONS.md                ← Architectural Decision Records (ADR-01–ADR-20)
+│   ├── TROUBLESHOOTING.md          ← Diagnostic Trees for 9 Failure Classes
 │   ├── SKILLS.md                   ← Skills Registry
 │   ├── RESOURCES.md                ← Schemas & Contracts Index
 │   ├── SCRIPTS.md                  ← Executable Scripts Registry
+│   ├── skills.json                 ← Native Antigravity skills discovery config ("skills")
 │   └── agents/                     ← 14 Canonical Agent Specifications
 │       ├── core-notes.md
 │       ├── core-basic-anki.md
@@ -482,16 +483,17 @@ To safely update StudySourceCore when upstream updates or schema improvements ar
    ```
 2. **Re-sync Locked Dependencies**:
    ```bash
-   cd skills/study-source-core
-   npm ci
+   cd skills/study-source-core && npm ci
    ```
 3. **Run Diagnostic Verification**:
    ```bash
    npm run doctor
    ```
-4. **Run Regression Suites**:
+   *(Executes all 7 diagnostic checks, including `.agents/skills.json` Antigravity discovery validation)*
+4. **Run Regression & Smoke Suites**:
    ```bash
-   npm test
+   npm run smoke   # 18-Gate zero-mock architectural anti-tamper harness
+   npm test        # 47 Vitest test suites (100% green)
    ```
 
 > [!NOTE]
@@ -533,7 +535,7 @@ For advanced multi-project setups where you want to access StudySourceCore tools
 
 ## Key Design Decisions
 
-See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record log (ADR-01 to ADR-17).
+See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record log (ADR-01 to ADR-20).
 
 | ADR | Decision |
 |---|---|
@@ -554,6 +556,9 @@ See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record 
 | ADR-15 | Fail-Closed Visual Learning Policy (`NO_APPROVED_ASSET`) |
 | ADR-16 | Content Lineage Record (CLR) Cryptographic Tracing |
 | ADR-17 | Scope Boundaries & Deferred Runtimes (SQLite DB, Web UI post-v1.0) |
+| ADR-18 | Strict Script De-Usurpation & Fail-Closed Pedagogical Integrity |
+| ADR-19 | Mechanical vs Cognitive Separation of Concerns |
+| ADR-20 | Antigravity Native Skills Discovery Bridge & Global Duplicate Purge |
 
 ---
 
@@ -566,7 +571,7 @@ See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record 
 | [`DATA_FLOW.md`](./DATA_FLOW.md) | End-to-end 6-stage transformation pipeline & message schemas |
 | [`EXECUTION_LIFECYCLE.md`](./EXECUTION_LIFECYCLE.md) | 3-Wave protocol, concurrency rules, timeout budgets |
 | [`FREEZE_MAP.md`](./FREEZE_MAP.md) | 5-Tier governance — what is FROZEN vs MUTABLE |
-| [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) | Diagnostic trees for 8 failure classes |
+| [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) | Diagnostic trees for 9 failure classes |
 | [`SCRIPTS.md`](./SCRIPTS.md) | CLI script reference with exit codes & usage |
 | [`RESOURCES.md`](./RESOURCES.md) | 38 JSON schemas and rulebooks index |
 | [`skills/study-source-core/resources/workflow.md`](./skills/study-source-core/resources/workflow.md) | Full 11-phase workflow specification |

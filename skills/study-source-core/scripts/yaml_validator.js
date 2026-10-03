@@ -148,16 +148,38 @@ function validateYamlFrontmatter(filePath) {
     }
 
     // Unclosed quote detection
+    const isDoubleQuoted = rawValue.startsWith('"') && rawValue.endsWith('"') && rawValue.length >= 2;
+    const isSingleQuoted = rawValue.startsWith("'") && rawValue.endsWith("'") && rawValue.length >= 2;
+
     const singleQ = (rawValue.match(/'/g) || []).length;
     const doubleQ = (rawValue.match(/"/g) || []).length;
-    if (singleQ % 2 !== 0) {
-      issues.push(`Line ${lineNum}: Unclosed single quote in value for "${key}": ${rawValue}`);
-      openQuoteChar = "'";
-      openQuoteLine = lineNum;
-    } else if (doubleQ % 2 !== 0) {
-      issues.push(`Line ${lineNum}: Unclosed double quote in value for "${key}": ${rawValue}`);
-      openQuoteChar = '"';
-      openQuoteLine = lineNum;
+
+    if (isDoubleQuoted) {
+      // Inside double quotes, apostrophes/single quotes are literal text
+      const unescapedDoubleQ = (rawValue.replace(/\\"/g, '').match(/"/g) || []).length;
+      if (unescapedDoubleQ % 2 !== 0) {
+        issues.push(`Line ${lineNum}: Unclosed double quote in value for "${key}": ${rawValue}`);
+        openQuoteChar = '"';
+        openQuoteLine = lineNum;
+      }
+    } else if (isSingleQuoted) {
+      // Inside single quotes, double quotes are literal text
+      const unescapedSingleQ = (rawValue.replace(/''/g, '').match(/'/g) || []).length;
+      if (unescapedSingleQ % 2 !== 0) {
+        issues.push(`Line ${lineNum}: Unclosed single quote in value for "${key}": ${rawValue}`);
+        openQuoteChar = "'";
+        openQuoteLine = lineNum;
+      }
+    } else {
+      if (singleQ > 0 && singleQ % 2 !== 0 && (rawValue.startsWith("'") || rawValue.endsWith("'"))) {
+        issues.push(`Line ${lineNum}: Unclosed single quote in value for "${key}": ${rawValue}`);
+        openQuoteChar = "'";
+        openQuoteLine = lineNum;
+      } else if (doubleQ > 0 && doubleQ % 2 !== 0) {
+        issues.push(`Line ${lineNum}: Unclosed double quote in value for "${key}": ${rawValue}`);
+        openQuoteChar = '"';
+        openQuoteLine = lineNum;
+      }
     }
 
     // Type validation

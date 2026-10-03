@@ -5,26 +5,26 @@
     "subject": "Math",
     "completed_count": 9,
     "artifact_count": 9,
-    "verified_timestamp": "2026-09-29T19:48:10.587Z",
+    "verified_timestamp": "2026-10-03T13:15:38.524Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
     {
-      "task_id": "task-notes",
+      "task_id": "task-notes-contract",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Notes\\Arithmetic-Progression_Notes.md",
       "bytes": 17315,
       "sha256": "edba9c755536e7e768166d2e9ab0396a6e1acbb921390f6387addd3af0175f13",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-basic",
+      "task_id": "task-basic-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Basic\\Arithmetic-Progression_Basic.tsv",
       "bytes": 5344,
       "sha256": "e8ce7f427b888e7965adf76362687992dc2618da72507d12301b34d034b46359",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-cloze",
+      "task_id": "task-cloze-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Cloze\\Arithmetic-Progression_Cloze.tsv",
       "bytes": 6303,
       "sha256": "1f8ea2dec3f507dfc4098ecde6d7f9d6a7728abec1164aad67cd179443c76143",
@@ -45,14 +45,14 @@
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-qbank",
-      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\StudyLab\\Arithmetic-Progression_Questions.md",
+      "task_id": "task-question-bank",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Questions\\Arithmetic-Progression_Questions.md",
       "bytes": 13503,
       "sha256": "4ded961ef2b953256df84206264efe33d220376d3ccb69ba534c280d9ca24032",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
-      "task_id": "task-anki-apkg",
+      "task_id": "task-declarative-apkg",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Arithmetic-Progression_Anki.apkg",
       "bytes": 9120,
       "sha256": "a49315e70bbc22502179dcbcd16e1c967183d89f22e89740c691267f0b4b391c",

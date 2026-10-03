@@ -3,7 +3,7 @@
 > **Canonical Architecture**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
 > **Master Agent Index**: [`.agents/AGENTS.md`](../.agents/AGENTS.md)  
 > **Primary Antigravity Skill**: [`skills/study-source-core/SKILL.md`](../skills/study-source-core/SKILL.md)  
-> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.5`)  
+> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.6`)  
 > **Author**: `naksh-07` (Suraj)
 
 ---
@@ -36,7 +36,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
                                     │ Calls deterministic tools
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│  3. DETERMINISTIC ENGINE & MCP SERVER (v1.2.0-beta.5)                  │
+│  3. DETERMINISTIC ENGINE & MCP SERVER (v1.2.0-beta.6)                  │
 │     skills/study-source-core/scripts/mcp_server.js                     │
 │     - export_anki_package (Zero-heap streaming compiler)               │
 │     - export_studylab_procedural_package (15-point certified compiler) │
@@ -69,19 +69,20 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 ### Layer A: Core Antigravity & Agent Operations
 - [`.agents/AGENTS.md`](../.agents/AGENTS.md) — Authoritative Master Agent Registry (all 14 subagent profiles and ownership boundaries).
 - [`.agents/agents/*.md`](../.agents/agents) — The 14 individual subagent definition markdown specifications equipped with write tool frontmatters.
+- [`.agents/skills.json`](../.agents/skills.json) — Native Antigravity Skills Discovery Config registering root `skills/` folder without global shadowing.
 - [`.agents/RESOURCES.md`](../.agents/RESOURCES.md) — Universal Language Contract (Hindi-first Hinglish), schemas, Model IDs, and resource registers.
 - [`.agents/OWNERSHIP.md`](../.agents/OWNERSHIP.md) — Single-Writer Rule and immutable artifact ownership matrices.
 - [`.agents/EXECUTION_LIFECYCLE.md`](../.agents/EXECUTION_LIFECYCLE.md) — 3-Wave execution flow, task DAG transitions, and structured handoff schemas.
-- [`.agents/DECISIONS.md`](../.agents/DECISIONS.md) — Architectural Decision Records (ADR-01 through ADR-18).
+- [`.agents/DECISIONS.md`](../.agents/DECISIONS.md) — Architectural Decision Records (ADR-01 through ADR-20).
 
 ### Layer B: System Architecture & Specifications
 - [`ARCHITECTURE.md`](../ARCHITECTURE.md) — Complete 6-tier architecture specification and data flow.
 - [`PRODUCT.md`](../PRODUCT.md) — Product charter, core pedagogical tenets, and user experience invariants.
-- [`ROADMAP.md`](../ROADMAP.md) — Engineering phases, test milestones, and v1.0/v1.1 feature timelines.
+- [`ROADMAP.md`](../ROADMAP.md) — Master 19-phase engineering roadmap, test milestones, and v1.2 domain slices.
 - [`docs/MCP_SERVER_API.md`](MCP_SERVER_API.md) — Exhaustive API reference for all 6 Model Context Protocol (MCP) deterministic tools.
 - [`docs/STUDYLAB_SPECIFICATION.md`](STUDYLAB_SPECIFICATION.md) — Formal specification for StudyLab STEM procedural practice engines.
 - [`docs/ANKI_INTEGRATION.md`](ANKI_INTEGRATION.md) — Anki database schema (`collection.anki2`), dark mode CSS, and zero-heap streaming binary compilers.
-- [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-34, all closed).
+- [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-35, all closed).
 - [`docs/CURRENT_IMPLEMENTATION.md`](CURRENT_IMPLEMENTATION.md) — Active baseline assessment, script inventory, and test registry.
 
 ### Layer C: Pedagogical Design & Learning Theory

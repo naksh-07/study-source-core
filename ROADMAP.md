@@ -1,22 +1,24 @@
-# StudySourceCore — Master Engineering Implementation Roadmap (Phases 0–10)
+# StudySourceCore — Master Engineering Implementation Roadmap (Phases 0–22)
 
 > **Canonical Document**: `ROADMAP.md`  
 > **Status**: AUTHORITATIVE / GOVERNED BASELINE  
-> **Version**: 1.0.0-ROADMAP  
-> **Target Release**: StudySourceCore v1.0.0 (Production Stable)  
+> **Version**: 1.2.0-beta.6-ROADMAP  
+> **Target Release**: StudySourceCore v1.2.0 (Production Stable)  
 > **Governance Authority**: StudySourceCore Master Governance Board  
 
 ---
 
 ## 1. Roadmap Architecture & Execution Model
 
-The StudySourceCore implementation roadmap is structured into eleven strictly sequenced phases (Phases 0 through 10). Each phase possesses unambiguous entry dependencies, concrete machine-verifiable deliverables, immutable invariants, and rigorous exit certification gates.
+The StudySourceCore implementation roadmap is structured into sequenced phases across two major eras:
+1. **Foundational Architecture (Phases 0 through 10)**: Core IR definitions, CLR cryptographic provenance, compiler pipelines, binary packaging, and host adapters.
+2. **Production Maturation, Forensic Remediation & Anti-Mock Hardening (Phases 11 through 22)**: STEM practice suites, canonical Question Bank primary delivery (`Questions.md`), anti-leak recalibration, autonomous multi-agent write enforcement, native Antigravity skills discovery, sequential test harness, anti-hardcoding purity, and 12-flaw adversarial certification hardening.
 
 No phase may be initiated until all of its prerequisite phases have passed their explicit exit criteria. Speculative refactoring, ahead-of-phase implementation, and circular dependencies are strictly forbidden.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                              11-PHASE IMPLEMENTATION LIFECYCLE                         │
+│                              MASTER IMPLEMENTATION LIFECYCLE                           │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │  [ PHASE 0: Product & Governance Freeze + Baseline ] ─────────────► COMPLETED          │
 │                           │                                                            │
@@ -51,7 +53,22 @@ No phase may be initiated until all of its prerequisite phases have passed their
 │  [ PHASE 10: Antigravity Host Adapter, Concurrency & Recovery ] ──► COMPLETED          │
 │                           │                                                            │
 │                           ▼                                                            │
-│              🏆 v1.0 PRODUCTION STABLE RELEASE CERTIFIED ◄── (CURRENT STATUS: ACTIVE)   │
+│  [ PHASES 11–14: Physics Delivery & Question Bank Primary Policy ]► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│  [ PHASE 15: Mathematics Delivery & Anti-Leak Recalibration ] ────► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│  [ PHASE 16: Reasoning Delivery (Syllogism 25 MCQs) ] ────────────► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│  [ PHASE 17: Multi-Agent Subagent Execution & Chemistry Delivery] ─► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│  [ PHASE 18: Antigravity Skills Discovery Bridge & Global Purge ] ─► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│       🏆 v1.2.0-beta.6 PRODUCTION BASELINE CERTIFIED ◄── (CURRENT STATUS: ACTIVE)      │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -267,6 +284,172 @@ No phase may be initiated until all of its prerequisite phases have passed their
 
 ---
 
+### Phase 11–14: Physics Production Delivery & Question Bank Primary Policy
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 5 - GAP-28, GAP-29, GAP-30)
+- **Objective**: Deliver complete production study suite for Physics calculational mechanics and establish canonical Markdown Question Banks (`Questions.md`) as the active primary practice deliverable.
+- **Dependencies**: Phase 10 Complete.
+- **Deliverables**:
+  - `Study Materials/Physics/Newton-Laws-Friction/`: Complete 8-deliverable suite (2,400+ word Note, 20 Basic, 20 Cloze, 28-node MindMap, 8-slide SlideDeck, 20-problem Question Bank, 23-card Declarative APKG, StudyLab Procedural APKG).
+  - GAP-30 Operational Policy: Designated canonical Markdown Question Banks (`Questions.md`) as the primary active practice deliverable; temporarily suspended automated procedural binary APKG packaging.
+  - Master Smoke Test & Anti-Tamper Integrity Harness (`scripts/run_master_smoke_test.js`, 18 zero-mock gates, `npm run smoke`).
+- **Invariants Enforced**:
+  - 6-Stage calculational physics pipeline (FBD, Coordinates, Law, Solve, SI, Sanity).
+  - All STEM practice questions delivered with complete 5-dimension pedagogical metadata and 3-tier hints.
+- **Exit Criteria**:
+  - 18/18 Master Smoke Test gates pass.
+  - 4/4 4-Gate Adversarial Certification passes for Physics.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 15: Mathematics Delivery & Anti-Leak Recalibration
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 6 - GAP-31)
+- **Objective**: Harden the mathematical authoring pipeline, eliminate false-positive hint leakage detections on problem input parameters, and deliver an authentic 26-MCQ Arithmetic Progression study package.
+- **Dependencies**: Phase 11–14 Complete.
+- **Deliverables**:
+  - `Study Materials/Math/Arithmetic-Progression/`: Complete verified suite featuring 26 distinct student-grade 4-option MCQs across 6 canonical AP families (CBSE/SSC/CDS).
+  - Recalibrated `hintLeaksAnswer` in `scripts/validate_studylab_question_bank.js` eliminating input parameter assignment false-positives ($a=2, d=-3$) while retaining robust answer-leak defense.
+  - Replaced hardcoded fallback strings in `scripts/author_math_studylab.js` with dynamic chapter-aware pattern generation.
+  - Added `[WARN: QUESTION_DENSITY_LOW]` threshold guard ($< 15$ questions) and fixed pattern resolution in `cross_artifact_checker.js`.
+- **Invariants Enforced**:
+  - `1 Pattern != 1 Question` invariant strictly upheld across all 26 practice items.
+  - Zero terminal answer leaks in hint tiers 1 and 2.
+- **Exit Criteria**:
+  - 4/4 Adversarial Certification PASS on Math/Arithmetic-Progression.
+  - 18/18 Smoke Test PASS, 47/47 Vitest PASS.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 16: Reasoning Delivery (Syllogism 25 MCQs)
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 7)
+- **Objective**: Implement 7-layer cognitive thinking flow for logical reasoning and author a 25-MCQ student-grade Syllogism chapter.
+- **Dependencies**: Phase 15 Complete.
+- **Deliverables**:
+  - `Study Materials/Reasoning/Syllogism/`: Complete 8-deliverable sibling package including 25 distinct 4-option MCQs (SSC/RRB/IBPS standards) with Euler/Venn step-by-step deduction DAGs.
+  - 2,600+ word Obsidian note, 20 Basic TSV, 20 Cloze TSV, 32-node MindMap, 8-slide presentation blueprint, 34-card Declarative APKG, Graph Index, and QA Report.
+- **Invariants Enforced**:
+  - 4-Tier constraint classification (Definite, Conditional, Negative, Possibility).
+  - Acyclicity in multi-statement syllogistic deduction graphs.
+- **Exit Criteria**:
+  - 4/4 Adversarial Certification PASS on Reasoning/Syllogism.
+  - 18/18 Smoke Test PASS, 47/47 Vitest PASS.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 17: Multi-Agent Subagent Execution & Chemistry Delivery
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 8 - GAP-32, GAP-33, GAP-34)
+- **Objective**: Programmatically enforce the Parent Self-Execution Ban via live subagent dispatch (`invoke_subagent`), equip subagents with write tools, and deliver a 25-MCQ Chemical Equilibrium chapter.
+- **Dependencies**: Phase 16 Complete.
+- **Deliverables**:
+  - Subagent Write Tool Enforcement: Updated `.agents/agents/*.md` with explicit write tool frontmatters (`tools: [view_file, write_to_file, replace_file_content, run_command, send_message]`).
+  - `studycore dispatch` CLI command providing deduplicated dispatch payloads.
+  - `Study Materials/Chemistry/Chemical-Equilibrium/`: Authored by 8 live subagents visible in the UI sidebar; includes 25 distinct 4-option MCQs across 5 pattern families (Kc ICE, Kp-Kc, Le Chatelier, Qc quotient, ionic pH/buffer), 40 Anki flashcards, 2,911-word Note, 38-node MindMap, 8-slide SlideDeck blueprint.
+  - LaTeX math block extraction filter in `scripts/cross_artifact_checker.js` eliminating false-positive variable state collisions.
+  - `SKIPPED` state transition support in `scripts/execution_state.js`.
+- **Invariants Enforced**:
+  - Parent Self-Execution Ban strictly enforced; all specialist files written directly by subagents.
+  - Chemical stoichiometry and equilibrium expressions verified for physical validity.
+- **Exit Criteria**:
+  - 4/4 Adversarial Certification PASS on Chemistry/Chemical-Equilibrium.
+  - 18/18 Smoke Test PASS, 47/47 Vitest PASS.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 18: Antigravity Skills Discovery Alignment & Global Purge
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 9 - GAP-35)
+- **Objective**: Connect the repository's internal `skills/` directory to Google Antigravity via native discovery configuration (`.agents/skills.json`), purge shadowing global mirrors, and harden vault root path resolution.
+- **Dependencies**: Phase 17 Complete.
+- **Deliverables**:
+  - `.agents/skills.json`: Native Antigravity discovery manifest referencing `$schema: "https://antigravity.google/schemas/skills-config.json"` and registering `"path": "skills"`.
+  - Purged duplicate global mirror (`~/.gemini/config/skills/study-source-core`) to prevent dual-source drift.
+  - `scripts/doctor.js`: Added Check 7 ("Antigravity Skill Discovery Config (.agents/skills.json)").
+  - `scripts/path_resolver.js`: Hardened `getVaultRoot` with `STUDYCORE_VAULT_ROOT` environment override and multi-marker upward traversal.
+- **Invariants Enforced**:
+  - Repository as Single Source of Truth (SSoT) for all skills and schemas.
+  - Out-of-the-box discovery on clean repository clones.
+- **Exit Criteria**:
+  - `npm run doctor` reports Check 7 PASS.
+  - 18/18 Master Smoke Test PASS, 47/47 Vitest PASS.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 19: Comprehensive Documentation Synchronization
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 10 - GAP-35)
+- **Objective**: Eliminate documentation drift across all architectural specifications, ADRs, indexes, and troubleshooting guides.
+- **Dependencies**: Phase 18 Complete.
+- **Deliverables**:
+  - Synchronized `ROADMAP.md`, `docs/GAP_REGISTER.md`, `DECISIONS.md`, `README.md`, `ARCHITECTURE.md`, `SCRIPTS.md`, `SKILLS.md`, `TROUBLESHOOTING.md`, `docs/CURRENT_IMPLEMENTATION.md`, and `docs/INDEX.md`.
+- **Exit Criteria**:
+  - Zero broken file references or stale roadmap status.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 20: Forensic Root-Cause Audit Remediation & Ghost Runner Fix
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 11 - GAP-36 & GAP-37)
+- **Objective**: Fix 11 critical forensic flaws, eliminate the "ghost runner" Vitest illusion, and establish a fail-closed sequential test harness.
+- **Dependencies**: Phase 19 Complete.
+- **Deliverables**:
+  - `scripts/run_all_tests.js`: Sequential test runner executing all 47 suites deterministically with zero worker-pool race conditions.
+  - Fixed Devanagari Unicode matra preservation (`\p{M}`) across Anki exporters and semantic deduplication.
+  - Standardized root `.gitattributes` to enforce LF line endings.
+  - Upgraded `studycore verify --all` to dynamically discover and audit all 6 production chapters.
+  - Added strict fail-closed assertions to `test_routing.js`.
+- **Exit Criteria**:
+  - 47/47 test suites PASS via `run_all_tests.js`.
+  - 6/6 chapters verified via `studycore verify --all`.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 21: Anti-Hardcoding & Zero-Mock Production Hardening
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 12 - GAP-38, ADR-21)
+- **Objective**: Purge all mock chapter fallbacks and test fixtures from production authoring engines; enforce dynamic vault link resolution.
+- **Dependencies**: Phase 20 Complete.
+- **Deliverables**:
+  - Fail-closed validation (`[MISSING_CHAPTER]`, `[MISSING_EVIDENCE_INPUT]`) across Math, Physics, Chemistry, and Reasoning author engines.
+  - Removed static `candidateVaultTargets` array from CLI in favor of dynamic filesystem scanning.
+  - Added Check 1.4 to `run_master_smoke_test.js` (19/19 gates) and Check 8 to `doctor.js`.
+- **Exit Criteria**:
+  - `npm run doctor` Check 8 PASS.
+  - 19/19 Master Smoke Test PASS, 47/47 test suites PASS.
+- **Readiness State**: `COMPLETED`
+
+---
+
+### Phase 22: 12-Flaw Forensic Remediation & Adversarial Certification Hardening
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 13 - GAP-39, ADR-22)
+- **Objective**: Remediate 12 forensic flaws across MCP validators, Devanagari hint leak detection, inventory parsing, Gate 2 Question Bank audit fallback, and stopword entity collision filtering.
+- **Dependencies**: Phase 21 Complete.
+- **Deliverables**:
+  - `latex_validator.js` & `mermaid_validator.js`: Exported `validateLatexContent` & `validateMermaidContent`; isolated escaped `\$` literal dollars.
+  - `hint_distractor_semantics.js`: Preserved Devanagari range `\u0900-\u097F` and added exact match & word boundary leak detection.
+  - `source_question_inventory.js`: Added `- Hints:` markdown list parsing and item hint preservation.
+  - `author_*_studylab.js`: Trimmed-line regex fix for Tier 1/2/3 hints and valid `{ id, title, patterns }` JSON serialization.
+  - `run_adversarial_certification.js`: Gate 2 fallback onto canonical `Questions/<Chapter>_Questions.md` when procedural APKG is absent/paused.
+  - `cross_artifact_checker.js`: Expanded `IGNORED_ENTITIES` with English/Hindi prepositions and isolated Kelvin matching (`kelvin|केल्विन`) to eliminate algebraic variable collisions (`2k`).
+  - `studycore_cli.js`: Added `QBank⚪(Legacy JSON only)` status indicator and fallback legacy validation in `studycore verify`.
+  - `yaml_validator.js`: Refined unquoted mid-word apostrophe handling.
+  - `doctor.js`: Added local `.venv` Python executable search.
+  - Version string synchronized to `v1.2.0-beta.6` across CLI, smoke runner, MCP server, and README.
+- **Invariants Enforced**:
+  - Procedural APKG compilation remains paused/off by default in production.
+  - Canonical Markdown Question Bank (`Questions.md`) is the active primary practice deliverable with strict 4-option MCQs.
+  - Gate 2 actively audits Question Banks when APKG is paused.
+- **Exit Criteria**:
+  - `npm run doctor` 8/8 PASS.
+  - `npm run smoke` 19/19 PASS.
+  - `studycore verify --all` 6/6 Chapters PASS.
+  - 4-Gate Adversarial Certification 6/6 Chapters 100% PASS (4/4 Gates).
+  - 47/47 Test Suites 100% GREEN PASS.
+- **Readiness State**: `COMPLETED`
+
+---
+
 ## 3. Scope Controls: What Must NOT Be Implemented in Phase 0
 
 To protect architectural focus, the following items are strictly out of scope for Phase 0:
@@ -298,3 +481,13 @@ To protect architectural focus, the following items are strictly out of scope fo
 | **Phase 8** | Binary Packaging Compilers (Dual APKG v1.0, SQLite Isolation) | Phases 5, 6, 7 | **COMPLETED / CERTIFIED** |
 | **Phase 9** | Independent Certification & Adversarial Verification Harness | Phase 8 | **COMPLETED / CERTIFIED** |
 | **Phase 10** | Antigravity Host Adapter, Concurrency & Checkpoint Recovery | Phase 9 | **COMPLETED / CERTIFIED** |
+| **Phase 11–14** | Physics Delivery & Question Bank Primary Policy (GAP-28..30) | Phase 10 | **COMPLETED / CERTIFIED** |
+| **Phase 15** | Mathematics Chapter Delivery & Parameter Leak Hardening (GAP-31) | Phase 11–14 | **COMPLETED / CERTIFIED** |
+| **Phase 16** | Reasoning Chapter Delivery (Syllogism 25-MCQ Suite) | Phase 15 | **COMPLETED / CERTIFIED** |
+| **Phase 17** | Multi-Agent Subagent Autonomous Write & Chemistry Delivery (GAP-32..34) | Phase 16 | **COMPLETED / CERTIFIED** |
+| **Phase 18** | Antigravity Skills Discovery Bridge & Global Purge (GAP-35) | Phase 17 | **COMPLETED / CERTIFIED** |
+| **Phase 19** | Comprehensive Documentation Synchronization | Phase 18 | **COMPLETED / CERTIFIED** |
+| **Phase 20** | Forensic Root-Cause Audit Remediation & Ghost Runner Fix (GAP-36..37) | Phase 19 | **COMPLETED / CERTIFIED** |
+| **Phase 21** | Anti-Hardcoding & Zero-Mock Production Hardening (GAP-38, ADR-21) | Phase 20 | **COMPLETED / CERTIFIED** |
+| **Phase 22** | 12-Flaw Forensic Remediation & Adversarial Certification Hardening (GAP-39, ADR-22) | Phase 21 | **COMPLETED / CERTIFIED** |
+

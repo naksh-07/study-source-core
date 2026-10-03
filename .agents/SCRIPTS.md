@@ -24,16 +24,16 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `author_math_studylab.js` | `SPECIALIST` | Node.js | Authors 17-dimension canonical procedural content from raw Math evidence, enforcing non-leaking hints and rendering/validating deliverables. | `math-apkg-author` (Wave 1) | `ACTIVE` |
 | `build_demo_apkg.js` | `UTILITY` | Node.js | Builds standalone demo APKG packages for pipeline smoke tests and visual checks. | CI Test Runner / Developer | `UTILITY` |
 | `cleanup_transients.js` | `UTILITY` | Node.js | Safely cleans up temporary build files while strictly preserving user deliverables. | `project_orchestrator` | `ACTIVE` |
-| `cross_artifact_checker.js` | `VALIDATION` | Node.js | Cross-checks factual consistency and structural alignment across Notes, Anki, Mindmap, Slides. | `bm-qa` | `ACTIVE` |
+| `cross_artifact_checker.js` | `VALIDATION` | Node.js | Cross-checks factual consistency and structural alignment across Notes, Anki, Mindmap, Slides, and Question Banks; shields against stopword entity collisions. | `bm-qa` | `ACTIVE` |
 | `export_anki.js` | `PACKAGING` | Node.js | Compiles Basic, Cloze, and Image Occlusion artifacts into a standard Anki `.apkg`. | `project_orchestrator` (Wave 2) | `ACTIVE` |
 | `export_studylab_procedural_anki.js` | `PACKAGING` | Node.js | Compiles StudyLab procedural problem patterns, solution DAGs, and 3-tier hints into interactive APKGs. | StudyLab Specialist Agents (Wave 1) | `FROZEN` |
-| `latex_validator.js` | `VALIDATION` | Node.js | Validates LaTeX math syntax, equation delimiters, environments, fractions, and symbols. | `math-apkg-author`, `physics-numerical-apkg-author`, `bm-qa` | `ACTIVE` |
+| `latex_validator.js` | `VALIDATION` | Node.js | Validates LaTeX math syntax, equation delimiters, environments, fractions, and symbols; exports `validateLatexContent` with escaped `\$` dollar isolation. | `math-apkg-author`, `physics-numerical-apkg-author`, `bm-qa`, `mcp_server` | `ACTIVE` |
 | `link_audit.js` | `AUDIT` | Node.js | Audits Obsidian wikilinks across Markdown notes and verifies absence of dead links. | `bm-graph` | `ACTIVE` |
 | `markdown_audit.js` | `AUDIT` | Node.js | Audits markdown formatting, header hierarchies, code blocks, and callouts. | `core-notes` | `ACTIVE` |
 | `mcq_blackbox_validator.js` | `VALIDATION` | Node.js | Performs black-box testing on MCQ options: asserts $\ge 4$ options and 1 valid key. | `adversarial-apkg-reviewer` | `ACTIVE` |
-| `mermaid_validator.js` | `VALIDATION` | Node.js | Validates Mermaid diagram and mindmap syntax, node connections, and formatting. | `core-mindmap` | `ACTIVE` |
+| `mermaid_validator.js` | `VALIDATION` | Node.js | Validates Mermaid diagram and mindmap syntax, node connections, and formatting; exports `validateMermaidContent`. | `core-mindmap`, `mcp_server` | `ACTIVE` |
 | `note_contract_audit.js` | `AUDIT` | Node.js | Verifies YAML frontmatter metadata, required structural sections, and note architecture. | `core-notes` | `ACTIVE` |
-| `path_resolver.js` | `UTILITY` | Node.js | Normalizes paths across Windows backslashes and POSIX forward slashes. | All scripts and agents | `ACTIVE` |
+| `path_resolver.js` | `UTILITY` | Node.js | Resolves canonical repository and vault paths across Windows and POSIX; traverses upward with multi-marker detection (`Study Materials`+`Sources`, `.agents`, `agents`, `.git`+`skills`) and prioritizes `STUDYCORE_VAULT_ROOT` override. | All scripts and agents | `ACTIVE` |
 | `pdf_inventory.py` | `UTILITY` | Python 3 | Extracts page counts, metadata, and structural outlines from source PDFs during intake. | `project_orchestrator` | `ACTIVE` |
 | `render_studylab_question_bank.js` | `RENDERER` | Node.js | Deterministically renders canonical StudyLab procedural questions into Obsidian Markdown. | Procedural Specialists (Wave 1) | `ACTIVE` |
 | `resolve_visual_asset.js` | `UTILITY` | Node.js | Resolves local visual image paths and computes asset cryptographic hashes. | `core-image-occlusion` | `ACTIVE` |
@@ -64,8 +64,11 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 
 | Script / Command | Category | Runner | Purpose & Invariants Asserted | Invoker | Status |
 |---|---|---|---|---|---|
-| `npm run doctor` | `MAINTENANCE & HEALTH` | npm / Node.js | Validates Node.js (>= 18), npm (>= 9), Git, dependency tree, workspace paths, permissions, and MCP readiness. | Developer / CI Runner | `ACTIVE` |
-| `scripts/test_mcp_server.js` | `VERIFICATION` | Node.js | Client verification test suite discovering and executing all 4 MCP server tools over stdio transport. | Developer / CI Runner | `ACTIVE` |
+| `npm run doctor` | `MAINTENANCE & HEALTH` | npm / Node.js | Validates Node.js (>= 18), npm (>= 9), Git, dependency tree, workspace paths, permissions, MCP readiness, Check 7 Antigravity discovery config (`.agents/skills.json`), and Check 8 production scripts anti-mock purity. | Developer / CI Runner | `ACTIVE` |
+| `scripts/run_all_tests.js` | `TEST_RUNNER` | Node.js | Sequential master test runner executing all 47 discovered test suites deterministically with fail-closed summary scorecard (`npm test`). | Developer / CI Runner | `ACTIVE` |
+| `scripts/run_master_smoke_test.js` | `VERIFICATION` | Node.js | 19-Gate zero-mock architectural integrity, anti-hardcoding, and anti-tamper smoke test harness (`npm run smoke`). | Developer / CI Runner | `ACTIVE` |
+| `scripts/run_adversarial_certification.js` | `CERTIFICATION` | Node.js | Standalone 4-Gate Adversarial Certification CLI (`npm run certify`) auditing completion evidence, ADV-01..15 attack matrix (with Gate 2 Question Bank fallback), binary packaging, and cross-artifact consistency. | `adversarial-apkg-reviewer` / CI | `ACTIVE` |
+| `scripts/test_mcp_server.js` | `VERIFICATION` | Node.js | Client verification test suite discovering and executing all MCP server tools over stdio transport (7/7 tests). | Developer / CI Runner | `ACTIVE` |
 | `scripts/test_adversarial_auditor.js` | `TRANSIENT_TEST` | Node.js | 15-Point adversarial attack suite testing tamper detection, schema corruptions, and anti-leak rules. | `adversarial-apkg-reviewer` / CI | `FROZEN` |
 | `scripts/test_contracts.js` | `TRANSIENT_TEST` | Node.js | Master contract suite covering 111 end-to-end invariant checks across all pipeline artifacts. | CI Test Runner | `FROZEN` |
 | `scripts/test_final_audit_harness.js` | `TRANSIENT_TEST` | Node.js | Final audit harness verifying complete pipeline deliverable integrity and quality gates. | `bm-qa` / CI Test Runner | `FROZEN` |

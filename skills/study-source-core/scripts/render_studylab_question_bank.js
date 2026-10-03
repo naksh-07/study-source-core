@@ -141,13 +141,13 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
     // 12-14. Hints (Tiers 1, 2, 3)
     let hints = { tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '' };
     if (q.hints && typeof q.hints === 'object') {
-        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.principle || q.hints.hint_principle || q.tier1_conceptual || '';
-        hints.tier2_strategic = q.hints.tier2_strategic || q.hints.tier2_strategic_method || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
-        hints.tier3_next_step = q.hints.tier3_next_step || q.hints.tier3_next_step_setup || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
-    } else if (q.tier1_conceptual && q.hint_tier_2 && q.hint_tier_3) {
-        hints.tier1_conceptual = q.tier1_conceptual;
-        hints.tier2_strategic = q.hint_tier_2;
-        hints.tier3_next_step = q.hint_tier_3;
+        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.hint_tier_1 || q.hints.principle || q.hints.hint_principle || q.tier1_conceptual || q.hint_tier_1 || '';
+        hints.tier2_strategic = q.hints.tier2_strategic || q.hints.tier2_strategic_method || q.hints.hint_tier_2 || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
+        hints.tier3_next_step = q.hints.tier3_next_step || q.hints.tier3_next_step_setup || q.hints.hint_tier_3 || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
+    } else if ((q.tier1_conceptual || q.hint_tier_1) && (q.tier2_strategic || q.hint_tier_2) && (q.tier3_next_step || q.hint_tier_3)) {
+        hints.tier1_conceptual = q.tier1_conceptual || q.hint_tier_1 || '';
+        hints.tier2_strategic = q.tier2_strategic || q.hint_tier_2 || '';
+        hints.tier3_next_step = q.tier3_next_step || q.hint_tier_3 || '';
     }
     hints.tier2_strategic_method = hints.tier2_strategic;
     hints.tier3_next_step_setup = hints.tier3_next_step;

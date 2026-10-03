@@ -1,9 +1,9 @@
 {
-  "certification_id": "cert-reasoning-syllogism-1790712765404",
+  "certification_id": "cert-reasoning-syllogism-1791033496199",
   "chapter": "Syllogism",
   "subject": "Reasoning",
   "chapter_dir": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism",
-  "certified_at": "2026-09-29T20:12:45.404Z",
+  "certified_at": "2026-10-03T13:18:16.199Z",
   "release_verdict": "PASS",
   "summary": {
     "total_gates": 4,
@@ -36,9 +36,9 @@
       "warnings": [],
       "checksRun": [
         {
-          "name": "ADV Procedural Deck",
-          "status": "SKIPPED",
-          "reason": "No procedural APKG for this chapter"
+          "name": "ADV Canonical Question Bank Verification (Questions.md)",
+          "status": "PASS",
+          "path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Questions\\Syllogism_Questions.md"
         }
       ]
     },

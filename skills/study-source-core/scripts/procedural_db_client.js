@@ -26,7 +26,6 @@ function getNativeDb() {
         try {
             const Database = require('better-sqlite3');
             betterDbInstance = new Database(DB_PATH, { readonly: true, timeout: 5000 });
-            betterDbInstance.pragma('journal_mode = WAL');
             betterDbInstance.pragma('busy_timeout = 5000');
             return betterDbInstance;
         } catch (e) {

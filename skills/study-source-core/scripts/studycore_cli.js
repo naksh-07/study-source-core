@@ -27,6 +27,7 @@ const { exportStudyLabProceduralAnki } = require('./export_studylab_procedural_a
 const { validateTsvContent } = require('./validate_tsv');
 const { validateApkgContent } = require('./validate_apkg');
 const { validateStudyLabLevels1to7 } = require('./validate_studylab_levels_1_7');
+const { validatePracticeQuestionsContent } = require('./validate_studylab_practice_questions');
 const { validateQuestionBankMarkdown } = require('./validate_studylab_question_bank');
 const { validateImageOcclusionContent } = require('./validate_image_occlusion');
 const { auditNoteContract } = require('./note_contract_audit');
@@ -97,8 +98,14 @@ function collectVaultStatus(vaultRoot) {
                 mindMap: Boolean(fs.existsSync(path.join(chapterDir, 'MindMap', `${norm}.mindmap.json`)) || fs.existsSync(path.join(chapterDir, 'MindMap', `${norm}_MindMap.json`))),
                 slideDeck: Boolean(fs.existsSync(path.join(chapterDir, 'SlideDeck', `${norm}_SlideDeckPrompt.md`)) || fs.existsSync(path.join(chapterDir, 'SlideDeck', `${norm}_SlideDeck.md`))),
                 questionBank: Boolean(
+                    fs.existsSync(path.join(chapterDir, 'Questions', `${norm}_Questions.md`)) ||
                     fs.existsSync(path.join(chapterDir, 'StudyLab', `${norm}_Questions.md`)) ||
-                    fs.existsSync(path.join(chapterDir, 'StudyLab', `${norm}_QuestionBank.md`)) ||
+                    fs.existsSync(path.join(chapterDir, 'StudyLab', `${norm}_QuestionBank.md`))
+                ),
+                questionBankLegacyOnly: Boolean(
+                    !fs.existsSync(path.join(chapterDir, 'Questions', `${norm}_Questions.md`)) &&
+                    !fs.existsSync(path.join(chapterDir, 'StudyLab', `${norm}_Questions.md`)) &&
+                    !fs.existsSync(path.join(chapterDir, 'StudyLab', `${norm}_QuestionBank.md`)) &&
                     fs.existsSync(path.join(chapterDir, 'Optional', `${norm}_PracticeQuestions.json`))
                 ),
                 declarativeApkg: fs.existsSync(path.join(chapterDir, `${norm}_Anki.apkg`)),
@@ -138,6 +145,7 @@ function cmdStatus(flags) {
 
     for (const ch of report.chapters) {
         const a = ch.artifacts;
+        const qbBadge = a.questionBank ? 'QBank✅' : (a.questionBankLegacyOnly ? 'QBank⚪(Legacy JSON only)' : 'QBank⚪');
         const badges = [
             a.notes ? 'Notes✅' : 'Notes⚪',
             a.basicTsv ? 'Basic✅' : 'Basic⚪',
@@ -145,7 +153,7 @@ function cmdStatus(flags) {
             a.imageOcclusion ? 'IO✅' : 'IO⚪',
             a.mindMap ? 'Map✅' : 'Map⚪',
             a.slideDeck ? 'Deck✅' : 'Deck⚪',
-            a.questionBank ? 'QBank✅' : 'QBank⚪',
+            qbBadge,
             a.declarativeApkg ? 'Anki.apkg✅' : 'Anki.apkg⚪',
             a.proceduralApkg ? 'StudyLab.apkg✅' : 'StudyLab.apkg⚪(Paused)'
         ].join(' | ');
@@ -244,17 +252,7 @@ async function cmdPackage(positional, flags) {
     return { status: 'SUCCESS', subject, chapter, studylab: Boolean(flags.studylab) };
 }
 
-async function cmdVerify(positional, flags) {
-    const subject = positional[0] || flags.subject;
-    const chapter = positional[1] || flags.chapter;
-
-    if (flags.all || (!subject && !chapter)) {
-        const harnessPath = path.join(__dirname, 'test_final_audit_harness.js');
-        const out = execFileSync(process.execPath, [harnessPath], { encoding: 'utf8' });
-        console.log(out);
-        return { status: 'SUCCESS', mode: 'ALL' };
-    }
-
+async function verifyChapterInternal(subject, chapter, flags = {}) {
     const vaultRoot = getVaultRoot();
     const chapterDir = path.join(vaultRoot, 'Study Materials', subject, chapter);
     if (!fs.existsSync(chapterDir)) {
@@ -302,10 +300,18 @@ async function cmdVerify(positional, flags) {
         {
             name: 'Question Bank',
             file: resolveFirstExisting([
+                path.join(chapterDir, 'Questions', `${norm}_Questions.md`),
                 path.join(chapterDir, 'StudyLab', `${norm}_Questions.md`),
-                path.join(chapterDir, 'StudyLab', `${norm}_QuestionBank.md`)
+                path.join(chapterDir, 'StudyLab', `${norm}_QuestionBank.md`),
+                path.join(chapterDir, 'Optional', `${norm}_PracticeQuestions.json`)
             ]),
-            run: (file) => validateQuestionBankMarkdown(fs.readFileSync(file, 'utf8'))
+            run: (file) => {
+                if (file.endsWith('.json')) {
+                    const content = JSON.parse(fs.readFileSync(file, 'utf8'));
+                    return validatePracticeQuestionsContent(content, file);
+                }
+                return validateQuestionBankMarkdown(fs.readFileSync(file, 'utf8'));
+            }
         },
         {
             name: 'Declarative APKG',
@@ -323,8 +329,11 @@ async function cmdVerify(positional, flags) {
     ];
 
     const results = [];
+    if (!flags.json) {
+        console.log(`\n🔍 Verifying ${subject}::${chapter}...`);
+    }
     for (const check of checks) {
-        if (!fs.existsSync(check.file)) continue;
+        if (!check.file || !fs.existsSync(check.file)) continue;
         try {
             const res = await check.run(check.file);
             const passed = res ? (res.isValid !== false && res.passed !== false) : true;
@@ -351,7 +360,7 @@ async function cmdVerify(positional, flags) {
     }
 
     const allPassed = results.every(r => r.passed);
-    if (allPassed) {
+    if (allPassed && results.length > 0) {
         const evidenceFile = path.join(chapterDir, '.completion-evidence.json');
         const artifactsList = results.map(r => {
             const stat = fs.statSync(r.file);
@@ -410,11 +419,82 @@ async function cmdVerify(positional, flags) {
         }
     }
 
-    const summary = { status: allPassed ? 'SUCCESS' : 'FAILED', subject, chapter, results };
+    return { status: allPassed ? 'SUCCESS' : 'FAILED', subject, chapter, results };
+}
+
+async function cmdVerify(positional, flags) {
+    const subject = positional[0] || flags.subject;
+    const chapter = positional[1] || flags.chapter;
+
+    if (flags.all || (!subject && !chapter)) {
+        const vaultRoot = getVaultRoot();
+        const smDir = path.join(vaultRoot, 'Study Materials');
+        const discovered = [];
+        if (fs.existsSync(smDir)) {
+            const subjs = fs.readdirSync(smDir).filter(s => fs.statSync(path.join(smDir, s)).isDirectory()).sort();
+            for (const s of subjs) {
+                const chs = fs.readdirSync(path.join(smDir, s)).filter(c => fs.statSync(path.join(smDir, s, c)).isDirectory()).sort();
+                for (const c of chs) {
+                    discovered.push({ subject: s, chapter: c });
+                }
+            }
+        }
+
+        if (discovered.length === 0) {
+            throw new Error(`No chapters found in ${smDir}`);
+        }
+
+        if (!flags.json) {
+            console.log('================================================================================');
+            console.log(`STUDYSOURCECORE — VERIFYING ALL CHAPTERS (${discovered.length} TOTAL)`);
+            console.log('================================================================================');
+        }
+
+        const chapterSummaries = [];
+        let allChaptersPassed = true;
+
+        for (const item of discovered) {
+            const summary = await verifyChapterInternal(item.subject, item.chapter, flags);
+            chapterSummaries.push(summary);
+            if (summary.status !== 'SUCCESS') {
+                allChaptersPassed = false;
+            }
+        }
+
+        if (!flags.json) {
+            console.log('\n================================================================================');
+            console.log('VERIFICATION SCORECARD');
+            console.log('================================================================================');
+            for (const s of chapterSummaries) {
+                const passedCount = s.results.filter(r => r.passed).length;
+                const totalCount = s.results.length;
+                const icon = s.status === 'SUCCESS' ? '✅' : '❌';
+                console.log(`${icon} ${s.subject.padEnd(12)} / ${s.chapter.padEnd(28)} [${passedCount}/${totalCount} checks passed]`);
+            }
+            console.log('================================================================================');
+            console.log(allChaptersPassed ? `🎉 ALL ${discovered.length} CHAPTERS PASSED VERIFICATION` : '❌ SOME CHAPTERS FAILED VERIFICATION');
+            console.log('================================================================================\n');
+        } else {
+            console.log(JSON.stringify({
+                status: allChaptersPassed ? 'SUCCESS' : 'FAILED',
+                mode: 'ALL',
+                totalChapters: discovered.length,
+                passedChapters: chapterSummaries.filter(s => s.status === 'SUCCESS').length,
+                chapters: chapterSummaries
+            }, null, 2));
+        }
+
+        if (!allChaptersPassed) {
+            process.exitCode = 1;
+        }
+        return { status: allChaptersPassed ? 'SUCCESS' : 'FAILED', mode: 'ALL', chapters: chapterSummaries };
+    }
+
+    const summary = await verifyChapterInternal(subject, chapter, flags);
     if (flags.json) {
         console.log(JSON.stringify(summary, null, 2));
     }
-    if (!allPassed) {
+    if (summary.status !== 'SUCCESS') {
         process.exitCode = 1;
     }
     return summary;
@@ -471,13 +551,7 @@ function cmdDispatch(positional, flags) {
         evidenceChars,
         evidencePack: evidencePath,
         customRoot: vaultRoot,
-        noteWordCount,
-        candidateVaultTargets: [
-            `${subject}/${chapter}`,
-            'Math/Arithmetic-Progression',
-            'Physics/Newton-Laws-Friction',
-            'Reasoning/Syllogism'
-        ]
+        noteWordCount
     });
 
     const hostAdapter = new AntigravityHostAdapter({
@@ -696,7 +770,7 @@ function cmdTelemetry(positional, flags) {
 
 function printHelp() {
     console.log(`
-StudySourceCore CLI (v1.2.0-beta.5)
+StudySourceCore CLI (v1.2.0-beta.6)
 
 Commands:
   studycore status [--json]

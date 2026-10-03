@@ -217,7 +217,7 @@ function normalizeFactText(str) {
     return String(str || '')
         .replace(/\{\{c\d+::(.*?)(?:::.*?)?\}\}/g, '$1')
         .replace(/<[^>]+>/g, ' ')
-        .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+        .replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ')
         .replace(/\s+/g, ' ')
         .trim()
         .toLowerCase();
@@ -606,7 +606,11 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     if (isNativeDb) {
         db.close();
         await assembleApkgStream(tempColPath, mediaFilesMap, outputPath);
-        try { if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath); } catch (_) {}
+        try {
+            if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath);
+            if (fs.existsSync(tempColPath + '-wal')) fs.unlinkSync(tempColPath + '-wal');
+            if (fs.existsSync(tempColPath + '-shm')) fs.unlinkSync(tempColPath + '-shm');
+        } catch (_) {}
         apkgBuffer = fs.readFileSync(outputPath);
     } else {
         const dbBinaryData = db.export();

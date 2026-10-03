@@ -78,10 +78,13 @@ function parseMathEvidence(evidenceInput) {
  * Normalizes raw source fixture data.
  */
 function normalizeRawSourceData(data) {
-    const chapter = data.chapter || 'LCM-HCF';
+    const chapter = data.chapter || null;
+    if (!chapter) {
+        throw new Error('MISSING_CHAPTER: Raw source data must contain a valid chapter name');
+    }
     const domain = data.domain || 'Mathematics';
     const subject = data.subject || 'Math';
-    const skill_id = data.skill_id || 'math.number_system.lcm_hcf';
+    const skill_id = data.skill_id || `math.${chapter.toLowerCase().replace(/[^a-z0-9_]/g, '_')}`;
 
     const patterns = Array.isArray(data.problem_patterns) ? data.problem_patterns : [];
     const rawProblems = (data.source_question_inventory && Array.isArray(data.source_question_inventory.questions))
@@ -124,10 +127,10 @@ function normalizeRawSourceData(data) {
  */
 function parseMarkdownEvidencePackText(text) {
     const lines = text.split(/\r?\n/);
-    let chapter = 'LCM-HCF';
+    let chapter = null;
     let subject = 'Math';
     let domain = 'Mathematics';
-    let skill_id = 'math.number_system.lcm_hcf';
+    let skill_id = null;
     let source_title = 'Math Source Evidence';
     let exam_corpus = ['Authentic PYQ'];
 
@@ -176,8 +179,10 @@ function parseMarkdownEvidencePackText(text) {
                 options: [],
                 source_solution_steps: [],
                 prerequisites: [],
+                hints: null,
                 _readingStatement: false,
-                _readingSteps: false
+                _readingSteps: false,
+                _readingHints: false
             };
             sourceProblems.push(currentItem);
         } else if (currentItem && currentSection === 'PATTERNS') {
@@ -200,53 +205,65 @@ function parseMarkdownEvidencePackText(text) {
         } else if (currentItem && currentSection === 'PROBLEMS') {
             if (line.startsWith('- Source Question ID:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.source_question_id = line.substring(21).trim();
                 currentItem.source_id = currentItem.source_question_id;
             } else if (line.startsWith('- Question Number:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.question_number = line.substring(18).trim();
             } else if (line.startsWith('- Exam:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.exam = line.substring(7).trim();
             } else if (line.startsWith('- Pattern Ref:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.pattern_ref = line.substring(14).trim();
             } else if (line.startsWith('- Type:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.raw_type = line.substring(7).trim().toLowerCase();
             } else if (line.startsWith('- Statement:')) {
-                currentItem._readingStatement = true;
                 currentItem.statement = line.substring(12).trim();
+                currentItem._readingStatement = true;
+                currentItem._readingHints = false;
             } else if (line.startsWith('- Options:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
             } else if (line.startsWith('- Correct Answer:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.correct_answer = line.substring(17).trim();
             } else if (line.startsWith('- Difficulty:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.difficulty = parseFloat(line.substring(13).trim()) || 2.0;
             } else if (line.startsWith('- Solution Steps:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem._readingSteps = true;
             } else if (line.startsWith('- Prerequisites:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.prerequisites = line.substring(16).split(',').map(s => s.trim()).filter(Boolean);
             } else if (line.startsWith('- Hints:')) {
                 currentItem._readingStatement = false;
                 currentItem._readingSteps = false;
                 currentItem._readingHints = true;
                 currentItem.hints = currentItem.hints || {};
-            } else if (currentItem._readingHints && line.startsWith('  - Tier 1:')) {
-                currentItem.hints.tier1_conceptual = line.substring(11).trim();
+            } else if (currentItem._readingHints && (line.startsWith('- Tier 1:') || line.startsWith('Tier 1:'))) {
+                currentItem.hints.tier1_conceptual = line.replace(/^(?:-\s*)?Tier\s*1:\s*/i, '').trim();
                 currentItem.hints.tier1_approach = currentItem.hints.tier1_conceptual;
-            } else if (currentItem._readingHints && line.startsWith('  - Tier 2:')) {
-                currentItem.hints.tier2_strategic = line.substring(11).trim();
+            } else if (currentItem._readingHints && (line.startsWith('- Tier 2:') || line.startsWith('Tier 2:'))) {
+                currentItem.hints.tier2_strategic = line.replace(/^(?:-\s*)?Tier\s*2:\s*/i, '').trim();
                 currentItem.hints.tier2_formula = currentItem.hints.tier2_strategic;
-            } else if (currentItem._readingHints && line.startsWith('  - Tier 3:')) {
-                currentItem.hints.tier3_next_step = line.substring(11).trim();
+            } else if (currentItem._readingHints && (line.startsWith('- Tier 3:') || line.startsWith('Tier 3:'))) {
+                currentItem.hints.tier3_next_step = line.replace(/^(?:-\s*)?Tier\s*3:\s*/i, '').trim();
                 currentItem.hints.tier3_setup = currentItem.hints.tier3_next_step;
             } else if (/^[\s-]*\([A-Za-z0-9]+\)\s*/.test(line)) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 const optText = line.replace(/^[\s-]*\([A-Za-z0-9]+\)\s*/, '').trim();
                 currentItem.options.push(optText);
             } else if (currentItem._readingSteps && /^\d+\.\s*/.test(line)) {
@@ -262,6 +279,13 @@ function parseMarkdownEvidencePackText(text) {
             else if (line.startsWith('- Source Title:')) source_title = line.substring(15).trim();
             else if (line.startsWith('- Exam Corpus:')) exam_corpus = line.substring(14).split(',').map(s => s.trim()).filter(Boolean);
         }
+    }
+
+    if (!chapter) {
+        throw new Error('MISSING_CHAPTER: Evidence pack text does not declare a chapter title');
+    }
+    if (!skill_id) {
+        skill_id = `math.${chapter.toLowerCase().replace(/[^a-z0-9_]/g, '_')}`;
     }
 
     return {
@@ -450,7 +474,7 @@ function authorMathProceduralContent(evidenceInput, options = {}) {
     const canonicalQuestionBank = {
         schema_version: '1.0.0',
         domain: parsed.domain || 'Mathematics',
-        chapter: parsed.chapter || 'Arithmetic-Progression',
+        chapter: parsed.chapter,
         skill_id: parsed.skill_id || `math.${(parsed.chapter || 'general').toLowerCase().replace(/[^a-z0-9_]/g, '_')}`,
         language: 'hi',
         provenance: {
@@ -480,8 +504,11 @@ async function executeMathSpecialistTask(task, context = {}) {
         throw new Error(`[OWNERSHIP_VIOLATION] Task '${task.task_id}' designated for '${task.owner_agent}', cannot be executed by math-apkg-author`);
     }
 
-    const subject = context.subject || 'Math';
-    const chapter = context.chapter || 'LCM-HCF';
+    const subject = context.subject || task.subject || 'Math';
+    const chapter = context.chapter || task.chapter || null;
+    if (!chapter) {
+        throw new Error(`[MISSING_CHAPTER] Math specialist task '${task.task_id}' requires explicit chapter context.`);
+    }
     const targetPath = task.target_path;
     const retryCount = context.retryCount || 0;
 
@@ -512,12 +539,6 @@ async function executeMathSpecialistTask(task, context = {}) {
         const scratchEvidence = path.resolve(__dirname, 'scratch/evidence-pack.md');
         if (fs.existsSync(scratchEvidence)) {
             evidenceInput = scratchEvidence;
-        }
-    }
-    if (!evidenceInput) {
-        const fixturePath = path.resolve(__dirname, '../resources/fixtures/math_lcm_hcf_source_fixture.json');
-        if (fs.existsSync(fixturePath)) {
-            evidenceInput = fixturePath;
         }
     }
 
@@ -626,11 +647,13 @@ async function executeMathSpecialistTask(task, context = {}) {
                 fs.mkdirSync(outDir, { recursive: true });
                 fs.writeFileSync(targetPath, JSON.stringify({
                     schema_version: '1.0.0',
+                    id: `sl.patterns.math.${chapter.toLowerCase()}`,
+                    title: `${chapter} Problem Patterns`,
                     domain: 'Math',
                     chapter,
                     skill_id: canonicalQB.skill_id,
                     language: 'hi',
-                    problem_patterns: canonicalQB.problem_patterns
+                    patterns: canonicalQB.patterns || []
                 }, null, 2), 'utf8');
                 outputsProduced.push(targetPath);
             }
@@ -660,10 +683,12 @@ async function executeMathSpecialistTask(task, context = {}) {
 
                 fs.writeFileSync(ppPath, JSON.stringify({
                     schema_version: '1.0.0',
+                    id: `sl.patterns.math.${chapter.toLowerCase()}`,
+                    title: `${chapter} Problem Patterns`,
                     domain: 'Math',
                     chapter,
                     skill_id: canonicalQB.skill_id,
-                    patterns: canonicalQB.patterns
+                    patterns: canonicalQB.patterns || []
                 }, null, 2), 'utf8');
 
                 const manifestPath = targetPath.replace(/\.apkg$/, '.manifest.json');

@@ -1,9 +1,9 @@
 {
-  "certification_id": "cert-physics-newton-laws-friction-1790701462052",
+  "certification_id": "cert-physics-newton-laws-friction-1791033491903",
   "chapter": "Newton-Laws-Friction",
   "subject": "Physics",
   "chapter_dir": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction",
-  "certified_at": "2026-09-29T17:04:22.052Z",
+  "certified_at": "2026-10-03T13:18:11.903Z",
   "release_verdict": "PASS",
   "summary": {
     "total_gates": 4,
@@ -22,8 +22,8 @@
       "stats": {
         "evidencePath": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\.completion-evidence.json",
         "overallVerdict": "SUCCESS",
-        "totalDeclared": 8,
-        "verifiedOnDisk": 8,
+        "totalDeclared": 10,
+        "verifiedOnDisk": 10,
         "skippedCount": 0,
         "mismatches": 0
       }

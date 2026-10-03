@@ -131,14 +131,15 @@ StudySourceCore enforces a strictly decoupled, unidirectional six-tier execution
 - **Certification Layers**:
   1. *Physical 4-Point Completion Gate*: Asserts file existence, non-zero byte size, single-writer ownership, and AJV schema validation.
   2. *Deep SQLite Binary Inspection*: Unpacks compiled `.apkg` files, parses `col` and `notes` tables, verifies model IDs, and checks that MCQ cards physically contain $\ge 4$ options.
-  3. *15-Point Adversarial Attack Harness (ADV-01 to ADV-15)*: Validates solution DAG acyclicity, detects hint answer leaks, tests distractor entropy, and verifies parameter domains.
-  4. *Cross-Artifact Semantic QA (`bm-qa`)*: Cross-checks formulas, numbers, and dates across sibling files to ensure zero drift.
+  3. *15-Point Adversarial Attack Harness (ADV-01 to ADV-15)*: Validates solution DAG acyclicity, detects hint answer leaks, tests distractor entropy, and verifies parameter domains. **Gate 2 Fallback**: When procedural APKG compilation is paused in production, Gate 2 actively audits canonical Markdown Question Banks (`Questions/<Chapter>_Questions.md`) via `validateQuestionBank` to guarantee practice deliverable integrity.
+  4. *Cross-Artifact Semantic QA (`bm-qa`)*: Cross-checks formulas, numbers, and dates across sibling files (Notes, Flashcards, MindMap, Slides, and Question Banks) to ensure zero drift. Equipped with an exhaustive English/Hindi Stopword Entity Shield (`IGNORED_ENTITIES`) and Kelvin isolation (`kelvin|केल्विन`) to eliminate false-positive variable collisions (`2k`).
   5. *Content Lineage Record (CLR) Audit [TARGET — Phase 2]*: Verifies that 100% of generated items trace back to verified source chunks.
 - **Veto Authority**: Any certification failure triggers an immediate build halt or isolated lane rejection; invalid artifacts are never released.
 
-### 2.7 The Antigravity Adapter [CURRENT]
+### 2.7 The Antigravity Adapter & Skills Discovery Bridge [CURRENT]
 - **Role**: Connects StudySourceCore's core architecture to Google Antigravity's multi-agent execution environment.
-- **Subagent Lifecycle**: Translates orchestrator task graph nodes into `invoke_subagent` calls, handles background task notifications, and collects 11-field handoff reports.
+- **Native Skills Discovery Bridge**: Antigravity discovers the repository's internal `skills/` folder natively via `.agents/skills.json` (`https://antigravity.google/schemas/skills-config.json`). This ensures clean out-of-the-box discovery on fresh clones while permanently eliminating dual-source drift caused by global shadowing (`~/.gemini/config/skills/study-source-core`).
+- **Subagent Lifecycle**: Translates orchestrator task graph nodes into `invoke_subagent` calls, handles background task notifications, and collects 11-field handoff reports. All subagents are equipped with direct file write tools (`tools: [view_file, write_to_file, replace_file_content, run_command, send_message]`) adhering to the Parent Self-Execution Ban.
 - **Hard Resource Caps**: Enforces local operational constraints:
   - **Maximum 4 concurrent worker subagents** (prevents rate limits and memory thrashing).
   - **Maximum 10 total mission launches** (bounds execution cost and prevents runaways).
@@ -156,7 +157,7 @@ Every system capability, data structure, and file deliverable has exactly one au
 | **Product Principles & Scope** | [`PRODUCT.md`](./PRODUCT.md) | Governance Board | Independent Audit |
 | **System Architecture** | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Systems Architect | Fresh-Agent Simulation |
 | **Pedagogical Principles** | [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md) | Pedagogy Architect | `bm-qa` |
-| **Architectural Decisions** | [`.agents/DECISIONS.md`](.agents/DECISIONS.md) | Systems Architect | ADR-01..17 Invariants |
+| **Architectural Decisions** | [`.agents/DECISIONS.md`](.agents/DECISIONS.md) | Systems Architect | ADR-01..22 Invariants |
 | **Artifact Registry** | `skills/study-source-core/resources/artifact-registry.json` | Orchestrator Engine | `test_artifact_registry.js` |
 | **Subject Policies** | `resources/subject-skill-manifest.json` & `docs/SUBJECT_POLICIES.md` | Subject Skills | `subject_policy_resolver.js` |
 | **Evidence Pack** | `resources/source-policy.md` | Parent Orchestrator | Lineage Audit (`artifact_provenance.js`) |
@@ -250,6 +251,12 @@ Under ADV-03 and ADV-04 certification rules, hints must preserve cognitive chall
 3. **Mechanical vs Cognitive Separation**:
    - **LLM Domain**: Conceptual synthesis, pedagogical notes, problem pattern recognition, 3-tier progressive hint authoring, solution DAG structuring, plausible distractor design.
    - **Script Domain**: Cryptographic SHA-256 provenance calculation, SQLite binary compilation, ZIP container packaging, regex/AJV AST linting, runtime timeout management, and physical disk verification. LLMs are never burdened with mental hashes or raw binary manipulation.
+
+### 4.7 Dynamic Context Resolution & Anti-Hardcoding Invariant
+To guarantee cross-subject neutrality and prevent silent data contamination:
+1. **Dynamic Context Resolution**: CLI tools (`studycore_cli.js`), orchestration drivers, and subagent dispatchers must dynamically resolve paths, chapter targets, and domain policies from runtime inputs (`argv`, manifest options, and filesystem discovery of `Study Materials/`). Static hardcoded chapter names or mock arrays are forbidden.
+2. **Fail-Closed on Missing Arguments**: Specialist authoring engines (`author_*_studylab.js`) must never fall back to default chapter names (e.g. `'Arithmetic-Progression'`, `'Work-Energy-Power'`) or test fixtures (`resources/fixtures/*.json`). Missing mandatory arguments trigger immediate fatal exceptions (`[MISSING_CHAPTER]`, `[MISSING_EVIDENCE_INPUT]`).
+3. **Fixture Segregation**: Test fixtures under `resources/fixtures/` belong strictly to automated test suites. Production execution paths must never import or default to test fixtures.
 
 ---
 

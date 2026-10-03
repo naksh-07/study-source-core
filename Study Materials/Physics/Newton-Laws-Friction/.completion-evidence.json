@@ -5,7 +5,7 @@
     "subject": "Physics",
     "completed_count": 10,
     "artifact_count": 10,
-    "verified_timestamp": "2026-09-29T23:32:34.112Z",
+    "verified_timestamp": "2026-10-03T13:42:03.753Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -46,7 +46,7 @@
     },
     {
       "task_id": "task-question-bank",
-      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\StudyLab\\Newton-Laws-Friction_Questions.md",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Questions\\Newton-Laws-Friction_Questions.md",
       "bytes": 7564,
       "sha256": "51a5d0a0fb047ed109aa03420451f115fed4751154721dbde9a79db04bd42760",
       "physical_status": "VERIFIED_ON_DISK"

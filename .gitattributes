@@ -1,0 +1,10 @@
+﻿# Ensure consistent LF line endings across all platforms (Windows, Linux, macOS)
+* text eol=lf
+
+*.md text eol=lf
+*.json text eol=lf
+*.tsv text eol=lf
+*.js text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.svg text eol=lf

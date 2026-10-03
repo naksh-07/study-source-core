@@ -737,9 +737,9 @@ async function executeTaskWorkflow(graph, taskExecutor, options = {}) {
             });
 
             // Start Specialist/Tool Telemetry Span
-            const taskLayer = task.wave === 'WAVE_2' 
+            const taskLayer = (task.wave === 2 || task.wave === 'WAVE_2') 
                 ? TELEMETRY_LAYERS.SCRIPT_TOOL 
-                : (task.wave === 'WAVE_3' ? TELEMETRY_LAYERS.VALIDATOR : TELEMETRY_LAYERS.SUBAGENT);
+                : ((task.wave === 3 || task.wave === 'WAVE_3') ? TELEMETRY_LAYERS.VALIDATOR : TELEMETRY_LAYERS.SUBAGENT);
 
             const taskSpan = telemetry.startSpan({
                 traceId: graph.mission_id || graph.missionRunId,

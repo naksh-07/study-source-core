@@ -5,7 +5,7 @@
     "subject": "Map",
     "completed_count": 7,
     "artifact_count": 7,
-    "verified_timestamp": "2026-09-29T23:32:34.495Z",
+    "verified_timestamp": "2026-10-03T13:42:03.930Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -19,22 +19,22 @@
     {
       "task_id": "task-basic-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Basic\\Europe_Basic.tsv",
-      "bytes": 13584,
-      "sha256": "d899d5c0bdaccca70047016aa71b83f3146d0a3ec49c424500b14ddc567fe27c",
+      "bytes": 13488,
+      "sha256": "7cdf24f1801b83e35e4521e03b5dc9856a9639fa44aca552ae7c44a5607a6d46",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
       "task_id": "task-cloze-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Cloze\\Europe_Cloze.tsv",
-      "bytes": 6434,
-      "sha256": "d913b97d0653a4c8333788b111c2db744badb64d9eba7e3a3b99cda6d2b30475",
+      "bytes": 6388,
+      "sha256": "c4d4b0047e1eaba7e34ffef65eca04b7fa00ab6df41c303a47946b7865e52825",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
       "task_id": "task-image-occlusion",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\ImageOcclusion\\Europe_ImageOcclusion.json",
-      "bytes": 6306,
-      "sha256": "4bfe1fdd48b85926da4e4c1741a0ee306e1767266dae90cc2ca2572ca01e8c39",
+      "bytes": 6100,
+      "sha256": "7dd5ad29ccb7ca0373f280c983154dbdeddefdabd492fa3f824e686c7822c594",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {

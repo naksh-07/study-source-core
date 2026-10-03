@@ -5,7 +5,7 @@
     "subject": "Chemistry",
     "completed_count": 9,
     "artifact_count": 9,
-    "verified_timestamp": "2026-09-29T23:32:09.862Z",
+    "verified_timestamp": "2026-10-03T13:15:38.499Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -46,7 +46,7 @@
     },
     {
       "task_id": "task-question-bank",
-      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\StudyLab\\Chemical-Equilibrium_Questions.md",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Chemistry\\Chemical-Equilibrium\\Questions\\Chemical-Equilibrium_Questions.md",
       "bytes": 22625,
       "sha256": "988973a760e7ef5e0fa7df72c0410ea52801551949d01d4d87a39243753315b9",
       "physical_status": "VERIFIED_ON_DISK"

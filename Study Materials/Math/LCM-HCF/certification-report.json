@@ -1,9 +1,9 @@
 {
-  "certification_id": "cert-math-lcm-hcf-1790672257781",
+  "certification_id": "cert-math-lcm-hcf-1791033499862",
   "chapter": "LCM-HCF",
   "subject": "Math",
   "chapter_dir": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF",
-  "certified_at": "2026-09-29T08:57:37.781Z",
+  "certified_at": "2026-10-03T13:18:19.862Z",
   "release_verdict": "PASS",
   "summary": {
     "total_gates": 4,
@@ -22,8 +22,8 @@
       "stats": {
         "evidencePath": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\.completion-evidence.json",
         "overallVerdict": "SUCCESS",
-        "totalDeclared": 3,
-        "verifiedOnDisk": 3,
+        "totalDeclared": 6,
+        "verifiedOnDisk": 6,
         "skippedCount": 0,
         "mismatches": 0
       }

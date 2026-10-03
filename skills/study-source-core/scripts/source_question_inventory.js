@@ -399,7 +399,8 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                 pattern_ref: currentItem.pattern_ref,
                 exam: currentItem.exam,
                 prerequisites: currentItem.prerequisites,
-                source_solution_steps: currentItem.source_solution_steps
+                source_solution_steps: currentItem.source_solution_steps,
+                hints: currentItem.hints || null
             });
             currentItem = null;
         }
@@ -436,12 +437,14 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                     options: [],
                     source_solution_steps: [],
                     prerequisites: [],
+                    hints: null,
                     raw_type: 'unknown',
                     difficulty: 2.0,
                     exam: null,
                     pattern_ref: null,
                     _readingStatement: false,
-                    _readingSteps: false
+                    _readingSteps: false,
+                    _readingHints: false
                 };
             } else if (naturalQMatch && !currentItem) {
                 const qNum = naturalQMatch[1] || naturalQMatch[2] || naturalQMatch[3];
@@ -453,62 +456,90 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                     options: [],
                     source_solution_steps: [],
                     prerequisites: [],
+                    hints: null,
                     raw_type: 'unknown',
                     difficulty: 2.0,
                     exam: null,
                     pattern_ref: null,
                     _readingStatement: true,
-                    _readingSteps: false
+                    _readingSteps: false,
+                    _readingHints: false
                 };
             } else if (currentItem) {
                 if (/^-\s*(?:Question\s*Number|Q\s*Num|Number):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.question_number = trimmed.replace(/^-\s*(?:Question\s*Number|Q\s*Num|Number):\s*/i, '').trim();
                 } else if (/^-\s*(?:Source\s*Question\s*ID|Source\s*ID|ID):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.source_id = trimmed.replace(/^-\s*(?:Source\s*Question\s*ID|Source\s*ID|ID):\s*/i, '').trim();
                 } else if (/^-\s*(?:Exam|Provenance|Source):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.exam = trimmed.replace(/^-\s*(?:Exam|Provenance|Source):\s*/i, '').trim();
                 } else if (/^-\s*(?:Pattern\s*Ref|Pattern|Family):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.pattern_ref = trimmed.replace(/^-\s*(?:Pattern\s*Ref|Pattern|Family):\s*/i, '').trim();
                 } else if (/^-\s*Type:\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.raw_type = trimmed.replace(/^-\s*Type:\s*/i, '').trim().toLowerCase();
                 } else if (/^-\s*Statement:\s*(.+)/i.test(trimmed)) {
                     currentItem.statement = trimmed.replace(/^-\s*Statement:\s*/i, '').trim();
                     currentItem._readingStatement = true;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                 } else if (/^-\s*(?:Correct\s*Answer|Answer|Ans|उत्तर):\s*(.+)/i.test(trimmed) || /^(?:Answer|Ans|उत्तर):\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     const ansText = trimmed.replace(/^(?:-\s*)?(?:Correct\s*Answer|Answer|Ans|उत्तर):\s*/i, '').trim();
                     currentItem.correct_answer = ansText;
                 } else if (/^-\s*Difficulty:\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.difficulty = parseFloat(trimmed.replace(/^-\s*Difficulty:\s*/i, '').trim()) || 2.0;
                 } else if (/^-\s*Prerequisites:\s*(.+)/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     currentItem.prerequisites = trimmed.replace(/^-\s*Prerequisites:\s*/i, '').split(',').map(s => s.trim()).filter(Boolean);
                 } else if (/^-\s*(?:Solution\s*Steps|Solution|हल):\s*/i.test(trimmed) || /^(?:Solution|हल):\s*/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = true;
+                    currentItem._readingHints = false;
                     const rem = trimmed.replace(/^(?:-\s*)?(?:Solution\s*Steps|Solution|हल):\s*/i, '').trim();
                     if (rem) currentItem.source_solution_steps.push(rem);
+                } else if (/^-\s*Hints:\s*/i.test(trimmed)) {
+                    currentItem._readingStatement = false;
+                    currentItem._readingSteps = false;
+                    currentItem._readingHints = true;
+                    currentItem.hints = currentItem.hints || {};
+                } else if (currentItem._readingHints && /^-\s*Tier\s*1:\s*(.+)/i.test(trimmed)) {
+                    currentItem.hints.tier1_conceptual = trimmed.replace(/^-\s*Tier\s*1:\s*/i, '').trim();
+                    currentItem.hints.tier1_approach = currentItem.hints.tier1_conceptual;
+                } else if (currentItem._readingHints && /^-\s*Tier\s*2:\s*(.+)/i.test(trimmed)) {
+                    currentItem.hints.tier2_strategic = trimmed.replace(/^-\s*Tier\s*2:\s*/i, '').trim();
+                    currentItem.hints.tier2_formula = currentItem.hints.tier2_strategic;
+                } else if (currentItem._readingHints && /^-\s*Tier\s*3:\s*(.+)/i.test(trimmed)) {
+                    currentItem.hints.tier3_next_step = trimmed.replace(/^-\s*Tier\s*3:\s*/i, '').trim();
+                    currentItem.hints.tier3_setup = currentItem.hints.tier3_next_step;
                 } else if (/^-\s*Options:\s*/i.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                 } else if (/^(?:-\s*)?(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+[\.\)])\s+(.+)/.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
+                    currentItem._readingHints = false;
                     const optText = trimmed.replace(/^(?:-\s*)?(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+[\.\)])\s+/, '').trim();
                     currentItem.options.push(optText);
                     if (currentItem.options.length >= 2) {

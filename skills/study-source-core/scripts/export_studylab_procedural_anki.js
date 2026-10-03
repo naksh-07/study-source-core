@@ -303,12 +303,53 @@ function enrichContractMetadata(contractObj, item, linkedPattern, rootData) {
 }
 
 /**
+ * Canonical contract aliases for domain fixtures and authentic PYQ patterns.
+ */
+const CANONICAL_CONTRACT_ALIASES = {
+    // Physics
+    'inclined-plane-friction': 'schema.physics.friction_dynamics.v1',
+    'work-energy-variable-force': 'schema.physics.work_energy_power.v1',
+    'dynamics & friction': 'schema.physics.friction_dynamics.v1',
+    'work-energy': 'schema.physics.work_energy_power.v1',
+    'pat-phys-fric-001': 'schema.physics.friction_dynamics.v1',
+    'pat-phys-work-002': 'schema.physics.work_energy_power.v1',
+
+    // Chemistry
+    'kp-kc-thermodynamics': 'schema.chemistry.equilibrium_law_kc_kp.v1',
+    'sn1-vs-sn2-nucleophilic-substitution': 'schema.chemistry.haloalkanes_sn1_sn2.v1',
+    'pat-chem-sn-002': 'schema.chemistry.aromatic_electrophilic_substitution.v1',
+    'pat-chem-equil-001': 'schema.chemistry.equilibrium_law_kc_kp.v1',
+    'chemical equilibrium': 'schema.chemistry.equilibrium_law_kc_kp.v1',
+    'chemical-equilibrium': 'schema.chemistry.equilibrium_law_kc_kp.v1',
+    'physical chemistry equilibrium': 'schema.chemistry.equilibrium_law_kc_kp.v1',
+    'organic chemistry mechanisms': 'schema.chemistry.aromatic_electrophilic_substitution.v1',
+    'reaction mechanisms': 'schema.chemistry.aromatic_electrophilic_substitution.v1',
+
+    // Reasoning
+    'syllogism-either-or-possibility': 'schema.reasoning.syllogism_standard.v1',
+    'linear-seating-definite-anchor': 'schema.reasoning.linear_seating_single.v1',
+    'pat-reas-seat-002': 'schema.reasoning.linear_seating_single.v1',
+    'pat-reas-syl-001': 'schema.reasoning.syllogism_standard.v1',
+    'pat-reas-syll-001': 'schema.reasoning.syllogism_standard.v1',
+    'syllogism': 'schema.reasoning.syllogism_standard.v1',
+    'logical deductions syllogism': 'schema.reasoning.syllogism_standard.v1',
+    'puzzles linear seating': 'schema.reasoning.linear_seating_single.v1',
+    'seating arrangement': 'schema.reasoning.linear_seating_single.v1',
+
+    // Math
+    'pat-single-shared': 'schema.math.number_system.lcm_hcf.v1',
+    'valid-schema': 'schema.math.number_system.lcm_hcf.v1'
+};
+
+/**
  * Resolves the canonical DeclarativeFamilyContract for a question or pattern item.
  * 
  * Resolution Precedence:
  * 1. Direct explicit inline_contract / contract_payload on item or linkedPattern.
  * 2. Canonical Contracts Registry lookup (by exact family_id, schema_id, skill_id, or normalized ID).
- * 3. Pattern / question synthesis if parameters and answer derivations are provided.
+ * 3. Canonical alias lookup.
+ * 4. Fuzzy keywords lookup across domain taxonomy.
+ * 5. Prompt heuristic fallback for solvable practice questions.
  * 
  * If portable mode is active and no contract can be formed, throws an error early.
  */
@@ -345,6 +386,12 @@ function resolveDeclarativeContract(item, linkedPattern, rootData, options = {})
             enrichContractMetadata(resolved, item, linkedPattern, rootData);
             return resolved;
         }
+        const aliasKey = CANONICAL_CONTRACT_ALIASES[k.toLowerCase()] || CANONICAL_CONTRACT_ALIASES[k];
+        if (aliasKey && registry[aliasKey]) {
+            const resolved = JSON.parse(JSON.stringify(registry[aliasKey]));
+            enrichContractMetadata(resolved, item, linkedPattern, rootData);
+            return resolved;
+        }
     }
 
     // Normalized permutations (Longest matching key first)
@@ -362,7 +409,7 @@ function resolveDeclarativeContract(item, linkedPattern, rootData, options = {})
         }
     }
 
-    // Fuzzy keywords lookup
+    // Fuzzy keywords lookup with cross-domain support
     for (const k of candidateKeys) {
         const normalized = k.toLowerCase().replace(/_/g, '.').replace(/-/g, '.');
         for (const regKey of sortedRegistryKeys) {
@@ -375,16 +422,21 @@ function resolveDeclarativeContract(item, linkedPattern, rootData, options = {})
                 (normalized.includes('multipl') && regNorm.includes('multipl')) ||
                 (normalized.includes('sync') && regNorm.includes('sync')) ||
                 (normalized.includes('lcm') && regNorm.includes('lcm')) ||
-                (normalized.includes('syllogism') && regNorm.includes('syllogism')) ||
+                ((normalized.includes('friction') || normalized.includes('inclined')) && regNorm.includes('friction_dynamics')) ||
+                ((normalized.includes('work') || normalized.includes('energy')) && regNorm.includes('work_energy_power')) ||
                 (normalized.includes('kinematic') && regNorm.includes('kinematic')) ||
                 (normalized.includes('stopping') && regNorm.includes('stopping')) ||
-                (normalized.includes('equilibrium') && regNorm.includes('equilibrium'))) {
+                (normalized.includes('equilibrium') && regNorm.includes('chemical_equilibrium_kc_kp')) ||
+                ((normalized.includes('sn1') || normalized.includes('sn2') || normalized.includes('substitution')) && regNorm.includes('haloalkanes_sn1_sn2')) ||
+                (normalized.includes('syllogism') && regNorm.includes('syllogism_standard')) ||
+                ((normalized.includes('seating') || normalized.includes('linear')) && regNorm.includes('linear_seating_single'))) {
                 const resolved = JSON.parse(JSON.stringify(registry[regKey]));
                 enrichContractMetadata(resolved, item, linkedPattern, rootData);
                 return resolved;
             }
         }
     }
+
 
     // 3. Fail-Closed Invariant: Prohibit silent fabrication of synthetic contracts with arbitrary bounds
     const explicitArchetypes = item.archetypes || (linkedPattern ? linkedPattern.archetypes : null);
@@ -458,7 +510,7 @@ function resolveDeclarativeContract(item, linkedPattern, rootData, options = {})
  */
 function createAnchorPayload(pattern, rootData, options = {}) {
     const resolvedContract = resolveDeclarativeContract(pattern, null, rootData, options);
-    const schemaId = resolvedContract ? resolvedContract.contract.default_schema : (pattern.schema_id || pattern.id);
+    const schemaId = pattern.schema_id || (resolvedContract ? resolvedContract.contract.default_schema : pattern.id);
     const difficultyVal = typeof pattern.difficulty === 'number' ? Math.max(1.0, Math.min(5.0, pattern.difficulty)) : (pattern.difficulty_override || 2.5);
     
     return {
@@ -1334,7 +1386,11 @@ async function exportStudyLabProceduralAnki(targetInput, options = {}) {
     if (isNativeDb) {
         db.close();
         await assembleApkgStream(tempColPath, new Map(), outputPath);
-        try { if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath); } catch (_) {}
+        try {
+            if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath);
+            if (fs.existsSync(tempColPath + '-wal')) fs.unlinkSync(tempColPath + '-wal');
+            if (fs.existsSync(tempColPath + '-shm')) fs.unlinkSync(tempColPath + '-shm');
+        } catch (_) {}
         apkgBuffer = fs.readFileSync(outputPath);
     } else {
         const dbBinaryData = db.export();

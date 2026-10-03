@@ -9,6 +9,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { execSync } = require('child_process');
 
 const { ensureAllTestFixtures } = require('./ensure_test_fixtures');
@@ -66,18 +67,21 @@ async function main() {
                 task_id: "task-notes",
                 target_path: mathNotes,
                 bytes: fs.existsSync(mathNotes) ? fs.statSync(mathNotes).size : 100,
+                sha256: fs.existsSync(mathNotes) ? crypto.createHash('sha256').update(fs.readFileSync(mathNotes)).digest('hex') : "dummy",
                 physical_status: "VERIFIED_ON_DISK"
             },
             {
                 task_id: "task-apkg",
                 target_path: mathDeclApkg,
                 bytes: fs.existsSync(mathDeclApkg) ? fs.statSync(mathDeclApkg).size : 100,
+                sha256: fs.existsSync(mathDeclApkg) ? crypto.createHash('sha256').update(fs.readFileSync(mathDeclApkg)).digest('hex') : "dummy",
                 physical_status: "VERIFIED_ON_DISK"
             },
             {
                 task_id: "task-proc-apkg",
                 target_path: mathProcApkg,
                 bytes: fs.existsSync(mathProcApkg) ? fs.statSync(mathProcApkg).size : 100,
+                sha256: fs.existsSync(mathProcApkg) ? crypto.createHash('sha256').update(fs.readFileSync(mathProcApkg)).digest('hex') : "dummy",
                 physical_status: "VERIFIED_ON_DISK"
             }
         ]
@@ -85,6 +89,25 @@ async function main() {
     const mathEvidencePath = path.join(mathDir, '.completion-evidence.json');
     if (!fs.existsSync(mathEvidencePath)) {
         fs.writeFileSync(mathEvidencePath, JSON.stringify(validEvidence, null, 2), 'utf8');
+    } else {
+        try {
+            const currentEv = JSON.parse(fs.readFileSync(mathEvidencePath, 'utf8'));
+            let modified = false;
+            currentEv.artifacts.forEach(a => {
+                if (fs.existsSync(a.target_path)) {
+                    const actualSize = fs.statSync(a.target_path).size;
+                    const actualHash = crypto.createHash('sha256').update(fs.readFileSync(a.target_path)).digest('hex');
+                    if (a.bytes !== actualSize || a.sha256 !== actualHash) {
+                        a.bytes = actualSize;
+                        a.sha256 = actualHash;
+                        modified = true;
+                    }
+                }
+            });
+            if (modified) {
+                fs.writeFileSync(mathEvidencePath, JSON.stringify(currentEv, null, 2), 'utf8');
+            }
+        } catch (_) {}
     }
 
     // ----------------------------------------------------

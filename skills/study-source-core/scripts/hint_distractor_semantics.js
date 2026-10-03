@@ -80,7 +80,7 @@ function cleanText(str) {
         .replace(/\$+/g, ' ')
         .replace(/\\(frac|sqrt|text|mathrm|mathbf)\{([^}]+)\}/g, ' $2 ')
         .replace(/[\\^_{}()]/g, ' ')
-        .replace(/[^\w\s.-]/g, ' ')
+        .replace(/[^\w\s\u0900-\u097F.-]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
 }
@@ -221,10 +221,11 @@ function detectHintLeak(hintText, terminalAnswer, options = [], correctOption = 
     for (const target of candidateAnswers) {
         const cleanTarget = cleanText(target).toLowerCase();
         if (cleanTarget.length >= 2) {
-            // Check word boundary match to avoid false positive on sub-tokens
+            // Check word boundary match or spaced boundary match to support Unicode/Devanagari scripts
             const escaped = cleanTarget.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const wordRegex = new RegExp(`\\b${escaped}\\b`, 'i');
-            if (wordRegex.test(cleanHint) || cleanHint.includes(` ${cleanTarget} `) || cleanHint.startsWith(`${cleanTarget} `) || cleanHint.endsWith(` ${cleanTarget}`)) {
+            const paddedHint = ` ${cleanHint} `;
+            if (cleanHint === cleanTarget || paddedHint.includes(` ${cleanTarget} `) || wordRegex.test(cleanHint)) {
                 return {
                     hasLeak: true,
                     leakType: 'EXACT_MATCH_LEAK',

@@ -35,13 +35,13 @@ try {
  * Finds the workspace / vault root directory regardless of current working directory (CWD).
  * Traverses upwards looking for marker directories like '.agents' or 'Study Materials'.
  */
-function getVaultRoot(startDir = __dirname) {
+function getVaultRoot(startDir = (process.env.STUDYCORE_VAULT_ROOT || process.cwd())) {
     let current = path.resolve(startDir);
     while (true) {
-        if (fs.existsSync(path.join(current, '.agents')) || 
+        if ((fs.existsSync(path.join(current, 'Study Materials')) && fs.existsSync(path.join(current, 'Sources'))) ||
+            fs.existsSync(path.join(current, '.agents')) || 
             fs.existsSync(path.join(current, 'agents')) ||
-            (fs.existsSync(path.join(current, '.git')) && fs.existsSync(path.join(current, 'skills'))) ||
-            (fs.existsSync(path.join(current, 'Study Materials')) && fs.existsSync(path.join(current, 'Sources')))) {
+            (fs.existsSync(path.join(current, '.git')) && fs.existsSync(path.join(current, 'skills')))) {
             return current;
         }
         const parent = path.dirname(current);

@@ -54,6 +54,12 @@ Every identified gap is tracked with:
 | **GAP-32** | Multi-Agent / Governance | **P0 Blocker** | Subagent Write Tool Execution & Parent Self-Execution Ban Enforcement | Phase 17 | **Resolved** (`v1.2.0-beta.5`) |
 | **GAP-33** | Validation / Cross-Artifact | **P1 Critical** | LaTeX Math Block Extraction & State Variable False-Positive Divergence Filter | Phase 17 | **Resolved** (`v1.2.0-beta.5`) |
 | **GAP-34** | Orchestration / State Machine | **P1 Critical** | Suppressed Subagent State Machine Transition (`RUNNING -> SKIPPED`) & Track Key Routing | Phase 17 | **Resolved** (`v1.2.0-beta.5`) |
+| **GAP-35** | Tooling / Skills Discovery | **P1 Critical** | Antigravity Workspace Skills Discovery Configuration & Global Duplicate Purge | Phase 18 | **Resolved** (`v1.2.0-beta.6`) |
+| **GAP-36** | Testing / Test Runner | **P0 Blocker** | "Ghost Runner" Vitest Illusion Remediation & Standalone Sequential Test Harness | Forensic Audit | **Resolved** (`v1.2.0-beta.6`) |
+| **GAP-37** | Multi-System / Integrity | **P0 Blocker** | Multi-Subsystem Forensic Remediation (Unicode, Contracts, CRLF, CLI, DB, Dedup) | Forensic Audit | **Resolved** (`v1.2.0-beta.6`) |
+| **GAP-38** | Governance / Anti-Mock | **P1 Critical** | Anti-Hardcoding Invariant & Elimination of Mock Chapter Fallbacks | Phase 21 | **Resolved** (`v1.2.0-beta.6`) |
+| **GAP-39** | Multi-System / Hardening | **P1 Critical** | 12-Flaw Forensic Root-Cause Remediation, Gate 2 Fallback & Stopword Entity Shield | Phase 22 | **Resolved** (`v1.2.0-beta.6`) |
+
 
 ---
 
@@ -558,6 +564,106 @@ Every identified gap is tracked with:
   3. Updated `studycore_cli.js verify` to automatically generate canonical `.completion-evidence.json` with byte sizes and SHA-256 hashes upon 100% verification of chapter deliverables.
 - **Verification Method**: `node skills/study-source-core/scripts/test_chemistry_production_path.js` (40/40 PASS), `run_adversarial_certification.js --chapter Chemical-Equilibrium --subject Chemistry` (Gate 1 PASS, 4/4 PASS), `npm test` (47/47 PASS).
 
+### GAP-35: Antigravity Workspace Skills Discovery Configuration & Global Duplicate Purge
+- **Category**: Tooling / Configuration / Skills Discovery
+- **Severity**: **P1 Critical**
+- **Evidence**:
+  1. The Antigravity host runtime discovers workspace-level skills by reading `.agents/skills.json` at the workspace root. Clean repository clones lacked `.agents/skills.json`, preventing Antigravity from automatically discovering `skills/study-source-core`.
+  2. Developers previously created a copy of the skill in global configuration (`~/.gemini/config/skills/study-source-core`), introducing dual-source drift where edits in the repository's `skills/study-source-core` were shadowed or desynchronized by the stale global copy.
+  3. `doctor.js` lacked checks for workspace skill discovery configuration and could not alert developers to missing `.agents/skills.json`.
+  4. `path_resolver.js` had brittle vault root resolution heuristics if invoked from deeply nested subfolders without environment overrides.
+- **Resolution Details**:
+  1. Created `.agents/skills.json` adhering to `https://antigravity.google/schemas/skills-config.json` with an entry pointing to `"path": "skills"`, establishing the native Antigravity bridge.
+  2. Purged the rogue duplicate copy from `~/.gemini/config/skills/study-source-core`, asserting the repository as the Single Source of Truth (SSoT).
+  3. Added Check 7 ("Antigravity Skill Discovery Config (.agents/skills.json)") to `doctor.js` to assert file presence, valid JSON structure, and `"skills"` registration path.
+  4. Hardened `getVaultRoot` in `skills/study-source-core/scripts/path_resolver.js` to prioritize `STUDYCORE_VAULT_ROOT` environment override and multi-marker traversal (`Study Materials` + `Sources`, `.agents`, `agents`, `.git` + `skills`).
+- **Verification Method**: `node skills/study-source-core/scripts/doctor.js` (Check 7 PASS), `npm run smoke` (18/18 PASS), `npm test` (47/47 PASS).
+
+### GAP-36: "Ghost Runner" Vitest Illusion Remediation & Standalone Sequential Test Harness
+- **Category**: Testing / Test Runner & CI Gate
+- **Severity**: **P0 Blocker**
+- **Evidence**:
+  1. `skills/study-source-core/package.json` had `"test": "vitest run"` and `vitest.config.js` configured `passWithNoTests: true`.
+  2. None of the 48 test scripts in `scripts/test_*.js` used Vitest's native `test()`, `describe()`, or `expect()` syntax; all were standalone CommonJS scripts running top-level async functions.
+  3. Running `npm test` imported files, detected 0 tests, and exited with code 0 in ~3.8s even when underlying scripts failed or threw unhandled errors.
+- **Resolution Details**:
+  1. Created standalone master test runner `skills/study-source-core/scripts/run_all_tests.js` that dynamically discovers all 47 test suites, spawns each sequentially in isolated child processes, streams real-time stdout/stderr, and returns true non-zero exit codes upon any failure.
+  2. Updated `package.json` to route `"test"` to `node scripts/run_all_tests.js` and preserved `"test:vitest"` as `vitest run`.
+- **Verification Method**: `node skills/study-source-core/scripts/run_all_tests.js` (47/47 suites discovered and executed).
+
+### GAP-37: Multi-Subsystem Forensic Remediation (Unicode, Contracts, CRLF, CLI, DB, Dedup)
+- **Category**: Multi-System / Integrity Hardening
+- **Severity**: **P0 Blocker**
+- **Evidence**:
+  1. **Unicode Matra Stripping**: Regex `/[^\p{L}\p{N}\s]/gu` in `export_anki.js`, `semantic_deduplication.js`, and `ku_reservation_engine.js` stripped Devanagari vowel signs/matras (`\p{M}`), viramas, and anusvaras, destroying Hindi text and causing false-positive card deduplication failures.
+  2. **Procedural Contract Resolution Blindspots**: GAP-21 fail-closed invariant failed for Physics, Chemistry, and Reasoning keys (`friction`, `sn1`, `substitution`, `seating`) due to missing canonical keyword mappings in `export_studylab_procedural_anki.js`.
+  3. **CRLF Line Endings & Byte Size Mismatch**: Lack of `.gitattributes` caused Windows CRLF checkouts, breaking cryptographic byte size verification in `.completion-evidence.json`.
+  4. **CLI `--all` Deception**: `studycore verify --all` ran mock scratch tests rather than auditing real production chapters.
+  5. **Unasserted Dummy Tests**: `test_routing.js` caught exceptions and printed logs without executing strict fail-closed assertions.
+  6. **Orphaned Duplicate Files**: Redundant `StudyLab/*_Questions.md` files existed alongside canonical `Questions/*_Questions.md`.
+  7. **Readonly WAL Pragma**: `procedural_db_client.js` executed `journal_mode = WAL` on a readonly SQLite connection.
+  8. **APKG Temp Companion Cleanup**: Temp APKG exporters only unlinked the main DB file, leaving `-wal` and `-shm` orphaned.
+  9. **Hint Property Naming Drift**: `render_studylab_question_bank.js` lacked fallback for `q.hint_tier_1` / `q.hints.hint_tier_1`.
+- **Resolution Details**:
+  1. Added `\p{M}` to Unicode regexes across `export_anki.js`, `semantic_deduplication.js`, and `ku_reservation_engine.js`.
+  2. Added deterministic domain aliases and prompt keyword heuristics to `export_studylab_procedural_anki.js`.
+  3. Added root `.gitattributes` with `* text eol=lf` and synchronized dynamic byte sizes in `test_adversarial_certification_cli.js`.
+  4. Refactored `cmdVerify` in `studycore_cli.js` to dynamically discover and audit all 6 real vault chapters in `Study Materials/*/*`.
+  5. Added 7 strict fail-closed `assert` checks to `test_routing.js`.
+  6. Pruned the 4 redundant `StudyLab/*_Questions.md` duplicate files across all chapters.
+  7. Removed readonly WAL pragma in `procedural_db_client.js`.
+  8. Added companion `-wal` and `-shm` unlinking in `export_anki.js` and `export_studylab_procedural_anki.js`.
+  9. Added support for `q.hint_tier_1` and `q.hints.hint_tier_1` in `render_studylab_question_bank.js`.
+- **Verification Method**: `node skills/study-source-core/scripts/test_unified_anki_packaging.js` (14/14 PASS), `node skills/study-source-core/scripts/test_contracts.js` (112/112 PASS), `node skills/study-source-core/scripts/test_routing.js` (7/7 PASS), `node skills/study-source-core/scripts/studycore_cli.js verify --all` (6/6 Chapters PASS).
+
+### GAP-38: Hardcoded Chapter Fallbacks, CLI Vault Target Overrides, and Anti-Mock Production Invariant
+- **Category**: Governance / Architectural Hardening / Anti-Hardcoding
+- **Severity**: **P1 Critical**
+- **Evidence**:
+  1. The 4 specialist author engines (`author_math_studylab.js`, `author_physics_studylab.js`, `author_chemistry_studylab.js`, `author_reasoning_studylab.js`) defaulted to specific hardcoded chapter names (e.g. `'Arithmetic-Progression'`, `'Work-Energy-Power'`, `'Chemical-Equilibrium'`, `'Syllogism-And-Seating-Arrangement'`) and silently fell back to test fixture files (`resources/fixtures/*.json`) when arguments were omitted.
+  2. `studycore_cli.js` contained a hardcoded `candidateVaultTargets` array, overriding dynamic filesystem discovery of `Study Materials/` in `orchestration_engine.js`.
+  3. `export_studylab_procedural_anki.js` contained domain-specific prompt keyword heuristics (`prompt.includes('lcm') || prompt.includes('hcf')`).
+  4. CI and smoke suites lacked automated regression checks to prevent developers/subagents from introducing test fixtures or mock fallbacks into production scripts.
+- **Resolution Details**:
+  1. Enforced strict fail-closed exceptions (`[MISSING_CHAPTER]`, `[MISSING_EVIDENCE_INPUT]`) across all 4 specialist author engines.
+  2. Permanently purged all `resources/fixtures/` references from production authoring scripts.
+  3. Removed the hardcoded `candidateVaultTargets` array in `studycore_cli.js`, allowing full dynamic vault discovery.
+  4. Sanitized procedural packaging heuristics in `export_studylab_procedural_anki.js`.
+  5. Implemented continuous automated enforcement: Check 1.4 in `run_master_smoke_test.js` (19/19 gates) and Check 8 in `doctor.js`.
+  6. Documented ADR-21, updated `CONTRIBUTING.md`, `ARCHITECTURE.md`, `AGENTS.md`, and `TROUBLESHOOTING.md`.
+- **Verification Method**: `npm run smoke` (19/19 checks PASS), `node scripts/doctor.js` (Check 8 PASS), `node scripts/studycore_cli.js dispatch Math Arithmetic-Progression --json` (PASS), `npm test` (47/47 suites PASS).
+
+### GAP-39: 12-Flaw Forensic Root-Cause Remediation, Canonical Question Bank Gate 2 Fallback, and Stopword Entity Shield
+- **Category**: Multi-System / Verification & Governance / Forensic Hardening
+- **Severity**: **P1 Critical**
+- **Evidence**:
+  1. **MCP Validator Disconnect**: `latex_validator.js` and `mermaid_validator.js` exported file-based functions, while `mcp_server.js` imported string-content functions (`validateLatexContent`, `validateMermaidContent`). Escaped `\$` literal dollars were not isolated in LaTeX validator.
+  2. **Unicode Anti-Leak Bypass**: ASCII-only regex `[^\w\s]` in `hint_distractor_semantics.js` stripped Devanagari characters (`\u0900-\u097F`), turning Hindi answers into empty strings and bypassing ADV-11 leak detection.
+  3. **Question Inventory Hint Dropping**: `source_question_inventory.js` lacked `- Hints:` markdown list parsing, dropping structured hints during ingestion.
+  4. **Trimmed Line Leading Space Mismatch**: Domain author engines trimmed lines and then tested `line.startsWith('  - Tier 1:')` with leading spaces, perpetually evaluating to `false` and dropping hints; `_ProblemPatterns.json` serialization lacked top-level `{ id, title, patterns }` wrapper.
+  5. **Adversarial Gate 2 Paused APKG Void**: Gate 2 in `run_adversarial_certification.js` skipped adversarial checks when procedural APKG packaging was paused, leaving canonical Question Banks un-audited by Gate 2.
+  6. **Cross-Artifact Stopword False Positives**: `cross_artifact_checker.js` lacked stopword filtering in entity extraction, capturing common English prepositions (`for`, `with`) and Hindi particles (`मान`, `के लिए`) as named entities; case-insensitive Kelvin regex matched algebraic single-letter variables (`2k`), triggering bogus divergence failures.
+  7. **Misleading QBank Status for Legacy JSON**: Chapters with only legacy `Optional/PracticeQuestions.json` (`Math/LCM-HCF`) showed `QBank✅` in `studycore status`, obscuring the absence of canonical Markdown Question Bank.
+  8. **YAML Apostrophe Parsing**: `yaml_validator.js` treated internal apostrophes inside unquoted strings as mismatched quotes.
+  9. **Orchestrator Wave Type Inflexibility**: `orchestration_engine.js` only checked `task.wave === 2`, failing when string `'WAVE_2'` was passed.
+  10. **Python Virtualenv Path Discovery**: `doctor.js` checked global `python`/`python3` commands but omitted local `.venv` executable paths.
+  11. **Version String Inconsistency**: Version strings varied across `studycore_cli.js`, `run_master_smoke_test.js`, and `mcp_server.js`.
+  12. **MCP Server Validator Coverage Gap**: `test_mcp_server.js` lacked tests for `latex` and `mermaid` artifact validation tools.
+- **Resolution Details**:
+  1. Exported `validateLatexContent` and `validateMermaidContent`; isolated escaped `\$` in LaTeX formulas; updated MCP tool definitions.
+  2. Preserved Devanagari range `\u0900-\u097F` in `cleanText` and implemented exact match & padded word leak detection.
+  3. Added `- Hints:` markdown list parsing and structured hint preservation in `source_question_inventory.js`.
+  4. Fixed hint regex to match trimmed line starts (`^- Tier [123]:`) and ensured schema-valid `{ id, title, patterns }` JSON serialization across Math, Physics, Chemistry, and Reasoning engines.
+  5. Implemented Gate 2 fallback in `run_adversarial_certification.js` to audit canonical `Questions/<Chapter>_Questions.md` via `validateQuestionBank` when procedural APKG is absent/paused.
+  6. Expanded `IGNORED_ENTITIES` in `cross_artifact_checker.js` with comprehensive English and Hindi stopwords/prepositions and isolated Kelvin matching (`kelvin|केल्विन`) to eliminate algebraic variable collisions.
+  7. Updated `collectVaultStatus` and `cmdStatus` in `studycore_cli.js` to display `QBank⚪(Legacy JSON only)` for legacy JSON chapters and added fallback legacy validation in `studycore verify`.
+  8. Refined YAML quote detection in `yaml_validator.js`.
+  9. Standardized Wave 2 check in `orchestration_engine.js` to accept `(task.wave === 2 || task.wave === 'WAVE_2')`.
+  10. Added local `.venv` Python executable search in `doctor.js`.
+  11. Synchronized version string `v1.2.0-beta.6` across all entrypoints.
+  12. Added explicit test cases for `validate_artifact` (`latex` and `mermaid`) in `test_mcp_server.js`.
+- **Verification Method**: `npm run doctor` (8/8 checks PASS), `npm run smoke` (19/19 checks PASS), `studycore verify --all` (6/6 chapters PASS), 4-Gate Adversarial Certification (6/6 chapters 100% PASS), and `npm test` (47/47 suites PASS).
+
 ---
 
 ## 4. Remediation Schedule & Roadmap Alignment
@@ -578,4 +684,8 @@ Every identified gap is tracked with:
 | **v1.2-beta.3**| **GAP-30** | Question Bank Primary Delivery & Temporary Procedural APKG Production Suspension |
 | **v1.2-beta.4**| **GAP-31** | Math Parameter Anti-Leak Recalibration, Dynamic Fallbacks & 26-Question Distinct Practice Suite |
 | **v1.2-beta.5**| **GAP-32, GAP-33, GAP-34** | Autonomous Subagent Write Tool Enforcement, Cross-Artifact LaTeX Filter & Chemistry 25-MCQ Release |
+| **v1.2-beta.6**| **GAP-35, GAP-36, GAP-37** | Antigravity Native Skills Discovery Bridge, Ghost Runner Remediation & Forensic Hardening |
+| **v1.2-beta.7**| **GAP-38** | Zero-Hardcoded-Context & Anti-Mock Production Invariant Hardening |
+| **v1.2-beta.8**| **GAP-39** | 12-Flaw Forensic Root-Cause Remediation, Gate 2 Fallback & Stopword Entity Shield |
+
 

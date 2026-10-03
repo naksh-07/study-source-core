@@ -75,10 +75,13 @@ function parseReasoningEvidence(evidenceInput) {
  * Normalizes raw source fixture data.
  */
 function normalizeRawSourceData(data) {
-    const chapter = data.chapter || 'Syllogism-And-Seating-Arrangement';
+    const chapter = data.chapter || null;
+    if (!chapter) {
+        throw new Error('MISSING_CHAPTER: Raw source data must contain a valid chapter name');
+    }
     const domain = data.domain || 'Reasoning';
     const subject = data.subject || 'Reasoning';
-    const skill_id = data.skill_id || 'reasoning-study';
+    const skill_id = data.skill_id || `reasoning.${chapter.toLowerCase().replace(/[^a-z0-9_]/g, '_')}`;
 
     const patterns = Array.isArray(data.problem_patterns) ? data.problem_patterns : [];
     const rawProblems = (data.source_question_inventory && Array.isArray(data.source_question_inventory.questions))
@@ -120,10 +123,10 @@ function normalizeRawSourceData(data) {
  */
 function parseMarkdownEvidencePackText(text) {
     const lines = text.split(/\r?\n/);
-    let chapter = 'Syllogism-And-Seating-Arrangement';
+    let chapter = null;
     let subject = 'Reasoning';
     let domain = 'Reasoning';
-    let skill_id = 'reasoning-study';
+    let skill_id = null;
     let source_title = 'Reasoning Source Evidence';
     let exam_corpus = ['Authentic PYQ'];
 
@@ -172,8 +175,10 @@ function parseMarkdownEvidencePackText(text) {
                 options: [],
                 source_solution_steps: [],
                 prerequisites: [],
+                hints: null,
                 _readingStatement: false,
-                _readingSteps: false
+                _readingSteps: false,
+                _readingHints: false
             };
             sourceProblems.push(currentItem);
         } else if (currentItem && currentSection === 'PATTERNS') {
@@ -196,39 +201,65 @@ function parseMarkdownEvidencePackText(text) {
         } else if (currentItem && currentSection === 'PROBLEMS') {
             if (line.startsWith('- Source Question ID:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.source_question_id = line.substring(21).trim();
                 currentItem.source_id = currentItem.source_question_id;
             } else if (line.startsWith('- Question Number:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.question_number = line.substring(18).trim();
             } else if (line.startsWith('- Exam:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.exam = line.substring(7).trim();
             } else if (line.startsWith('- Pattern Ref:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.pattern_ref = line.substring(14).trim();
             } else if (line.startsWith('- Type:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.raw_type = line.substring(7).trim().toLowerCase();
             } else if (line.startsWith('- Statement:')) {
-                currentItem._readingStatement = true;
                 currentItem.statement = line.substring(12).trim();
+                currentItem._readingStatement = true;
+                currentItem._readingHints = false;
             } else if (line.startsWith('- Options:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
             } else if (line.startsWith('- Correct Answer:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.correct_answer = line.substring(17).trim();
             } else if (line.startsWith('- Difficulty:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.difficulty = parseFloat(line.substring(13).trim()) || 2.0;
             } else if (line.startsWith('- Prerequisites:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem.prerequisites = line.substring(16).split(',').map(s => s.trim()).filter(Boolean);
             } else if (line.startsWith('- Solution Steps:')) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 currentItem._readingSteps = true;
+            } else if (line.startsWith('- Hints:')) {
+                currentItem._readingStatement = false;
+                currentItem._readingSteps = false;
+                currentItem._readingHints = true;
+                currentItem.hints = currentItem.hints || {};
+            } else if (currentItem._readingHints && (line.startsWith('- Tier 1:') || line.startsWith('Tier 1:'))) {
+                currentItem.hints.tier1_conceptual = line.replace(/^(?:-\s*)?Tier\s*1:\s*/i, '').trim();
+                currentItem.hints.tier1_approach = currentItem.hints.tier1_conceptual;
+            } else if (currentItem._readingHints && (line.startsWith('- Tier 2:') || line.startsWith('Tier 2:'))) {
+                currentItem.hints.tier2_strategic = line.replace(/^(?:-\s*)?Tier\s*2:\s*/i, '').trim();
+                currentItem.hints.tier2_formula = currentItem.hints.tier2_strategic;
+            } else if (currentItem._readingHints && (line.startsWith('- Tier 3:') || line.startsWith('Tier 3:'))) {
+                currentItem.hints.tier3_next_step = line.replace(/^(?:-\s*)?Tier\s*3:\s*/i, '').trim();
+                currentItem.hints.tier3_setup = currentItem.hints.tier3_next_step;
             } else if (/^[\s-]*\([A-Za-z0-9]+\)\s*/.test(line)) {
                 currentItem._readingStatement = false;
+                currentItem._readingHints = false;
                 const optText = line.replace(/^[\s-]*\([A-Za-z0-9]+\)\s*/, '').trim();
                 currentItem.options.push(optText);
             } else if (currentItem._readingSteps && /^\d+\.\s*/.test(line)) {
@@ -244,6 +275,13 @@ function parseMarkdownEvidencePackText(text) {
             else if (line.startsWith('- Source Title:')) source_title = line.substring(15).trim();
             else if (line.startsWith('- Exam Corpus:')) exam_corpus = line.substring(14).split(',').map(s => s.trim()).filter(Boolean);
         }
+    }
+
+    if (!chapter) {
+        throw new Error('MISSING_CHAPTER: Evidence pack text does not declare a chapter title');
+    }
+    if (!skill_id) {
+        skill_id = `reasoning.${chapter.toLowerCase().replace(/[^a-z0-9_]/g, '_')}`;
     }
 
     return {
@@ -433,8 +471,8 @@ function authorReasoningProceduralContent(evidenceInput, options = {}) {
     const canonicalQuestionBank = {
         schema_version: '1.0.0',
         domain: parsed.domain || 'Reasoning',
-        chapter: parsed.chapter || 'Syllogism-And-Seating-Arrangement',
-        skill_id: parsed.skill_id || 'reasoning-study',
+        chapter: parsed.chapter,
+        skill_id: parsed.skill_id || `reasoning.${(parsed.chapter || 'general').toLowerCase().replace(/[^a-z0-9_]/g, '_')}`,
         language: 'hi',
         provenance: {
             source: parsed.source_title,
@@ -463,8 +501,11 @@ async function executeReasoningSpecialistTask(task, context = {}) {
         throw new Error(`[OWNERSHIP_VIOLATION] Task '${task.task_id}' designated for '${task.owner_agent}', cannot be executed by reasoning-apkg-author`);
     }
 
-    const subject = context.subject || 'Reasoning';
-    const chapter = context.chapter || 'Syllogism-And-Seating-Arrangement';
+    const subject = context.subject || task.subject || 'Reasoning';
+    const chapter = context.chapter || task.chapter || null;
+    if (!chapter) {
+        throw new Error(`[MISSING_CHAPTER] Reasoning specialist task '${task.task_id}' requires explicit chapter context.`);
+    }
     const targetPath = task.target_path;
     const retryCount = context.retryCount || 0;
 
@@ -500,12 +541,6 @@ async function executeReasoningSpecialistTask(task, context = {}) {
     // Fallback only if no evidence pack exists
     if (!evidenceInput && context.sourceFixture) {
         evidenceInput = context.sourceFixture;
-    }
-    if (!evidenceInput) {
-        const fixturePath = path.resolve(__dirname, '../resources/fixtures/reasoning_syllogism_seating_source_fixture.json');
-        if (fs.existsSync(fixturePath)) {
-            evidenceInput = fixturePath;
-        }
     }
 
     if (!evidenceInput) {
@@ -613,11 +648,13 @@ async function executeReasoningSpecialistTask(task, context = {}) {
                 fs.mkdirSync(outDir, { recursive: true });
                 fs.writeFileSync(targetPath, JSON.stringify({
                     schema_version: '1.0.0',
+                    id: `pat-reas-${chapter.toLowerCase()}`,
+                    title: `${chapter} Problem Patterns`,
                     domain: 'Reasoning',
                     chapter,
                     skill_id: canonicalQB.skill_id,
                     language: 'hi',
-                    patterns: canonicalQB.patterns
+                    patterns: canonicalQB.patterns || []
                 }, null, 2), 'utf8');
                 outputsProduced.push(targetPath);
             }
@@ -647,10 +684,12 @@ async function executeReasoningSpecialistTask(task, context = {}) {
 
                 fs.writeFileSync(ppPath, JSON.stringify({
                     schema_version: '1.0.0',
+                    id: `pat-reas-${chapter.toLowerCase()}`,
+                    title: `${chapter} Problem Patterns`,
                     domain: 'Reasoning',
                     chapter,
                     skill_id: canonicalQB.skill_id,
-                    patterns: canonicalQB.patterns
+                    patterns: canonicalQB.patterns || []
                 }, null, 2), 'utf8');
 
                 const manifestPath = targetPath.replace(/\.apkg$/, '.manifest.json');

@@ -144,7 +144,7 @@ function normalizePropositionText(text) {
     // Strip math delimiters $...$
     norm = norm.replace(/\$/g, '');
     // Replace non-alphanumeric (except core math operators +, -, *, /, =) with spaces
-    norm = norm.replace(/[^\p{L}\p{N}+=/*-]/gu, ' ');
+    norm = norm.replace(/[^\p{L}\p{M}\p{N}+=/*-]/gu, ' ');
     // Collapse multiple spaces
     norm = norm.replace(/\s+/g, ' ').trim();
     return norm;

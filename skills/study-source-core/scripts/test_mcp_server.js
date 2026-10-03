@@ -105,6 +105,44 @@ async function runTest() {
     }
     console.log("✅ Procedural DB contract query test passed!");
 
+    // Test 6: Call validate_artifact for latex (including escaped \$ test)
+    console.log("\n[Test 6] Calling 'validate_artifact' for latex math...");
+    const sampleLatexPath = path.resolve(__dirname, 'scratch/test_latex.md');
+    fs.writeFileSync(sampleLatexPath, "# Math Sample\nCost is \\$100.\nFormula: $E = mc^2$\n$$\nF = ma\n$$\n", 'utf8');
+    const latexCall = await client.callTool({
+        name: "validate_artifact",
+        arguments: {
+            artifactPath: sampleLatexPath,
+            artifactType: "latex"
+        }
+    });
+    const latexResult = JSON.parse(latexCall.content[0].text);
+    console.log("LaTeX validation result:", latexResult);
+    if (!latexResult.passed || latexResult.displayMathCount !== 1 || latexResult.inlineMathCount !== 1) {
+        throw new Error("LaTeX artifact validation failed or returned incorrect counts!");
+    }
+    if (fs.existsSync(sampleLatexPath)) fs.unlinkSync(sampleLatexPath);
+    console.log("✅ LaTeX artifact validation test passed!");
+
+    // Test 7: Call validate_artifact for mermaid
+    console.log("\n[Test 7] Calling 'validate_artifact' for mermaid diagram...");
+    const sampleMermaidPath = path.resolve(__dirname, 'scratch/test_mermaid.md');
+    fs.writeFileSync(sampleMermaidPath, "# Diagram Sample\n```mermaid\nflowchart TD\n    A[\"Node A\"] --> B[\"Node B\"]\n```\n", 'utf8');
+    const mermaidCall = await client.callTool({
+        name: "validate_artifact",
+        arguments: {
+            artifactPath: sampleMermaidPath,
+            artifactType: "mermaid"
+        }
+    });
+    const mermaidResult = JSON.parse(mermaidCall.content[0].text);
+    console.log("Mermaid validation result:", mermaidResult);
+    if (!mermaidResult.passed || mermaidResult.blocks !== 1) {
+        throw new Error("Mermaid artifact validation failed!");
+    }
+    if (fs.existsSync(sampleMermaidPath)) fs.unlinkSync(sampleMermaidPath);
+    console.log("✅ Mermaid artifact validation test passed!");
+
     await client.close();
     console.log("\n🎉 ALL MCP TESTS PASSED SUCCESSFULLY!\n");
 }

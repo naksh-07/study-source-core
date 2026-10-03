@@ -298,6 +298,7 @@ This document serves as the canonical reference source for all available, verifi
 * **`migrate-workflows`**: Automated migration of legacy workflow scripts to modern `SKILL.md` definitions.
 * **`skill-repair`**: Troubleshooting and repairing failed skill installations or `manifest.json` errors.
 * **`structural-search`**: AST-based code pattern matching and structural refactoring using `ast-grep`.
+* **`study-source-core`**: Master multi-agent study asset synthesis orchestrator coordinating 14 specialist subagents across 9 subject domains. Registered natively via `.agents/skills.json` workspace discovery bridge pointing to `./skills/`.
 
 ### Frontend, Web & Design Skills
 * **`a11y-debugging`**: Web accessibility auditing (ARIA, keyboard nav, contrast) via DevTools.

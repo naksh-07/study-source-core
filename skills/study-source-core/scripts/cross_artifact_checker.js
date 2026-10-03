@@ -20,7 +20,7 @@ const { getCanonicalArtifactPaths } = require('./path_resolver');
 const { getArtifactRegistry } = require('./artifact_registry');
 
 // Unicode-aware regex patterns
-const NUMBER_WITH_UNIT = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?(\d+(?:\.\d+)?(?:\s*(?:g\/cm[³3]|km\/h|km|m|cm|mm|kg|g|%|°C|°F|K|वर्ष|साल|किमी|मीटर|प्रतिशत|वर्ग किमी)))(?:[^\w\u0900-\u097F]|$)/gi;
+const NUMBER_WITH_UNIT = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?(\d+(?:\.\d+)?(?:\s*(?:g\/cm[³3]|km\/h|km|m|cm|mm|kg|g|%|°C|°F|kelvin|केल्विन|वर्ष|साल|किमी|मीटर|प्रतिशत|वर्ग किमी)))(?:[^\w\u0900-\u097F]|$)/gi;
 const ENTITY_YEAR_PATTERN = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?\b((?:1[5-9]\d{2}|20\d{2}))\b(?:[^\w\u0900-\u097F]|$)/gi;
 
 function cleanContentForExtraction(text) {
@@ -47,16 +47,35 @@ function extractEntityFacts(text, artifactName) {
 
     // 1. Number + Unit pairings with surrounding entity context
     const IGNORED_ENTITIES = new Set([
+        // Schema & metadata keys
         'year', 'exam', 'status', 'page', 'id', 'code', 'shift', 'step', 'tier', 'date',
         'mod', 'crt', 'version', 'time', 'val', 'pyq', 'ref', 'prompt', 'question',
         'title', 'description', 'name', 'explanation', 'text', 'extra', 'front', 'back',
         'tags', 'concept', 'notes', 'solution', 'hint', 'option', 'options', 'difficulty',
+        // Physics / Chemistry generic parameters (measured quantities, not unique entities)
         'तापमान', 'temperature', 'temp', 'दाब', 'pressure', 'आयतन', 'volume', 'सांद्रता',
         'concentration', 'द्रव्यमान', 'mass', 'चाल', 'गति', 'वेग', 'speed', 'velocity',
         'त्वरण', 'acceleration', 'दूरी', 'distance', 'विस्थापन', 'displacement', 'कार्य',
         'work', 'ऊर्जा', 'energy', 'बल', 'force', 'समय', 'आवृति', 'frequency', 'कोण',
         'angle', 'अनुपात', 'ratio', 'log', 'log10', 'ln', 'oh', 'ka', 'kb', 'kw', 'kc',
-        'kp', 'qc', 'qp', 'ph', 'poh', 'mol', 'mole', 'moles', '10', 'rt', 'delta', 'deltang'
+        'kp', 'qc', 'qp', 'ph', 'poh', 'mol', 'mole', 'moles', '10', 'rt', 'delta', 'deltang',
+        // English stopwords, prepositions, conjunctions, pronouns, math boilerplate
+        'for', 'and', 'the', 'with', 'from', 'that', 'this', 'these', 'those', 'which',
+        'when', 'where', 'what', 'how', 'why', 'who', 'whom', 'whose', 'all', 'any',
+        'both', 'each', 'every', 'few', 'more', 'most', 'other', 'some', 'such', 'than',
+        'then', 'into', 'through', 'between', 'among', 'after', 'before', 'above', 'below',
+        'under', 'over', 'again', 'further', 'once', 'here', 'there', 'only', 'own', 'same',
+        'too', 'very', 'can', 'will', 'just', 'should', 'would', 'could', 'may', 'might',
+        'must', 'shall', 'are', 'were', 'was', 'been', 'have', 'has', 'had', 'does', 'did',
+        'find', 'given', 'let', 'assume', 'suppose', 'show', 'prove', 'term', 'terms',
+        'value', 'values', 'sum', 'total', 'first', 'second', 'third', 'fourth', 'fifth',
+        'last', 'next', 'previous', 'case', 'rule', 'formula', 'type', 'types', 'item', 'items',
+        'level', 'levels', 'table', 'figure', 'example', 'examples', 'problem', 'problems',
+        // Hindi stopwords and boilerplate
+        'के', 'की', 'का', 'में', 'पर', 'से', 'को', 'लिए', 'है', 'हैं', 'था', 'थे', 'थी',
+        'हो', 'होता', 'होती', 'होते', 'अगर', 'यदि', 'तो', 'और', 'या', 'एवं', 'तथा',
+        'माना', 'मान', 'ज्ञात', 'दिए', 'दिया', 'दी', 'गए', 'गया', 'गई', 'पद', 'पदों',
+        'संख्या', 'योग', 'कुल', 'अंतर', 'प्रथम', 'अंतिम', 'समीकरण', 'प्रकार', 'सूत्र'
     ]);
 
     let match;
@@ -207,6 +226,23 @@ function checkCrossArtifactIntegrity(chapterDir, options = {}) {
         const pqJsonFile = getDynamicArtifactPath(resolvedChapterDir, chapterName, 'practiceQuestions');
         if (pqJsonFile && fs.existsSync(pqJsonFile)) {
             artifactsData.practiceQuestionsJson = fs.readFileSync(pqJsonFile, 'utf-8');
+        }
+    }
+
+    // 9. Locate Canonical Markdown Question Bank (from memory or disk)
+    if (preloaded.proceduralQuestionBank || preloaded.questionBank || options.questionBankContent) {
+        artifactsData.questionBank = preloaded.proceduralQuestionBank || preloaded.questionBank || options.questionBankContent;
+    } else {
+        const qbCandidates = [
+            getDynamicArtifactPath(resolvedChapterDir, chapterName, 'proceduralQuestionBank'),
+            path.join(resolvedChapterDir, 'Questions', `${chapterName}_Questions.md`),
+            path.join(resolvedChapterDir, 'StudyLab', `${chapterName}_Questions.md`)
+        ];
+        for (const candidate of qbCandidates) {
+            if (candidate && fs.existsSync(candidate)) {
+                artifactsData.questionBank = fs.readFileSync(candidate, 'utf-8');
+                break;
+            }
         }
     }
 

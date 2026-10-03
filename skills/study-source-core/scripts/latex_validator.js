@@ -14,13 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function validateLatex(filePath) {
-  if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
-  }
-
-  const content = fs.readFileSync(filePath, 'utf8');
+function validateLatexContent(content, filePath = 'content.md') {
   const lines = content.split(/\r?\n/);
   const issues = [];
   const warnings = [];
@@ -85,8 +79,8 @@ function validateLatex(filePath) {
 
     // Process inline math $ (skip inside active display math spans)
     if (!inDisplayMath) {
-      // Replace $$ with placeholders to avoid confusion
-      const lineForInline = rawLine.replace(/\$\$/g, '\x00\x00');
+      // Replace escaped \$ and $$ with placeholders to avoid false positives on literal dollars
+      const lineForInline = rawLine.replace(/\\\$/g, '\x01\x01').replace(/\$\$/g, '\x00\x00');
       let inInline = false;
       let inlineStart = -1;
 
@@ -141,7 +135,17 @@ function validateLatex(filePath) {
   }
   console.log('======================================================\n');
 
-  return { displayMathCount, inlineMathCount, issues, warnings, passed: issues.length === 0 };
+  return { displayMathCount, inlineMathCount, issues, warnings, passed: issues.length === 0, isValid: issues.length === 0 };
+}
+
+function validateLatex(filePath) {
+  if (!fs.existsSync(filePath)) {
+    console.error(`[ERROR] File not found: ${filePath}`);
+    process.exit(1);
+  }
+
+  const content = fs.readFileSync(filePath, 'utf8');
+  return validateLatexContent(content, filePath);
 }
 
 /**
@@ -205,5 +209,7 @@ if (require.main === module) {
 
 module.exports = {
   validateLatex,
+  validateLatexContent,
   validateFormulaSyntax
 };
+

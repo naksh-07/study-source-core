@@ -1,7 +1,7 @@
 # StudySourceCore — Architectural Decision Records (ADRs)
 
 > **Canonical Path**: `.agents/DECISIONS.md`  
-> **Index Range**: ADR-01 through ADR-19  
+> **Index Range**: ADR-01 through ADR-20  
 > **Status**: AUTHORITATIVE / CONSOLIDATED
 
 ---
@@ -29,6 +29,9 @@
 | **ADR-17** | Scope Boundaries & Deferred Runtimes | In-memory/file IR in v1.0; SQLite semantic DB, CLI, and web UI deferred post-v1.0 | 2026-09-07 |
 | **ADR-18** | Strict Script De-Usurpation & Fail-Closed Pedagogical Integrity | No scripts doing creative/pedagogical work; missing hints/leaks fail closed | 2026-09-28 |
 | **ADR-19** | Mechanical vs Cognitive Separation of Concerns | LLM owns pedagogical reasoning/AST; scripts own SHA-256, SQLite, zip, regex | 2026-09-28 |
+| **ADR-20** | Antigravity Native Skills Discovery Bridge & Global Duplicate Purge | `.agents/skills.json` bridge; rogue global mirror purged; Doctor Check 7 | 2026-10-03 |
+| **ADR-21** | Anti-Hardcoding Invariant & Elimination of Mock Chapter Fallbacks | Fail-closed chapter/evidence args; zero fixture imports in production | 2026-10-03 |
+| **ADR-22** | Canonical Question Bank Release Policy, Gate 2 Fallback & Stopword Shield | Procedural APKG paused; Question Bank primary; Gate 2 fallback audit; stopword shield | 2026-10-03 |
 
 ---
 
@@ -322,5 +325,78 @@ Enforce a strict boundary between Cognitive (LLM) and Mechanical (Script) respon
 ### Consequences
 - **Positive**: Maximizes LLM reasoning capacity on pedagogical quality; prevents hallucinated hashes or broken binary structures; zero prompt burden on non-cognitive tasks.
 - **Negative**: Requires clean JSON/AST schema interfaces between LLM outputs and deterministic packaging scripts.
+
+---
+
+## ADR-20: Antigravity Workspace Skills Discovery Configuration & Global Duplicate Purge
+
+### Context
+In Google Antigravity, workspace skills can reside directly within the repository under `skills/`. However, for the host agent runtime to dynamically discover and mount project-local skills without manual configuration or hardcoding, Antigravity requires a discovery manifest at `.agents/skills.json`.
+
+Previously, in the absence of `.agents/skills.json`, a copy of the skill was placed into the global agent configuration directory (`~/.gemini/config/skills/study-source-core`). This led to serious operational vulnerabilities:
+1. **Dual-Source Desynchronization**: Updates made to schemas, prompts, and validator scripts inside the repository's `skills/study-source-core/` were eclipsed or conflicted with the stale global copy.
+2. **Loss of Portability**: Clean clones on fresh workstations failed to register the skill unless manually copied to global folders.
+3. **Breach of Repository Boundary**: Deviated from the Single Source of Truth (SSoT) invariant where the repository itself must be self-contained and reproducible.
+
+### Decision
+1. **Native Antigravity Skill Discovery (`.agents/skills.json`)**: Commit `.agents/skills.json` at repository root referencing `$schema: "https://antigravity.google/schemas/skills-config.json"` with entry `{"path": "skills"}`.
+2. **Purge Rogue Global Mirrors**: Permanently purge and ban any shadow copies in `~/.gemini/config/skills/study-source-core`.
+3. **Environment Doctor Check (Check 7)**: Add Check 7 to `doctor.js` to automatically verify that `.agents/skills.json` exists, is valid JSON, and contains the `"skills"` mapping.
+4. **Resilient Vault Root Resolution**: Harden `path_resolver.js` (`getVaultRoot`) to prioritize `STUDYCORE_VAULT_ROOT` environment override and traverse markers (`Study Materials` + `Sources`, `.agents`, `agents`, `.git` + `skills`) so tools can execute reliably from any directory.
+
+### Consequences
+- **Positive**: 100% self-contained workspace; zero dual-source drift; immediate out-of-the-box discovery on fresh clones; automated health checks alert developers if discovery config is missing.
+- **Negative**: Requires clean clones to retain `.agents/skills.json` (tracked in Git).
+
+---
+
+## ADR-21: Anti-Hardcoding Invariant & Elimination of Mock Chapter Fallbacks
+
+### Context
+A forensic audit across the codebase revealed several legacy testing relics and hardcoded chapter fallbacks:
+1. The 4 specialist author engines (`author_math_studylab.js`, `author_physics_studylab.js`, `author_chemistry_studylab.js`, `author_reasoning_studylab.js`) contained fallback defaults to specific chapters (e.g. `'Arithmetic-Progression'`, `'Work-Energy-Power'`, `'Chemical-Equilibrium'`, `'Syllogism-And-Seating-Arrangement'`) and silently fell back to loading test fixture JSON files (`resources/fixtures/*.json`) if evidence packs were omitted.
+2. The CLI dispatcher (`studycore_cli.js`) provided a hardcoded `candidateVaultTargets: ['Math/Arithmetic-Progression', 'Physics/Newton-Laws-Friction', 'Reasoning/Syllogism']`, overriding `orchestration_engine.js`'s built-in dynamic filesystem discovery of `Study Materials/`.
+3. The procedural packaging compiler (`export_studylab_procedural_anki.js`) contained an isolated domain-specific prompt keyword heuristic (`prompt.includes('lcm') || prompt.includes('hcf')`).
+
+These practices violated the zero-mock production invariant and created a high risk of silent data contamination if specialist scripts were invoked with incomplete arguments.
+
+### Decision
+1. **Fail-Closed on Missing Arguments**: All specialist author engines (`author_*_studylab.js`) must strictly validate `chapter` and `evidencePack`. If missing, they immediately throw fatal exceptions (`[MISSING_CHAPTER]` and `[MISSING_EVIDENCE_INPUT]`).
+2. **Purge Test Fixtures from Production**: Permanently delete all references to `resources/fixtures/` from production authoring scripts. Test fixtures are strictly quarantined to unit and contract test suites.
+3. **Dynamic Vault Link Discovery**: Removed the static override array in `studycore_cli.js`. Graph link resolution relies entirely on runtime dynamic scanning of the Obsidian vault (`Study Materials/`).
+4. **Domain-Neutral Packaging**: Replaced domain-specific keyword sniffing with universal schema-driven field extraction.
+5. **Continuous Automated Governance**: Added Check 1.4 (`Anti-Hardcoding & Zero-Mock Production Audit`) to `run_master_smoke_test.js` and Check 8 (`Production scripts purity`) to `doctor.js`. Both gates automatically fail if any production script imports test fixtures or embeds chapter fallbacks.
+
+### Consequences
+- **Positive**: Prevents silent cross-chapter contamination; guarantees cross-subject neutrality; enforces clean, deterministic test suites; automated CI/smoke checks prevent future regression.
+- **Negative**: Manual execution of individual authoring scripts requires supplying explicit `--chapter` and evidence parameters.
+
+---
+
+## ADR-22: Canonical Question Bank Release Policy, Gate 2 Adversarial Fallback, and Stopword Entity Collision Shield
+
+### Context
+1. StudyLab procedural APKG client applications remain far from production readiness, whereas the canonical Markdown Question Bank (`Questions/<Chapter>_Questions.md`) is immediately accessible and useful across markdown and Obsidian vaults.
+2. In production runs, binary procedural APKG packaging was paused by default. However, Gate 2 in `run_adversarial_certification.js` previously skipped adversarial evaluation when procedural APKGs were absent, leaving Question Banks uncertified under Gate 2.
+3. The cross-artifact consistency checker (`cross_artifact_checker.js`) lacked stopword filtering for entity extraction. As a result, common English prepositions (`for`, `with`) and Hindi particles (`मान`, `लिए`) within 40 characters of numbers were captured as named entities. Furthermore, case-insensitive Kelvin matching (`K`) matched single-letter algebraic variables (`2k`, `5k`), causing bogus cross-artifact divergence errors.
+4. Chapters with only legacy JSON practice questions (`Math/LCM-HCF`) misleadingly displayed `QBank✅` in `studycore status`.
+5. `mcp_server.js` imported content validation functions that were not exported by `latex_validator.js` and `mermaid_validator.js`, and ASCII-only anti-leak regexes allowed leaked Hindi Devanagari answers to bypass ADV-11.
+
+### Decision
+1. **Canonical Question Bank Primary Release Policy**: Enforce that canonical Markdown Question Banks (`Questions/<Chapter>_Questions.md`) containing strictly 4-option MCQs (`(A)`, `(B)`, `(C)`, `(D)`) are the active primary practice deliverable in production. Procedural APKG binary packaging is permanently paused by default until downstream client applications are ready.
+2. **Gate 2 Adversarial Fallback**: Gate 2 in `run_adversarial_certification.js` must actively audit canonical `Questions/<Chapter>_Questions.md` via `validateQuestionBank` whenever procedural APKG is absent or paused.
+3. **Stopword Entity Collision Shield**:
+   - Expanded `IGNORED_ENTITIES` in `cross_artifact_checker.js` with comprehensive English and Hindi prepositions, conjunctions, pronouns, and math boilerplate words.
+   - Isolated Kelvin matching in `NUMBER_WITH_UNIT` to `kelvin|केल्विन` to eliminate collisions with algebraic variables (`2k`).
+4. **Transparent Vault Status Badging**: Refined `studycore status` to display `QBank⚪(Legacy JSON only)` for legacy JSON chapters, and updated `studycore verify` to fall back on `validatePracticeQuestionsContent`.
+5. **Unicode Anti-Leak & MCP Validator Exports**:
+   - Exported `validateLatexContent` and `validateMermaidContent`, and isolated escaped `\$` literal dollars.
+   - Preserved Devanagari range `\u0900-\u097F` in `cleanText` in `hint_distractor_semantics.js`.
+
+### Consequences
+- **Positive**: 100% rigorous certification of active practice deliverables without requiring unready APKG apps; zero false-positive cross-artifact divergence errors; robust Unicode leak detection for bilingual content; transparent vault status reporting.
+- **Negative**: Question Banks must strictly adhere to the 4-option MCQ schema; free-form non-MCQ questions are rejected by the validator.
+
+
 
 

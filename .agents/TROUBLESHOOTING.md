@@ -20,6 +20,7 @@ When an execution error or validation failure occurs in StudySourceCore, locate 
 | `ERR-06-IO-COORDS` | Image Occlusion Out-of-Bounds Mask | Wave 1 Generation | `core-image-occlusion`, `image-occlusion-schema.json` |
 | `ERR-07-SQLITE-LOCK` | Database Lock / APKG SQLite Corruption | Wave 2 Packaging | `export_anki.js`, `export_studylab_procedural_anki.js` |
 | `ERR-08-ROUTE-MISSING` | Missing Subject Route / Ambiguous Subject | Stage 1 Ingestion / Stage 2 Routing | `routing_engine.js`, subject skill dispatch |
+| `ERR-09-SKILL-DISCOVERY` | Skill Discovery Missing / Global Shadowing | Setup / Environment Doctor | `.agents/skills.json`, `doctor.js`, global mirror |
 
 ---
 
@@ -288,3 +289,124 @@ No exact match found in 9 subject skills.
 1. Consult `.agents/SKILLS.md` for the authoritative list of 9 subject skills.
 2. Map interdisciplinary topics to their dominant parent skill or route to General.
 3. Record the explicit fallback routing in `scratch/routing_manifest.json`.
+
+---
+
+### Tree 9: Antigravity Skill Discovery & Global Shadowing (`ERR-09-SKILL-DISCOVERY`)
+
+#### Symptom & Log Signature
+```
+[DOCTOR_WARN] Antigravity discovery config missing (.agents/skills.json not found; external skills/ folder won't be discovered in clean clones)
+# or
+[TOOL_DISCOVERY_ERROR] Skill 'study-source-core' not found in active agent skills
+# or stale behavior where edits in repository skills/ are ignored by the host runtime
+```
+
+#### Diagnostic Decision Flow
+```
+               [Skill Not Discovered / Stale Behavior]
+                                  │
+                                  ▼
+                Does .agents/skills.json exist in repo root?
+                                  │
+               ┌──────────────────┴──────────────────┐
+               ▼                                     ▼
+            [ NO ]                                [ YES ]
+               │                                     │
+               ▼                                     ▼
+   Create .agents/skills.json             Check ~/.gemini/config/skills/
+   with {"entries":[{"path":"skills"}]}   Is duplicate global skill present?
+   Run npm run doctor to verify.                     │
+                                          ┌──────────┴──────────┐
+                                          ▼                     ▼
+                                       [ YES ]                [ NO ]
+                                          │                     │
+                                          ▼                     ▼
+                               Purge global copy:         Check doctor Check 7.
+                               rm -rf ~/.gemini/config/   Verify JSON is valid
+                               skills/study-source-core   and contains "skills".
+```
+
+#### Remediation Steps
+1. Verify repository root has `.agents/skills.json` containing:
+   ```json
+   {
+     "$schema": "https://antigravity.google/schemas/skills-config.json",
+     "entries": [{ "path": "skills" }]
+   }
+   ```
+2. Check if a rogue copy exists at `~/.gemini/config/skills/study-source-core`. If found, delete it immediately to eliminate dual-source drift.
+3. Run `npm run doctor` and confirm Check 7 reports `[PASS] Antigravity discovery config (.agents/skills.json -> "skills")`.
+
+---
+
+### Tree 10: Missing Chapter / Hardcoded Fallback Violation (`ERR-10-HARDCODED-CONTEXT`)
+
+#### Symptom & Log Signature
+```
+[FATAL_INVARIANT_VIOLATION] [MISSING_CHAPTER] author_math_studylab requires an explicit chapter name. Hardcoded fallbacks are strictly prohibited under ADR-21.
+# or
+[FATAL_INVARIANT_VIOLATION] [MISSING_EVIDENCE_INPUT] author_physics_studylab requires an explicit evidencePack input. Loading test fixtures as production fallbacks is forbidden under ADR-21.
+# or
+[DOCTOR_FAIL] Production scripts purity (1 files contain prohibited fixture imports or chapter fallbacks)
+```
+
+#### Diagnostic Decision Flow
+```
+               [ERR-10-HARDCODED-CONTEXT Detected]
+                                  │
+                                  ▼
+                 Is failure from runtime invocation or doctor/smoke?
+                                  │
+               ┌──────────────────┴──────────────────┐
+               ▼                                     ▼
+      [Runtime Invocation]                  [Doctor / Smoke Test]
+               │                                     │
+               ▼                                     ▼
+   Was script invoked without            Did a recent edit introduce a fallback
+   --chapter or evidence input?          to resources/fixtures or hardcoded chapter?
+               │                                     │
+               ▼                                     ▼
+   Pass explicit CLI parameters:         Revert the mock fallback. Keep production
+   --chapter <Name> --evidence <Path>    engines pure. Pass test data in test files.
+```
+
+#### Remediation Steps
+1. **At Runtime**: Always pass `--chapter <ChapterName>` and `--evidence <EvidencePath>` when executing specialist author engines directly. Fail-closed behavior prevents corrupting artifacts with sample chapters.
+2. **In Doctor / Smoke Checks**: Check which production file failed Check 8 in `npm run doctor` or Check 1.4 in `npm run smoke`. Ensure production scripts do not import or reference `resources/fixtures/` and do not contain `options.chapter || '<SampleChapter>'`.
+
+---
+
+### Tree 11: Cross-Artifact Stopword / Variable False-Positive Divergence (`ERR-11-ENTITY-STOPWORD`)
+
+#### Symptom & Log Signature
+```
+[CROSS_ARTIFACT_DIVERGENCE] Cross-artifact divergence detected on 'number_unit::for': [practiceQuestionsJson] says '22m' vs [questionBank] says '2k'.
+```
+
+#### Diagnostic Decision Flow
+```
+               [CROSS_ARTIFACT_DIVERGENCE Triggered]
+                                 │
+                                 ▼
+               Is the reported entity a common word/preposition
+               (e.g. 'for', 'with', 'in', 'के लिए', 'मान') or
+               a single-letter variable (e.g. '2k' for Kelvin)?
+                                 │
+              ┌──────────────────┴──────────────────┐
+              ▼                                     ▼
+           [ YES ]                                [ NO ]
+              │                                     │
+              ▼                                     ▼
+   Entity extraction false positive:      Genuine factual contradiction:
+   Add stopword/token to                  One artifact contains incorrect
+   IGNORED_ENTITIES in                    data (e.g. wrong formula or value).
+   cross_artifact_checker.js.             Correct the divergent sibling file.
+```
+
+#### Remediation Steps
+1. Verify if the entity reported is a genuine named entity (e.g., `Everest`, `Earth`, `Electron`) or an accidental grammatical token (`for`, `from`, `with`, `find`, `मान`).
+2. If accidental, add the token to `IGNORED_ENTITIES` in `skills/study-source-core/scripts/cross_artifact_checker.js`.
+3. If caused by algebraic variable matching (e.g. `2k` in math AP matching unit `K`), ensure the unit regex uses explicit word boundaries or non-overlapping tokenization (`kelvin|केल्विन`).
+
+

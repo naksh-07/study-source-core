@@ -152,7 +152,7 @@ npm run doctor
 # Execute all 47 automated test suites via Vitest
 npm test
 
-# Run the 18-gate zero-mock architectural smoke test
+# Run the 19-gate zero-mock architectural smoke test
 npm run smoke
 ```
 The test suite covers:
@@ -201,6 +201,13 @@ node scripts/test_chemistry_production_path.js
 node scripts/test_reasoning_production_path.js
 ```
 
+### 5.4 Testing & Specialist Development Guardrails (Zero-Mock & Anti-Hardcoding Invariant)
+To maintain cryptographic integrity and prevent data contamination:
+1. **Never Hardcode Chapter Names in Production**: Production authoring engines (`author_*_studylab.js`), CLI tools (`studycore_cli.js`), and subagent dispatchers must never embed static chapter names or mock fallbacks. Dynamic context resolution must always be used.
+2. **Fail-Closed Architecture**: If required parameters (`chapter`, `evidencePack`) are omitted, scripts must throw immediately (`[MISSING_CHAPTER]`, `[MISSING_EVIDENCE_INPUT]`) rather than silently defaulting to sample chapters or test fixtures.
+3. **Fixture Isolation**: Files under `resources/fixtures/` are strictly reserved for unit/contract test suites. Importing or referencing test fixtures in production scripts is forbidden.
+4. **Automated Enforcement**: Both `npm run smoke` (Check 1.4) and `npm run doctor` (Check 8) continuously scan production authoring engines and will fail the build if any test fixture imports or hardcoded chapter fallbacks are introduced.
+
 ---
 
 ## 6. Pull Request & Commit Guidelines
@@ -215,7 +222,8 @@ Use standard conventional commit messages:
 ### PR Review Checklist
 Every PR will be reviewed against:
 - [ ] No regression in `npm test` (all 47 test suites pass via Vitest).
-- [ ] `npm run smoke` passes with 18/18 zero-mock gates green.
+- [ ] `npm run smoke` passes with 19/19 zero-mock gates green.
+- [ ] Zero hardcoded chapter fallbacks or test fixture imports in production scripts.
 - [ ] No violation of the Single-Writer Rule or Parent Self-Execution Ban.
 - [ ] Any architectural change has a corresponding accepted ADR.
 - [ ] New/updated files use explicit temporal labeling (`[CURRENT]`, `[TARGET]`, `[DEFERRED]`).

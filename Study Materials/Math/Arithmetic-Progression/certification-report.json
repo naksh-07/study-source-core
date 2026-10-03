@@ -1,9 +1,9 @@
 {
-  "certification_id": "cert-math-arithmetic-progression-1790712047346",
+  "certification_id": "cert-math-arithmetic-progression-1791033483481",
   "chapter": "Arithmetic-Progression",
   "subject": "Math",
   "chapter_dir": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression",
-  "certified_at": "2026-09-29T20:00:47.347Z",
+  "certified_at": "2026-10-03T13:18:03.481Z",
   "release_verdict": "PASS",
   "summary": {
     "total_gates": 4,
@@ -36,9 +36,9 @@
       "warnings": [],
       "checksRun": [
         {
-          "name": "ADV Procedural Deck",
-          "status": "SKIPPED",
-          "reason": "No procedural APKG for this chapter"
+          "name": "ADV Canonical Question Bank Verification (Questions.md)",
+          "status": "PASS",
+          "path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Questions\\Arithmetic-Progression_Questions.md"
         }
       ]
     },

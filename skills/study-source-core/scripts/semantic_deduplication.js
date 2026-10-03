@@ -86,7 +86,7 @@ function extractTokens(text, filterStopwords = true) {
     if (!text || typeof text !== 'string') return [];
     const normalized = normalizePropositionText(text);
     // Match word sequences in Latin and Devanagari scripts
-    const rawTokens = normalized.match(/[\p{L}\p{N}]+/gu) || [];
+    const rawTokens = normalized.match(/[\p{L}\p{M}\p{N}]+/gu) || [];
     if (!filterStopwords) {
         return rawTokens.map(stemWord);
     }

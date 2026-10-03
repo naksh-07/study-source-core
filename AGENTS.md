@@ -238,3 +238,11 @@ description: <concise summary of specialist role and responsibility>
 ```
 
 Any deviation in section naming, numbering, or omission of required sections constitutes an architectural lint error.
+
+---
+
+## 5. Architectural Guardrails: Zero-Hardcoded-Context & Anti-Mock-Fallback Invariant
+
+1. **Zero Hardcoded Context**: Subagents, production scripts, and authoring engines are strictly forbidden from hardcoding chapter names, topics, or static vault target paths. Dynamic context resolution (from CLI args, manifest options, or filesystem discovery of `Study Materials/`) MUST always be used.
+2. **Fail-Closed on Missing Inputs**: Production authoring scripts MUST NEVER fall back to sample test fixtures (e.g. `resources/fixtures/*.json`) or hardcoded chapter names when arguments are missing. If `chapter` or `evidencePack` is missing, the script MUST fail immediately with an explicit error (`[MISSING_CHAPTER]` or `[MISSING_EVIDENCE_INPUT]`).
+3. **Anti-Mock Production Invariant**: Testing shortcuts, mock fixtures, or chapter bypasses must NEVER be committed to production pipelines or specialist author engines. All test suites must pass explicit parameters rather than relying on production scripts falling back to test data.

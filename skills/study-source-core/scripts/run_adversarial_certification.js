@@ -1,4 +1,4 @@
-﻿/**
+/**
  * StudySourceCore Standalone Adversarial Certification & Verification Harness
  * (`run_adversarial_certification.js`)
  * 
@@ -37,6 +37,7 @@ const { validateCompletionEvidenceFile, validateChapterCompletionEvidence } = re
 const { validateApkgContent } = require('./validate_apkg');
 const { validateStudyLabLevels1to7, validateStudyLabLevels1to6 } = require('./validate_studylab_levels_1_6');
 const { validateSolutionGraphDag, validateHintTierDisclosure } = require('./validate_studylab_procedural_apkg');
+const { validateQuestionBank } = require('./validate_studylab_question_bank');
 const { checkCrossArtifactIntegrity, checkProceduralConsistency } = require('./cross_artifact_checker');
 const { getVaultRoot, getCanonicalArtifactPaths, normalizeName } = require('./path_resolver');
 
@@ -78,7 +79,35 @@ async function runGate2AdversarialChecks(chapterDir, proceduralApkgPath, options
             errors.push(`[ADV-L1-L7] Multi-tier verification failed: ${err.message}`);
         }
     } else {
-        checksRun.push({ name: 'ADV Procedural Deck', status: 'SKIPPED', reason: 'No procedural APKG for this chapter' });
+        // Fallback: When procedural APKG is absent/paused, actively audit canonical Markdown Question Bank
+        const chapterName = options.chapter || path.basename(chapterDir);
+        const candidateQbPaths = [
+            path.join(chapterDir, 'Questions', `${chapterName}_Questions.md`),
+            path.join(chapterDir, 'StudyLab', `${chapterName}_Questions.md`),
+            path.join(chapterDir, 'Optional', `${chapterName}_PracticeQuestions.json`)
+        ];
+        const activeQbPath = candidateQbPaths.find(p => fs.existsSync(p));
+
+        if (activeQbPath) {
+            try {
+                const qbResult = validateQuestionBank(activeQbPath);
+                checksRun.push({
+                    name: 'ADV Canonical Question Bank Verification (Questions.md)',
+                    status: qbResult.isValid ? 'PASS' : 'FAIL',
+                    path: activeQbPath
+                });
+                if (!qbResult.isValid) {
+                    qbResult.errors.forEach(e => errors.push(`[ADV-QB] ${e}`));
+                }
+                if (qbResult.warnings && qbResult.warnings.length > 0) {
+                    qbResult.warnings.forEach(w => warnings.push(`[ADV-QB] ${w}`));
+                }
+            } catch (err) {
+                errors.push(`[ADV-QB] Question Bank audit failed: ${err.message}`);
+            }
+        } else {
+            checksRun.push({ name: 'ADV Procedural Deck', status: 'SKIPPED', reason: 'No procedural APKG or Question Bank found for this chapter' });
+        }
     }
 
     return {
