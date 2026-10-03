@@ -1,8 +1,8 @@
-# StudySourceCore — Master Engineering Implementation Roadmap (Phases 0–22)
+# StudySourceCore — Master Engineering Implementation Roadmap (Phases 0–23)
 
 > **Canonical Document**: `ROADMAP.md`  
 > **Status**: AUTHORITATIVE / GOVERNED BASELINE  
-> **Version**: 1.2.0-beta.6-ROADMAP  
+> **Version**: 1.2.0-beta.7-ROADMAP  
 > **Target Release**: StudySourceCore v1.2.0 (Production Stable)  
 > **Governance Authority**: StudySourceCore Master Governance Board  
 
@@ -12,7 +12,7 @@
 
 The StudySourceCore implementation roadmap is structured into sequenced phases across two major eras:
 1. **Foundational Architecture (Phases 0 through 10)**: Core IR definitions, CLR cryptographic provenance, compiler pipelines, binary packaging, and host adapters.
-2. **Production Maturation, Forensic Remediation & Anti-Mock Hardening (Phases 11 through 22)**: STEM practice suites, canonical Question Bank primary delivery (`Questions.md`), anti-leak recalibration, autonomous multi-agent write enforcement, native Antigravity skills discovery, sequential test harness, anti-hardcoding purity, and 12-flaw adversarial certification hardening.
+2. **Production Maturation, Forensic Remediation & Anti-Mock Hardening (Phases 11 through 23)**: STEM practice suites, canonical Question Bank primary delivery (`Questions.md`), anti-leak recalibration, autonomous multi-agent write enforcement, native Antigravity skills discovery, sequential test harness, anti-hardcoding purity, safe audit library returns, Wave 2 procedural DAG orchestration, and unified multi-chapter certification CLI.
 
 No phase may be initiated until all of its prerequisite phases have passed their explicit exit criteria. Speculative refactoring, ahead-of-phase implementation, and circular dependencies are strictly forbidden.
 
@@ -68,7 +68,13 @@ No phase may be initiated until all of its prerequisite phases have passed their
 │  [ PHASE 18: Antigravity Skills Discovery Bridge & Global Purge ] ─► COMPLETED          │
 │                           │                                                            │
 │                           ▼                                                            │
-│       🏆 v1.2.0-beta.6 PRODUCTION BASELINE CERTIFIED ◄── (CURRENT STATUS: ACTIVE)      │
+│  [ PHASES 19–22: Ghost Runner, Anti-Mock Purity & 12-Flaw Shield ]► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│  [ PHASE 23: Safe Audit Libs, Wave 2 DAG, Unified Certify CLI ] ──► COMPLETED          │
+│                           │                                                            │
+│                           ▼                                                            │
+│       🏆 v1.2.0-beta.7 PRODUCTION BASELINE CERTIFIED ◄── (CURRENT STATUS: ACTIVE)      │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -450,6 +456,38 @@ No phase may be initiated until all of its prerequisite phases have passed their
 
 ---
 
+### Phase 23: 12-Flaw Deep Remediation, Safe Audit Libraries, Wave 2 Procedural DAG & Unified Multi-Chapter Certification CLI
+- **Status**: **COMPLETED / CERTIFIED** (Milestone 14 - GAP-40, ADR-23)
+- **Objective**: Execute deep forensic remediation across core YAML/prompt parsers, eliminate programmatic process termination from audit libraries, anchor procedural APKG packaging in Wave 2 with explicit upstream dependencies, prevent completion evidence false failures on archived files, filter STEM unit and punctuation collisions in cross-artifact QA, and provide a unified multi-chapter certification CLI.
+- **Dependencies**: Phase 22 Complete.
+- **Deliverables**:
+  - `yaml_validator.js`: Aligned list item apostrophe detection with scalar parser to eliminate false positives on unquoted apostrophes in list items (`- Newton's Laws`).
+  - `author_physics_studylab.js` & `author_reasoning_studylab.js`: Restored `hints: p.hints || (p.progressive_hints ? p.progressive_hints : null)` in `sourceProblems` normalization to guarantee hint continuity into rendered Question Banks.
+  - Domain STEM Authors (`math`, `physics`, `chemistry`, `reasoning`): Standardized statement extraction to accept `p.statement || p.question || p.prompt`.
+  - `evidence_ingestion_engine.js` & `source_question_inventory.js`: Standardized markdown emission to `- Statement:` and extended inventory parser regex to match `(?:Stem|Statement|Question|Prompt)`.
+  - `evidence_ingestion_engine.js`: Added `resolvePythonExecutable()` helper dynamically inspecting local `.venv`, workspace root `.venv`, and system Python across Windows and POSIX.
+  - Audit Libraries (`note_contract_audit.js`, `link_audit.js`, `markdown_audit.js`, `latex_validator.js`, `mermaid_validator.js`): Replaced programmatic `process.exit(1)` with structured failure objects while retaining CLI guard `if (require.main === module)` for safe programmatic embedding.
+  - `mcp_server.js`: Passed `resolvedPath` in `validateQuestionBankMarkdown(content, resolvedPath)`.
+  - `artifact-registry.json`: Shifted `proceduralApkg` to `"wave": 2` with explicit dependencies on `task-studylab-practice-questions` and `task-studylab-problem-patterns`.
+  - `cross_artifact_checker.js`: Added comprehensive SI/STEM units (`N, J, Pa, atm, V, A, Ω, W, Hz, M, mol/L`, Hindi units) and physical dimensions to `IGNORED_ENTITIES`; stripped Devanagari dandas (`।`, `॥`) and punctuation from extracted entities to eliminate Hindi copula (`है।`) collisions.
+  - `validate_completion_evidence.js`: Integrated `.build/source-artifacts/<file>` archive fallback in disk verification so packaged chapters pass Gate 1.
+  - `run_adversarial_certification.js`: Added positional argument support (`[chapterDir]`), `--all` flag discovering and certifying all chapters in `samples/` and `Study Materials/`, and exported `certifyAllChapters`.
+  - `studycore_cli.js`: Added unified `certify` command (`studycore certify [chapterDir]` / `studycore certify --all`) and updated `printHelp()`.
+  - Version strings bumped to `v1.2.0-beta.7` across `package.json`, `studycore_cli.js`, `run_master_smoke_test.js`, and `mcp_server.js`.
+- **Invariants Enforced**:
+  - Audit libraries never terminate the host Node.js process when imported programmatically.
+  - Packaged chapters pass completion evidence gates by resolving archived source artifacts in `.build/source-artifacts/`.
+  - Unified certification CLI verifies all 6 production chapters and sample chapters across all 4 gates without manual loop scripts.
+- **Exit Criteria**:
+  - `npm run doctor`: 8/8 checks HEALTHY.
+  - `npm test`: 47/47 suites PASS.
+  - `npm run smoke`: 19/19 checks PASS.
+  - `studycore verify --all`: 6/6 chapters PASS.
+  - `npm run certify -- --all`: 6/6 chapters PASS (4/4 gates, 100% release verdict: PASS).
+- **Readiness State**: `COMPLETED`
+
+---
+
 ## 3. Scope Controls: What Must NOT Be Implemented in Phase 0
 
 To protect architectural focus, the following items are strictly out of scope for Phase 0:
@@ -490,4 +528,5 @@ To protect architectural focus, the following items are strictly out of scope fo
 | **Phase 20** | Forensic Root-Cause Audit Remediation & Ghost Runner Fix (GAP-36..37) | Phase 19 | **COMPLETED / CERTIFIED** |
 | **Phase 21** | Anti-Hardcoding & Zero-Mock Production Hardening (GAP-38, ADR-21) | Phase 20 | **COMPLETED / CERTIFIED** |
 | **Phase 22** | 12-Flaw Forensic Remediation & Adversarial Certification Hardening (GAP-39, ADR-22) | Phase 21 | **COMPLETED / CERTIFIED** |
+| **Phase 23** | 12-Flaw Deep Forensic Remediation, Safe Audit Libraries & Multi-Chapter Certification (GAP-40, ADR-23) | Phase 22 | **COMPLETED / CERTIFIED** |
 

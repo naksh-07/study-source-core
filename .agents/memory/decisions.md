@@ -54,3 +54,14 @@
   6. Added `QBank⚪(Legacy JSON only)` badge in `studycore status` and fallback validation in `studycore verify`.
 - **Status**: Accepted & Verified (100% across all 47 test suites, 19 smoke checks, and 6/6 chapters certified).
 
+## ADR-006: 12-Flaw Deep Remediation, Safe Audit Libraries, Wave 2 DAG & Unified Certify CLI
+- **Date**: 2026-10-03
+- **Context**: Audit libraries abruptly terminated host processes via `process.exit(1)`, procedural APKG task was misplaced in Wave 1 with empty dependencies, packaged chapters failed Gate 1 completion evidence due to archived TSVs in `.build/source-artifacts/`, and no unified CLI existed to certify all chapters in one pass.
+- **Decision**:
+  1. Replaced unconditional `process.exit(1)` in audit libraries (`note_contract_audit`, `link_audit`, `markdown_audit`, `latex_validator`, `mermaid_validator`) with structured return objects, wrapping exit in `if (require.main === module)` CLI guards.
+  2. Shifted `proceduralApkg` to `"wave": 2` with explicit dependencies in `artifact-registry.json`.
+  3. Added `.build/source-artifacts/<file>` fallback in `validate_completion_evidence.js` disk checks.
+  4. Added `studycore certify` command and `--all` flag to `run_adversarial_certification.js`.
+  5. Expanded SI/STEM units and stripped Devanagari dandas (`।`, `॥`) in `cross_artifact_checker.js`.
+- **Status**: Accepted & Verified (100% across 47/47 suites, 19/19 smoke checks, 8/8 doctor, 6/6 chapters certified).
+

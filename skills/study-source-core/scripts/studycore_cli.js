@@ -253,6 +253,13 @@ async function cmdPackage(positional, flags) {
 }
 
 async function verifyChapterInternal(subject, chapter, flags = {}) {
+    if (!subject || typeof subject !== 'string' || !subject.trim()) {
+        throw new Error(`[studycore verify] Missing or invalid subject argument: '${subject}'`);
+    }
+    if (!chapter || typeof chapter !== 'string' || !chapter.trim()) {
+        throw new Error(`[studycore verify] Missing or invalid chapter argument: '${chapter}'`);
+    }
+
     const vaultRoot = getVaultRoot();
     const chapterDir = path.join(vaultRoot, 'Study Materials', subject, chapter);
     if (!fs.existsSync(chapterDir)) {
@@ -336,12 +343,22 @@ async function verifyChapterInternal(subject, chapter, flags = {}) {
         if (!check.file || !fs.existsSync(check.file)) continue;
         try {
             const res = await check.run(check.file);
-            const passed = res ? (res.isValid !== false && res.passed !== false) : true;
+            let passed = true;
+            if (res) {
+                if (res.isValid !== undefined) passed = passed && Boolean(res.isValid);
+                if (res.passed !== undefined) passed = passed && Boolean(res.passed);
+                if (res.success !== undefined) passed = passed && Boolean(res.success);
+                if (Array.isArray(res.issues) && res.issues.length > 0) passed = false;
+                if (Array.isArray(res.errors) && res.errors.length > 0) passed = false;
+            }
+            const capturedErrors = (res && Array.isArray(res.errors) && res.errors.length > 0)
+                ? res.errors
+                : ((res && Array.isArray(res.issues) && res.issues.length > 0) ? res.issues : []);
             results.push({
                 check: check.name,
                 file: check.file,
                 passed,
-                errors: res && res.errors ? res.errors : []
+                errors: capturedErrors
             });
             if (!flags.json) {
                 console.log(`  ${passed ? '✅' : '❌'} ${check.name}: ${passed ? 'PASS' : 'FAIL'} (${path.basename(check.file)})`);
@@ -490,6 +507,82 @@ async function cmdVerify(positional, flags) {
         return { status: allChaptersPassed ? 'SUCCESS' : 'FAILED', mode: 'ALL', chapters: chapterSummaries };
     }
 
+    if (subject && !chapter) {
+        const vaultRoot = getVaultRoot();
+        const smDir = path.join(vaultRoot, 'Study Materials');
+        const { getSubjectCandidates } = require('./path_resolver');
+        const candidates = getSubjectCandidates(subject);
+        let matchedSubjDir = null;
+        let actualSubj = subject;
+
+        if (fs.existsSync(smDir)) {
+            const existingSubjects = fs.readdirSync(smDir).filter(s => fs.statSync(path.join(smDir, s)).isDirectory());
+            for (const c of candidates) {
+                const found = existingSubjects.find(s => s.toLowerCase() === c.toLowerCase());
+                if (found) {
+                    matchedSubjDir = path.join(smDir, found);
+                    actualSubj = found;
+                    break;
+                }
+            }
+        }
+
+        if (!matchedSubjDir || !fs.existsSync(matchedSubjDir)) {
+            throw new Error(`Subject directory not found for '${subject}'. Usage: studycore verify <Subject> <Chapter> or studycore verify --all`);
+        }
+
+        const chs = fs.readdirSync(matchedSubjDir).filter(c => fs.statSync(path.join(matchedSubjDir, c)).isDirectory()).sort();
+        if (chs.length === 0) {
+            throw new Error(`No chapters found in subject '${actualSubj}' (${matchedSubjDir})`);
+        }
+
+        if (!flags.json) {
+            console.log('================================================================================');
+            console.log(`STUDYSOURCECORE — VERIFYING SUBJECT: ${actualSubj} (${chs.length} CHAPTERS TOTAL)`);
+            console.log('================================================================================');
+        }
+
+        const chapterSummaries = [];
+        let allChaptersPassed = true;
+
+        for (const c of chs) {
+            const summary = await verifyChapterInternal(actualSubj, c, flags);
+            chapterSummaries.push(summary);
+            if (summary.status !== 'SUCCESS') {
+                allChaptersPassed = false;
+            }
+        }
+
+        if (!flags.json) {
+            console.log('\n================================================================================');
+            console.log(`VERIFICATION SCORECARD — ${actualSubj}`);
+            console.log('================================================================================');
+            for (const s of chapterSummaries) {
+                const passedCount = s.results.filter(r => r.passed).length;
+                const totalCount = s.results.length;
+                const icon = s.status === 'SUCCESS' ? '✅' : '❌';
+                console.log(`${icon} ${s.subject.padEnd(12)} / ${s.chapter.padEnd(28)} [${passedCount}/${totalCount} checks passed]`);
+            }
+            console.log('================================================================================');
+            console.log(allChaptersPassed ? `🎉 ALL ${chs.length} CHAPTERS IN ${actualSubj} PASSED VERIFICATION` : `❌ SOME CHAPTERS IN ${actualSubj} FAILED VERIFICATION`);
+            console.log('================================================================================\n');
+        } else {
+            console.log(JSON.stringify({
+                status: allChaptersPassed ? 'SUCCESS' : 'FAILED',
+                mode: 'SUBJECT',
+                subject: actualSubj,
+                totalChapters: chs.length,
+                passedChapters: chapterSummaries.filter(s => s.status === 'SUCCESS').length,
+                chapters: chapterSummaries
+            }, null, 2));
+        }
+
+        if (!allChaptersPassed) {
+            process.exitCode = 1;
+        }
+        return { status: allChaptersPassed ? 'SUCCESS' : 'FAILED', mode: 'SUBJECT', subject: actualSubj, chapters: chapterSummaries };
+    }
+
     const summary = await verifyChapterInternal(subject, chapter, flags);
     if (flags.json) {
         console.log(JSON.stringify(summary, null, 2));
@@ -498,6 +591,58 @@ async function cmdVerify(positional, flags) {
         process.exitCode = 1;
     }
     return summary;
+}
+
+async function cmdCertify(positional, flags) {
+    const { certifyChapter, certifyAllChapters } = require('./run_adversarial_certification');
+
+    if (flags.all) {
+        const res = await certifyAllChapters({ silent: flags.json });
+        if (flags.json) {
+            console.log(JSON.stringify(res, null, 2));
+        }
+        if (res.release_verdict !== 'PASS') {
+            process.exitCode = 1;
+        }
+        return res;
+    }
+
+    const firstArg = positional[0] || flags.chapterDir || flags.chapter;
+    let subject = null;
+    let chapter = null;
+    let chapterDir = null;
+
+    if (firstArg && (firstArg.includes('/') || firstArg.includes('\\') || fs.existsSync(firstArg))) {
+        chapterDir = path.resolve(firstArg);
+        chapter = flags.chapter || path.basename(chapterDir);
+        subject = flags.subject || path.basename(path.dirname(chapterDir));
+    } else {
+        subject = positional[0] || flags.subject;
+        chapter = positional[1] || flags.chapter;
+    }
+
+    if (!chapter && !chapterDir) {
+        throw new Error("Missing target chapter for certification. Usage: 'studycore certify <Subject> <Chapter>' or 'studycore certify --all'");
+    }
+
+    const report = await certifyChapter({
+        chapter,
+        subject,
+        chapterDir,
+        apkg: flags.apkg,
+        proceduralApkg: flags.proceduralApkg,
+        outputReport: flags.outputReport
+    });
+
+    if (flags.json) {
+        console.log(JSON.stringify(report, null, 2));
+    }
+
+    if (report.release_verdict !== 'PASS') {
+        process.exitCode = 1;
+    }
+
+    return report;
 }
 
 function cmdDispatch(positional, flags) {
@@ -770,7 +915,7 @@ function cmdTelemetry(positional, flags) {
 
 function printHelp() {
     console.log(`
-StudySourceCore CLI (v1.2.0-beta.6)
+StudySourceCore CLI (v1.2.0-beta.7)
 
 Commands:
   studycore status [--json]
@@ -787,6 +932,9 @@ Commands:
 
   studycore verify [<Subject> <Chapter>] [--all] [--json]
       Validate all present chapter deliverables or run the 10-gate Final Audit Harness (--all).
+
+  studycore certify [<Subject> <Chapter> | <chapterDir>] [--all] [--json]
+      Execute independent 4-gate adversarial certification release harness across chapter deliverables.
 
   studycore telemetry [--summary] [--spans] [--export <path>] [--clear] [--json]
       Inspect runtime telemetry, LLM token load, subagent latencies, and calibration recommendations.
@@ -813,6 +961,8 @@ async function runCli(argv = process.argv.slice(2)) {
             return await cmdPackage(positional, flags);
         case 'verify':
             return await cmdVerify(positional, flags);
+        case 'certify':
+            return await cmdCertify(positional, flags);
         case 'telemetry':
         case 'metrics':
             return cmdTelemetry(positional, flags);

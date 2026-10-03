@@ -85,7 +85,7 @@ async function runSmokeCheck(sectionName, checkName, testFn) {
 async function main() {
     console.log('================================================================================');
     console.log('STUDYSOURCECORE — MASTER SMOKE TEST & ARCHITECTURAL INTEGRITY HARNESS');
-    console.log('Target Version: v1.2.0-beta.6 | Zero Mocks | Zero Compromise');
+    console.log('Target Version: v1.2.0-beta.7 | Zero Mocks | Zero Compromise');
     console.log('================================================================================\n');
 
     fs.mkdirSync(SCRATCH_DIR, { recursive: true });
@@ -256,7 +256,7 @@ async function main() {
         const notesPath = path.join(mathDir, 'Notes/LCM-HCF_Notes.md');
         const basicPath = path.join(mathDir, 'Basic/LCM-HCF_Basic.tsv');
         const ankiPath = path.join(mathDir, 'LCM-HCF_Anki.apkg');
-        const procApkgPath = path.join(mathDir, 'StudyLab/LCM-HCF_StudyLab_Procedural.apkg');
+        const qbPath = path.join(mathDir, 'Questions/LCM-HCF_Questions.md');
 
         assert(fs.existsSync(notesPath), 'Math Notes missing');
         assert.strictEqual(auditNoteContract(notesPath, { silent: true }).success, true, 'Math Notes contract audit failed');
@@ -265,7 +265,9 @@ async function main() {
         assert.strictEqual(validateTsvContent(fs.readFileSync(basicPath, 'utf8'), 'LCM-HCF_Basic.tsv').isValid, true);
 
         assert(fs.existsSync(ankiPath), 'Math Anki APKG missing');
-        assert(fs.existsSync(procApkgPath), 'Math Procedural APKG missing');
+        assert(fs.existsSync(qbPath), 'Math Questions.md missing');
+        const qbRes = validateQuestionBankMarkdown(fs.readFileSync(qbPath, 'utf8'), qbPath);
+        assert.strictEqual(qbRes.isValid, true, `Math Question Bank invalid: ${qbRes.errors.join(', ')}`);
     });
 
     await runSmokeCheck('STAGE 2', '2.3 Track C (Reasoning): Authors and validates Syllogism & Seating Arrangement suite', async () => {
@@ -300,7 +302,6 @@ async function main() {
             ? path.join(physDir, 'Questions/Newton-Laws-Friction_Questions.md')
             : path.join(physDir, 'StudyLab/Newton-Laws-Friction_Questions.md');
         const ankiPath = path.join(physDir, 'Newton-Laws-Friction_Anki.apkg');
-        const procApkgPath = path.join(physDir, 'StudyLab/Newton-Laws-Friction_StudyLab_Procedural.apkg');
 
         assert(fs.existsSync(notesPath), 'Physics Notes missing');
         const noteRes = auditNoteContract(notesPath, { silent: true });
@@ -324,7 +325,6 @@ async function main() {
         assert.strictEqual(qbRes.hintLeaks?.length || 0, 0, 'Physics Question Bank has hint leaks');
 
         assert(fs.existsSync(ankiPath), 'Physics Declarative APKG missing');
-        assert(fs.existsSync(procApkgPath), 'Physics Procedural APKG missing');
     });
 
     await runSmokeCheck('STAGE 2', '2.5 Track E (Chemistry Equilibrium): Authors and validates ICE tables & Kc suite', async () => {
@@ -390,35 +390,19 @@ async function main() {
         }
     });
 
-    await runSmokeCheck('STAGE 3', '3.2 Procedural Anchor SQLite Inspection: Non-leaking hints & MCQ invariant', async () => {
-        const SQL = await initSqlJs();
-        const procPackages = [
-            path.resolve(VAULT_ROOT, 'Study Materials/Math/LCM-HCF/StudyLab/LCM-HCF_StudyLab_Procedural.apkg'),
-            path.resolve(VAULT_ROOT, 'Study Materials/Physics/Newton-Laws-Friction/StudyLab/Newton-Laws-Friction_StudyLab_Procedural.apkg')
+    await runSmokeCheck('STAGE 3', '3.2 Procedural Practice Question Bank Inspection: Non-leaking hints & MCQ options invariant', async () => {
+        const qbFiles = [
+            path.resolve(VAULT_ROOT, 'Study Materials/Math/LCM-HCF/Questions/LCM-HCF_Questions.md'),
+            path.resolve(VAULT_ROOT, 'Study Materials/Physics/Newton-Laws-Friction/Questions/Newton-Laws-Friction_Questions.md')
         ];
 
-        for (const apkgPath of procPackages) {
-            assert(fs.existsSync(apkgPath), `Procedural APKG missing: ${apkgPath}`);
-            const zip = await JSZip.loadAsync(fs.readFileSync(apkgPath));
-            const dbFile = zip.file('collection.anki21') || zip.file('collection.anki2');
-            assert(dbFile, `collection.anki2 missing in ${path.basename(apkgPath)}`);
-
-            const db = new SQL.Database(await dbFile.async('nodebuffer'));
-            const notesRes = db.exec('SELECT id, flds FROM notes');
-            assert(notesRes.length > 0 && notesRes[0].values.length > 0, `No procedural notes in ${path.basename(apkgPath)}`);
-
-            for (const row of notesRes[0].values) {
-                const flds = String(row[1]).split('\x1f');
-                const payload = JSON.parse(flds[0]);
-
-                assert(payload.proc_schema, `Procedural note ${row[0]} missing proc_schema`);
-                assert(payload.inline_contract, `Procedural note ${row[0]} missing inline_contract`);
-
-                if (payload.inline_contract?.options) {
-                    assert(payload.inline_contract.options.length >= 4,
-                        `MCQ in note ${row[0]} has fewer than 4 options in ${path.basename(apkgPath)}`);
-                }
-            }
+        for (const qbPath of qbFiles) {
+            assert(fs.existsSync(qbPath), `Question Bank missing: ${qbPath}`);
+            const content = fs.readFileSync(qbPath, 'utf8');
+            const res = validateQuestionBankMarkdown(content, qbPath);
+            assert.strictEqual(res.isValid, true, `Question Bank invalid at ${path.basename(qbPath)}: ${res.errors.join(', ')}`);
+            assert(content.includes('> [!tip]- संकेत (3-Tier Hints)'), `Missing collapsible hints in ${path.basename(qbPath)}`);
+            assert(content.includes('> [!success]- उत्तर एवं विस्तृत हल'), `Missing collapsible solution in ${path.basename(qbPath)}`);
         }
     });
 

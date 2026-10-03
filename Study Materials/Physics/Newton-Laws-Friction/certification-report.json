@@ -1,9 +1,9 @@
 {
-  "certification_id": "cert-physics-newton-laws-friction-1791033491903",
+  "certification_id": "cert-physics-newton-laws-friction-1791047842579",
   "chapter": "Newton-Laws-Friction",
   "subject": "Physics",
   "chapter_dir": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction",
-  "certified_at": "2026-10-03T13:18:11.903Z",
+  "certified_at": "2026-10-03T17:17:22.579Z",
   "release_verdict": "PASS",
   "summary": {
     "total_gates": 4,
@@ -22,8 +22,8 @@
       "stats": {
         "evidencePath": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\.completion-evidence.json",
         "overallVerdict": "SUCCESS",
-        "totalDeclared": 10,
-        "verifiedOnDisk": 10,
+        "totalDeclared": 9,
+        "verifiedOnDisk": 9,
         "skippedCount": 0,
         "mismatches": 0
       }
@@ -36,8 +36,9 @@
       "warnings": [],
       "checksRun": [
         {
-          "name": "ADV-L1-L7 Multi-Tier StudyLab Verification",
-          "status": "PASS"
+          "name": "ADV Canonical Question Bank Verification (Questions.md)",
+          "status": "PASS",
+          "path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Questions\\Newton-Laws-Friction_Questions.md"
         }
       ]
     },
@@ -50,14 +51,6 @@
       "checks": [
         {
           "check": "PKG-DECL-INTEGRITY",
-          "status": "PASS"
-        },
-        {
-          "check": "PKG-PROC-INTEGRITY",
-          "status": "PASS"
-        },
-        {
-          "check": "PKG-14-DUAL-DECK-COEXISTENCE",
           "status": "PASS"
         }
       ]

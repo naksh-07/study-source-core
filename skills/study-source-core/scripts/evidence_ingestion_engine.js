@@ -308,6 +308,28 @@ function extractMarkdownStructuredEntities(text) {
 }
 
 /**
+ * Resolves Python executable across Windows and POSIX virtual environments.
+ */
+function resolvePythonExecutable() {
+    const isWin = process.platform === 'win32';
+    const pyCandidates = [
+        path.join(__dirname, '..', '.venv', isWin ? 'Scripts/python.exe' : 'bin/python'),
+        path.join(__dirname, '..', '..', '..', '.venv', isWin ? 'Scripts/python.exe' : 'bin/python'),
+        path.join(process.cwd(), '.venv', isWin ? 'Scripts/python.exe' : 'bin/python'),
+        isWin ? 'python' : 'python3',
+        'python'
+    ];
+    for (const cand of pyCandidates) {
+        if (cand.includes('/') || cand.includes('\\')) {
+            if (fs.existsSync(cand)) return cand;
+        } else {
+            return cand;
+        }
+    }
+    return isWin ? 'python' : 'python3';
+}
+
+/**
  * Parses and ingests raw source from file or object into a Canonical Evidence Pack.
  */
 function ingestSourceToEvidencePack(sourceInput, options = {}) {
@@ -323,8 +345,7 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
 
             if (fileExt === '.pdf') {
                 const extractorScript = path.join(__dirname, 'extract_pdf_source.py');
-                const venvPy = path.join(__dirname, '../.venv/Scripts/python.exe');
-                const pythonPath = fs.existsSync(venvPy) ? venvPy : (process.platform === 'win32' ? 'python' : 'python3');
+                const pythonPath = resolvePythonExecutable();
 
                 try {
                     const pyArgs = [extractorScript, '--pdf', path.resolve(sourceInput), '--subject', subject, '--chapter', chapter];
@@ -543,7 +564,7 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
         mdLines.push('## 5. Authentic Source Problems');
         for (const p of rawPracticeProblems) {
             mdLines.push(`### Problem: ${p.id || 'Item'}`);
-            mdLines.push(`- Stem: ${p.question_text || p.stem || ''}`);
+            mdLines.push(`- Statement: ${p.question_text || p.statement || p.stem || p.question || p.prompt || ''}`);
             if (p.answer) mdLines.push(`- Answer: ${p.answer}`);
             mdLines.push('');
         }

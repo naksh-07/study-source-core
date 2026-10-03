@@ -101,6 +101,13 @@ function getChapterVariants(chapter) {
  * Performs candidate probing and filesystem inspection.
  */
 function resolveChapterDir(subject, chapter, customRoot = null) {
+    if (!subject || typeof subject !== 'string' || !subject.trim()) {
+        throw new Error(`[path_resolver] Cannot resolve chapter directory: 'subject' must be a non-empty string. Received: ${JSON.stringify(subject)}`);
+    }
+    if (!chapter || typeof chapter !== 'string' || !chapter.trim()) {
+        throw new Error(`[path_resolver] Cannot resolve chapter directory: 'chapter' must be a non-empty string. Received: ${JSON.stringify(chapter)}`);
+    }
+
     const root = customRoot || getVaultRoot();
     const studyMaterialsDir = path.join(root, 'Study Materials');
     const safeSubj = normalizeName(subject);

@@ -397,6 +397,31 @@ These practices violated the zero-mock production invariant and created a high r
 - **Positive**: 100% rigorous certification of active practice deliverables without requiring unready APKG apps; zero false-positive cross-artifact divergence errors; robust Unicode leak detection for bilingual content; transparent vault status reporting.
 - **Negative**: Question Banks must strictly adhere to the 4-option MCQ schema; free-form non-MCQ questions are rejected by the validator.
 
+---
+
+## ADR-23: Safe Audit Libraries Programmatic Returns, Wave 2 Procedural Packaging DAG, Completion Evidence Archive Fallback, and Unified Certification CLI
+
+### Context
+1. Audit and validation modules (`note_contract_audit.js`, `link_audit.js`, `markdown_audit.js`, `latex_validator.js`, `mermaid_validator.js`) executed unconditional `process.exit(1)` upon encountering errors. While appropriate for standalone CLI usage, programmatic callers (such as test runners, MCP servers, and orchestrator hooks) were forcefully terminated rather than receiving structured diagnostic failure objects.
+2. In `artifact-registry.json`, the procedural APKG packaging task (`proceduralApkg`) was registered in `"wave": 1` with an empty dependencies list (`[]`), contradicting the architectural reality that packaging depends on Wave 1 authored practice questions and problem pattern JSON deliverables.
+3. When `export_anki.js` compiles declarative APKG with `cleanIntermediates: true`, raw TSVs in `Basic/` and `Cloze/` are moved to `.build/source-artifacts/`. Gate 1 in `validate_completion_evidence.js` only checked root paths, causing packaged chapters to fail Gate 1 verification.
+4. Developers and CI workflows lacked a single-command interface to execute 4-Gate Adversarial Certification across all chapters in the vault, requiring manual shell loops or individual script invocations.
+
+### Decision
+1. **Safe Programmatic Audit Libraries**: Replaced unconditional `process.exit(1)` in audit libraries with structured return objects (`{ valid: false, errors }`), wrapping process termination strictly in `if (require.main === module)` CLI guards. Programmatic invocations return failure descriptors cleanly.
+2. **Wave 2 Procedural Packaging DAG**: Shifted `proceduralApkg` to `"wave": 2` with explicit dependencies on `["task-studylab-practice-questions", "task-studylab-problem-patterns"]` in `artifact-registry.json`.
+3. **Completion Evidence Archive Fallback**: Integrated `.build/source-artifacts/<file>` fallback in `validate_completion_evidence.js` so that packaged chapters with archived intermediate TSVs pass physical disk verification without false failures.
+4. **Unified Certification CLI Driver**:
+   - Added positional directory support (`[chapterDir]`) and `--all` flag to `run_adversarial_certification.js`, alongside the exported function `certifyAllChapters`.
+   - Added `studycore certify` command to `studycore_cli.js` (`studycore certify [chapterDir]` and `studycore certify --all`).
+5. **Cross-Artifact STEM Unit & Devanagari Danda Shield**:
+   - Added comprehensive SI/STEM units (`N, J, Pa, atm, V, A, Ω, W, Hz, M, mol/L`, Hindi units) and physical dimensions to `IGNORED_ENTITIES` in `cross_artifact_checker.js`.
+   - Stripped Devanagari dandas (`\u0964`, `\u0965`) and punctuation from extracted entities to eliminate Hindi copula (`है।`) collisions.
+
+### Consequences
+- **Positive**: Audit modules can be safely imported and embedded into any Node.js service, MCP tool, or test suite without abrupt process termination; task DAG respects packaging dependencies; packaged chapters pass Gate 1 completion evidence; entire vault can be certified via `npm run certify -- --all` or `studycore certify --all`.
+- **Negative**: Programmatic callers must inspect the returned `{ valid, errors }` object to determine success or failure.
+
 
 
 

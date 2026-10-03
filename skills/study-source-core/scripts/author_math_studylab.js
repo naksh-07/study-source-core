@@ -97,7 +97,7 @@ function normalizeRawSourceData(data) {
         question_number: p.question_number || null,
         pattern_ref: p.pattern_ref || null,
         raw_type: p.question_type || p.raw_type || (Array.isArray(p.options) && p.options.length > 0 ? 'mcq' : 'numerical'),
-        statement: p.question_text || p.statement || p.stem || '',
+        statement: p.question_text || p.statement || p.stem || p.question || p.prompt || '',
         options: Array.isArray(p.options) ? [...p.options] : [],
         correct_answer: p.correct_answer !== undefined ? p.correct_answer : p.answer,
         difficulty: p.difficulty || 2.0,

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * StudySourceCore Completion Evidence Release Gate Validator (`validate_completion_evidence.js`)
  * 
  * Implements GAP-08: Hard Physical On-Disk Release Gate.
@@ -107,19 +107,24 @@ function validateCompletionEvidenceFile(evidencePath, options = {}) {
             return;
         }
 
-        const resolvedTarget = path.isAbsolute(rawTarget) ? rawTarget : path.resolve(baseDir, rawTarget);
+        let targetFilePath = path.isAbsolute(rawTarget) ? rawTarget : path.resolve(baseDir, rawTarget);
 
-        // a. File must physically exist on disk
-        if (!fs.existsSync(resolvedTarget)) {
-            errors.push(`[ARTIFACT_MISSING_ON_DISK] Declared artifact '${artId}' does not exist on disk: '${resolvedTarget}'`);
-            stats.mismatches++;
-            return;
+        // a. File must physically exist on disk (with fallback to .build/source-artifacts/ if packaged and archived)
+        if (!fs.existsSync(targetFilePath)) {
+            const archivedTarget = path.join(baseDir, '.build', 'source-artifacts', path.basename(targetFilePath));
+            if (fs.existsSync(archivedTarget)) {
+                targetFilePath = archivedTarget;
+            } else {
+                errors.push(`[ARTIFACT_MISSING_ON_DISK] Declared artifact '${artId}' does not exist on disk: '${targetFilePath}'`);
+                stats.mismatches++;
+                return;
+            }
         }
 
         // b. Non-zero byte verification
-        const artStat = fs.statSync(resolvedTarget);
+        const artStat = fs.statSync(targetFilePath);
         if (artStat.size === 0) {
-            errors.push(`[ZERO_BYTE_ARTIFACT] Declared artifact '${artId}' exists but is 0 bytes on disk: '${resolvedTarget}'`);
+            errors.push(`[ZERO_BYTE_ARTIFACT] Declared artifact '${artId}' exists but is 0 bytes on disk: '${targetFilePath}'`);
             stats.mismatches++;
             return;
         }
@@ -127,16 +132,16 @@ function validateCompletionEvidenceFile(evidencePath, options = {}) {
         // c. Byte size check (if declared)
         if (typeof art.bytes === 'number' && art.bytes > 0) {
             if (artStat.size !== art.bytes) {
-                errors.push(`[BYTE_SIZE_MISMATCH] Declared artifact '${artId}' byte size mismatch: declared ${art.bytes} bytes, actual disk size ${artStat.size} bytes for '${resolvedTarget}'`);
+                errors.push(`[BYTE_SIZE_MISMATCH] Declared artifact '${artId}' byte size mismatch: declared ${art.bytes} bytes, actual disk size ${artStat.size} bytes for '${targetFilePath}'`);
                 stats.mismatches++;
             }
         }
 
         // d. SHA-256 hash check (if declared)
         if (art.sha256) {
-            const actualHash = computeFileSha256(resolvedTarget);
+            const actualHash = computeFileSha256(targetFilePath);
             if (actualHash !== art.sha256) {
-                errors.push(`[HASH_MISMATCH] Declared artifact '${artId}' SHA-256 mismatch: declared ${art.sha256}, actual disk hash ${actualHash} for '${resolvedTarget}'`);
+                errors.push(`[HASH_MISMATCH] Declared artifact '${artId}' SHA-256 mismatch: declared ${art.sha256}, actual disk hash ${actualHash} for '${targetFilePath}'`);
                 stats.mismatches++;
             }
         }

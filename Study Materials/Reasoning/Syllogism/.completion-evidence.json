@@ -5,7 +5,7 @@
     "subject": "Reasoning",
     "completed_count": 9,
     "artifact_count": 9,
-    "verified_timestamp": "2026-10-03T13:15:38.662Z",
+    "verified_timestamp": "2026-10-03T18:36:39.593Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -47,8 +47,8 @@
     {
       "task_id": "task-question-bank",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Reasoning\\Syllogism\\Questions\\Syllogism_Questions.md",
-      "bytes": 32379,
-      "sha256": "189780f676d4e01f42566bc5fb17d8f9ac79554cde3c01b46cc9b4b9106edc31",
+      "bytes": 142677,
+      "sha256": "fbad9d4acf9ab1637435a818d7066db22bcba8095c23e91b3fb77747492624ec",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {

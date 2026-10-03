@@ -56,8 +56,8 @@ async function validateMcqBlackBox(apkgPath) {
                 if (!options || !Array.isArray(options)) {
                     console.error(`❌ FAIL Note ${id}: MCQ is missing options array in payload.`);
                     allValid = false;
-                } else if (options.length < 3) {
-                    console.error(`❌ FAIL Note ${id}: MCQ has fewer than 3 options (${options.length}).`);
+                } else if (options.length < 4) {
+                    console.error(`❌ FAIL Note ${id}: MCQ has fewer than 4 options (${options.length}).`);
                     allValid = false;
                 } else {
                     console.log(`✅ Note ${id}: Valid MCQ with ${options.length} discrete options.`);

@@ -145,7 +145,14 @@ function validateMermaidBlock(block, issues, warnings) {
   }
 }
 
-function validateMermaidContent(content, filePath = 'content.md') {
+function validateMermaidContent(content, filePath = 'content.md', options = {}) {
+  let effectiveOptions = options;
+  let effectivePath = filePath;
+  if (typeof filePath === 'object' && filePath !== null) {
+    effectiveOptions = filePath;
+    effectivePath = 'content.md';
+  }
+
   const blocks = extractMermaidBlocks(content);
   const issues = [];
   const warnings = [];
@@ -158,39 +165,51 @@ function validateMermaidContent(content, filePath = 'content.md') {
     validateMermaidBlock(block, issues, warnings);
   }
 
-  const fileName = path.basename(filePath);
-  console.log('======================================================');
-  console.log(`  MERMAID STRUCTURAL VALIDATOR: ${fileName}`);
-  console.log('======================================================');
-  console.log(`Mermaid blocks found: ${blocks.length}`);
-  console.log('------------------------------------------------------');
+  const fileName = path.basename(effectivePath);
+  if (!effectiveOptions.silent) {
+    console.log('======================================================');
+    console.log(`  MERMAID STRUCTURAL VALIDATOR: ${fileName}`);
+    console.log('======================================================');
+    console.log(`Mermaid blocks found: ${blocks.length}`);
+    console.log('------------------------------------------------------');
 
-  if (issues.length > 0) {
-    console.log(`❌ MERMAID ISSUES (${issues.length}):`);
-    issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    if (issues.length > 0) {
+      console.log(`❌ MERMAID ISSUES (${issues.length}):`);
+      issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    }
+    if (warnings.length > 0) {
+      console.log(`⚠️  WARNINGS (${warnings.length}):`);
+      warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
+    }
+    if (issues.length === 0 && warnings.length === 0) {
+      console.log('✅ ALL MERMAID BLOCKS VALID.');
+    } else if (issues.length === 0) {
+      console.log('✅ MERMAID VALID WITH WARNINGS.');
+    }
+    console.log('======================================================\n');
   }
-  if (warnings.length > 0) {
-    console.log(`⚠️  WARNINGS (${warnings.length}):`);
-    warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
-  }
-  if (issues.length === 0 && warnings.length === 0) {
-    console.log('✅ ALL MERMAID BLOCKS VALID.');
-  } else if (issues.length === 0) {
-    console.log('✅ MERMAID VALID WITH WARNINGS.');
-  }
-  console.log('======================================================\n');
 
   return { blocks: blocks.length, issues, warnings, passed: issues.length === 0, isValid: issues.length === 0 };
 }
 
-function validateFile(filePath) {
+function validateFile(filePath, options = {}) {
   if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
+    const msg = `[ERROR] File not found: ${filePath}`;
+    if (require.main === module) {
+      console.error(msg);
+      process.exit(1);
+    }
+    return {
+      blocks: 0,
+      issues: [msg],
+      warnings: [],
+      passed: false,
+      isValid: false
+    };
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
-  return validateMermaidContent(content, filePath);
+  return validateMermaidContent(content, filePath, options);
 }
 
 if (require.main === module) {

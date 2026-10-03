@@ -3,9 +3,9 @@
     "overall_verdict": "SUCCESS",
     "chapter": "Newton-Laws-Friction",
     "subject": "Physics",
-    "completed_count": 10,
-    "artifact_count": 10,
-    "verified_timestamp": "2026-10-03T13:42:03.753Z",
+    "completed_count": 9,
+    "artifact_count": 9,
+    "verified_timestamp": "2026-10-03T18:36:39.574Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -47,8 +47,8 @@
     {
       "task_id": "task-question-bank",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Questions\\Newton-Laws-Friction_Questions.md",
-      "bytes": 7564,
-      "sha256": "51a5d0a0fb047ed109aa03420451f115fed4751154721dbde9a79db04bd42760",
+      "bytes": 23326,
+      "sha256": "62311cc08852fe900b56ff4f4fd5785ff443c7dfe7001046808c93f4c5dd1eda",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
@@ -56,13 +56,6 @@
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\Newton-Laws-Friction_Anki.apkg",
       "bytes": 10504,
       "sha256": "49e6507a41e537addaf07127ec9ff2051e60f3d205f9ab13c48e39c72d570822",
-      "physical_status": "VERIFIED_ON_DISK"
-    },
-    {
-      "task_id": "task-studylab-procedural-apkg",
-      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Physics\\Newton-Laws-Friction\\StudyLab\\Newton-Laws-Friction_StudyLab_Procedural.apkg",
-      "bytes": 6673,
-      "sha256": "27303eaccf75bdedf2f0d6543baf2b93f23f413f73a96c16f4aa24a893abb7ba",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {

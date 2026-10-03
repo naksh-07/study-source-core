@@ -28,8 +28,12 @@ const THRESHOLDS = {
 
 function auditMarkdown(filePath) {
   if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
+    const msg = `[ERROR] File not found: ${filePath}`;
+    if (require.main === module) {
+      console.error(msg);
+      process.exit(1);
+    }
+    return false;
   }
 
   const content = fs.readFileSync(filePath, 'utf8');

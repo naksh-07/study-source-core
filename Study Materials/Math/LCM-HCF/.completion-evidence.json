@@ -5,7 +5,7 @@
     "subject": "Math",
     "completed_count": 6,
     "artifact_count": 6,
-    "verified_timestamp": "2026-10-03T13:15:38.641Z",
+    "verified_timestamp": "2026-10-03T18:36:39.559Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -32,9 +32,9 @@
     },
     {
       "task_id": "task-question-bank",
-      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\Optional\\LCM-HCF_PracticeQuestions.json",
-      "bytes": 42508,
-      "sha256": "5969af62fc71db761d6da1eba9454e0f9fcdc55196f7ddfce04c44e6f8fd07f1",
+      "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\Questions\\LCM-HCF_Questions.md",
+      "bytes": 9807,
+      "sha256": "095764cc6641c324cf68011dae6ebfdcb4a169cd82c082ae72caa112b557a16f",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
@@ -48,7 +48,7 @@
       "task_id": "task-studylab-procedural-apkg",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\StudyLab\\LCM-HCF_StudyLab_Procedural.apkg",
       "bytes": 8381,
-      "sha256": "8c18d9a662e7baf5c67d02c601c41414d1de25f61bfda37fb014f02f0e8dfeb4",
+      "sha256": "4fa22daf95db2252e000a2e56e5941424a9540050b2987af0ddf4e1e555cc0ac",
       "physical_status": "VERIFIED_ON_DISK"
     }
   ]

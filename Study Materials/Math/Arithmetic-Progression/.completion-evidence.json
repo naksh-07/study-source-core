@@ -5,7 +5,7 @@
     "subject": "Math",
     "completed_count": 9,
     "artifact_count": 9,
-    "verified_timestamp": "2026-10-03T13:15:38.524Z",
+    "verified_timestamp": "2026-10-03T18:36:39.436Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -47,8 +47,8 @@
     {
       "task_id": "task-question-bank",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\Arithmetic-Progression\\Questions\\Arithmetic-Progression_Questions.md",
-      "bytes": 13503,
-      "sha256": "4ded961ef2b953256df84206264efe33d220376d3ccb69ba534c280d9ca24032",
+      "bytes": 65897,
+      "sha256": "1d69571a736dc2975c5b3c1320ca8f9099eaa995328bbfaa11d2b89c0ab86883",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {

@@ -508,7 +508,7 @@
         },
         {
           "tier": 2,
-          "text": "LCM = HCF * 3 * 4 = 48।"
+          "text": "सूत्र: LCM = HCF * x * y का अनुप्रयोग करें।"
         }
       ],
       "inline_contract": {

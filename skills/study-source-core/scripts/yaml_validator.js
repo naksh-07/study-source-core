@@ -38,10 +38,14 @@ function extractFrontmatter(content) {
   return { lines: lines.slice(1, endIdx), endLine: endIdx };
 }
 
-function validateYamlFrontmatter(filePath) {
+function validateYamlFrontmatter(filePath, options = {}) {
   if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
+    const msg = `[ERROR] File not found: ${filePath}`;
+    if (require.main === module) {
+      console.error(msg);
+      process.exit(1);
+    }
+    return report(filePath, [msg], [], options);
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
@@ -54,14 +58,14 @@ function validateYamlFrontmatter(filePath) {
     const closeIdx = allLines.findIndex((l, i) => i > 0 && l.trim() === '---');
     if (closeIdx === -1) {
       issues.push('Line 1: Unclosed YAML frontmatter block — missing terminating `---`.');
-      return report(filePath, issues, warnings);
+      return report(filePath, issues, warnings, options);
     }
   }
 
   const fm = extractFrontmatter(content);
   if (!fm) {
     warnings.push('No YAML frontmatter block found (optional but recommended).');
-    return report(filePath, [], warnings);
+    return report(filePath, [], warnings, options);
   }
 
   const { lines } = fm;
@@ -98,17 +102,36 @@ function validateYamlFrontmatter(filePath) {
         warnings.push(`Line ${lineNum}: List item found outside expected array context.`);
       }
       const itemValue = line.substring(2).trim();
-      // Check unclosed quotes in item
+      const isItemDoubleQuoted = itemValue.startsWith('"') && itemValue.endsWith('"') && itemValue.length >= 2;
+      const isItemSingleQuoted = itemValue.startsWith("'") && itemValue.endsWith("'") && itemValue.length >= 2;
+
       const sq = (itemValue.match(/'/g) || []).length;
       const dq = (itemValue.match(/"/g) || []).length;
-      if (sq % 2 !== 0) {
-        issues.push(`Line ${lineNum}: Unclosed single quote in list item: "${itemValue}"`);
-        openQuoteChar = "'";
-        openQuoteLine = lineNum;
-      } else if (dq % 2 !== 0) {
-        issues.push(`Line ${lineNum}: Unclosed double quote in list item: "${itemValue}"`);
-        openQuoteChar = '"';
-        openQuoteLine = lineNum;
+
+      if (isItemDoubleQuoted) {
+        const unescapedDoubleQ = (itemValue.replace(/\\"/g, '').match(/"/g) || []).length;
+        if (unescapedDoubleQ % 2 !== 0) {
+          issues.push(`Line ${lineNum}: Unclosed double quote in list item: "${itemValue}"`);
+          openQuoteChar = '"';
+          openQuoteLine = lineNum;
+        }
+      } else if (isItemSingleQuoted) {
+        const unescapedSingleQ = (itemValue.replace(/''/g, '').match(/'/g) || []).length;
+        if (unescapedSingleQ % 2 !== 0) {
+          issues.push(`Line ${lineNum}: Unclosed single quote in list item: "${itemValue}"`);
+          openQuoteChar = "'";
+          openQuoteLine = lineNum;
+        }
+      } else {
+        if (sq > 0 && sq % 2 !== 0 && (itemValue.startsWith("'") || itemValue.endsWith("'"))) {
+          issues.push(`Line ${lineNum}: Unclosed single quote in list item: "${itemValue}"`);
+          openQuoteChar = "'";
+          openQuoteLine = lineNum;
+        } else if (dq > 0 && dq % 2 !== 0 && (itemValue.startsWith('"') || itemValue.endsWith('"'))) {
+          issues.push(`Line ${lineNum}: Unclosed double quote in list item: "${itemValue}"`);
+          openQuoteChar = '"';
+          openQuoteLine = lineNum;
+        }
       }
       continue;
     }
@@ -202,29 +225,38 @@ function validateYamlFrontmatter(filePath) {
     issues.push(`Line ${openQuoteLine}: Unclosed ${openQuoteChar === "'" ? 'single' : 'double'} quote not terminated before end of frontmatter.`);
   }
 
-  return report(filePath, issues, warnings);
+  return report(filePath, issues, warnings, options);
 }
 
-function report(filePath, issues, warnings) {
+function report(filePath, issues, warnings, options = {}) {
   const fileName = path.basename(filePath);
-  console.log('======================================================');
-  console.log(`  YAML FRONTMATTER VALIDATOR: ${fileName}`);
-  console.log('======================================================');
-  if (issues.length > 0) {
-    console.log(`❌ YAML ISSUES (${issues.length}):`);
-    issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+  if (!options.silent) {
+    console.log('======================================================');
+    console.log(`  YAML FRONTMATTER VALIDATOR: ${fileName}`);
+    console.log('======================================================');
+    if (issues.length > 0) {
+      console.log(`❌ YAML ISSUES (${issues.length}):`);
+      issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    }
+    if (warnings.length > 0) {
+      console.log(`⚠️  WARNINGS (${warnings.length}):`);
+      warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
+    }
+    if (issues.length === 0 && warnings.length === 0) {
+      console.log('✅ YAML FRONTMATTER VALID.');
+    } else if (issues.length === 0) {
+      console.log('✅ YAML VALID WITH WARNINGS.');
+    }
+    console.log('======================================================\n');
   }
-  if (warnings.length > 0) {
-    console.log(`⚠️  WARNINGS (${warnings.length}):`);
-    warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
-  }
-  if (issues.length === 0 && warnings.length === 0) {
-    console.log('✅ YAML FRONTMATTER VALID.');
-  } else if (issues.length === 0) {
-    console.log('✅ YAML VALID WITH WARNINGS.');
-  }
-  console.log('======================================================\n');
-  return { issues, warnings, passed: issues.length === 0 };
+  return {
+    issues,
+    warnings,
+    errors: issues,
+    passed: issues.length === 0,
+    isValid: issues.length === 0,
+    success: issues.length === 0
+  };
 }
 
 if (require.main === module) {

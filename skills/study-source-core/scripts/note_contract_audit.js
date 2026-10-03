@@ -26,8 +26,23 @@ const path = require('path');
 
 function auditNoteContract(filePath, options = {}) {
   if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
+    const msg = `[ERROR] File not found: ${filePath}`;
+    if (require.main === module) {
+      console.error(msg);
+      process.exit(1);
+    }
+    return {
+      h1Count: 0,
+      headingIssues: 0,
+      calloutCount: 0,
+      boldRatio: 0,
+      emojiCount: 0,
+      duplicateH2: [],
+      issues: [msg],
+      warnings: [],
+      success: false,
+      isValid: false
+    };
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
@@ -72,6 +87,7 @@ function auditNoteContract(filePath, options = {}) {
   const fenceStack = [];
   const h2Seen = new Map();
   const h3Seen = new Map();
+  const duplicateH2 = [];
 
   for (let i = bodyStartIndex; i < lines.length; i++) {
     const lineNum = i + 1;
@@ -112,7 +128,9 @@ function auditNoteContract(filePath, options = {}) {
         }
         if (level === 2) {
           if (h2Seen.has(titleLower)) {
-            issues.push(`Line ${lineNum}: Duplicate H2 section "${title}" (first at line ${h2Seen.get(titleLower)}).`);
+            const firstLine = h2Seen.get(titleLower);
+            issues.push(`Line ${lineNum}: Duplicate H2 section "${title}" (first at line ${firstLine}).`);
+            duplicateH2.push({ title, line: lineNum, firstLine });
           } else {
             h2Seen.set(titleLower, lineNum);
           }
@@ -162,7 +180,7 @@ function auditNoteContract(filePath, options = {}) {
     console.log(`Path: ${filePath}`);
     console.log(`Frontmatter: ${frontmatterClosed ? 'Present (deep YAML validation: use yaml_validator.js)' : (lines[0]?.trim() === '---' ? 'Malformed (unclosed)' : 'None')}`);
     console.log(`H1 Count: ${h1Count} | Heading Jump Valid: ${issues.filter(i => i.includes('Skipped heading')).length === 0}`);
-    console.log(`Duplicate H2: ${h2Seen.size} unique | Bolding: ${boldPct.toFixed(1)}% | Emojis: ${emojiMatches.length}`);
+    console.log(`H2 Sections: ${h2Seen.size} unique (${duplicateH2.length} duplicate) | Bolding: ${boldPct.toFixed(1)}% | Emojis: ${emojiMatches.length}`);
     console.log('------------------------------------------------------');
 
     if (issues.length > 0) {
@@ -189,9 +207,12 @@ function auditNoteContract(filePath, options = {}) {
     h1Count,
     boldRatio: boldPct,
     emojiCount: emojiMatches.length,
-    duplicateH2: [...h2Seen.entries()].filter((_, __, arr) => arr.length !== new Set([...h2Seen.values()]).size),
+    duplicateH2,
     issues,
     warnings,
+    errors: issues,
+    isValid: issues.length === 0,
+    passed: issues.length === 0,
     success: issues.length === 0
   };
 }

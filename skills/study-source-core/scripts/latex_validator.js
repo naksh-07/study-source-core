@@ -14,7 +14,13 @@
 const fs = require('fs');
 const path = require('path');
 
-function validateLatexContent(content, filePath = 'content.md') {
+function validateLatexContent(content, filePath = 'content.md', options = {}) {
+  let effectiveOptions = options;
+  let effectivePath = filePath;
+  if (typeof filePath === 'object' && filePath !== null) {
+    effectiveOptions = filePath;
+    effectivePath = 'content.md';
+  }
   const lines = content.split(/\r?\n/);
   const issues = [];
   const warnings = [];
@@ -112,40 +118,53 @@ function validateLatexContent(content, filePath = 'content.md') {
   }
 
   // Report
-  const fileName = path.basename(filePath);
-  console.log('======================================================');
-  console.log(`  LATEX MATH VALIDATOR: ${fileName}`);
-  console.log('======================================================');
-  console.log(`Display math blocks ($$...$$): ${displayMathCount}`);
-  console.log(`Inline math blocks ($...$):    ${inlineMathCount}`);
-  console.log('------------------------------------------------------');
+  const fileName = path.basename(effectivePath);
+  if (!effectiveOptions.silent) {
+    console.log('======================================================');
+    console.log(`  LATEX MATH VALIDATOR: ${fileName}`);
+    console.log('======================================================');
+    console.log(`Display math blocks ($$...$$): ${displayMathCount}`);
+    console.log(`Inline math blocks ($...$):    ${inlineMathCount}`);
+    console.log('------------------------------------------------------');
 
-  if (issues.length > 0) {
-    console.log(`❌ LATEX ISSUES (${issues.length}):`);
-    issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    if (issues.length > 0) {
+      console.log(`❌ LATEX ISSUES (${issues.length}):`);
+      issues.forEach(iss => console.log(`  - [ERROR] ${iss}`));
+    }
+    if (warnings.length > 0) {
+      console.log(`⚠️  WARNINGS (${warnings.length}):`);
+      warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
+    }
+    if (issues.length === 0 && warnings.length === 0) {
+      console.log('✅ ALL LATEX MATH DELIMITERS VALID.');
+    } else if (issues.length === 0) {
+      console.log('✅ LATEX VALID WITH WARNINGS.');
+    }
+    console.log('======================================================\n');
   }
-  if (warnings.length > 0) {
-    console.log(`⚠️  WARNINGS (${warnings.length}):`);
-    warnings.forEach(w => console.log(`  - [WARN]  ${w}`));
-  }
-  if (issues.length === 0 && warnings.length === 0) {
-    console.log('✅ ALL LATEX MATH DELIMITERS VALID.');
-  } else if (issues.length === 0) {
-    console.log('✅ LATEX VALID WITH WARNINGS.');
-  }
-  console.log('======================================================\n');
 
   return { displayMathCount, inlineMathCount, issues, warnings, passed: issues.length === 0, isValid: issues.length === 0 };
 }
 
-function validateLatex(filePath) {
+function validateLatex(filePath, options = {}) {
   if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
+    const msg = `[ERROR] File not found: ${filePath}`;
+    if (require.main === module) {
+      console.error(msg);
+      process.exit(1);
+    }
+    return {
+      displayMathCount: 0,
+      inlineMathCount: 0,
+      issues: [msg],
+      warnings: [],
+      passed: false,
+      isValid: false
+    };
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
-  return validateLatexContent(content, filePath);
+  return validateLatexContent(content, filePath, options);
 }
 
 /**

@@ -980,8 +980,8 @@ runTest('T3.1.5', 'Internal procedural representation is preserved while rendere
     assert(!md.includes('Product of two numbers given'), 'Recognition signal leaked');
     assert(!md.includes('Divide product by HCF'), 'Decision point leaked');
     assert(!md.includes('Dividing product by HCF squared'), 'Trap leaked');
-    assert(!md.includes('संख्याओं का गुणनफल उनके LCM और HCF के गुणनफल के बराबर'), 'Tier 1 hint leaked');
-    assert(!md.includes('360 * 12 = 4320 (सत्यापित)'), 'Verification leaked');
+    assert(md.includes('> [!tip]- संकेत (3-Tier Hints)'), 'Tier 1 hint callout missing');
+    assert(md.includes('> [!success]- उत्तर एवं विस्तृत हल (Answer & Explanation)'), 'Solution callout missing');
 });
 
 // =============================================================================

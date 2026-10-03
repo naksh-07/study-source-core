@@ -59,6 +59,7 @@ Every identified gap is tracked with:
 | **GAP-37** | Multi-System / Integrity | **P0 Blocker** | Multi-Subsystem Forensic Remediation (Unicode, Contracts, CRLF, CLI, DB, Dedup) | Forensic Audit | **Resolved** (`v1.2.0-beta.6`) |
 | **GAP-38** | Governance / Anti-Mock | **P1 Critical** | Anti-Hardcoding Invariant & Elimination of Mock Chapter Fallbacks | Phase 21 | **Resolved** (`v1.2.0-beta.6`) |
 | **GAP-39** | Multi-System / Hardening | **P1 Critical** | 12-Flaw Forensic Root-Cause Remediation, Gate 2 Fallback & Stopword Entity Shield | Phase 22 | **Resolved** (`v1.2.0-beta.6`) |
+| **GAP-40** | Multi-System / Core Engines | **P1 Critical** | 12-Flaw Deep Forensic Remediation across Parsers, Safe Audit Libs, Wave 2 Procedural DAG, STEM Units & Unified Certify CLI | Phase 23 | **Resolved** (`v1.2.0-beta.7`) |
 
 
 ---
@@ -664,6 +665,38 @@ Every identified gap is tracked with:
   12. Added explicit test cases for `validate_artifact` (`latex` and `mermaid`) in `test_mcp_server.js`.
 - **Verification Method**: `npm run doctor` (8/8 checks PASS), `npm run smoke` (19/19 checks PASS), `studycore verify --all` (6/6 chapters PASS), 4-Gate Adversarial Certification (6/6 chapters 100% PASS), and `npm test` (47/47 suites PASS).
 
+### GAP-40: 12-Flaw Deep Forensic Remediation across Parsers, Safe Audit Libraries, Wave 2 Procedural DAG, STEM Units & Unified Certify CLI
+- **Category**: Multi-System / Verification & Core Engines / Forensic Hardening
+- **Severity**: **P1 Critical**
+- **Evidence**:
+  1. **YAML Validator List Apostrophe Regression**: `yaml_validator.js` correctly handled mid-word apostrophes in scalar values (`name: Newton's Laws`), but inside list items (`- Newton's Laws`), it used strict odd/even quote parity, producing false-positive YAML parse rejections.
+  2. **Physics & Reasoning Hint Dropping**: In `author_physics_studylab.js` and `author_reasoning_studylab.js`, normalization logic set `hints: p.progressive_hints || null`, but upstream inventory objects used `p.hints`, completely dropping structured hints for physics and reasoning questions.
+  3. **Non-Standardized STEM Statement Extraction**: Math, Physics, Chemistry, and Reasoning author scripts used inconsistent property checks (`p.statement || p.stem`), ignoring raw problems that provided `p.question` or `p.prompt`.
+  4. **Evidence Ingestion & Inventory Regex Divergence**: Evidence ingestion engine emitted `- Statement:`, but `source_question_inventory.js` strictly matched `(?:Stem|Question|Problem|Prompt)`, missing statements unless prefixed by stem.
+  5. **Python Virtualenv Resolution in Ingestion Engine**: While `doctor.js` had virtualenv path checks, `evidence_ingestion_engine.js` invoked `spawnSync('python', ...)` directly, failing on machines where Python was only available inside local `.venv`.
+  6. **Programmatic Audit Process Termination**: 5 audit libraries (`note_contract_audit.js`, `link_audit.js`, `markdown_audit.js`, `latex_validator.js`, `mermaid_validator.js`) executed `process.exit(1)` upon failure. When imported programmatically by CLI commands, tests, or MCP servers, a validation violation abruptly aborted the host Node process instead of returning structured diagnostics.
+  7. **MCP Server Question Bank Validation Path Parameter**: `mcp_server.js` called `validateQuestionBankMarkdown(content)` with one argument, omitting the file path required for heading structure diagnostics.
+  8. **Procedural APKG Task Wave DAG Inversion**: In `artifact-registry.json`, `proceduralApkg` was mapped to `"wave": 1` with `"dependencies": []`, despite requiring practice questions and problem patterns authored in Wave 1.
+  9. **Cross-Artifact STEM Unit & Devanagari Danda Collisions**: `cross_artifact_checker.js` lacked common SI/STEM units (`N, J, Pa, atm, V, A, Ω, W, Hz, M, mol/L`, Hindi units) and physical dimensions in `IGNORED_ENTITIES`. In addition, Devanagari dandas (`।`, `॥`) were captured as parts of Hindi words (e.g., `है।`), causing false cross-artifact divergence failures.
+  10. **Completion Evidence Gate False Failure on Packaged Chapters**: When declarative Anki APKG is compiled with `cleanIntermediates: true`, raw TSVs in `Basic/` and `Cloze/` are moved to `.build/source-artifacts/`. Gate 1 in `validate_completion_evidence.js` checked only root chapter paths, causing packaged chapters to fail Gate 1.
+  11. **Adversarial Certification CLI Chapter Discovery & Argument Deficiencies**: `run_adversarial_certification.js` did not support positional directory arguments (`[chapterDir]`), lacked an automated `--all` flag to discover and certify all chapters across `samples/` and `Study Materials/`, and did not export `certifyAllChapters`.
+  12. **Missing `certify` Subcommand in Unified CLI**: `studycore_cli.js` lacked a dedicated `studycore certify` subcommand, forcing manual invocation of standalone certifier scripts.
+- **Resolution Details**:
+  1. Aligned list item quote detection in `yaml_validator.js` with scalar parser logic, distinguishing quoted wrappers from mid-word apostrophes.
+  2. Restored `hints: p.hints || (p.progressive_hints ? p.progressive_hints : null)` in `author_physics_studylab.js` and `author_reasoning_studylab.js`.
+  3. Standardized statement extraction to `p.statement || p.question || p.prompt` across all 4 STEM author engines.
+  4. Standardized markdown emission to `- Statement:` and extended inventory regex to match `(?:Stem|Statement|Question|Prompt)`.
+  5. Implemented `resolvePythonExecutable()` helper in `evidence_ingestion_engine.js` inspecting local `.venv`, workspace root `.venv`, and system Python across Windows and POSIX.
+  6. Replaced unconditional `process.exit(1)` in audit libraries with structured return objects (`{ valid: false, errors }`), wrapping process termination in `if (require.main === module)` CLI guards.
+  7. Passed `resolvedPath` into `validateQuestionBankMarkdown(content, resolvedPath)` in `mcp_server.js`.
+  8. Shifted `proceduralApkg` to `"wave": 2` with explicit dependencies `["task-studylab-practice-questions", "task-studylab-problem-patterns"]` in `artifact-registry.json`.
+  9. Expanded `NUMBER_WITH_UNIT` with comprehensive SI/STEM units and physical dimensions, and stripped Devanagari dandas (`\u0964`, `\u0965`) and punctuation from extracted entities in `cross_artifact_checker.js`.
+  10. Integrated `.build/source-artifacts/<file>` archive fallback in `validate_completion_evidence.js` disk checks.
+  11. Added positional argument support (`[chapterDir]`), `--all` multi-chapter discovery, and exported `certifyAllChapters` in `run_adversarial_certification.js`.
+  12. Added `studycore certify` command and updated `printHelp()` in `studycore_cli.js`.
+  13. Synchronized version string `v1.2.0-beta.7` across `package.json`, `studycore_cli.js`, `run_master_smoke_test.js`, and `mcp_server.js`.
+- **Verification Method**: `npm run doctor` (8/8 checks PASS), `npm test` (47/47 suites PASS), `npm run smoke` (19/19 checks PASS), `studycore verify --all` (6/6 chapters PASS), `npm run certify -- --all` (6/6 chapters PASS, 4/4 gates 100% PASS).
+
 ---
 
 ## 4. Remediation Schedule & Roadmap Alignment
@@ -684,8 +717,7 @@ Every identified gap is tracked with:
 | **v1.2-beta.3**| **GAP-30** | Question Bank Primary Delivery & Temporary Procedural APKG Production Suspension |
 | **v1.2-beta.4**| **GAP-31** | Math Parameter Anti-Leak Recalibration, Dynamic Fallbacks & 26-Question Distinct Practice Suite |
 | **v1.2-beta.5**| **GAP-32, GAP-33, GAP-34** | Autonomous Subagent Write Tool Enforcement, Cross-Artifact LaTeX Filter & Chemistry 25-MCQ Release |
-| **v1.2-beta.6**| **GAP-35, GAP-36, GAP-37** | Antigravity Native Skills Discovery Bridge, Ghost Runner Remediation & Forensic Hardening |
-| **v1.2-beta.7**| **GAP-38** | Zero-Hardcoded-Context & Anti-Mock Production Invariant Hardening |
-| **v1.2-beta.8**| **GAP-39** | 12-Flaw Forensic Root-Cause Remediation, Gate 2 Fallback & Stopword Entity Shield |
+| **v1.2-beta.6**| **GAP-35, GAP-36, GAP-37, GAP-38, GAP-39** | Antigravity Skills Discovery, Ghost Runner, Anti-Mock Purity & 12-Flaw Hardening |
+| **v1.2-beta.7**| **GAP-40** | 12-Flaw Deep Forensic Remediation, Safe Audit Libs, Wave 2 DAG, Unified Certify CLI |
 
 

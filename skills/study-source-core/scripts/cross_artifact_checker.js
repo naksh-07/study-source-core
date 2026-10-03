@@ -20,7 +20,7 @@ const { getCanonicalArtifactPaths } = require('./path_resolver');
 const { getArtifactRegistry } = require('./artifact_registry');
 
 // Unicode-aware regex patterns
-const NUMBER_WITH_UNIT = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?(\d+(?:\.\d+)?(?:\s*(?:g\/cm[³3]|km\/h|km|m|cm|mm|kg|g|%|°C|°F|kelvin|केल्विन|वर्ष|साल|किमी|मीटर|प्रतिशत|वर्ग किमी)))(?:[^\w\u0900-\u097F]|$)/gi;
+const NUMBER_WITH_UNIT = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?(\d+(?:\.\d+)?(?:\s*(?:g\/cm[³3]|km\/h|km|m|cm|mm|kg|g|%|°C|°F|kelvin|केल्विन|वर्ष|साल|किमी|मीटर|प्रतिशत|वर्ग किमी|kN|N|kJ|J|kPa|MPa|Pa|atm|bar|mV|kV|V|mA|A|Ω|ohm|kW|MW|W|kHz|MHz|GHz|Hz|mol\/L|M|cal|kcal|न्यूटन|जूल|पास्कल|वोल्ट|एम्पीयर|ओम|वाट|हर्ट्ज)))(?:[^\w\u0900-\u097F]|$)/gi;
 const ENTITY_YEAR_PATTERN = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?\b((?:1[5-9]\d{2}|20\d{2}))\b(?:[^\w\u0900-\u097F]|$)/gi;
 
 function cleanContentForExtraction(text) {
@@ -59,6 +59,10 @@ function extractEntityFacts(text, artifactName) {
         'work', 'ऊर्जा', 'energy', 'बल', 'force', 'समय', 'आवृति', 'frequency', 'कोण',
         'angle', 'अनुपात', 'ratio', 'log', 'log10', 'ln', 'oh', 'ka', 'kb', 'kw', 'kc',
         'kp', 'qc', 'qp', 'ph', 'poh', 'mol', 'mole', 'moles', '10', 'rt', 'delta', 'deltang',
+        'height', 'radius', 'diameter', 'area', 'depth', 'width', 'length', 'perimeter',
+        'power', 'voltage', 'current', 'charge', 'resistance', 'wavelength', 'weight',
+        'ऊंचाई', 'त्रिज्या', 'व्यास', 'क्षेत्रफल', 'गहराई', 'चौड़ाई', 'लंबाई', 'परिमाप',
+        'आवेश', 'प्रतिरोध', 'धारा', 'विभवांतर', 'शक्ति', 'तरंगदैर्घ्य', 'भार', 'वजन',
         // English stopwords, prepositions, conjunctions, pronouns, math boilerplate
         'for', 'and', 'the', 'with', 'from', 'that', 'this', 'these', 'those', 'which',
         'when', 'where', 'what', 'how', 'why', 'who', 'whom', 'whose', 'all', 'any',
@@ -81,7 +85,7 @@ function extractEntityFacts(text, artifactName) {
     let match;
     const numRe = new RegExp(NUMBER_WITH_UNIT.source, 'gi');
     while ((match = numRe.exec(cleaned)) !== null) {
-        const entity = match[1].toLowerCase().trim();
+        const entity = match[1].replace(/[\u0964\u0965.,;:!?"'()\[\]{}]/g, '').toLowerCase().trim();
         const value = match[2].toLowerCase().trim();
         if (entity.length >= 2 && !IGNORED_ENTITIES.has(entity)) {
             facts.push({
@@ -97,7 +101,7 @@ function extractEntityFacts(text, artifactName) {
     // 2. Entity + Year pairings
     const yearRe = new RegExp(ENTITY_YEAR_PATTERN.source, 'gi');
     while ((match = yearRe.exec(cleaned)) !== null) {
-        const entity = match[1].toLowerCase().trim();
+        const entity = match[1].replace(/[\u0964\u0965.,;:!?"'()\[\]{}]/g, '').toLowerCase().trim();
         const year = match[2].trim();
         if (entity.length >= 2 && !IGNORED_ENTITIES.has(entity)) {
             facts.push({
@@ -241,6 +245,22 @@ function checkCrossArtifactIntegrity(chapterDir, options = {}) {
         for (const candidate of qbCandidates) {
             if (candidate && fs.existsSync(candidate)) {
                 artifactsData.questionBank = fs.readFileSync(candidate, 'utf-8');
+                break;
+            }
+        }
+    }
+
+    // 10. Locate SlideDeck Prompt Markdown (from memory or disk)
+    if (preloaded.slideDeck || preloaded.slideDeckPrompt || options.slideDeckContent) {
+        artifactsData.slideDeck = preloaded.slideDeck || preloaded.slideDeckPrompt || options.slideDeckContent;
+    } else {
+        const sdCandidates = [
+            getDynamicArtifactPath(resolvedChapterDir, chapterName, 'slideDeck'),
+            path.join(resolvedChapterDir, 'SlideDeck', `${chapterName}_SlideDeckPrompt.md`)
+        ];
+        for (const candidate of sdCandidates) {
+            if (candidate && fs.existsSync(candidate)) {
+                artifactsData.slideDeck = fs.readFileSync(candidate, 'utf-8');
                 break;
             }
         }

@@ -4,15 +4,25 @@
 > **Product Charter**: [`PRODUCT.md`](./PRODUCT.md)  
 > **Implementation Roadmap**: [`ROADMAP.md`](./ROADMAP.md)  
 > **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md)  
-> **Version**: v1.2.0-beta.6 Production Baseline  
+> **Version**: v1.2.0-beta.7 Production Baseline  
 > **Status**: Certified / Production Baseline  
 > **Architecture**: 14-Agent Multi-Agent System with 6-Tier Pipeline & 3-Wave Execution
 
 ---
 
+> [!IMPORTANT]
+> ### ⚡ Core Reality: Antigravity 2.0 Native Skill & Plugin Pack
+> **What this repository ACTUALLY is**: This entire repository is an **Antigravity 2.0 Native Skill / Plugin Pack**.
+> - **Host Runtime**: **Google Antigravity 2.0 IS the orchestrator, runtime, and LLM reasoning engine.**
+> - **Master Skill Entrypoint**: [`skills/study-source-core/SKILL.md`](./skills/study-source-core/SKILL.md) is the primary skill invoked inside Antigravity sessions.
+> - **14 Subagents**: Files in [`.agents/agents/*.md`](./.agents/agents/) are prompt templates and behavioral contracts for Antigravity subagents spawned via `invoke_subagent`.
+> - **Deterministic Helpers**: Scripts in [`skills/study-source-core/scripts/`](./skills/study-source-core/scripts/) are lightweight Node.js/Python safety rails (linting, TSV formatting, SQLite packaging, AST auditing) called by Antigravity or exposed via the local MCP server ([`mcp_server.js`](./skills/study-source-core/scripts/mcp_server.js)).
+> - **Output Vault**: Local Obsidian vault layout under `Study Materials/<Subject>/<Chapter>/`.
+> - **🚨 CRITICAL DIRECTIVE FOR AI AGENTS**: Do NOT attempt to build an independent SaaS compiler engine, custom event loops, or standalone runtime frameworks. Treat this repository strictly as an **Antigravity skill plugin pack with deterministic tool helpers**. Overengineering this repository breaks Antigravity's native agentic lifecycle.
+
 ## What is this?
 
-**StudySourceCore** is a production-grade, deterministic multi-agent orchestration engine that ingests authorized study sources (PDFs, textbook chapters, exam papers) and synthesizes a complete ecosystem of high-yield study deliverables in parallel — automatically.
+**StudySourceCore** is a production-grade, deterministic multi-agent orchestration skill pack for Antigravity that ingests authorized study sources (PDFs, textbook chapters, exam papers) and synthesizes a complete ecosystem of high-yield study deliverables in parallel — automatically.
 
 It operates on the canonical six-tier architecture:
 `AUTHORIZED SOURCE → EVIDENCE PACK → SEMANTIC LEARNING IR → PEDAGOGICAL COMPILER → RENDERERS → INDEPENDENT CERTIFICATION`.
@@ -437,7 +447,11 @@ node skills/study-source-core/scripts/studycore_cli.js package <Subject> <Chapte
 node skills/study-source-core/scripts/studycore_cli.js verify <Subject> <Chapter>
 
 # Run independent 4-gate adversarial certification on a chapter
-node skills/study-source-core/scripts/run_adversarial_certification.js --chapter <Chapter> --subject <Subject>
+node skills/study-source-core/scripts/studycore_cli.js certify <Subject> <Chapter>
+
+# Run independent 4-gate adversarial certification across all production chapters in one pass
+node skills/study-source-core/scripts/studycore_cli.js certify --all
+# (Or using npm: npm run certify -- --all)
 ```
 
 ### Certified Production Vault Catalog (6 Chapters Across 5 Domains)

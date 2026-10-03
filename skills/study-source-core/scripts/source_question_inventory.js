@@ -491,8 +491,8 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                     currentItem._readingSteps = false;
                     currentItem._readingHints = false;
                     currentItem.raw_type = trimmed.replace(/^-\s*Type:\s*/i, '').trim().toLowerCase();
-                } else if (/^-\s*Statement:\s*(.+)/i.test(trimmed)) {
-                    currentItem.statement = trimmed.replace(/^-\s*Statement:\s*/i, '').trim();
+                } else if (/^-\s*(?:Statement|Stem|Question|Prompt):\s*(.+)/i.test(trimmed)) {
+                    currentItem.statement = trimmed.replace(/^-\s*(?:Statement|Stem|Question|Prompt):\s*/i, '').trim();
                     currentItem._readingStatement = true;
                     currentItem._readingSteps = false;
                     currentItem._readingHints = false;

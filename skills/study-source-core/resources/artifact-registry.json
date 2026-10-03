@@ -134,12 +134,15 @@
         "task_name": "StudyLab Procedural APKG Packaging",
         "status": "TEMPORARILY_SUSPENDED",
         "production_alternative": "proceduralQuestionBank",
-        "wave": 1,
+        "wave": 2,
         "owner_agent": "$DOMAIN_SPECIALIST",
         "writer_agent": "$DOMAIN_SPECIALIST",
         "validator": "validate_studylab_procedural_apkg.js",
         "artifactKey": "proceduralApkg",
-        "dependencies": [],
+        "dependencies": [
+            "task-studylab-practice-questions",
+            "task-studylab-problem-patterns"
+        ],
         "output_dir": "StudyLab",
         "file_pattern": "{chapter}_StudyLab_Procedural.apkg",
         "validator_export": "validateProceduralApkg",

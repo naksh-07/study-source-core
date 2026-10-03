@@ -471,50 +471,192 @@ async function certifyChapter(params = {}) {
     return report;
 }
 
+/**
+ * Auto-discovers and certifies all chapters in the vault and samples directories.
+ * 
+ * @param {Object} [options]
+ * @returns {Promise<Object>} Consolidated certification report
+ */
+async function certifyAllChapters(options = {}) {
+    const vaultRoot = getVaultRoot(__dirname);
+    const candidateDirs = [
+        path.join(vaultRoot, 'Study Materials'),
+        path.join(__dirname, '..', 'samples'),
+        path.join(vaultRoot, 'samples')
+    ];
+
+    const discovered = new Map();
+
+    for (const baseDir of candidateDirs) {
+        if (!fs.existsSync(baseDir)) continue;
+        const subjects = fs.readdirSync(baseDir).filter(s => {
+            const p = path.join(baseDir, s);
+            return fs.statSync(p).isDirectory() && !s.startsWith('.');
+        });
+        for (const subj of subjects) {
+            const subjDir = path.join(baseDir, subj);
+            const chapters = fs.readdirSync(subjDir).filter(c => {
+                const p = path.join(subjDir, c);
+                return fs.statSync(p).isDirectory() && !c.startsWith('.');
+            });
+            for (const ch of chapters) {
+                const key = `${subj}/${ch}`;
+                if (!discovered.has(key)) {
+                    discovered.set(key, {
+                        subject: subj,
+                        chapter: ch,
+                        chapterDir: path.join(subjDir, ch)
+                    });
+                }
+            }
+        }
+    }
+
+    const chapterList = Array.from(discovered.values());
+    if (chapterList.length === 0) {
+        throw new Error('No chapters discovered in Study Materials or samples directories.');
+    }
+
+    if (!options.silent) {
+        console.log('================================================================================');
+        console.log(`  STUDYSOURCECORE — ADVERSARIAL CERTIFICATION: ALL CHAPTERS (${chapterList.length} TOTAL)`);
+        console.log('================================================================================\n');
+    }
+
+    const reports = [];
+    let allPassed = true;
+
+    for (const item of chapterList) {
+        const report = await certifyChapter({
+            chapter: item.chapter,
+            subject: item.subject,
+            chapterDir: item.chapterDir
+        });
+        reports.push(report);
+        if (report.release_verdict !== 'PASS') {
+            allPassed = false;
+        }
+    }
+
+    if (!options.silent) {
+        console.log('\n================================================================================');
+        console.log('  ADVERSARIAL CERTIFICATION SCORECARD (--all)');
+        console.log('================================================================================');
+        console.log('| Status  | Subject      | Chapter                      | Gates (1-4) | Errors | Warnings |');
+        console.log('|---------|--------------|------------------------------|-------------|--------|----------|');
+        for (const rep of reports) {
+            const icon = rep.release_verdict === 'PASS' ? '✅ PASS' : '❌ FAIL';
+            const subjPadded = rep.subject.padEnd(12).slice(0, 12);
+            const chPadded = rep.chapter.padEnd(28).slice(0, 28);
+            const g1 = (rep.gates?.gate_1_completion_evidence?.status === 'PASS') ? 'P' : 'F';
+            const g2 = (rep.gates?.gate_2_adversarial_matrix?.status === 'PASS') ? 'P' : 'F';
+            const g3 = (rep.gates?.gate_3_binary_integrity?.status === 'PASS') ? 'P' : 'F';
+            const g4 = (rep.gates?.gate_4_cross_artifact_consistency?.status === 'PASS') ? 'P' : 'F';
+            const gatesStr = `${g1}/${g2}/${g3}/${g4}`.padStart(11);
+            const errs = String(rep.summary.total_errors).padStart(6);
+            const warns = String(rep.summary.total_warnings).padStart(8);
+            console.log(`| ${icon} | ${subjPadded} | ${chPadded} | ${gatesStr} | ${errs} | ${warns} |`);
+        }
+        console.log('================================================================================');
+        console.log(allPassed ? `🎉 ALL ${chapterList.length} CHAPTERS RELEASE VERDICT: PASS` : '❌ SOME CHAPTERS FAILED ADVERSARIAL CERTIFICATION');
+        console.log('================================================================================\n');
+    }
+
+    return {
+        release_verdict: allPassed ? 'PASS' : 'BLOCKED',
+        total_chapters: chapterList.length,
+        passed_chapters: reports.filter(r => r.release_verdict === 'PASS').length,
+        failed_chapters: reports.filter(r => r.release_verdict !== 'PASS').length,
+        reports
+    };
+}
+
 // ----------------------------------------------------
 // CLI Interface
 // ----------------------------------------------------
 if (require.main === module) {
-    const args = process.argv.slice(2);
+    const rawArgs = process.argv.slice(2);
 
     function getArg(flag) {
-        const idx = args.indexOf(flag);
-        return idx !== -1 ? args[idx + 1] : null;
+        const idx = rawArgs.indexOf(flag);
+        return idx !== -1 ? rawArgs[idx + 1] : null;
     }
+
+    if (rawArgs.includes('--help') || rawArgs.includes('-h')) {
+        console.log(`
+StudySourceCore Adversarial Certification CLI
+
+Usage:
+  node run_adversarial_certification.js [chapterDir] [options]
+
+Options:
+  [chapterDir]           Positional chapter directory (e.g. samples/Math/Arithmetic-Progression)
+  --chapter <name>       Target chapter name
+  --subject <name>       Target subject name
+  --chapter-dir <path>   Explicit path to chapter directory
+  --all                  Certify all discovered chapters across vault/samples
+  --apkg <path>          Path to declarative APKG
+  --procedural-apkg <p>  Path to procedural APKG
+  --output-report <p>    Path to write JSON certification report
+  --json                 Output report in JSON format
+  --help, -h             Show this help message
+        `.trim());
+        process.exit(0);
+    }
+
+    const isAll = rawArgs.includes('--all');
+    const isJson = rawArgs.includes('--json');
+    const positionalDir = rawArgs.find(a => !a.startsWith('-'));
 
     const chapter = getArg('--chapter');
     const subject = getArg('--subject');
-    const chapterDir = getArg('--chapter-dir');
+    const chapterDir = getArg('--chapter-dir') || positionalDir;
     const apkg = getArg('--apkg');
     const proceduralApkg = getArg('--procedural-apkg');
     const outputReport = getArg('--output-report');
-    const isJson = args.includes('--json');
 
-    if (!chapter && !chapterDir) {
-        console.error("Usage: node run_adversarial_certification.js --chapter <name> --subject <name> [options]");
-        process.exit(1);
-    }
-
-    certifyChapter({
-        chapter: chapter || path.basename(path.resolve(chapterDir)),
-        subject: subject || path.basename(path.dirname(path.resolve(chapterDir))),
-        chapterDir,
-        apkg,
-        proceduralApkg,
-        outputReport
-    }).then(report => {
-        if (isJson) {
-            console.log(JSON.stringify(report, null, 2));
+    if (isAll) {
+        certifyAllChapters({ silent: isJson }).then(res => {
+            if (isJson) {
+                console.log(JSON.stringify(res, null, 2));
+            }
+            process.exit(res.release_verdict === 'PASS' ? 0 : 1);
+        }).catch(err => {
+            console.error("Fatal certification error:", err);
+            process.exit(1);
+        });
+    } else {
+        if (!chapter && !chapterDir) {
+            console.error("Usage: node run_adversarial_certification.js [chapterDir] --chapter <name> --subject <name> [options]\nRun with --help for details.");
+            process.exit(1);
         }
-        process.exit(report.release_verdict === 'PASS' ? 0 : 1);
-    }).catch(err => {
-        console.error("Fatal certification error:", err);
-        process.exit(1);
-    });
+
+        const resolvedDir = chapterDir ? path.resolve(chapterDir) : null;
+        const inferredChapter = chapter || (resolvedDir ? path.basename(resolvedDir) : null);
+        const inferredSubject = subject || (resolvedDir ? path.basename(path.dirname(resolvedDir)) : null);
+
+        certifyChapter({
+            chapter: inferredChapter,
+            subject: inferredSubject,
+            chapterDir: resolvedDir,
+            apkg,
+            proceduralApkg,
+            outputReport
+        }).then(report => {
+            if (isJson) {
+                console.log(JSON.stringify(report, null, 2));
+            }
+            process.exit(report.release_verdict === 'PASS' ? 0 : 1);
+        }).catch(err => {
+            console.error("Fatal certification error:", err);
+            process.exit(1);
+        });
+    }
 }
 
 module.exports = {
     certifyChapter,
+    certifyAllChapters,
     runGate1CompletionEvidence,
     runGate2AdversarialChecks,
     runGate3BinaryIntegrity,

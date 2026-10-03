@@ -3,7 +3,7 @@
 > **Canonical Architecture**: [`ARCHITECTURE.md`](../ARCHITECTURE.md)  
 > **Master Agent Index**: [`.agents/AGENTS.md`](../.agents/AGENTS.md)  
 > **Primary Antigravity Skill**: [`skills/study-source-core/SKILL.md`](../skills/study-source-core/SKILL.md)  
-> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.6`)  
+> **Status**: Certified / 100% Verified Production Baseline (`v1.2.0-beta.7`)  
 > **Author**: `naksh-07` (Suraj)
 
 ---
@@ -36,7 +36,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
                                     │ Calls deterministic tools
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│  3. DETERMINISTIC ENGINE & MCP SERVER (v1.2.0-beta.6)                  │
+│  3. DETERMINISTIC ENGINE & MCP SERVER (v1.2.0-beta.7)                  │
 │     skills/study-source-core/scripts/mcp_server.js                     │
 │     - export_anki_package (Zero-heap streaming compiler)               │
 │     - export_studylab_procedural_package (15-point certified compiler) │
@@ -58,6 +58,7 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 │     - studycore package: Compile Declarative & StudyLab APKGs          │
 │     - studycore verify: Validate chapter deliverables or run 10-gate   │
 │       Master Final Audit Harness (--all)                               │
+│     - studycore certify: Standalone 4-Gate Adversarial Certification   │
 │     - studycore telemetry: Token economy, spans & latency scorecards   │
 └────────────────────────────────────────────────────────────────────────┘
 ```

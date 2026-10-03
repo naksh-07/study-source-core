@@ -9,7 +9,11 @@
 
 ## 1. Product Identity
 
-**StudySourceCore** is a source-first, evidence-grounded cognitive compiler for human learning.
+> [!IMPORTANT]
+> **Host Architecture Reality**: **StudySourceCore is an Antigravity 2.0 Native Skill / Plugin Pack.**
+> It does not run as an independent SaaS server or standalone AI runtime. Google Antigravity 2.0 IS the master orchestrator, reasoning engine, and execution host. StudySourceCore provides the domain skill (`skills/study-source-core/SKILL.md`), prompt contracts for 14 specialist subagents (`.agents/agents/*.md`), subject policies, and deterministic verification tools.
+
+**StudySourceCore** is a source-first, evidence-grounded cognitive compiler skill pack for human learning executing natively within Google Antigravity 2.0.
 
 Rather than acting as an unconstrained generative text summarizer or a bulk flashcard dumper, StudySourceCore functions as an educational compiler: it ingests authoritative primary source materials (textbooks, authentic previous-year question papers, syllabus manuals) and compiles them into a structured, pedagogically sound, multimodal learning ecosystem.
 
@@ -73,9 +77,10 @@ Generating study artifacts is **not** the end goal. The sole objective is **dura
 - **Anki is a Renderer, NOT the Semantic Store**: Anki desktop and mobile apps provide a world-class spaced repetition rendering runtime. However, SQLite database tables (`collection.anki2`) and Anki note models (`1600000001`–`1600000004`) are downstream projection targets.
 - **Media Decoupling**: Canonical learning content exists in the Semantic Learning IR, completely decoupled from Anki fields, HTML card templates, and SQLite schemas. If Anki were replaced tomorrow with a web-based runtime, zero learning content would be lost or modified.
 
-### 5.3 Antigravity Relationship [CURRENT]
-- **Antigravity is the Host Adapter**: Google Antigravity provides the autonomous multi-agent execution environment, terminal tooling, and subagent dispatch mechanisms (`invoke_subagent`, `run_command`, `manage_task`).
-- **Clean Decoupling**: StudySourceCore's core pedagogical contracts, JSON schemas, AST validators, and packaging engines are self-contained and run portably in any Node.js environment. The Antigravity adapter simply orchestrates agent worker pools, injects context slices, and enforces concurrency bounds.
+### 5.3 Antigravity Relationship [AUTHORITATIVE]
+- **Antigravity IS the Master Host & Runtime Engine**: Google Antigravity 2.0 provides the autonomous multi-agent execution environment, terminal tooling, session memory, LLM reasoning, and subagent dispatch mechanisms (`invoke_subagent`, `run_command`, `manage_task`).
+- **StudySourceCore IS the Domain Skill / Plugin**: StudySourceCore is not an external engine wrapped around Antigravity; it is a native Antigravity skill (`skills/study-source-core/SKILL.md`) providing domain heuristics, prompt definitions for 14 specialist subagents, and deterministic Node.js safety rails.
+- **Anti-Overengineering Warning**: AI agents operating in this workspace must NOT attempt to re-implement process schedulers, custom event loops, or standalone runtime frameworks. Leverage Antigravity's native primitives directly.
 
 ---
 

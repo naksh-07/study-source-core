@@ -49,6 +49,19 @@ function isTransientFilename(filename, isSuccess = true) {
 }
 
 /**
+ * Non-spinning synchronous sleep using OS thread suspension.
+ */
+function sleepSync(ms) {
+    if (ms <= 0) return;
+    try {
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+    } catch {
+        const waitTill = Date.now() + ms;
+        while (Date.now() < waitTill) {}
+    }
+}
+
+/**
  * Safely unlinks a file with exponential-backoff retry to absorb transient Windows EBUSY/EPERM/EACCES locks.
  */
 function safeUnlinkSync(filePath, maxRetries = 5, initialDelayMs = 25) {
@@ -61,8 +74,7 @@ function safeUnlinkSync(filePath, maxRetries = 5, initialDelayMs = 25) {
             return true;
         } catch (err) {
             if (['EBUSY', 'EPERM', 'EACCES'].includes(err.code) && attempt < maxRetries) {
-                const waitTill = Date.now() + delay;
-                while (Date.now() < waitTill) {}
+                sleepSync(delay);
                 delay *= 2;
             } else {
                 throw err;
@@ -85,8 +97,7 @@ function safeRmdirSync(dirPath, maxRetries = 5, initialDelayMs = 25) {
             return true;
         } catch (err) {
             if (['EBUSY', 'EPERM', 'EACCES', 'ENOTEMPTY'].includes(err.code) && attempt < maxRetries) {
-                const waitTill = Date.now() + delay;
-                while (Date.now() < waitTill) {}
+                sleepSync(delay);
                 delay *= 2;
             } else {
                 throw err;

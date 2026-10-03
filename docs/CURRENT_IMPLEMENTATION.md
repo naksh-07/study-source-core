@@ -2,7 +2,7 @@
 
 ## 1. Overview & Baseline State
 
-This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0-beta.6 Production Baseline**.
+This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0-beta.7 Production Baseline**.
 
 It details the code, scripts, schemas, subagent definitions, and test suites that are actively implemented, passing, and functional in the repository today.
 
@@ -13,7 +13,7 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
 - **Targeted Test Suites**:
   - `npm run smoke`: 19-gate zero-mock architectural anti-tamper, anti-hardcoding, and 5-domain end-to-end verification.
   - `npm run telemetry`: Live span tracing, token load budgeting, and latency percentile scorecard.
-  - `npm run certify -- --chapter <Chapter> --subject <Subject>`: Standalone 4-Gate Adversarial Certification CLI (with Gate 2 Question Bank fallback).
+  - `studycore certify --all` / `npm run certify -- --all`: Standalone 4-Gate Adversarial Certification CLI across all 6 production chapters (with Gate 2 Question Bank fallback).
   - `npm run test:milestone4`: Closed-boundary model isolation, physical completion evidence gate, and adversarial certification.
   - `npm run test:phase10`: Concurrency clamping (MAX_CONCURRENT_WORKERS = 4), crash-resilient atomic checkpoints, and runtime adversarial matrix.
   - `npm run test:legacy`: Direct Node runner executing the original 28 standalone validation scripts.
@@ -27,7 +27,7 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
   4. `Physics / Newton-Laws-Friction`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, Question Bank, 23-card Anki APKG, StudyLab APKG.
   5. `Reasoning / Syllogism`: Notes, Basic TSV, Cloze TSV, MindMap, SlideDeck, 25 distinct 4-option MCQs across 5 pattern families, Anki APKG, Graph Index, QA Report.
   6. `Chemistry / Chemical-Equilibrium`: Notes (2,911 words), Basic TSV, Cloze TSV, MindMap (38 nodes), SlideDeck (8 slides), 25 distinct 4-option MCQs across 5 pattern families, Anki APKG, Graph Index, QA Report (Authored by 8 live subagents, 4/4 Adversarial Certification PASS).
-- **Deficiencies & Resolutions**: Fully tracked in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) (GAP-01 through GAP-39, 100% resolved).
+- **Deficiencies & Resolutions**: Fully tracked in [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) (GAP-01 through GAP-40, 100% resolved).
 
 ---
 
@@ -265,9 +265,9 @@ Defined in `skills/study-source-core/package.json`:
 
 ## 7. Release State & Roadmap Transition
 
-The **v1.2.0-beta.6 Production Baseline** is certified, passing all 47 automated test suites, passing the 18-gate zero-mock smoke test, achieving 4-Gate adversarial certification across 6 production chapters, and passing all 7 Environment Doctor checks:
-- Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 18.
-- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-35 (100% resolved and verified).
+The **v1.2.0-beta.7 Production Baseline** is certified, passing all 47 automated test suites, passing the 19-gate zero-mock smoke test, achieving 4-Gate adversarial certification across all 6 production chapters, and passing all 8 Environment Doctor checks:
+- Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 23.
+- Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-40 (100% resolved and verified).
 - Refer to [`docs/MCP_SERVER_API.md`](./MCP_SERVER_API.md) for full documentation of the 6 deterministic MCP tools.
 - Production question delivery is standardized on canonical Markdown Question Banks (`Questions.md`) under GAP-30.
 - Workspace skills discovery is standardized via native `.agents/skills.json` under GAP-35.

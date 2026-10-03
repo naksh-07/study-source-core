@@ -73,25 +73,27 @@ const baseCanonicalQuestion = {
 // -----------------------------------------------------------------------------
 console.log('--- SUITE 1: ANTI-LEAK STRESS TESTING ---');
 
-runStressTest('Anti-Leak', 'AL-01', 'Renderer NEVER renders procedural fields (hints, solution, verification, traps, DAG) into output', () => {
+runStressTest('Anti-Leak', 'AL-01', 'Renderer renders hints and solutions inside collapsible callouts without raw uncollapsed headers', () => {
     const md = renderQuestionBankToMarkdown({
         subject: 'Mathematics',
         chapter: 'LCM-HCF',
         questions: [baseCanonicalQuestion]
     });
 
-    assert(!md.includes('### Progressive Hints'), 'Progressive Hints leaked into Markdown');
-    assert(!md.includes('### Solution'), 'Solution section leaked into Markdown');
-    assert(!md.includes('### Verification'), 'Verification section leaked into Markdown');
+    // Assert raw uncollapsed sections are NEVER leaked
+    assert(!md.includes('### Progressive Hints'), 'Progressive Hints raw header leaked into Markdown');
+    assert(!md.includes('### Solution'), 'Solution raw header leaked into Markdown');
+    assert(!md.includes('### Verification'), 'Verification raw header leaked into Markdown');
     assert(!md.includes('### Method & Recognition'), 'Method & Recognition leaked into Markdown');
     assert(!md.includes('### Traps & Errors'), 'Traps & Errors leaked into Markdown');
-    assert(!md.includes('120 को 6 से गुणा करें'), 'Hint Tier 3 text leaked into Markdown');
-    assert(!md.includes('गुणनफल = LCM × HCF = 120 × 6 = 720'), 'Solution derivation leaked into Markdown');
-    assert(!md.includes('720 / 6 = 120 (सत्यापित)'), 'Verification text leaked into Markdown');
-    assert(!md.includes('ल.स. को म.स. से भाग देना'), 'Trap description leaked into Markdown');
     assert(!md.includes('ERR_01'), 'Error code leaked into Markdown');
-    assert(!md.includes('**Correct Answer**'), 'Correct answer label leaked into Markdown');
-    assert(!md.includes('**Correct Option**'), 'Correct option label leaked into Markdown');
+
+    // Assert collapsible callouts exist and are collapsed by default with '-'
+    assert(md.includes('> [!tip]- संकेत (3-Tier Hints)'), 'Must contain collapsible hint callout');
+    assert(md.includes('> [!success]- उत्तर एवं विस्तृत हल (Answer & Explanation)'), 'Must contain collapsible solution callout');
+    assert(md.includes('120 को 6 से गुणा करें'), 'Hint Tier 3 must be inside collapsible callout');
+    assert(md.includes('गुणनफल = LCM × HCF = 120 × 6 = 720'), 'Solution must be inside collapsible callout');
+    assert(md.includes('720 / 6 = 120 (सत्यापित)'), 'Verification must be inside collapsible callout');
 });
 
 runStressTest('Anti-Leak', 'AL-02', 'Validator detects sneakily injected Progressive Hints in question text', () => {

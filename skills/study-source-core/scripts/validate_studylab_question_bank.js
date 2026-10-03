@@ -328,33 +328,36 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
         }
     }
 
-    // 4. Anti-Leak Invariants: Strictly reject procedural leakage
-    if (/###\s*Progressive Hints/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] '### Progressive Hints' found in '${filePath}'. Progressive hints must not be rendered in human-facing Questions.md.`);
+    // 4. Anti-Leak Invariants: Reject uncollapsed raw headers and uncollapsed spoilers
+    if (/^###\s*Progressive Hints/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Progressive Hints' found in '${filePath}'. Progressive hints must be rendered inside collapsible '> [!tip]-' callout.`);
     }
-    if (/###\s*Solution/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] '### Solution' found in '${filePath}'. Solutions must not be rendered in human-facing Questions.md.`);
+    if (/^###\s*Solution/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Solution' found in '${filePath}'. Solutions must be rendered inside collapsible '> [!success]-' callout.`);
     }
-    if (/###\s*Verification/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] '### Verification' found in '${filePath}'. Verification blocks must not be rendered in human-facing Questions.md.`);
+    if (/^###\s*Verification/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Verification' found in '${filePath}'. Verification must be rendered inside collapsible '> [!success]-' callout.`);
     }
-    if (/###\s*Method & Recognition/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] '### Method & Recognition' found in '${filePath}'. Method & Recognition must not be rendered in human-facing Questions.md.`);
+    if (/^###\s*Method & Recognition/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Method & Recognition' found in '${filePath}'. Internal procedural method must not be rendered as a raw heading.`);
     }
-    if (/###\s*Traps & Errors/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] '### Traps & Errors' found in '${filePath}'. Traps & Errors must not be rendered in human-facing Questions.md.`);
+    if (/^###\s*Traps & Errors/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] '### Traps & Errors' found in '${filePath}'. Traps & Errors must not be rendered as a raw heading.`);
     }
-    if (/>\s*\[!tip\]-?\s*Tier\s*[123]/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] Progressive hint callout (Tier 1/2/3) found in '${filePath}'. Progressive hints must not be rendered in human-facing Questions.md.`);
+    if (/^###\s*Decision Points/mi.test(content) || /^\s*-\s*\*\*Decision Points\*\*/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] 'Decision Points' found in '${filePath}'. Internal decision points must not be rendered in human-facing Questions.md.`);
     }
-    if (/\*\*Decision Points\*\*/i.test(content) || /###\s*Decision Points/i.test(content) || />\s*-\s*\*\*Decision Points\*\*/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] 'Decision Points' found in '${filePath}'. Decision points must not be rendered in human-facing Questions.md.`);
+    if (/^###\s*(?:Correct\s*)?Answer/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Raw uncollapsed '### Answer' found in '${filePath}'. Answers must be inside collapsible '> [!success]-' callout.`);
     }
-    if (/\*\*Correct\s*(?:Option|Answer)\*\*/i.test(content) || />\s*-\s*\*\*(?:Correct\s*)?Answer\*\*/i.test(content) || /^\s*-\s*\*\*(?:Correct\s*)?Answer\*\*\s*:/mi.test(content) || /###\s*(?:Answer|Correct Answer)/i.test(content) || /\*\*(?:उत्तर|सही\s*विकल्प|सही\s*उत्तर)\*\*/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] Correct answer reveal found in '${filePath}'. Answers must not be rendered in human-facing Questions.md.`);
+    if (/^\s*-\s*\*\*Correct\s*(?:Option|Answer)\*\*/mi.test(content) || /^>\s*-\s*\*\*Correct\s*(?:Option|Answer)\*\*/mi.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Raw uncollapsed answer bullet found in '${filePath}'. Answers must be inside collapsible '> [!success]-' callout.`);
     }
-    if (/>\s*-\s*\*\*Trap\*\*/i.test(content) || />\s*-\s*\*\*Expected Method\*\*/i.test(content) || />\s*-\s*\*\*Recognition Signals\*\*/i.test(content) || />\s*-\s*\*\*Error Categories\*\*/i.test(content)) {
-        errors.push(`[PROCEDURAL_LEAKAGE] Internal procedural metadata callout found in '${filePath}'.`);
+    if (/>\s*\[!tip\](?!\-)/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Hint callout in '${filePath}' must be collapsible with trailing '-' ('> [!tip]-') to prevent immediate spoilers.`);
+    }
+    if (/>\s*\[!success\](?!\-)/i.test(content)) {
+        errors.push(`[PROCEDURAL_LEAKAGE] Solution callout in '${filePath}' must be collapsible with trailing '-' ('> [!success]-') to prevent immediate spoilers.`);
     }
 
     // 5. Validate required human-facing structure
@@ -385,11 +388,32 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
             errors.push(`[MISSING_QUESTION_STATEMENT] Question block '## ${heading}' missing '### Question' in '${filePath}'`);
         } else {
             const afterQ = block.substring(qPos + '### Question'.length);
-            const sepMatch = afterQ.match(/(?:\r?\n\s*-\s*\([A-Z0-9]+\)|\r?\n\s*---|^\s*---)/);
+            // End of question prompt: options, collapsible callout, or horizontal rule
+            const sepMatch = afterQ.match(/(?:\r?\n\s*-\s*\([A-Z0-9]+\)|\r?\n\s*>\s*\[!|\r?\n\s*---|^\s*---)/);
             const sepPos = sepMatch ? sepMatch.index : -1;
             const qStatement = (sepPos !== -1 ? afterQ.substring(0, sepPos) : afterQ).trim();
             if (qStatement.length === 0) {
                 errors.push(`[EMPTY_QUESTION_TEXT] Question block '## ${heading}' has empty question statement in '${filePath}'`);
+            } else {
+                // Check if uncollapsed leaks or procedural headers were injected into question statement
+                if (/###\s*Progressive Hints/i.test(qStatement) || />\s*\[!tip\]/i.test(qStatement)) {
+                    errors.push(`[PROCEDURAL_LEAKAGE] Progressive hints found injected in question statement of '## ${heading}'.`);
+                }
+                if (/###\s*Solution/i.test(qStatement)) {
+                    errors.push(`[PROCEDURAL_LEAKAGE] Solution header found injected in question statement of '## ${heading}'.`);
+                }
+                if (/###\s*Verification/i.test(qStatement)) {
+                    errors.push(`[PROCEDURAL_LEAKAGE] Verification block found injected in question statement of '## ${heading}'.`);
+                }
+                if (/###\s*(?:method & recognition|traps & errors|decision points|answer|correct answer)/i.test(qStatement)) {
+                    errors.push(`[PROCEDURAL_LEAKAGE] Internal procedural header found injected in question statement of '## ${heading}'.`);
+                }
+                if (/\*\*Correct\s*(?:Option|Answer)\*\*/i.test(qStatement) || /\*\*(?:उत्तर|सही\s*विकल्प|सही\s*उत्तर)\*\*/i.test(qStatement)) {
+                    errors.push(`[PROCEDURAL_LEAKAGE] Correct answer reveal found injected in question statement of '## ${heading}'.`);
+                }
+                if (/>\s*-\s*\*\*(?:Trap|Expected Method|Recognition Signals|Error Categories|Decision Points|Correct Answer)\*\*/i.test(qStatement)) {
+                    errors.push(`[PROCEDURAL_LEAKAGE] Internal procedural metadata found injected in question statement of '## ${heading}'.`);
+                }
             }
         }
 
@@ -399,6 +423,29 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
         if (isMcq) {
             if (optionLines.length < 4) {
                 errors.push(`[INSUFFICIENT_MCQ_OPTIONS] MCQ in '## ${heading}' must have at least 4 authentic options (A), (B), (C), (D), found ${optionLines.length} in '${filePath}'`);
+            }
+        }
+
+        // Hint Anti-Leak Check in Collapsible Hint Callouts
+        const tipMatch = block.match(/>\s*\[!tip\]-\s*[^\n]*\n((?:>[^\n]*\n?)*)/i);
+        if (tipMatch) {
+            const tipContent = tipMatch[1];
+            // Extract correct answer if present (bilingual & English variants)
+            const ansMatch = block.match(/>\s*\*\*(?:सही उत्तर\s*(?:\(Correct Option\))?|Correct Option|Correct Answer|Answer)\*\*:\s*(?:\*\*)?([^\n\*]+)(?:\*\*)?/i);
+            const rawAns = ansMatch ? ansMatch[1].trim() : '';
+            // Strip option letter if present e.g. "(B) 35th" -> "35th"
+            const cleanAns = rawAns.replace(/^\([A-Za-z0-9]+\)\s*/, '').trim();
+
+            if (cleanAns || rawAns) {
+                const targetAns = cleanAns || rawAns;
+                const t1Match = tipContent.match(/>\s*-\s*\*\*Tier 1[^\*]*\*\*:\s*([^\n]+)/i);
+                if (t1Match && hintLeaksAnswer(t1Match[1], targetAns)) {
+                    errors.push(`[HINT_ANSWER_LEAKAGE] Question '## ${heading}' Hint Tier 1 leaks final answer '${targetAns}'.`);
+                }
+                const t2Match = tipContent.match(/>\s*-\s*\*\*Tier 2[^\*]*\*\*:\s*([^\n]+)/i);
+                if (t2Match && hintLeaksAnswer(t2Match[1], targetAns)) {
+                    errors.push(`[HINT_ANSWER_LEAKAGE] Question '## ${heading}' Hint Tier 2 leaks final answer '${targetAns}'.`);
+                }
             }
         }
     }

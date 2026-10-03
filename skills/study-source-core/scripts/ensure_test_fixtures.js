@@ -521,7 +521,7 @@ domain: Math
                 exam_metadata: { exam: "RRB NTPC", year: 2019 },
                 hints: [
                     { tier: 1, text: "संख्याएँ = HCF * अनुपात पद।" },
-                    { tier: 2, text: "LCM = HCF * 3 * 4 = 48।" }
+                    { tier: 2, text: "सूत्र: LCM = HCF * x * y का अनुप्रयोग करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -952,6 +952,26 @@ $$LCM(a, b) \\times HCF(a, b) = a \\times b$$
         }
     }
 
+    // Render canonical Math Questions.md Practice Question Bank (APKG Paused in Production)
+    const mathQuestionsDir = path.join(mathDir, 'Questions');
+    if (!fs.existsSync(mathQuestionsDir)) {
+        fs.mkdirSync(mathQuestionsDir, { recursive: true });
+    }
+    const mathQbPath = path.join(mathQuestionsDir, 'LCM-HCF_Questions.md');
+    try {
+        const { compileCanonicalQuestionBank, renderQuestionBankToMarkdown } = require('./render_studylab_question_bank');
+        const canonicalQB = compileCanonicalQuestionBank(
+            path.join(mathOptional, 'LCM-HCF_PracticeQuestions.json'),
+            path.join(mathOptional, 'LCM-HCF_ProblemPatterns.json'),
+            { domain: 'Math', chapter: 'LCM-HCF' }
+        );
+        const md = renderQuestionBankToMarkdown(canonicalQB);
+        fs.writeFileSync(mathQbPath, md, 'utf8');
+    } catch (e) {
+        console.error('Failed to render LCM-HCF_Questions.md:', e.message);
+    }
+
+    // Export procedural APKG test fixture for Anki model isolation and simulation test suites
     try {
         const mathProcApkg = path.join(mathStudyLab, 'LCM-HCF_StudyLab_Procedural.apkg');
         if (!fs.existsSync(mathProcApkg) || fs.statSync(mathProcApkg).size === 0) {
@@ -1146,6 +1166,25 @@ $$\\vec{F}_{\\text{net}} = m\\vec{a}$$
 गतिज घर्षण: $f_k = \\mu_k N$
 `;
     writeIfMissing(path.join(physNotes, 'Newton-Laws-Friction_Notes.md'), physNotesMd, 'utf8');
+
+    // Render canonical Physics Questions.md Practice Question Bank (APKG Paused in Production)
+    const physQuestionsDir = path.join(physDir, 'Questions');
+    if (!fs.existsSync(physQuestionsDir)) {
+        fs.mkdirSync(physQuestionsDir, { recursive: true });
+    }
+    const physQbPath = path.join(physQuestionsDir, 'Newton-Laws-Friction_Questions.md');
+    try {
+        const { compileCanonicalQuestionBank, renderQuestionBankToMarkdown } = require('./render_studylab_question_bank');
+        const canonicalQB = compileCanonicalQuestionBank(
+            path.join(physOptional, 'Newton-Laws-Friction_PracticeQuestions.json'),
+            path.join(physOptional, 'Newton-Laws-Friction_ProblemPatterns.json'),
+            { domain: 'Physics', chapter: 'Newton-Laws-Friction' }
+        );
+        const md = renderQuestionBankToMarkdown(canonicalQB);
+        fs.writeFileSync(physQbPath, md, 'utf8');
+    } catch (e) {
+        console.error('Failed to render Newton-Laws-Friction_Questions.md:', e.message);
+    }
 
     // ----------------------------------------------------
     // 3. Map / Europe Fixture (Declarative + IO)

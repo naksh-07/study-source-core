@@ -25,6 +25,9 @@ const { validateImageOcclusionContent } = require('./validate_image_occlusion');
 const { auditNoteContract } = require('./note_contract_audit');
 const { validateLatexContent } = require('./latex_validator');
 const { validateMermaidContent } = require('./mermaid_validator');
+const { validateMapContent } = require('./validate_map');
+const { auditSlideDeckPrompt } = require('./slide_deck_prompt_audit');
+const { validateYamlFrontmatter } = require('./yaml_validator');
 const { resolveSubjectPolicy } = require('./subject_policy_resolver');
 const { getContractByKeySync, getAllContractsSync } = require('./procedural_db_client');
 const { ingestSourceToEvidencePack, persistEvidencePack } = require('./evidence_ingestion_engine');
@@ -32,7 +35,7 @@ const { ingestSourceToEvidencePack, persistEvidencePack } = require('./evidence_
 // Initialize MCP Server
 const server = new McpServer({
     name: "studysource-core",
-    version: "1.2.0-beta.6"
+    version: "1.2.0-beta.7"
 });
 
 // Tool 1: Compile Standard Anki Package
@@ -109,12 +112,16 @@ server.tool(
             "studylab_procedural",
             "studylab_practice_questions",
             "studylab_question_bank",
+            "question_bank",
             "image_occlusion",
             "note_contract",
             "apkg_standard",
             "apkg_studylab_levels_1_7",
             "latex",
-            "mermaid"
+            "mermaid",
+            "mindmap",
+            "slidedeck",
+            "yaml"
         ]).describe("The type of artifact to validate.")
     },
     async ({ artifactPath, artifactType }) => {
@@ -145,9 +152,10 @@ server.tool(
                     result = validatePracticeQuestionsContent(content, resolvedPath);
                     break;
                 }
-                case "studylab_question_bank": {
+                case "studylab_question_bank":
+                case "question_bank": {
                     const content = fs.readFileSync(resolvedPath, 'utf8');
-                    result = validateQuestionBankMarkdown(content);
+                    result = validateQuestionBankMarkdown(content, resolvedPath);
                     break;
                 }
                 case "image_occlusion": {
@@ -156,7 +164,7 @@ server.tool(
                     break;
                 }
                 case "note_contract": {
-                    result = auditNoteContract(resolvedPath);
+                    result = auditNoteContract(resolvedPath, { silent: true });
                     break;
                 }
                 case "apkg_standard": {
@@ -170,12 +178,25 @@ server.tool(
                 }
                 case "latex": {
                     const content = fs.readFileSync(resolvedPath, 'utf8');
-                    result = validateLatexContent(content, resolvedPath);
+                    result = validateLatexContent(content, resolvedPath, { silent: true });
                     break;
                 }
                 case "mermaid": {
                     const content = fs.readFileSync(resolvedPath, 'utf8');
-                    result = validateMermaidContent(content, resolvedPath);
+                    result = validateMermaidContent(content, resolvedPath, { silent: true });
+                    break;
+                }
+                case "mindmap": {
+                    const content = fs.readFileSync(resolvedPath, 'utf8');
+                    result = validateMapContent(content, resolvedPath);
+                    break;
+                }
+                case "slidedeck": {
+                    result = auditSlideDeckPrompt(resolvedPath);
+                    break;
+                }
+                case "yaml": {
+                    result = validateYamlFrontmatter(resolvedPath, { silent: true });
                     break;
                 }
             }
@@ -318,7 +339,7 @@ server.tool(
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error("[StudySourceCore MCP] Server v1.2.0-beta.6 listening on stdio.");
+    console.error("[StudySourceCore MCP] Server v1.2.0-beta.7 listening on stdio.");
 }
 
 main().catch(err => {

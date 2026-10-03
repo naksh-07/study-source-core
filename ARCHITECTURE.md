@@ -7,9 +7,18 @@
 
 ---
 
+> [!IMPORTANT]
+> ### ⚡ Architecture Reality Check: Antigravity 2.0 Native Skill Pack
+> **StudySourceCore runs natively INSIDE Google Antigravity 2.0 as an autonomous Skill / Plugin.**
+> - **Host Runtime**: Antigravity 2.0 provides the multi-agent coordination, subagent spawning (`invoke_subagent`), file IO, and LLM reasoning.
+> - **Skill Package**: [`skills/study-source-core/SKILL.md`](./skills/study-source-core/SKILL.md) is the master skill entrypoint.
+> - **14 Subagents**: Markdown definitions in [`.agents/agents/*.md`](./.agents/agents/) define specialist persona contracts for Antigravity subagents.
+> - **Deterministic Tooling**: Scripts in [`skills/study-source-core/scripts/`](./skills/study-source-core/scripts/) are lightweight Node.js/Python safety rails (validation, SQLite packaging, format parsing).
+> - **Anti-Overengineering Law**: AI agents must NOT treat this repository as an independent standalone OS or monolithic SaaS compiler. Do NOT write custom event loops, mock orchestration frameworks, or complex standalone process schedulers.
+
 ## 1. The Canonical 6-Tier Architecture
 
-StudySourceCore enforces a strictly decoupled, unidirectional six-tier execution pipeline. In this architecture, conceptual learning representations are isolated from presentation renderers, and artifact generation is strictly separated from independent certification.
+StudySourceCore enforces a strictly decoupled, unidirectional six-tier execution pipeline within the Antigravity skill architecture. In this pipeline, conceptual learning representations are isolated from presentation renderers, and artifact generation is strictly separated from independent certification.
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -257,6 +266,17 @@ To guarantee cross-subject neutrality and prevent silent data contamination:
 1. **Dynamic Context Resolution**: CLI tools (`studycore_cli.js`), orchestration drivers, and subagent dispatchers must dynamically resolve paths, chapter targets, and domain policies from runtime inputs (`argv`, manifest options, and filesystem discovery of `Study Materials/`). Static hardcoded chapter names or mock arrays are forbidden.
 2. **Fail-Closed on Missing Arguments**: Specialist authoring engines (`author_*_studylab.js`) must never fall back to default chapter names (e.g. `'Arithmetic-Progression'`, `'Work-Energy-Power'`) or test fixtures (`resources/fixtures/*.json`). Missing mandatory arguments trigger immediate fatal exceptions (`[MISSING_CHAPTER]`, `[MISSING_EVIDENCE_INPUT]`).
 3. **Fixture Segregation**: Test fixtures under `resources/fixtures/` belong strictly to automated test suites. Production execution paths must never import or default to test fixtures.
+
+### 4.8 Safe Programmatic Audit Libraries
+To guarantee that audit modules can be cleanly embedded in test harnesses, MCP services, and CLI commands:
+1. **Zero Uncontrolled Process Aborts**: Audit libraries (`note_contract_audit.js`, `link_audit.js`, `markdown_audit.js`, `latex_validator.js`, `mermaid_validator.js`) must never call `process.exit(1)` when invoked as library functions.
+2. **Structured Diagnostics**: Invocations return `{ valid: boolean, errors: string[] }`, allowing callers to programmatically inspect violations without process termination.
+3. **CLI Isolation**: Process exit codes are strictly isolated inside `if (require.main === module)` guards for standalone terminal execution.
+
+### 4.9 Wave 2 Packaging DAG & Archive Fallback
+To ensure deterministic dependency resolution and reliable completion verification:
+1. **Wave 2 Packaging Anchor**: All packaging compilers (`export_anki.js`, `export_studylab_procedural_anki.js`) reside in Wave 2 and explicitly depend on Wave 1 artifacts in `artifact-registry.json`.
+2. **Archive Evidence Recognition**: When packaging compiles raw intermediate TSVs into binary APKGs and archives them to `.build/source-artifacts/`, physical completion evidence gates (`validate_completion_evidence.js`) check both primary and archive paths before asserting file presence.
 
 ---
 

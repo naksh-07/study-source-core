@@ -140,10 +140,18 @@ function normalizeQuestionItem(q, patternMap = {}, index = 0) {
 
     // 12-14. Hints (Tiers 1, 2, 3)
     let hints = { tier1_conceptual: '', tier2_strategic: '', tier3_next_step: '' };
-    if (q.hints && typeof q.hints === 'object') {
-        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.hint_tier_1 || q.hints.principle || q.hints.hint_principle || q.tier1_conceptual || q.hint_tier_1 || '';
-        hints.tier2_strategic = q.hints.tier2_strategic || q.hints.tier2_strategic_method || q.hints.hint_tier_2 || q.hints.operation || q.hints.hint_operation || q.hint_tier_2 || '';
-        hints.tier3_next_step = q.hints.tier3_next_step || q.hints.tier3_next_step_setup || q.hints.hint_tier_3 || q.hints.intermediate || q.hints.hint_intermediate || q.hint_tier_3 || '';
+    if (Array.isArray(q.hints)) {
+        for (const h of q.hints) {
+            const tierNum = h.tier || h.tier_number || h.level;
+            const text = h.text || h.hint || h.content || '';
+            if (tierNum === 1) hints.tier1_conceptual = text;
+            else if (tierNum === 2) hints.tier2_strategic = text;
+            else if (tierNum === 3) hints.tier3_next_step = text;
+        }
+    } else if (q.hints && typeof q.hints === 'object') {
+        hints.tier1_conceptual = q.hints.tier1_conceptual || q.hints.hint_tier_1 || q.hints.principle || q.hints.hint_principle || q.hints.tier1_approach || q.tier1_conceptual || q.hint_tier_1 || '';
+        hints.tier2_strategic = q.hints.tier2_strategic || q.hints.tier2_strategic_method || q.hints.hint_tier_2 || q.hints.operation || q.hints.hint_operation || q.hints.tier2_formula || q.tier2_strategic || q.hint_tier_2 || '';
+        hints.tier3_next_step = q.hints.tier3_next_step || q.hints.tier3_next_step_setup || q.hints.hint_tier_3 || q.hints.intermediate || q.hints.hint_intermediate || q.hints.tier3_setup || q.tier3_next_step || q.hint_tier_3 || '';
     } else if ((q.tier1_conceptual || q.hint_tier_1) && (q.tier2_strategic || q.hint_tier_2) && (q.tier3_next_step || q.hint_tier_3)) {
         hints.tier1_conceptual = q.tier1_conceptual || q.hint_tier_1 || '';
         hints.tier2_strategic = q.tier2_strategic || q.hint_tier_2 || '';
@@ -300,6 +308,81 @@ function renderQuestionBankToMarkdown(data) {
                 return `- (${label}) ${cleanOpt}`;
             });
             block.push(optionLines.join('\n'));
+        }
+
+        // Collapsible 3-Tier Hints Callout
+        const hasT1 = q.hints && q.hints.tier1_conceptual && String(q.hints.tier1_conceptual).trim().length > 0;
+        const hasT2 = q.hints && q.hints.tier2_strategic && String(q.hints.tier2_strategic).trim().length > 0;
+        const hasT3 = q.hints && q.hints.tier3_next_step && String(q.hints.tier3_next_step).trim().length > 0;
+        if (hasT1 || hasT2 || hasT3) {
+            const hintLines = ['> [!tip]- संकेत (3-Tier Hints)'];
+            if (hasT1) {
+                hintLines.push(`> - **Tier 1 (संकल्पना / Approach)**: ${String(q.hints.tier1_conceptual).trim()}`);
+            }
+            if (hasT2) {
+                hintLines.push(`> - **Tier 2 (सूत्र / Formula)**: ${String(q.hints.tier2_strategic).trim()}`);
+            }
+            if (hasT3) {
+                hintLines.push(`> - **Tier 3 (हल की दिशा / Setup)**: ${String(q.hints.tier3_next_step).trim()}`);
+            }
+            block.push(hintLines.join('\n'));
+        }
+
+        // Collapsible Answer & Step-by-Step Solution Callout
+        const hasSolution = q.solution && String(q.solution).trim().length > 0;
+        const hasAnswer = q.correct_answer !== undefined && q.correct_answer !== null && String(q.correct_answer).trim().length > 0;
+        const hasVerification = q.verification && String(q.verification).trim().length > 0;
+
+        if (hasAnswer || hasSolution || hasVerification) {
+            const solutionLines = ['> [!success]- उत्तर एवं विस्तृत हल (Answer & Explanation)'];
+
+            if (hasAnswer) {
+                const ansRaw = String(q.correct_answer).trim();
+                let ansDisplay = ansRaw;
+                if (Array.isArray(q.options) && q.options.length > 0) {
+                    let matchIdx = -1;
+                    for (let idx = 0; idx < q.options.length; idx++) {
+                        const opt = q.options[idx];
+                        const cleanOpt = (typeof opt === 'string' && /^(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+\s*[\.\):-](?!\d))\s*/.test(opt))
+                            ? opt.replace(/^\(?[A-Za-z0-9]+\)?\s*[\s.:-]?\s*/, '').trim()
+                            : String(opt).trim();
+                        if (cleanOpt.toLowerCase() === ansRaw.toLowerCase() || String(opt).trim().toLowerCase() === ansRaw.toLowerCase()) {
+                            matchIdx = idx;
+                            break;
+                        }
+                        const label = String.fromCharCode(65 + idx);
+                        if (ansRaw.toUpperCase() === `(${label})` || ansRaw.toUpperCase() === label) {
+                            matchIdx = idx;
+                            break;
+                        }
+                    }
+                    if (matchIdx !== -1) {
+                        const label = String.fromCharCode(65 + matchIdx);
+                        const opt = q.options[matchIdx];
+                        const cleanOpt = (typeof opt === 'string' && /^(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+\s*[\.\):-](?!\d))\s*/.test(opt))
+                            ? opt.replace(/^\(?[A-Za-z0-9]+\)?\s*[\s.:-]?\s*/, '').trim()
+                            : String(opt).trim();
+                        ansDisplay = `(${label}) ${cleanOpt}`;
+                    }
+                }
+                solutionLines.push(`> **सही उत्तर (Correct Option)**: **${ansDisplay}**`);
+                solutionLines.push('>');
+            }
+
+            if (hasSolution) {
+                solutionLines.push('> **विस्तृत हल (Step-by-Step Solution)**:');
+                const solFormatted = String(q.solution).trim().split(/\r?\n/).map(line => line.trim() ? `> ${line}` : '>').join('\n');
+                solutionLines.push(solFormatted);
+            }
+
+            if (hasVerification) {
+                solutionLines.push('>');
+                solutionLines.push('> **उत्तर की जांच / सत्यापन (Verification)**:');
+                const verFormatted = String(q.verification).trim().split(/\r?\n/).map(line => line.trim() ? `> ${line}` : '>').join('\n');
+                solutionLines.push(verFormatted);
+            }
+
+            block.push(solutionLines.join('\n'));
         }
 
         questionBlocks.push(block.join('\n\n'));

@@ -23,8 +23,24 @@ const GENERIC_BANNED_WORDS = new Set([
 
 function auditLinks(filePath, options = {}) {
   if (!fs.existsSync(filePath)) {
-    console.error(`[ERROR] File not found: ${filePath}`);
-    process.exit(1);
+    const msg = `[ERROR] File not found: ${filePath}`;
+    if (require.main === module) {
+      console.error(msg);
+      process.exit(1);
+    }
+    return {
+      totalWords: 0,
+      totalWikilinks: 0,
+      embedCount: 0,
+      uniqueTargets: 0,
+      linkDensity: 0,
+      selfLinkCount: 0,
+      genericLinkCount: 0,
+      issues: [msg],
+      warnings: [],
+      success: false,
+      isValid: false
+    };
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
