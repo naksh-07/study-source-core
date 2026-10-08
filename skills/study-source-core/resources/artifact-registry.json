@@ -66,8 +66,8 @@
         "dependencies": [],
         "output_dir": "MindMap",
         "file_pattern": "{chapter}.mindmap.json",
-        "validator_export": null,
-        "validator_format": "none"
+        "validator_export": "validateMapContent",
+        "validator_format": "content_and_basename"
     },
     "slideDeck": {
         "task_id": "task-core-slide-deck",
@@ -94,8 +94,8 @@
         "dependencies": [],
         "output_dir": "Optional",
         "file_pattern": "{chapter}_PracticeQuestions.json",
-        "validator_export": null,
-        "validator_format": "parsed_json_fallback"
+        "validator_export": "validatePracticeQuestionsContent",
+        "validator_format": "parsed_json"
     },
     "problemPatterns": {
         "task_id": "task-studylab-problem-patterns",
@@ -108,8 +108,8 @@
         "dependencies": [],
         "output_dir": "Optional",
         "file_pattern": "{chapter}_ProblemPatterns.json",
-        "validator_export": null,
-        "validator_format": "parsed_json_fallback"
+        "validator_export": "validateProceduralContent",
+        "validator_format": "parsed_json"
     },
     "apkg": {
         "task_id": "task-export-anki",

@@ -153,9 +153,13 @@ function cleanTransients(options = {}) {
     }
 
     // 2. Skill-local scratch
-    const skillScratch = path.join(__dirname, 'scratch');
+    const skillScratch = path.join(__dirname, '..', 'scratch');
     if (fs.existsSync(skillScratch) && fs.statSync(skillScratch).isDirectory() && !candidateDirs.includes(skillScratch)) {
         candidateDirs.push(skillScratch);
+    }
+    const legacySkillScratch = path.join(__dirname, 'scratch');
+    if (fs.existsSync(legacySkillScratch) && fs.statSync(legacySkillScratch).isDirectory() && !candidateDirs.includes(legacySkillScratch)) {
+        candidateDirs.push(legacySkillScratch);
     }
 
     // 3. Target dir itself if it is a scratch directory

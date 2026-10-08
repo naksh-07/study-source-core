@@ -79,6 +79,29 @@
   - `studycore verify --all`: 6/6 chapters PASS
   - `npm test`: 47/47 suites PASS (18.96s)
 - [x] Phase 2 Remediation: Architectural Normalization & SSOT Pointer Consolidation (100% Complete):
-  - [x] Converted 9 duplicate root governance documents (`OWNERSHIP.md`, `DATA_FLOW.md`, `EXECUTION_LIFECYCLE.md`, `FREEZE_MAP.md`, `RESOURCES.md`, `SCRIPTS.md`, `SKILLS.md`, `TROUBLESHOOTING.md`, `DECISIONS.md`) into lean SSOT pointers to `.agents/`.
-  - [x] Preserved all test fixtures and assertions while eliminating ~150 KB of redundant duplicate text.
-  - [x] Re-verified all 4 Quality Gates: `npm run doctor` (HEALTHY), `npm run smoke` (19/19 PASS), `npm test` (47/47 PASS in 19.51s), `studycore verify --all` (6/6 PASS).
+  - [x] Converted 9 duplicate root governance documents into lean SSOT pointers to `.agents/`.
+  - [x] Preserved test fixtures and assertions while eliminating redundant duplicate text.
+- [x] Phase 26: 12-Flaw Forensic Root-Cause Defect Remediation (BUG-01 to BUG-12) (100% Complete):
+  - [x] BUG-01 (P0): In `source_question_inventory.js`, prioritized `_readingSteps` over generic option regex so numbered steps are never intercepted as MCQs.
+  - [x] BUG-02 (P0): In `artifact-registry.json`, wired validators for `mindmap`, `practiceQuestions`, and `problemPatterns`; unified schema tolerance in both validators.
+  - [x] BUG-03 (P1): In `validate_studylab_question_bank.js`, expanded regex to `[A-Za-z0-9]` to support lowercase `- (a)` options.
+  - [x] BUG-04 (P1): In `shared_anki_utils.js`, added `wal_checkpoint(TRUNCATE)` and serialization to avoid dirty WAL reads.
+  - [x] BUG-05 (P1): In `validate_artifact.json` MCP tool schema, added `question_bank`, `mindmap`, `slidedeck`, and `yaml`.
+  - [x] BUG-06 (P1): In `hint_distractor_semantics.js`, normalized Unicode minus `\u2212` into ASCII `-` to prevent inverting negatives.
+  - [x] BUG-07 (P1): In `cross_artifact_checker.js`, added signed regex `[-+−]?` and Unicode minus normalization to catch polarity mismatches.
+  - [x] BUG-08 (P2): In `studycore_cli.js`, added subject-level chapter discovery and scorecard to `cmdCertify`, eliminating asymmetry with `verify`.
+  - [x] BUG-09 (P2): In `run_adversarial_certification.js`, wrapped SQLite WASM operations in `try-finally` to eliminate memory leaks on failure.
+  - [x] BUG-10 (P2): In `note_contract_audit.js`, `latex_validator.js`, and `vault_indexer.js`, supported tilde code fences (`~~~`).
+  - [x] BUG-11 (P2): In `mcq_blackbox_validator.js`, set `allValid = false;` in catch block and wrapped DB in try-finally.
+  - [x] BUG-12 (P3): In `cleanup_transients.js`, targeted `skills/study-source-core/scratch` directory.
+- [x] Phase 27: Antigravity 2.0 Plugin Architecture Conversion (100% Complete):
+  - [x] Created root `plugin.json` manifest (`study-source-core` v1.2.0) with suggested starter prompts.
+  - [x] Established root `rules/AGENTS.md` containing single-writer, parent self-execution ban, and universal question invariants.
+  - [x] Scoped `mcp_config.json` directly to plugin root and removed legacy hardcoded entry from global `~/.gemini/config/mcp_config.json`.
+  - [x] Mirrored all 14 specialist subagents to `agents/*.md` for native universal discovery.
+  - [x] Created NTFS Directory Junction (`~/.gemini/config/plugins/study-source-core` <-> workspace repo) for zero-drift real-time global availability.
+- [x] Quality Gates 100% GREEN Verified:
+  - `npm run doctor`: 8/8 checks PASS (HEALTHY)
+  - `npm run smoke`: 19/19 checks PASS (Zero-mock certified)
+  - `npm test`: 47/47 suites PASS (18.9s)
+

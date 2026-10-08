@@ -113,10 +113,22 @@ function parseNote(filePath) {
 
   const bodyLines = allLines.slice(bodyStart);
   let inFence = false;
+  let fenceChar = '';
 
   for (const line of bodyLines) {
     const trimmed = line.trim();
-    if (trimmed.match(/^```/)) { inFence = !inFence; continue; }
+    const fm = trimmed.match(/^(`{3,}|~{3,})/);
+    if (fm) {
+      const char = fm[1][0];
+      if (!inFence) {
+        inFence = true;
+        fenceChar = char;
+      } else if (char === fenceChar) {
+        inFence = false;
+        fenceChar = '';
+      }
+      continue;
+    }
     if (inFence) continue;
 
     // Headings (H1-H3 for anchor resolution)

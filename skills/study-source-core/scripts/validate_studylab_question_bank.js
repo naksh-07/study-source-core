@@ -389,7 +389,7 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
         } else {
             const afterQ = block.substring(qPos + '### Question'.length);
             // End of question prompt: options, collapsible callout, or horizontal rule
-            const sepMatch = afterQ.match(/(?:\r?\n\s*-\s*\([A-Z0-9]+\)|\r?\n\s*>\s*\[!|\r?\n\s*---|^\s*---)/);
+            const sepMatch = afterQ.match(/(?:\r?\n\s*-\s*\([A-Za-z0-9]+\)|\r?\n\s*>\s*\[!|\r?\n\s*---|^\s*---)/);
             const sepPos = sepMatch ? sepMatch.index : -1;
             const qStatement = (sepPos !== -1 ? afterQ.substring(0, sepPos) : afterQ).trim();
             if (qStatement.length === 0) {
@@ -419,7 +419,7 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
 
         // Authentic MCQ options check if question type is MCQ
         const isMcq = />\s*-\s*\*\*Question Type\*\*:\s*mcq/i.test(block);
-        const optionLines = block.match(/^\s*-\s*\([A-Z0-9]+\)\s+.+$/gm) || [];
+        const optionLines = block.match(/^\s*-\s*\([A-Za-z0-9]+\)\s+.+$/gm) || [];
         if (isMcq) {
             if (optionLines.length < 4) {
                 errors.push(`[INSUFFICIENT_MCQ_OPTIONS] MCQ in '## ${heading}' must have at least 4 authentic options (A), (B), (C), (D), found ${optionLines.length} in '${filePath}'`);

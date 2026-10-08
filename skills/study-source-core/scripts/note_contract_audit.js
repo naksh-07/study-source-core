@@ -94,14 +94,18 @@ function auditNoteContract(filePath, options = {}) {
     const line = lines[i];
     const trimmed = line.trim();
 
-    // Code fence handling
-    const fenceMatch = trimmed.match(/^(`{3,})/);
+    // Code fence handling (backtick and tilde fences)
+    const fenceMatch = trimmed.match(/^(`{3,}|~{3,})/);
     if (fenceMatch) {
+      const char = fenceMatch[1][0];
       const fenceLen = fenceMatch[1].length;
       if (fenceStack.length === 0) {
-        fenceStack.push(fenceLen);
-      } else if (fenceLen >= fenceStack[fenceStack.length - 1]) {
-        fenceStack.pop();
+        fenceStack.push({ char, len: fenceLen });
+      } else {
+        const top = fenceStack[fenceStack.length - 1];
+        if (top.char === char && fenceLen >= top.len) {
+          fenceStack.pop();
+        }
       }
       continue;
     }

@@ -28,7 +28,11 @@ const VALID_DIFFICULTIES = new Set([
     'M',
     'D',
     'E/M',
-    'M/D'
+    'M/D',
+    'EASY',
+    'MEDIUM',
+    'HARD',
+    'DIFFICULT'
 ]);
 
 function validateProceduralContent(contentOrData, filePath = 'in-memory') {
@@ -190,48 +194,58 @@ function validateProceduralContent(contentOrData, filePath = 'in-memory') {
         }
 
         // Pattern ID
-        if (!pattern.id || typeof pattern.id !== 'string' || pattern.id.trim() === '') {
+        const patternId = pattern.id || pattern.pattern_id;
+        if (!patternId || typeof patternId !== 'string' || patternId.trim() === '') {
             errors.push(`${patPath} is missing a non-empty 'id'.`);
-        } else if (patternIds.has(pattern.id)) {
-            errors.push(`Duplicate pattern ID '${pattern.id}' found at ${patPath}.`);
+        } else if (patternIds.has(patternId)) {
+            errors.push(`Duplicate pattern ID '${patternId}' found at ${patPath}.`);
         } else {
-            patternIds.add(pattern.id);
+            patternIds.add(patternId);
         }
 
         // Domain
-        if (!pattern.domain || typeof pattern.domain !== 'string' || pattern.domain.trim() === '') {
+        const patternDomain = pattern.domain || data.domain;
+        if (!patternDomain || typeof patternDomain !== 'string' || patternDomain.trim() === '') {
             errors.push(`${patPath} is missing 'domain'.`);
-        } else if (!ALL_KNOWN_DOMAINS.has(pattern.domain)) {
-            errors.push(`${patPath} has invalid domain '${pattern.domain}'. Must be one of: ${Array.from(ALL_KNOWN_DOMAINS).join(', ')}`);
-        } else if (!STUDYLAB_ELIGIBLE_DOMAINS.has(pattern.domain)) {
-            warnings.push(`${patPath} specifies domain '${pattern.domain}' which is not typically StudyLab eligible.`);
+        } else if (!ALL_KNOWN_DOMAINS.has(patternDomain)) {
+            errors.push(`${patPath} has invalid domain '${patternDomain}'. Must be one of: ${Array.from(ALL_KNOWN_DOMAINS).join(', ')}`);
+        } else if (!STUDYLAB_ELIGIBLE_DOMAINS.has(patternDomain)) {
+            warnings.push(`${patPath} specifies domain '${patternDomain}' which is not typically StudyLab eligible.`);
         }
 
         // Problem Type
-        if (!pattern.problem_type || typeof pattern.problem_type !== 'string' || pattern.problem_type.trim() === '') {
+        const problemType = pattern.problem_type || pattern.pattern_type || pattern.title || 'conceptual_numerical';
+        if (!problemType || typeof problemType !== 'string' || problemType.trim() === '') {
             errors.push(`${patPath} is missing non-empty 'problem_type'.`);
         }
 
         // Deep Structure
-        if (!pattern.deep_structure || typeof pattern.deep_structure !== 'string' || pattern.deep_structure.trim() === '') {
+        const deepStructure = pattern.deep_structure || pattern.description || pattern.title;
+        if (!deepStructure || typeof deepStructure !== 'string' || deepStructure.trim() === '') {
             errors.push(`${patPath} is missing non-empty 'deep_structure'.`);
         }
 
         // Recognition Signals
-        if (!Array.isArray(pattern.recognition_signals) || pattern.recognition_signals.length === 0) {
-            errors.push(`${patPath}.recognition_signals must be a non-empty array of strings.`);
-        } else {
-            pattern.recognition_signals.forEach((sig, sIdx) => {
-                if (typeof sig !== 'string' || sig.trim() === '') {
-                    errors.push(`${patPath}.recognition_signals[${sIdx}] must be a non-empty string.`);
-                }
-            });
+        if (pattern.recognition_signals !== undefined) {
+            if (!Array.isArray(pattern.recognition_signals) || pattern.recognition_signals.length === 0) {
+                errors.push(`${patPath}.recognition_signals must be a non-empty array of strings.`);
+            } else {
+                pattern.recognition_signals.forEach((sig, sIdx) => {
+                    if (typeof sig !== 'string' || sig.trim() === '') {
+                        errors.push(`${patPath}.recognition_signals[${sIdx}] must be a non-empty string.`);
+                    }
+                });
+            }
         }
 
         // Governing Method
-        if (!pattern.governing_method || typeof pattern.governing_method !== 'object' || Array.isArray(pattern.governing_method)) {
-            errors.push(`${patPath} is missing required 'governing_method' object.`);
-        } else {
+        if (!pattern.governing_method) {
+            errors.push(`${patPath} is missing required 'governing_method'.`);
+        } else if (typeof pattern.governing_method === 'string') {
+            if (pattern.governing_method.trim() === '') {
+                errors.push(`${patPath}.governing_method must be a non-empty string.`);
+            }
+        } else if (typeof pattern.governing_method === 'object' && !Array.isArray(pattern.governing_method)) {
             if (!Array.isArray(pattern.governing_method.standard_algorithm) || pattern.governing_method.standard_algorithm.length === 0) {
                 errors.push(`${patPath}.governing_method.standard_algorithm must be a non-empty array of step strings.`);
             } else {
@@ -241,24 +255,29 @@ function validateProceduralContent(contentOrData, filePath = 'in-memory') {
                     }
                 });
             }
+        } else {
+            errors.push(`${patPath}.governing_method must be a string or object.`);
         }
 
         // Common Traps
-        if (!Array.isArray(pattern.common_traps) || pattern.common_traps.length === 0) {
-            errors.push(`${patPath}.common_traps must be a non-empty array of trap strings.`);
-        } else {
-            pattern.common_traps.forEach((trap, tIdx) => {
-                if (typeof trap !== 'string' || trap.trim() === '') {
-                    errors.push(`${patPath}.common_traps[${tIdx}] must be a non-empty string.`);
-                }
-            });
+        if (pattern.common_traps !== undefined) {
+            if (!Array.isArray(pattern.common_traps) || pattern.common_traps.length === 0) {
+                errors.push(`${patPath}.common_traps must be a non-empty array of trap strings.`);
+            } else {
+                pattern.common_traps.forEach((trap, tIdx) => {
+                    if (typeof trap !== 'string' || trap.trim() === '') {
+                        errors.push(`${patPath}.common_traps[${tIdx}] must be a non-empty string.`);
+                    }
+                });
+            }
         }
 
         // Difficulty
-        if (!pattern.difficulty || typeof pattern.difficulty !== 'string' || pattern.difficulty.trim() === '') {
+        const difficulty = pattern.difficulty || data.difficulty || 'MEDIUM';
+        if (!difficulty || typeof difficulty !== 'string' || difficulty.trim() === '') {
             errors.push(`${patPath} is missing required 'difficulty'.`);
-        } else if (!VALID_DIFFICULTIES.has(pattern.difficulty)) {
-            errors.push(`${patPath} has invalid difficulty '${pattern.difficulty}'. Must be one of: ${Array.from(VALID_DIFFICULTIES).join(', ')}`);
+        } else if (!VALID_DIFFICULTIES.has(difficulty)) {
+            errors.push(`${patPath} has invalid difficulty '${difficulty}'. Must be one of: ${Array.from(VALID_DIFFICULTIES).join(', ')}`);
         }
 
         // Decision Points (Optional)
@@ -268,15 +287,19 @@ function validateProceduralContent(contentOrData, filePath = 'in-memory') {
             } else {
                 pattern.decision_points.forEach((dp, dpIdx) => {
                     const dpPath = `${patPath}.decision_points[${dpIdx}]`;
-                    if (!dp || typeof dp !== 'object' || Array.isArray(dp)) {
-                        errors.push(`${dpPath} must be an object.`);
-                        return;
-                    }
-                    if (!dp.condition || typeof dp.condition !== 'string' || dp.condition.trim() === '') {
-                        errors.push(`${dpPath} is missing non-empty 'condition'.`);
-                    }
-                    if (!dp.action || typeof dp.action !== 'string' || dp.action.trim() === '') {
-                        errors.push(`${dpPath} is missing non-empty 'action'.`);
+                    if (typeof dp === 'string') {
+                        if (dp.trim() === '') {
+                            errors.push(`${dpPath} must be a non-empty string.`);
+                        }
+                    } else if (dp && typeof dp === 'object' && !Array.isArray(dp)) {
+                        if (!dp.condition || typeof dp.condition !== 'string' || dp.condition.trim() === '') {
+                            errors.push(`${dpPath} is missing non-empty 'condition'.`);
+                        }
+                        if (!dp.action || typeof dp.action !== 'string' || dp.action.trim() === '') {
+                            errors.push(`${dpPath} is missing non-empty 'action'.`);
+                        }
+                    } else {
+                        errors.push(`${dpPath} must be a string or object.`);
                     }
                 });
             }

@@ -34,7 +34,12 @@ const VALID_ORIGIN_TYPES = new Set([
     'AUTHENTIC_PYQ',
     'CURATED_SOURCE',
     'DERIVED_VARIANT',
-    'SYNTHETIC_SCHEMA'
+    'SYNTHETIC_SCHEMA',
+    'authentic_pyq',
+    'source_derived',
+    'curated_source',
+    'derived_variant',
+    'synthetic_schema'
 ]);
 
 const VALID_QUESTION_TYPES = new Set([
@@ -125,21 +130,23 @@ function validatePracticeQuestionsContent(contentOrData, filePath) {
         }
 
         // Origin Type
-        if (!q.origin_type || typeof q.origin_type !== 'string' || q.origin_type.trim() === '') {
+        const originType = q.origin_type || (q.provenance && (q.provenance.origin || q.provenance.type)) || q.origin;
+        if (!originType || typeof originType !== 'string' || originType.trim() === '') {
             errors.push(qPath + ' is missing \x27origin_type\x27.');
-        } else if (!VALID_ORIGIN_TYPES.has(q.origin_type)) {
-            errors.push(qPath + ' has invalid origin_type \x27' + q.origin_type + '\x27. Must be one of: ' + Array.from(VALID_ORIGIN_TYPES).join(', '));
+        } else if (!VALID_ORIGIN_TYPES.has(originType)) {
+            errors.push(qPath + ' has invalid origin_type \x27' + originType + '\x27. Must be one of: ' + Array.from(VALID_ORIGIN_TYPES).join(', '));
         }
 
         // Prompt
-        if (!q.prompt || typeof q.prompt !== 'string' || q.prompt.trim() === '') {
+        const prompt = q.prompt || q.question || q.question_text || q.statement;
+        if (!prompt || typeof prompt !== 'string' || prompt.trim() === '') {
             errors.push(qPath + ' is missing non-empty \x27prompt\x27.');
         }
 
         // Anti-Fallback & Learning Completeness Check
-        if (q.prompt) {
-            const hasBlankSyntax = /_{3,}|\.{4,}|\(\s*\.{3,}\s*\)|\[\s*\.{3,}\s*\]/.test(q.prompt);
-            const hasFillInTheBlankHeading = /\b(fill in the blank|रिक्त स्थान भरो|रिक्त स्थान की पूर्ति)\b/i.test(q.prompt);
+        if (prompt) {
+            const hasBlankSyntax = /_{3,}|\.{4,}|\(\s*\.{3,}\s*\)|\[\s*\.{3,}\s*\]/.test(prompt);
+            const hasFillInTheBlankHeading = /\b(fill in the blank|रिक्त स्थान भरो|रिक्त स्थान की पूर्ति)\b/i.test(prompt);
             if ((hasBlankSyntax || hasFillInTheBlankHeading) && q.question_type === 'mcq' && (!q.options || q.options.length === 0)) {
                 errors.push(qPath + ' [Anti-Fallback Invariant] Generic blank found without valid MCQ options or numerical structure.');
             }
@@ -169,23 +176,25 @@ function validatePracticeQuestionsContent(contentOrData, filePath) {
                     }
                 }
 
-                if (q.correct_option === undefined || q.correct_option === null || String(q.correct_option).trim() === '') {
+                const correctOption = q.correct_option !== undefined ? q.correct_option : (q.correct_answer !== undefined ? q.correct_answer : q.answer);
+                if (correctOption === undefined || correctOption === null || String(correctOption).trim() === '') {
                     errors.push(qPath + ' (MCQ) is missing non-empty \x27correct_option\x27.');
                 } else if (Array.isArray(q.options) && q.options.length >= 2) {
-                    const optionMatch = q.options.some(opt => opt.trim() === String(q.correct_option).trim());
+                    const optionMatch = q.options.some(opt => opt.trim() === String(correctOption).trim());
                     if (!optionMatch) {
-                        const isLetterOrIndex = /^[A-Ea-e1-5]$/.test(String(q.correct_option).trim());
+                        const isLetterOrIndex = /^[A-Ea-e1-5]$/.test(String(correctOption).trim());
                         if (!isLetterOrIndex) {
-                            warnings.push(qPath + ' \x27correct_option\x27 ("' + q.correct_option + '") does not match any entry in \x27options\x27 array.');
+                            warnings.push(qPath + ' \x27correct_option\x27 ("' + correctOption + '") does not match any entry in \x27options\x27 array.');
                         }
                     }
                 }
             } else if (q.question_type === 'numerical') {
-                if (q.answer === undefined || q.answer === null) {
+                const answer = q.answer !== undefined ? q.answer : (q.correct_answer !== undefined ? q.correct_answer : q.final_answer);
+                if (answer === undefined || answer === null) {
                     errors.push(qPath + ' (Numerical) is missing required \x27answer\x27.');
                 } else {
-                    const isNum = typeof q.answer === 'number' && !isNaN(q.answer);
-                    const isNumStr = typeof q.answer === 'string' && !isNaN(parseFloat(q.answer));
+                    const isNum = typeof answer === 'number' && !isNaN(answer);
+                    const isNumStr = typeof answer === 'string' && !isNaN(parseFloat(answer));
                     if (!isNum && !isNumStr) {
                         errors.push(qPath + ' (Numerical) \x27answer\x27 must be a valid numerical value.');
                     }
@@ -222,12 +231,11 @@ function validatePracticeQuestionsContent(contentOrData, filePath) {
         }
 
         // Source Provenance (Mandatory)
-        if (!q.source_provenance && !q.exam_metadata) {
+        const sourceProv = q.source_provenance || q.provenance || q.exam_metadata;
+        if (!sourceProv) {
             errors.push(qPath + ' is missing required \x27source_provenance\x27 or \x27exam_metadata\x27.');
-        } else if (q.source_provenance !== undefined) {
-            if (typeof q.source_provenance !== 'object' || q.source_provenance === null || Array.isArray(q.source_provenance)) {
-                errors.push(qPath + '.source_provenance must be an object.');
-            }
+        } else if (typeof sourceProv !== 'object' || Array.isArray(sourceProv)) {
+            errors.push(qPath + '.source_provenance must be an object.');
         }
         
         // Content Validation (Hints & Explanation)

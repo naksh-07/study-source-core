@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "study-source-core": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\skills\\study-source-core\\scripts\\mcp_server.js"
+      ]
+    }
+  }
+}

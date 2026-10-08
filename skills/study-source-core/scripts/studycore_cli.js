@@ -621,6 +621,108 @@ async function cmdCertify(positional, flags) {
         chapter = positional[1] || flags.chapter;
     }
 
+    if (subject && !chapter && !chapterDir) {
+        const vaultRoot = getVaultRoot();
+        const smDir = path.join(vaultRoot, 'Study Materials');
+        const { getSubjectCandidates } = require('./path_resolver');
+        const candidates = getSubjectCandidates(subject);
+        let matchedSubjDir = null;
+        let actualSubj = subject;
+
+        if (fs.existsSync(smDir)) {
+            const existingSubjects = fs.readdirSync(smDir).filter(s => fs.statSync(path.join(smDir, s)).isDirectory());
+            for (const c of candidates) {
+                const found = existingSubjects.find(s => s.toLowerCase() === c.toLowerCase());
+                if (found) {
+                    matchedSubjDir = path.join(smDir, found);
+                    actualSubj = found;
+                    break;
+                }
+            }
+        }
+
+        if (!matchedSubjDir || !fs.existsSync(matchedSubjDir)) {
+            throw new Error(`Subject directory not found for '${subject}'. Usage: 'studycore certify <Subject> <Chapter>' or 'studycore certify --all'`);
+        }
+
+        const chs = fs.readdirSync(matchedSubjDir).filter(c => fs.statSync(path.join(matchedSubjDir, c)).isDirectory()).sort();
+        if (chs.length === 0) {
+            throw new Error(`No chapters found in subject '${actualSubj}' (${matchedSubjDir})`);
+        }
+
+        if (!flags.json) {
+            console.log('================================================================================');
+            console.log(`  STUDYSOURCECORE — ADVERSARIAL CERTIFICATION: SUBJECT ${actualSubj} (${chs.length} CHAPTERS TOTAL)`);
+            console.log('================================================================================\n');
+        }
+
+        const reports = [];
+        let allPassed = true;
+
+        for (const c of chs) {
+            const rep = await certifyChapter({
+                chapter: c,
+                subject: actualSubj,
+                chapterDir: path.join(matchedSubjDir, c),
+                apkg: flags.apkg,
+                proceduralApkg: flags.proceduralApkg,
+                outputReport: flags.outputReport
+            });
+            reports.push(rep);
+            if (rep.release_verdict !== 'PASS') {
+                allPassed = false;
+            }
+        }
+
+        if (!flags.json) {
+            console.log('\n================================================================================');
+            console.log(`  ADVERSARIAL CERTIFICATION SCORECARD — ${actualSubj}`);
+            console.log('================================================================================');
+            console.log('| Status  | Subject      | Chapter                      | Gates (1-4) | Errors | Warnings |');
+            console.log('|---------|--------------|------------------------------|-------------|--------|----------|');
+            for (const rep of reports) {
+                const icon = rep.release_verdict === 'PASS' ? '✅ PASS' : '❌ FAIL';
+                const subjPadded = rep.subject.padEnd(12).slice(0, 12);
+                const chPadded = rep.chapter.padEnd(28).slice(0, 28);
+                const g1 = (rep.gates?.gate_1_completion_evidence?.status === 'PASS') ? 'P' : 'F';
+                const g2 = (rep.gates?.gate_2_adversarial_matrix?.status === 'PASS') ? 'P' : 'F';
+                const g3 = (rep.gates?.gate_3_binary_integrity?.status === 'PASS') ? 'P' : 'F';
+                const g4 = (rep.gates?.gate_4_cross_artifact_consistency?.status === 'PASS') ? 'P' : 'F';
+                const gatesStr = `${g1}/${g2}/${g3}/${g4}`.padStart(11);
+                const errs = String(rep.summary?.total_errors ?? 0).padStart(6);
+                const warns = String(rep.summary?.total_warnings ?? 0).padStart(8);
+                console.log(`| ${icon} | ${subjPadded} | ${chPadded} | ${gatesStr} | ${errs} | ${warns} |`);
+            }
+            console.log('================================================================================');
+            console.log(allPassed ? `🎉 ALL ${chs.length} CHAPTERS IN ${actualSubj} RELEASE VERDICT: PASS` : `❌ SOME CHAPTERS IN ${actualSubj} FAILED ADVERSARIAL CERTIFICATION`);
+            console.log('================================================================================\n');
+        } else {
+            console.log(JSON.stringify({
+                release_verdict: allPassed ? 'PASS' : 'BLOCKED',
+                mode: 'SUBJECT',
+                subject: actualSubj,
+                total_chapters: chs.length,
+                passed_chapters: reports.filter(r => r.release_verdict === 'PASS').length,
+                failed_chapters: reports.filter(r => r.release_verdict !== 'PASS').length,
+                reports
+            }, null, 2));
+        }
+
+        if (!allPassed) {
+            process.exitCode = 1;
+        }
+
+        return {
+            release_verdict: allPassed ? 'PASS' : 'BLOCKED',
+            mode: 'SUBJECT',
+            subject: actualSubj,
+            total_chapters: chs.length,
+            passed_chapters: reports.filter(r => r.release_verdict === 'PASS').length,
+            failed_chapters: reports.filter(r => r.release_verdict !== 'PASS').length,
+            reports
+        };
+    }
+
     if (!chapter && !chapterDir) {
         throw new Error("Missing target chapter for certification. Usage: 'studycore certify <Subject> <Chapter>' or 'studycore certify --all'");
     }

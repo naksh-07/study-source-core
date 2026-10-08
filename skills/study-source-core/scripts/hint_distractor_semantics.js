@@ -77,6 +77,7 @@ const NUMBER_WORD_MAP = {
 function cleanText(str) {
     if (str === null || str === undefined) return '';
     return String(str)
+        .replace(/\u2212/g, '-')
         .replace(/\$+/g, ' ')
         .replace(/\\(frac|sqrt|text|mathrm|mathbf)\{([^}]+)\}/g, ' $2 ')
         .replace(/[\\^_{}()]/g, ' ')

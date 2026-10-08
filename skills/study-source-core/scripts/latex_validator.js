@@ -26,6 +26,7 @@ function validateLatexContent(content, filePath = 'content.md', options = {}) {
   const warnings = [];
 
   let inCodeFence = false;
+  let fenceChar = '';
   let fenceLen = 0;
   let inDisplayMath = false;
   let displayMathStartLine = -1;
@@ -38,14 +39,17 @@ function validateLatexContent(content, filePath = 'content.md', options = {}) {
     const trimmed = rawLine.trim();
 
     // Code fence tracking (skip math inside code blocks)
-    const fenceMatch = trimmed.match(/^(`{3,})/);
+    const fenceMatch = trimmed.match(/^(`{3,}|~{3,})/);
     if (fenceMatch) {
+      const char = fenceMatch[1][0];
       const len = fenceMatch[1].length;
       if (!inCodeFence) {
         inCodeFence = true;
+        fenceChar = char;
         fenceLen = len;
-      } else if (len >= fenceLen) {
+      } else if (char === fenceChar && len >= fenceLen) {
         inCodeFence = false;
+        fenceChar = '';
         fenceLen = 0;
       }
       continue;

@@ -25,54 +25,57 @@ async function validateMcqBlackBox(apkgPath) {
     const SQL = await initSqlJs();
     const db = new SQL.Database(dbBuffer);
 
-    const notes = db.exec(`SELECT id, flds FROM notes`);
-    if (!notes || notes.length === 0) {
-        console.error(`❌ FAIL: No notes found in APKG`);
-        return false;
-    }
-
     let mcqCount = 0;
     let allValid = true;
 
-    for (const row of notes[0].values) {
-        const id = row[0];
-        const flds = row[1];
-        const parts = flds.split('\x1f');
-        const payloadStr = parts[0];
-
-        try {
-            const payload = JSON.parse(payloadStr);
-            const contract = payload.inline_contract;
-            if (!contract) continue;
-
-            const baseModality = contract.question_type || contract.modality || contract.card_type;
-            const modality = contract.contract ? (contract.contract.modality || baseModality) : baseModality;
-
-            if (modality === 'mcq' || (contract.contract && contract.contract.modality === 'mcq')) {
-                mcqCount++;
-                const actualContract = contract.contract || contract;
-                const options = actualContract.options || (actualContract.rendering_metadata ? actualContract.rendering_metadata.options : null);
-                
-                if (!options || !Array.isArray(options)) {
-                    console.error(`❌ FAIL Note ${id}: MCQ is missing options array in payload.`);
-                    allValid = false;
-                } else if (options.length < 4) {
-                    console.error(`❌ FAIL Note ${id}: MCQ has fewer than 4 options (${options.length}).`);
-                    allValid = false;
-                } else {
-                    console.log(`✅ Note ${id}: Valid MCQ with ${options.length} discrete options.`);
-                }
-            }
-        } catch (e) {
-            console.error(`❌ FAIL Note ${id}: Could not parse ProceduralPayload JSON. ${e.message}`);
+    try {
+        const notes = db.exec(`SELECT id, flds FROM notes`);
+        if (!notes || notes.length === 0) {
+            console.error(`❌ FAIL: No notes found in APKG`);
+            return false;
         }
-    }
 
-    if (mcqCount === 0) {
-        console.warn(`⚠️ Warning: No MCQ questions found in APKG to validate.`);
-    }
+        for (const row of notes[0].values) {
+            const id = row[0];
+            const flds = row[1];
+            const parts = flds.split('\x1f');
+            const payloadStr = parts[0];
 
-    db.close();
+            try {
+                const payload = JSON.parse(payloadStr);
+                const contract = payload.inline_contract;
+                if (!contract) continue;
+
+                const baseModality = contract.question_type || contract.modality || contract.card_type;
+                const modality = contract.contract ? (contract.contract.modality || baseModality) : baseModality;
+
+                if (modality === 'mcq' || (contract.contract && contract.contract.modality === 'mcq')) {
+                    mcqCount++;
+                    const actualContract = contract.contract || contract;
+                    const options = actualContract.options || (actualContract.rendering_metadata ? actualContract.rendering_metadata.options : null);
+                    
+                    if (!options || !Array.isArray(options)) {
+                        console.error(`❌ FAIL Note ${id}: MCQ is missing options array in payload.`);
+                        allValid = false;
+                    } else if (options.length < 4) {
+                        console.error(`❌ FAIL Note ${id}: MCQ has fewer than 4 options (${options.length}).`);
+                        allValid = false;
+                    } else {
+                        console.log(`✅ Note ${id}: Valid MCQ with ${options.length} discrete options.`);
+                    }
+                }
+            } catch (e) {
+                console.error(`❌ FAIL Note ${id}: Could not parse ProceduralPayload JSON. ${e.message}`);
+                allValid = false;
+            }
+        }
+
+        if (mcqCount === 0) {
+            console.warn(`⚠️ Warning: No MCQ questions found in APKG to validate.`);
+        }
+    } finally {
+        db.close();
+    }
 
     console.log(`\n====================================================`);
     if (allValid && mcqCount > 0) {

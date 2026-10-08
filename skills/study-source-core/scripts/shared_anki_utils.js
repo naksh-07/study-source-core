@@ -210,6 +210,14 @@ function createAnkiDatabase(diskFilePath) {
             return stmt;
         };
         db.export = function() {
+            try {
+                db.pragma('wal_checkpoint(TRUNCATE)');
+            } catch (e) {}
+            if (typeof db.serialize === 'function') {
+                try {
+                    return db.serialize();
+                } catch (e) {}
+            }
             return fs.readFileSync(diskFilePath);
         };
         return { db, isNative: true, diskFilePath };

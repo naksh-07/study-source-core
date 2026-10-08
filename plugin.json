@@ -1,0 +1,11 @@
+{
+  "name": "study-source-core",
+  "displayName": "StudySourceCore Engine",
+  "version": "1.2.0",
+  "description": "Antigravity 2.0 Multi-Agent Study Engine coordinating 14 specialist subagents for Obsidian study notes, Anki flashcard decks, MindMaps, Slide decks, and StudyLab Question Banks.",
+  "suggestedPrompts": [
+    "Transform this textbook chapter into Obsidian notes, Anki cards, and MindMap",
+    "Generate procedural STEM question bank with solution DAGs and 3-tier hints",
+    "Audit cross-artifact consistency across generated study deliverables"
+  ]
+}

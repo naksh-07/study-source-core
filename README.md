@@ -2,6 +2,7 @@
 
 > **Canonical Architecture**: [`ARCHITECTURE.md`](./ARCHITECTURE.md)  
 > **Product Charter**: [`PRODUCT.md`](./PRODUCT.md)  
+> **Plugin Usage Guide**: [`docs/PLUGIN_USAGE.md`](./docs/PLUGIN_USAGE.md)  
 > **Implementation Roadmap**: [`ROADMAP.md`](./ROADMAP.md)  
 > **Learning Principles**: [`docs/LEARNING_PRINCIPLES.md`](./docs/LEARNING_PRINCIPLES.md)  
 > **Version**: v1.2.0-beta.7 Production Baseline  

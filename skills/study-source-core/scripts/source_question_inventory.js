@@ -536,6 +536,25 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
                     currentItem._readingHints = false;
+                } else if (currentItem._readingSteps && (
+                    /^(?:-\s*)?(?:\d+[\.\)]|Step\s*\d+[:\.]?)\s*/i.test(trimmed) ||
+                    (trimmed.startsWith('- ') && !/^(?:-\s*)?\([A-Za-z0-9]+\)\s+/.test(trimmed) && !/^-\s*(?:Options|Hints|Correct\s*Answer|Answer|Ans|Difficulty|Prerequisites):/i.test(trimmed))
+                )) {
+                    const stepClean = trimmed
+                        .replace(/^(?:-\s*)?(?:Step\s*\d+[:\.]?|\d+[\.\)])\s*/i, '')
+                        .replace(/^-\s*/, '')
+                        .trim();
+                    if (stepClean) {
+                        currentItem.source_solution_steps.push(stepClean);
+                    }
+                } else if (currentItem._readingSteps && !trimmed.startsWith('- ') && !trimmed.startsWith('### ') && !trimmed.startsWith('## ')) {
+                    if (trimmed.length > 0) {
+                        if (currentItem.source_solution_steps.length > 0) {
+                            currentItem.source_solution_steps[currentItem.source_solution_steps.length - 1] += '\n' + trimmed;
+                        } else {
+                            currentItem.source_solution_steps.push(trimmed);
+                        }
+                    }
                 } else if (/^(?:-\s*)?(?:\([A-Za-z0-9]+\)|[A-Za-z0-9]+[\.\)])\s+(.+)/.test(trimmed)) {
                     currentItem._readingStatement = false;
                     currentItem._readingSteps = false;
@@ -545,8 +564,6 @@ function parseInventoryItemsFromMarkdownText(markdownText, context = {}) {
                     if (currentItem.options.length >= 2) {
                         currentItem.raw_type = 'mcq';
                     }
-                } else if (currentItem._readingSteps && /^\d+\.\s*/.test(trimmed)) {
-                    currentItem.source_solution_steps.push(trimmed.replace(/^\d+\.\s*/, '').trim());
                 } else if (currentItem._readingStatement && !trimmed.startsWith('- ') && !trimmed.startsWith('### ') && !trimmed.startsWith('## ')) {
                     if (trimmed.length > 0) {
                         currentItem.statement += '\n' + trimmed;

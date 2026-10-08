@@ -154,189 +154,195 @@ async function runGate3BinaryIntegrity(declarativeApkgPath, proceduralApkgPath, 
     let declCards = [];
     let procCards = [];
 
-    // PKG-01: ZIP & SQLite schema for Declarative
-    if (hasDecl) {
-        try {
-            const zip = await JSZip.loadAsync(fs.readFileSync(declarativeApkgPath));
-            const colFile = zip.file('collection.anki2');
-            const mediaFile = zip.file('media');
+    try {
+        // PKG-01: ZIP & SQLite schema for Declarative
+        if (hasDecl) {
+            try {
+                const zip = await JSZip.loadAsync(fs.readFileSync(declarativeApkgPath));
+                const colFile = zip.file('collection.anki2');
+                const mediaFile = zip.file('media');
 
-            if (!colFile) errors.push("[PKG-01] Declarative APKG missing collection.anki2");
-            if (!mediaFile) errors.push("[PKG-01] Declarative APKG missing media file");
+                if (!colFile) errors.push("[PKG-01] Declarative APKG missing collection.anki2");
+                if (!mediaFile) errors.push("[PKG-01] Declarative APKG missing media file");
 
-            if (colFile) {
-                declDb = new SQL.Database(await colFile.async('nodebuffer'));
-                const colRes = declDb.exec("SELECT models, decks FROM col LIMIT 1");
-                declModels = JSON.parse(colRes[0].values[0][0]);
+                if (colFile) {
+                    declDb = new SQL.Database(await colFile.async('nodebuffer'));
+                    const colRes = declDb.exec("SELECT models, decks FROM col LIMIT 1");
+                    declModels = JSON.parse(colRes[0].values[0][0]);
 
-                // PKG-04: Closed Model Boundary for Declarative
-                const declModelIds = Object.keys(declModels);
-                if (declModelIds.includes('1600000004') || Object.values(declModels).some(m => m.name === 'StudyLab Procedural Anchor')) {
-                    errors.push("[PKG-04] Declarative APKG contains prohibited StudyLab Model 1600000004");
-                }
-                const allowedDeclIds = new Set(['1600000001', '1600000002', '1600000003']);
-                declModelIds.forEach(id => {
-                    if (!allowedDeclIds.has(id)) {
-                        errors.push(`[PKG-04] Declarative APKG contains unauthorized model ID ${id}`);
+                    // PKG-04: Closed Model Boundary for Declarative
+                    const declModelIds = Object.keys(declModels);
+                    if (declModelIds.includes('1600000004') || Object.values(declModels).some(m => m.name === 'StudyLab Procedural Anchor')) {
+                        errors.push("[PKG-04] Declarative APKG contains prohibited StudyLab Model 1600000004");
                     }
-                });
-
-                // Notes & Cards
-                const nRes = declDb.exec("SELECT id, guid, mid, flds FROM notes");
-                declNotes = nRes[0]?.values || [];
-                const cRes = declDb.exec("SELECT id, nid, did FROM cards");
-                declCards = cRes[0]?.values || [];
-
-                // PKG-05: Orphan card detection
-                const orphanC = declDb.exec("SELECT count(*) FROM cards WHERE nid NOT IN (SELECT id FROM notes)")[0]?.values[0][0];
-                if (orphanC > 0) errors.push(`[PKG-05] Declarative APKG has ${orphanC} orphan cards`);
-
-                // PKG-06: Orphan note detection
-                const orphanN = declDb.exec("SELECT count(*) FROM notes WHERE id NOT IN (SELECT nid FROM cards)")[0]?.values[0][0];
-                if (orphanN > 0) errors.push(`[PKG-06] Declarative APKG has ${orphanN} orphan notes`);
-
-                // PKG-08: GUID uniqueness
-                const guids = declNotes.map(n => n[1]);
-                if (new Set(guids).size !== guids.length) {
-                    errors.push("[PKG-08] Declarative APKG contains duplicate note GUIDs");
-                }
-            }
-            checks.push({ check: 'PKG-DECL-INTEGRITY', status: errors.length === 0 ? 'PASS' : 'FAIL' });
-        } catch (e) {
-            errors.push(`[PKG-01] Declarative APKG binary inspection failed: ${e.message}`);
-        }
-    }
-
-    // PKG-02: ZIP & SQLite schema for Procedural
-    if (hasProc) {
-        try {
-            const zip = await JSZip.loadAsync(fs.readFileSync(proceduralApkgPath));
-            const colFile = zip.file('collection.anki2');
-            const mediaFile = zip.file('media');
-
-            if (!colFile) errors.push("[PKG-02] Procedural APKG missing collection.anki2");
-            if (!mediaFile) errors.push("[PKG-02] Procedural APKG missing media file");
-
-            if (colFile) {
-                procDb = new SQL.Database(await colFile.async('nodebuffer'));
-                const colRes = procDb.exec("SELECT models, decks FROM col LIMIT 1");
-                procModels = JSON.parse(colRes[0].values[0][0]);
-
-                // PKG-04: Closed Model Boundary for Procedural
-                const procModelIds = Object.keys(procModels);
-                if (!procModelIds.includes('1600000004')) {
-                    errors.push("[PKG-04] Procedural APKG missing required Model 1600000004 ('StudyLab Procedural Anchor')");
-                }
-                const prohibitedInProc = ['1600000001', '1600000002', '1600000003'];
-                prohibitedInProc.forEach(id => {
-                    if (procModelIds.includes(id)) {
-                        errors.push(`[PKG-04] Procedural APKG contains prohibited Declarative Model ID ${id}`);
-                    }
-                });
-
-                // Notes & Cards
-                const nRes = procDb.exec("SELECT id, guid, mid, flds FROM notes");
-                procNotes = nRes[0]?.values || [];
-                const cRes = procDb.exec("SELECT id, nid, did FROM cards");
-                procCards = cRes[0]?.values || [];
-
-                // PKG-05: Orphan card detection
-                const orphanC = procDb.exec("SELECT count(*) FROM cards WHERE nid NOT IN (SELECT id FROM notes)")[0]?.values[0][0];
-                if (orphanC > 0) errors.push(`[PKG-05] Procedural APKG has ${orphanC} orphan cards`);
-
-                // PKG-06: Orphan note detection
-                const orphanN = procDb.exec("SELECT count(*) FROM notes WHERE id NOT IN (SELECT nid FROM cards)")[0]?.values[0][0];
-                if (orphanN > 0) errors.push(`[PKG-06] Procedural APKG has ${orphanN} orphan notes`);
-
-                // PKG-08: GUID uniqueness
-                const guids = procNotes.map(n => n[1]);
-                if (new Set(guids).size !== guids.length) {
-                    errors.push("[PKG-08] Procedural APKG contains duplicate note GUIDs");
-                }
-
-                // PKG-11, PKG-12, PKG-13: In-Database Payload Inspections
-                procNotes.forEach((row, idx) => {
-                    const [nid, guid, mid, flds] = row;
-                    const fieldParts = flds.split('\u001f');
-                    const payloadRaw = fieldParts[0];
-
-                    try {
-                        const payload = JSON.parse(payloadRaw);
-
-                        // PKG-12: MCQ option count check in SQLite payload
-                        if (payload.question_type === 'mcq') {
-                            const opts = payload.options || (payload.inline_contract?.options);
-                            if (Array.isArray(opts) && opts.length < 4) {
-                                errors.push(`[PKG-12] Procedural note ${nid} has MCQ with only ${opts.length} options (minimum 4 required)`);
-                            }
+                    const allowedDeclIds = new Set(['1600000001', '1600000002', '1600000003']);
+                    declModelIds.forEach(id => {
+                        if (!allowedDeclIds.has(id)) {
+                            errors.push(`[PKG-04] Declarative APKG contains unauthorized model ID ${id}`);
                         }
+                    });
 
-                        // PKG-11 & PKG-13: Solution DAG & Hint Leak in SQLite payload
-                        if (payload.solution_graph && Array.isArray(payload.solution_graph.step_nodes)) {
-                            const dagRes = validateSolutionGraphDag(payload.solution_graph.step_nodes);
-                            if (!dagRes.isValid) {
-                                errors.push(`[PKG-11] Procedural note ${nid} solution graph DAG has cycles: ${dagRes.errors.join('; ')}`);
-                            }
+                    // Notes & Cards
+                    const nRes = declDb.exec("SELECT id, guid, mid, flds FROM notes");
+                    declNotes = nRes[0]?.values || [];
+                    const cRes = declDb.exec("SELECT id, nid, did FROM cards");
+                    declCards = cRes[0]?.values || [];
 
-                            const finalAns = payload.correct_option || payload.final_answer || '';
-                            if (finalAns) {
-                                const leakRes = validateHintTierDisclosure(payload.solution_graph.step_nodes, String(finalAns));
-                                if (!leakRes.isValid) {
-                                    errors.push(`[PKG-13] Procedural note ${nid} hints disclose final answer: ${leakRes.errors.join('; ')}`);
+                    // PKG-05: Orphan card detection
+                    const orphanC = declDb.exec("SELECT count(*) FROM cards WHERE nid NOT IN (SELECT id FROM notes)")[0]?.values[0][0];
+                    if (orphanC > 0) errors.push(`[PKG-05] Declarative APKG has ${orphanC} orphan cards`);
+
+                    // PKG-06: Orphan note detection
+                    const orphanN = declDb.exec("SELECT count(*) FROM notes WHERE id NOT IN (SELECT nid FROM cards)")[0]?.values[0][0];
+                    if (orphanN > 0) errors.push(`[PKG-06] Declarative APKG has ${orphanN} orphan notes`);
+
+                    // PKG-08: GUID uniqueness
+                    const guids = declNotes.map(n => n[1]);
+                    if (new Set(guids).size !== guids.length) {
+                        errors.push("[PKG-08] Declarative APKG contains duplicate note GUIDs");
+                    }
+                }
+                checks.push({ check: 'PKG-DECL-INTEGRITY', status: errors.length === 0 ? 'PASS' : 'FAIL' });
+            } catch (e) {
+                errors.push(`[PKG-01] Declarative APKG binary inspection failed: ${e.message}`);
+            }
+        }
+
+        // PKG-02: ZIP & SQLite schema for Procedural
+        if (hasProc) {
+            try {
+                const zip = await JSZip.loadAsync(fs.readFileSync(proceduralApkgPath));
+                const colFile = zip.file('collection.anki2');
+                const mediaFile = zip.file('media');
+
+                if (!colFile) errors.push("[PKG-02] Procedural APKG missing collection.anki2");
+                if (!mediaFile) errors.push("[PKG-02] Procedural APKG missing media file");
+
+                if (colFile) {
+                    procDb = new SQL.Database(await colFile.async('nodebuffer'));
+                    const colRes = procDb.exec("SELECT models, decks FROM col LIMIT 1");
+                    procModels = JSON.parse(colRes[0].values[0][0]);
+
+                    // PKG-04: Closed Model Boundary for Procedural
+                    const procModelIds = Object.keys(procModels);
+                    if (!procModelIds.includes('1600000004')) {
+                        errors.push("[PKG-04] Procedural APKG missing required Model 1600000004 ('StudyLab Procedural Anchor')");
+                    }
+                    const prohibitedInProc = ['1600000001', '1600000002', '1600000003'];
+                    prohibitedInProc.forEach(id => {
+                        if (procModelIds.includes(id)) {
+                            errors.push(`[PKG-04] Procedural APKG contains prohibited Declarative Model ID ${id}`);
+                        }
+                    });
+
+                    // Notes & Cards
+                    const nRes = procDb.exec("SELECT id, guid, mid, flds FROM notes");
+                    procNotes = nRes[0]?.values || [];
+                    const cRes = procDb.exec("SELECT id, nid, did FROM cards");
+                    procCards = cRes[0]?.values || [];
+
+                    // PKG-05: Orphan card detection
+                    const orphanC = procDb.exec("SELECT count(*) FROM cards WHERE nid NOT IN (SELECT id FROM notes)")[0]?.values[0][0];
+                    if (orphanC > 0) errors.push(`[PKG-05] Procedural APKG has ${orphanC} orphan cards`);
+
+                    // PKG-06: Orphan note detection
+                    const orphanN = procDb.exec("SELECT count(*) FROM notes WHERE id NOT IN (SELECT nid FROM cards)")[0]?.values[0][0];
+                    if (orphanN > 0) errors.push(`[PKG-06] Procedural APKG has ${orphanN} orphan notes`);
+
+                    // PKG-08: GUID uniqueness
+                    const guids = procNotes.map(n => n[1]);
+                    if (new Set(guids).size !== guids.length) {
+                        errors.push("[PKG-08] Procedural APKG contains duplicate note GUIDs");
+                    }
+
+                    // PKG-11, PKG-12, PKG-13: In-Database Payload Inspections
+                    procNotes.forEach((row, idx) => {
+                        const [nid, guid, mid, flds] = row;
+                        const fieldParts = flds.split('\u001f');
+                        const payloadRaw = fieldParts[0];
+
+                        try {
+                            const payload = JSON.parse(payloadRaw);
+
+                            // PKG-12: MCQ option count check in SQLite payload
+                            if (payload.question_type === 'mcq') {
+                                const opts = payload.options || (payload.inline_contract?.options);
+                                if (Array.isArray(opts) && opts.length < 4) {
+                                    errors.push(`[PKG-12] Procedural note ${nid} has MCQ with only ${opts.length} options (minimum 4 required)`);
                                 }
                             }
+
+                            // PKG-11 & PKG-13: Solution DAG & Hint Leak in SQLite payload
+                            if (payload.solution_graph && Array.isArray(payload.solution_graph.step_nodes)) {
+                                const dagRes = validateSolutionGraphDag(payload.solution_graph.step_nodes);
+                                if (!dagRes.isValid) {
+                                    errors.push(`[PKG-11] Procedural note ${nid} solution graph DAG has cycles: ${dagRes.errors.join('; ')}`);
+                                }
+
+                                const finalAns = payload.correct_option || payload.final_answer || '';
+                                if (finalAns) {
+                                    const leakRes = validateHintTierDisclosure(payload.solution_graph.step_nodes, String(finalAns));
+                                    if (!leakRes.isValid) {
+                                        errors.push(`[PKG-13] Procedural note ${nid} hints disclose final answer: ${leakRes.errors.join('; ')}`);
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            errors.push(`[PKG-11] Note ${nid} has unparseable ProceduralPayload: ${e.message}`);
                         }
-                    } catch (e) {
-                        errors.push(`[PKG-11] Note ${nid} has unparseable ProceduralPayload: ${e.message}`);
+                    });
+                }
+                checks.push({ check: 'PKG-PROC-INTEGRITY', status: errors.length === 0 ? 'PASS' : 'FAIL' });
+            } catch (e) {
+                errors.push(`[PKG-02] Procedural APKG binary inspection failed: ${e.message}`);
+            }
+        }
+
+        // PKG-14: Fresh Profile Coexistence Check (Zero Collision Assertion)
+        if (hasDecl && hasProc && declDb && procDb) {
+            try {
+                const declModelKeys = new Set(Object.keys(declModels));
+                const procModelKeys = new Set(Object.keys(procModels));
+                for (const k of procModelKeys) {
+                    if (declModelKeys.has(k)) {
+                        errors.push(`[PKG-14] Dual-deck collision: Model ID collision on ${k}`);
+                    }
+                }
+
+                const declGuids = new Set(declNotes.map(n => n[1]));
+                procNotes.forEach(n => {
+                    if (declGuids.has(n[1])) {
+                        errors.push(`[PKG-14] Dual-deck collision: GUID collision on ${n[1]}`);
                     }
                 });
+
+                const declNids = new Set(declNotes.map(n => n[0]));
+                procNotes.forEach(n => {
+                    if (declNids.has(n[0])) {
+                        errors.push(`[PKG-14] Dual-deck collision: Note ID collision on ${n[0]}`);
+                    }
+                });
+
+                const declCids = new Set(declCards.map(c => c[0]));
+                procCards.forEach(c => {
+                    if (declCids.has(c[0])) {
+                        errors.push(`[PKG-14] Dual-deck collision: Card ID collision on ${c[0]}`);
+                    }
+                });
+
+                checks.push({ check: 'PKG-14-DUAL-DECK-COEXISTENCE', status: errors.length === 0 ? 'PASS' : 'FAIL' });
+            } catch (e) {
+                errors.push(`[PKG-14] Coexistence simulation failed: ${e.message}`);
             }
-            checks.push({ check: 'PKG-PROC-INTEGRITY', status: errors.length === 0 ? 'PASS' : 'FAIL' });
-        } catch (e) {
-            errors.push(`[PKG-02] Procedural APKG binary inspection failed: ${e.message}`);
+        }
+    } finally {
+        if (declDb) {
+            try { declDb.close(); } catch (e) {}
+        }
+        if (procDb) {
+            try { procDb.close(); } catch (e) {}
         }
     }
-
-    // PKG-14: Fresh Profile Coexistence Check (Zero Collision Assertion)
-    if (hasDecl && hasProc && declDb && procDb) {
-        try {
-            const declModelKeys = new Set(Object.keys(declModels));
-            const procModelKeys = new Set(Object.keys(procModels));
-            for (const k of procModelKeys) {
-                if (declModelKeys.has(k)) {
-                    errors.push(`[PKG-14] Dual-deck collision: Model ID collision on ${k}`);
-                }
-            }
-
-            const declGuids = new Set(declNotes.map(n => n[1]));
-            procNotes.forEach(n => {
-                if (declGuids.has(n[1])) {
-                    errors.push(`[PKG-14] Dual-deck collision: GUID collision on ${n[1]}`);
-                }
-            });
-
-            const declNids = new Set(declNotes.map(n => n[0]));
-            procNotes.forEach(n => {
-                if (declNids.has(n[0])) {
-                    errors.push(`[PKG-14] Dual-deck collision: Note ID collision on ${n[0]}`);
-                }
-            });
-
-            const declCids = new Set(declCards.map(c => c[0]));
-            procCards.forEach(c => {
-                if (declCids.has(c[0])) {
-                    errors.push(`[PKG-14] Dual-deck collision: Card ID collision on ${c[0]}`);
-                }
-            });
-
-            checks.push({ check: 'PKG-14-DUAL-DECK-COEXISTENCE', status: errors.length === 0 ? 'PASS' : 'FAIL' });
-        } catch (e) {
-            errors.push(`[PKG-14] Coexistence simulation failed: ${e.message}`);
-        }
-    }
-
-    if (declDb) declDb.close();
-    if (procDb) procDb.close();
 
     return {
         gate: 'GATE_3_BINARY_INTEGRITY',

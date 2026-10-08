@@ -20,7 +20,7 @@ const { getCanonicalArtifactPaths } = require('./path_resolver');
 const { getArtifactRegistry } = require('./artifact_registry');
 
 // Unicode-aware regex patterns
-const NUMBER_WITH_UNIT = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?(\d+(?:\.\d+)?(?:\s*(?:g\/cm[³3]|km\/h|km|m|cm|mm|kg|g|%|°C|°F|kelvin|केल्विन|वर्ष|साल|किमी|मीटर|प्रतिशत|वर्ग किमी|kN|N|kJ|J|kPa|MPa|Pa|atm|bar|mV|kV|V|mA|A|Ω|ohm|kW|MW|W|kHz|MHz|GHz|Hz|mol\/L|M|cal|kcal|न्यूटन|जूल|पास्कल|वोल्ट|एम्पीयर|ओम|वाट|हर्ट्ज)))(?:[^\w\u0900-\u097F]|$)/gi;
+const NUMBER_WITH_UNIT = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?([-+−]?\d+(?:\.\d+)?(?:\s*(?:g\/cm[³3]|km\/h|km|m|cm|mm|kg|g|%|°C|°F|kelvin|केल्विन|वर्ष|साल|किमी|मीटर|प्रतिशत|वर्ग किमी|kN|N|kJ|J|kPa|MPa|Pa|atm|bar|mV|kV|V|mA|A|Ω|ohm|kW|MW|W|kHz|MHz|GHz|Hz|mol\/L|M|cal|kcal|न्यूटन|जूल|पास्कल|वोल्ट|एम्पीयर|ओम|वाट|हर्ट्ज)))(?:[^\w\u0900-\u097F]|$)/gi;
 const ENTITY_YEAR_PATTERN = /(?:^|[^\w\u0900-\u097F])([\w\u0900-\u097F]{2,})[^.\n\r\t]{1,40}?\b((?:1[5-9]\d{2}|20\d{2}))\b(?:[^\w\u0900-\u097F]|$)/gi;
 
 function cleanContentForExtraction(text) {
@@ -86,7 +86,7 @@ function extractEntityFacts(text, artifactName) {
     const numRe = new RegExp(NUMBER_WITH_UNIT.source, 'gi');
     while ((match = numRe.exec(cleaned)) !== null) {
         const entity = match[1].replace(/[\u0964\u0965.,;:!?"'()\[\]{}]/g, '').toLowerCase().trim();
-        const value = match[2].toLowerCase().trim();
+        const value = match[2].replace(/\u2212/g, '-').toLowerCase().trim();
         if (entity.length >= 2 && !IGNORED_ENTITIES.has(entity)) {
             facts.push({
                 artifact: artifactName,
