@@ -237,60 +237,9 @@ async function assembleApkgStream(colDbPathOrBuffer, mediaFilesMap = new Map(), 
     if (!fs.existsSync(outDir)) {
         fs.mkdirSync(outDir, { recursive: true });
     }
-
-    const tmpOutputPath = `${outputPath}.tmp_${process.pid}_${Math.random().toString(36).substring(2, 8)}`;
-    try {
-        const { ZipArchive } = require('archiver');
-        const output = fs.createWriteStream(tmpOutputPath);
-        const zip = new ZipArchive({ zlib: { level: 6 } });
-
-        await new Promise((resolve, reject) => {
-            output.on('close', resolve);
-            output.on('error', reject);
-            zip.on('error', reject);
-
-            zip.pipe(output);
-
-            // 1. collection.anki2
-            if (typeof colDbPathOrBuffer === 'string') {
-                zip.file(colDbPathOrBuffer, { name: 'collection.anki2' });
-            } else {
-                zip.append(colDbPathOrBuffer, { name: 'collection.anki2' });
-            }
-
-            // 2. Media index and media files
-            const mediaMap = {};
-            let mediaIndex = 0;
-
-            if (mediaFilesMap && mediaFilesMap.size > 0) {
-                for (const [filename, absPath] of mediaFilesMap.entries()) {
-                    const indexStr = mediaIndex.toString();
-                    mediaMap[indexStr] = filename;
-                    if (typeof absPath === 'string' && fs.existsSync(absPath)) {
-                        zip.file(absPath, { name: indexStr });
-                    }
-                    mediaIndex++;
-                }
-            }
-
-            zip.append(JSON.stringify(mediaMap), { name: 'media' });
-            zip.finalize();
-        });
-
-        try {
-            fs.renameSync(tmpOutputPath, outputPath);
-        } catch (_) {
-            fs.copyFileSync(tmpOutputPath, outputPath);
-            try { fs.unlinkSync(tmpOutputPath); } catch (__) {}
-        }
-        return;
-    } catch (err) {
-        try { if (fs.existsSync(tmpOutputPath)) fs.unlinkSync(tmpOutputPath); } catch (_) {}
-        // Fallback: If streaming archiver encounters an error, fallback to JSZip
-        const buffer = (typeof colDbPathOrBuffer === 'string') ? fs.readFileSync(colDbPathOrBuffer) : colDbPathOrBuffer;
-        const zipBuf = await assembleApkgZip(buffer, mediaFilesMap);
-        fs.writeFileSync(outputPath, zipBuf);
-    }
+    const buffer = (typeof colDbPathOrBuffer === 'string') ? fs.readFileSync(colDbPathOrBuffer) : colDbPathOrBuffer;
+    const zipBuf = await assembleApkgZip(buffer, mediaFilesMap);
+    fs.writeFileSync(outputPath, zipBuf);
 }
 
 /**

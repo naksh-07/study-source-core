@@ -11,7 +11,6 @@
  * 4. Provides `validateSubjectDomain(irOrKus, subject)` and `getDomainLexicon(subject)`.
  */
 
-const { toSlug } = require('./semantic_learning_ir');
 
 /**
  * 9 Canonical Subjects

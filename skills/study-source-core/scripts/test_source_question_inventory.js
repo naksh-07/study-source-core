@@ -40,15 +40,6 @@ const {
     validateQuestionBankContent
 } = require('./validate_studylab_question_bank');
 
-const {
-    createIRFromEvidencePack
-} = require('./semantic_learning_ir');
-
-const {
-    deduplicateKnowledgeUnits,
-    classifyKuRelation,
-    RELATION_TYPES
-} = require('./semantic_deduplication');
 
 console.log('======================================================================');
 console.log('TEST SUITE: SOURCE QUESTION INVENTORY & LOSSLESS PRESERVATION');
@@ -307,42 +298,6 @@ runTest('Complete Ingestion to Math Specialist authoring produces 100 questions 
     assert(qbMd.includes('## math-q-100 — '), 'Markdown must render the 100th question');
 });
 
-// -----------------------------------------------------------------------------
-// Test 5: Downstream Semantic IR and Deduplication Preservation Invariant
-// -----------------------------------------------------------------------------
-runTest('Semantic Learning IR and Deduplication preserve all distinct source questions under 1 pattern', () => {
-    const rawQuestions = [];
-    const patternId = 'pat.math.lcm.prime_factorization';
-
-    for (let i = 1; i <= 50; i++) {
-        rawQuestions.push({
-            id: `sem_q_${i}`,
-            question_number: String(i),
-            question_text: `Compute the LCM of 2^${i} and 3^${i}.`,
-            options: [`${2**i}`, `${3**i}`, `${(2*3)**i}`, 'None'],
-            correct_answer: `${(2*3)**i}`,
-            question_type: 'mcq',
-            pattern_ref: patternId,
-            provenance: { exam: 'CAT 2020' }
-        });
-    }
-
-    const evidencePack = ingestSourceToEvidencePack({
-        source_id: 'src.cat.math',
-        subject: 'Math',
-        chapter: 'LCM-HCF',
-        problem_patterns: [{ pattern_id: patternId, title: 'Prime Factorization' }],
-        source_problems: rawQuestions
-    });
-
-    const ir = createIRFromEvidencePack(evidencePack);
-    assert.strictEqual(ir.practice_items.length, 50, `Expected 50 IR practice items, got ${ir.practice_items.length}`);
-
-    // Deduplication should NOT collapse any of the 50 items
-    const dedupResult = deduplicateKnowledgeUnits(ir.practice_items, { subject: 'Math', chapter: 'LCM-HCF' });
-    assert.strictEqual(dedupResult.uniqueKus.length, 50, `Expected 50 items after dedup, got ${dedupResult.uniqueKus.length}`);
-    assert.strictEqual(dedupResult.duplicateCount, 0, `Expected 0 items removed by dedup, got ${dedupResult.duplicateCount}`);
-});
 
 console.log('\n======================================================================');
 console.log(`TEST RESULTS: ${passedTests} / ${totalTests} PASSED (ALL PASS)`);

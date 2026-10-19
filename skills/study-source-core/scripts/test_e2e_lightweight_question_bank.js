@@ -51,13 +51,6 @@ const {
     evaluateArtifactRouting
 } = require('./routing_engine');
 
-const {
-    createIRFromEvidencePack
-} = require('./semantic_learning_ir');
-
-const {
-    deduplicateKnowledgeUnits
-} = require('./semantic_deduplication');
 
 // Test runner state
 let totalTests = 0;

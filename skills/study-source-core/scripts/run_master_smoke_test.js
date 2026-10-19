@@ -38,9 +38,6 @@ const {
 } = require('./orchestration_engine');
 
 const { validateTsvContent } = require('./validate_tsv');
-const { validateApkg } = require('./validate_apkg');
-const { validateProceduralApkg } = require('./validate_studylab_procedural_apkg');
-const { validateStudyLabLevels1to7 } = require('./validate_studylab_levels_1_7');
 const {
     validateQuestionBankContent,
     validateQuestionBankMarkdown,
