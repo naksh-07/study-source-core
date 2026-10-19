@@ -784,12 +784,14 @@ function cmdDispatch(positional, flags) {
     }
 
     // Inspect existing deliverables for Wave 3 gating (word count & candidate targets)
+    const noteFile = path.join(chapterDir, 'Notes', `${chapter}_Notes.md`);
     let noteWordCount = 0;
-    const noteFile = path.join(chapterDir, 'Notes', `${norm}_Notes.md`);
     if (fs.existsSync(noteFile)) {
         const noteContent = fs.readFileSync(noteFile, 'utf8');
         noteWordCount = noteContent.trim().split(/\s+/).length;
     }
+
+    const targetFilter = flags.only || flags.target || flags.targets || null;
 
     const graph = buildExecutionTaskGraph({
         subject,
@@ -798,7 +800,8 @@ function cmdDispatch(positional, flags) {
         evidenceChars,
         evidencePack: evidencePath,
         customRoot: vaultRoot,
-        noteWordCount
+        noteWordCount,
+        targets: targetFilter
     });
 
     const hostAdapter = new AntigravityHostAdapter({
@@ -1015,18 +1018,44 @@ function cmdTelemetry(positional, flags) {
     return report;
 }
 
+async function cmdRun(positional, flags) {
+    const subject = positional[0] || flags.subject;
+    const chapter = positional[1] || flags.chapter;
+
+    if (!subject || !chapter) {
+        throw new Error('Usage: studycore run <Subject> <Chapter> [--only <target>] [--dry-run] [--json]');
+    }
+
+    const targetFilter = flags.only || flags.target || flags.targets || (flags.all ? 'all' : null);
+
+    if (targetFilter === 'package' || targetFilter === 'apkg') {
+        return await cmdPackage([subject, chapter], flags);
+    }
+    if (targetFilter === 'verify') {
+        return await cmdVerify([subject, chapter], flags);
+    }
+    if (targetFilter === 'certify') {
+        return await cmdCertify([subject, chapter], flags);
+    }
+
+    return cmdDispatch(positional, { ...flags, only: targetFilter });
+}
+
 function printHelp() {
     console.log(`
 StudySourceCore CLI (v1.2.0-beta.7)
 
 Commands:
+  studycore run <Subject> <Chapter> [--only <target>] [--all] [--json]
+      Execute targeted granular run (e.g. --only notes, --only basic, --only qbank) with zero ceremony.
+
   studycore status [--json]
       List all subjects and chapters in 'Study Materials/' with artifact and provenance status.
 
   studycore ingest <sourcePath> --subject <Subject> --chapter <Chapter> [--output <path>] [--page-start <N>] [--page-end <M>] [--lang <hinglish|en|hi|bilingual>]
       Ingest a PDF, Markdown, or text source into a canonical Evidence Pack and resolve subject policy.
 
-  studycore dispatch <Subject> <Chapter> [--wave 1|2|3] [--evidence <path>] [--json]
+  studycore dispatch <Subject> <Chapter> [--only <target>] [--wave 1|2|3] [--evidence <path>] [--json]
       Build execution task graph, resolve context slices, and generate subagent payloads.
 
   studycore package <Subject> <Chapter> [--studylab]
@@ -1053,6 +1082,8 @@ async function runCli(argv = process.argv.slice(2)) {
     }
 
     switch (command) {
+        case 'run':
+            return await cmdRun(positional, flags);
         case 'status':
             return cmdStatus(flags);
         case 'ingest':

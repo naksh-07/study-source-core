@@ -27,12 +27,46 @@ StudySourceCore is the master orchestration engine that transforms raw education
 | Wave | Mode | What Happens |
 |------|------|--------------|
 | **1** | Parallel (max 4 concurrent) | Specialist subagents author Notes, Anki TSVs, IO manifests, MindMaps, SlideDecks, StudyLab Question Banks (`Questions.md`) |
-| **2** | Sequential | Packaging tools compile Declarative APKGs (`export_anki.js` / `export_anki_package`). Procedural APKG packaging is paused in production in favor of Wave 1 Question Banks. |
-| **3** | Post-packaging | QA audits (`bm-qa`, `bm-graph`, `adversarial-apkg-reviewer`) and physical validation (`validate_artifact`) |
+| **2** | Sequential | Packaging tools compile Declarative APKGs (`export_anki.js` / `export_anki_package`). Procedural APKG packaging is permanently archived in favor of Wave 1 Question Banks. |
+| **3** | Post-packaging | QA audits (`bm-qa`, `bm-graph`) and physical validation (`validate_artifact`) |
 
 > Full specification → [`resources/workflow.md`](./resources/workflow.md)
 
-## 4. Routing & Dispatch
+## 4. Granular Target Execution & Ponytail Efficiency (ADR-24)
+
+StudySourceCore supports both full-chapter batch generation and surgical, on-demand execution. Never run the full 14-agent, 3-wave pipeline when a user or upstream workflow only requires a single deliverable.
+
+### Execution Modes:
+1. **Mode 1: Granular On-Demand (Ponytail Standard)**:
+   - When the user asks for a single artifact (e.g. *"Bas notes bana do"*, *"Only question bank please"*, *"Generate mindmap for this topic"*):
+   - Directly execute the targeted specialist subagent (`core-notes`, `math-apkg-author`, `core-mindmap`, etc.) with its scoped context slice.
+   - Suppresses unrequested tracks with `OMITTED_BY_TARGET_FILTER` — zero compute waste, zero multi-wave overhead.
+2. **Mode 2: CLI Selective Filter (`--only <target>`)**:
+   - Filter any run using `--only` / `--targets`:
+     ```bash
+     studycore run Math LCM-HCF --only notes
+     studycore run Reasoning Syllogisms --only qbank
+     studycore run Biology Photosynthesis --only flashcards
+     ```
+   - Target Aliases:
+     - `notes` → `notes` (`core-notes`)
+     - `basic` → `basic` (`core-basic-anki`)
+     - `cloze` → `cloze` (`core-cloze-anki`)
+     - `flashcards` / `anki` → `basic`, `cloze`, `apkg`
+     - `qbank` / `questions` → `proceduralQuestionBank` (`$DOMAIN_SPECIALIST`)
+     - `mindmap` → `mindmap` (`core-mindmap`)
+     - `slidedeck` / `slides` → `slideDeck` (`core-slide-deck`)
+     - `graph` → `bmGraph` (`bm-graph`)
+     - `qa` → `bmQa` (`bm-qa`)
+3. **Mode 3: Full Chapter Multi-Wave Pipeline**:
+   - Used only when the user explicitly requests a comprehensive chapter package or full study suite.
+
+### Procedural APKG Archival (GAP-30 / ADR-22 / ADR-24):
+- **ARCHIVED & INACTIVE**: Binary procedural APKG compilation (`export_studylab_procedural_anki.js`, `validate_studylab_procedural_apkg.js`) is permanently archived.
+- **Active Primary**: Canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) validated by `validate_studylab_question_bank.js` serve as the 100% active primary practice deliverable.
+- Future agents and workflows must **NEVER** generate or attempt procedural APKG compilation.
+
+## 5. Routing & Dispatch
 
 `study-source-core` strictly complies with **Adaptive Orchestrator v4 Foundation**. The MANDATORY DISPATCH GATE and artifact eligibility matrix are defined in [`resources/workflow.md#phase-45`](./resources/workflow.md). Routing decisions are strictly governed by the deterministic, machine-readable `runtime-policy.json` provided by each Subject Skill. The policy is loaded and validated by `scripts/subject_policy_resolver.js` and consumed by `scripts/routing_engine.js`. Core routes based *only* on this resolved policy and strictly fails closed when the policy is missing, malformed, or invalid. Core MUST NOT invent, infer, or fallback to default policies.
 
@@ -47,26 +81,26 @@ Execution metadata for all artifacts is maintained in `resources/artifact-regist
 - **Adaptive Retry & Hard Limits**: `scripts/retry_policy.js` classifies failures into 11 canonical failure modes and 4 retry classes (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`), enforcing hard mission limits (max 4 concurrent, max 10 total launches) with targeted prompt adaptations.
 - **Execution State Checkpointing**: `scripts/execution_state.js` maintains persistent task status and decision trail in `scratch/execution-state.json`.
 
-## 5. Agent Ownership (Single-Writer Rule)
+## 6. Agent Ownership (Single-Writer Rule)
 
 The authoritative artifact ownership, writer, validator, dependency, and execution metadata is defined in `resources/artifact-registry.json`.
 
 > Full ownership matrix explanation → [`OWNERSHIP.md`](../../OWNERSHIP.md)
 
-## 6. Evidence & Context Rules
+## 7. Evidence & Context Rules
 
 - **Single Source Parse**: Read source once → extract to `scratch/evidence-pack.md`. No multiple PDF parsing.
 - **SOURCE_ONLY default**: Zero web searches or model memory injections unless explicitly requested.
 - **Hindi-first language contract** → [`RESOURCES.md#universal-language-contract`](../../RESOURCES.md#universal-language-contract)
 
-## 7. Completion & Failure Gates
+## 8. Completion & Failure Gates
 
 - **Completion**: Physical disk inspection — every expected artifact exists, size > 0, conforms to schema, passes validation.
 - **Failure**: Missing files, 0-byte outputs, schema errors, or invariant violations prevent PASS.
 - **HANDOFF REPORT contract** → [`EXECUTION_LIFECYCLE.md#structured-handoff-schema`](../../EXECUTION_LIFECYCLE.md#structured-handoff-schema)
 - **Validation scripts** → [`resources/workflow.md` Phase 6](./resources/workflow.md)
 
-## 8. Canonical References
+## 9. Canonical References
 
 | Domain | Canonical Source |
 |--------|-----------------|
@@ -85,7 +119,7 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 | MCP Server API Specification | [`docs/MCP_SERVER_API.md`](../../docs/MCP_SERVER_API.md) |
 | Telemetry & Observability Engine | [`scripts/telemetry_engine.js`](./scripts/telemetry_engine.js) |
 
-## 9. Stop Rules & Autonomous Execution Guardrails
+## 10. Stop Rules & Autonomous Execution Guardrails
 
 - **Parent Self-Execution Ban (Zero-Tolerance)**: The parent orchestrator coordinates, routes, gates, and audits — **NEVER** authors specialist deliverables (`Notes/*.md`, `Basic/*.tsv`, `Cloze/*.tsv`, `Questions.md`, `MindMap/*.json`, `SlideDeck/*.md`). All authoring is owned exclusively by the designated specialist subagent.
 - **Subagent Write-Permission Handshake**: Before calling `invoke_subagent`, the parent orchestrator MUST ensure specialist subagents are registered with `enable_write_tools: true` via `define_subagent` (or via `studycore dispatch`) so that subagents can write their files directly to disk and execute validation commands without parent intervention.

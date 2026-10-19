@@ -14,8 +14,8 @@ StudySourceCore coordinates 14 specialized, single-responsibility subagents to t
 
 The 14 agents are categorized into three operational classes:
 1. **Generic Content Specialists (6 agents)**: Produce core chapter study artifacts in Wave 1 parallel generation (`core-notes`, `core-basic-anki`, `core-cloze-anki`, `core-image-occlusion`, `core-mindmap`, `core-slide-deck`).
-2. **StudyLab Procedural Specialists (4 agents)**: Author domain-specific STEM and analytical practice patterns, solution DAGs, 3-tier hints, and canonical Markdown Question Banks (`math-apkg-author`, `reasoning-apkg-author`, `physics-numerical-apkg-author`, `chemistry-numerical-apkg-author`). *Operational Policy*: Binary Procedural APKG packaging is temporarily suspended in production; canonical Markdown Question Banks (`Questions.md`) serve as the active primary practice deliverable.
-3. **Downstream QA & Audit Specialists (4 agents)**: Execute semantic cross-artifact consistency checks, vault graph linking, contract gap analysis, and independent adversarial APKG verification (`bm-graph`, `bm-qa`, `mold-gap-auditor`, `adversarial-apkg-reviewer`).
+2. **StudyLab Procedural Specialists (4 agents)**: Author domain-specific STEM and analytical practice patterns, solution DAGs, 3-tier hints, and canonical Markdown Question Banks (`math-apkg-author`, `reasoning-apkg-author`, `physics-numerical-apkg-author`, `chemistry-numerical-apkg-author`). *Operational Policy (GAP-30 / ADR-22 / ADR-24)*: Binary Procedural APKG packaging is permanently ARCHIVED & INACTIVE in production; canonical Markdown Question Banks (`Questions.md`) serve as the 100% active primary practice deliverable.
+3. **Downstream QA & Audit Specialists (4 agents)**: Execute semantic cross-artifact consistency checks, vault graph linking, contract gap analysis, and independent adversarial verification (`bm-graph`, `bm-qa`, `mold-gap-auditor`, `adversarial-apkg-reviewer`).
 
 ---
 
@@ -33,10 +33,10 @@ The authoritative artifact ownership, writer, validator, dependency, and executi
 | 6 | `core-slide-deck` | [06-slide-deck / `core-slide-deck.md`](.agents/agents/core-slide-deck.md) | Generic Content | SlideDeck Specialist |
 | 7 | `bm-graph` | [07-graph-linker / `bm-graph.md`](.agents/agents/bm-graph.md) | Downstream QA | Graph Linker Specialist |
 | 8 | `bm-qa` | [08-cross-artifact-qa / `bm-qa.md`](.agents/agents/bm-qa.md) | Downstream QA | Cross-Artifact QA Specialist |
-| 9 | `math-apkg-author` | [09-math-specialist / `math-apkg-author.md`](.agents/agents/math-apkg-author.md) | StudyLab Specialist | Track B Mathematics Question Bank Specialist (APKG Paused) |
-| 10 | `reasoning-apkg-author` | [10-reasoning-specialist / `reasoning-apkg-author.md`](.agents/agents/reasoning-apkg-author.md) | StudyLab Specialist | Track C Reasoning Question Bank Specialist (APKG Paused) |
-| 11 | `physics-numerical-apkg-author` | [11-physics-specialist / `physics-numerical-apkg-author.md`](.agents/agents/physics-numerical-apkg-author.md) | StudyLab Specialist | Track D Physics Numerical Question Bank Specialist (APKG Paused) |
-| 12 | `chemistry-numerical-apkg-author` | [12-chemistry-specialist / `chemistry-numerical-apkg-author.md`](.agents/agents/chemistry-numerical-apkg-author.md) | StudyLab Specialist | Track E Chemistry Numerical Question Bank Specialist (APKG Paused) |
+| 9 | `math-apkg-author` | [09-math-specialist / `math-apkg-author.md`](.agents/agents/math-apkg-author.md) | StudyLab Specialist | Track B Mathematics Question Bank Specialist (APKG Archived) |
+| 10 | `reasoning-apkg-author` | [10-reasoning-specialist / `reasoning-apkg-author.md`](.agents/agents/reasoning-apkg-author.md) | StudyLab Specialist | Track C Reasoning Question Bank Specialist (APKG Archived) |
+| 11 | `physics-numerical-apkg-author` | [11-physics-specialist / `physics-numerical-apkg-author.md`](.agents/agents/physics-numerical-apkg-author.md) | StudyLab Specialist | Track D Physics Numerical Question Bank Specialist (APKG Archived) |
+| 12 | `chemistry-numerical-apkg-author` | [12-chemistry-specialist / `chemistry-numerical-apkg-author.md`](.agents/agents/chemistry-numerical-apkg-author.md) | StudyLab Specialist | Track E Chemistry Numerical Question Bank Specialist (APKG Archived) |
 | 13 | `mold-gap-auditor` | [13-mold-gap-auditor / `mold-gap-auditor.md`](.agents/agents/mold-gap-auditor.md) | Downstream QA | Mold & Gap Auditor |
 | 14 | `adversarial-apkg-reviewer` | [14-adversarial-reviewer / `adversarial-apkg-reviewer.md`](.agents/agents/adversarial-apkg-reviewer.md) | Downstream QA | Independent Adversarial Reviewer |
 

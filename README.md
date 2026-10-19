@@ -54,7 +54,7 @@ STANDARD TRACK                                  STUDYLAB TRACK
                                ▼
                   WAVE 2: Sequential Packaging
                   export_anki.js (Declarative APKG)
-                  [Procedural APKG Packaging Paused in Production]
+                  [Procedural APKG Packaging Permanently Archived (ADR-24)]
                                │
                                ▼
                   WAVE 3: QA & Physical Audit
@@ -437,6 +437,13 @@ StudySourceCore provides a unified CLI driver [`studycore_cli.js`](skills/study-
 ```bash
 # Check status of all chapters across the production vault
 node skills/study-source-core/scripts/studycore_cli.js status
+
+# Run modular execution (Full Suite or Granular On-Demand via --only)
+node skills/study-source-core/scripts/studycore_cli.js run <Subject> <Chapter> [--only <target>]
+# Examples:
+#   studycore run Math LCM-HCF --only notes
+#   studycore run Reasoning Syllogisms --only qbank
+#   studycore run Biology Photosynthesis --only flashcards
 
 # Dispatch genuine specialist subagents for a chapter (Wave 1, 2, or 3)
 node skills/study-source-core/scripts/studycore_cli.js dispatch <Subject> <Chapter> [--wave 1|2|3]

@@ -35,6 +35,76 @@ const PROCEDURAL_TRACK_KEYS = new Set([
     'practiceQuestionsJson'
 ]);
 
+const TARGET_ALIASES = {
+    'notes': ['notes'],
+    'note': ['notes'],
+    'summary': ['notes'],
+    'basic': ['basic'],
+    'basic-anki': ['basic'],
+    'basic_anki': ['basic'],
+    'cloze': ['cloze'],
+    'cloze-anki': ['cloze'],
+    'cloze_anki': ['cloze'],
+    'flashcards': ['basic', 'cloze'],
+    'cards': ['basic', 'cloze'],
+    'io': ['imageOcclusion'],
+    'imageocclusion': ['imageOcclusion'],
+    'image-occlusion': ['imageOcclusion'],
+    'image_occlusion': ['imageOcclusion'],
+    'mindmap': ['mindmap'],
+    'map': ['mindmap'],
+    'slidedeck': ['slideDeck'],
+    'slide-deck': ['slideDeck'],
+    'slide_deck': ['slideDeck'],
+    'deck': ['slideDeck'],
+    'slides': ['slideDeck'],
+    'qbank': ['proceduralQuestionBank'],
+    'questions': ['proceduralQuestionBank'],
+    'practice': ['proceduralQuestionBank'],
+    'practicequestions': ['practiceQuestions'],
+    'problempatterns': ['problemPatterns'],
+    'proceduralquestionbank': ['proceduralQuestionBank'],
+    'procedural_question_bank': ['proceduralQuestionBank'],
+    'apkg': ['apkg'],
+    'anki': ['apkg'],
+    'package': ['apkg'],
+    'graph': ['bmGraph'],
+    'bmgraph': ['bmGraph'],
+    'bm-graph': ['bmGraph'],
+    'bm_graph': ['bmGraph'],
+    'qa': ['bmQa'],
+    'bmqa': ['bmQa'],
+    'bm-qa': ['bmQa'],
+    'bm_qa': ['bmQa']
+};
+
+function normalizeTargets(rawTargets) {
+    if (!rawTargets) return null;
+    let list = [];
+    if (Array.isArray(rawTargets)) {
+        list = rawTargets;
+    } else if (typeof rawTargets === 'string') {
+        list = rawTargets.split(',').map(s => s.trim()).filter(Boolean);
+    } else {
+        return null;
+    }
+    if (list.length === 0) return null;
+    if (list.includes('all') || list.includes('*')) return null;
+
+    const resolved = new Set();
+    for (const item of list) {
+        const lower = String(item).toLowerCase().trim();
+        if (TARGET_ALIASES[lower]) {
+            for (const canonical of TARGET_ALIASES[lower]) {
+                resolved.add(canonical);
+            }
+        } else {
+            resolved.add(item);
+        }
+    }
+    return resolved;
+}
+
 /**
  * Evaluates comprehensive artifact eligibility, subagent dispatching,
  * and downstream complexity gating for a given chapter context.
@@ -252,11 +322,26 @@ function evaluateArtifactRouting(context = {}) {
         }
     }
 
+    // Granular Target Filtering (ADR-24)
+    const activeTargets = normalizeTargets(context.targets || context.only || context.target);
+    if (activeTargets && activeTargets.size > 0) {
+        const booleanTracks = Object.keys(routing).filter(k => k !== 'suppressions' && typeof routing[k] === 'boolean');
+        for (const k of booleanTracks) {
+            if (!activeTargets.has(k)) {
+                routing[k] = false;
+                routing.suppressions[k] = 'OMITTED_BY_TARGET_FILTER';
+            }
+        }
+        routing.filtered_targets = Array.from(activeTargets);
+    }
+
     return routing;
 }
 
 module.exports = {
-    evaluateArtifactRouting
+    evaluateArtifactRouting,
+    normalizeTargets,
+    TARGET_ALIASES
 };
 
 // --- CLI EXECUTION CONTRACT ---

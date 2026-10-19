@@ -62,7 +62,7 @@ StudySourceCore enforces a strictly decoupled, unidirectional six-tier execution
 │  ├── Concept Tree Renderer (MindMap JSON & Mermaid Diagrams)                           │
 │  ├── Presentation Renderer (Marp Markdown Slide Decks)                                 │
 │  ├── Declarative APKG Compiler (export_anki.js: Models 1600000001–1600000003)          │
-│  └── Procedural APKG Compiler (export_studylab_procedural_anki.js: Model 1600000004)   │
+│  └── Procedural APKG Compiler [ARCHIVED & INACTIVE - Model 1600000004 / ADR-24]        │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
                                             │ [Physical Verification Barrier]
                                             ▼
@@ -282,9 +282,9 @@ To ensure deterministic dependency resolution and reliable completion verificati
 
 ## 5. Storage Layer & Scope Invariants
 
-1. **Dual APKG Architecture for v1.0 [CURRENT]**:
+1. **Dual APKG Architecture for v1.0 [ARCHIVED & INACTIVE - ADR-24]**:
    - `<Chapter>_Anki.apkg`: Bundles Basic (1600000001), Cloze (1600000002), and Image Occlusion (1600000003) notes.
-   - `StudyLab/<Chapter>_StudyLab_Procedural.apkg`: Bundles Procedural Card Anchors (Model 1600000004) with embedded solution DAGs and 3-tier hints.
+   - `StudyLab/<Chapter>_StudyLab_Procedural.apkg`: [ARCHIVED & INACTIVE (ADR-24)] Procedural APKG packaging is permanently archived in production. Canonical Markdown Question Banks (`Questions/<Chapter>_Questions.md`) serve as the active primary practice deliverable.
    - Model isolation is absolute. Model 1600000004 cards are strictly forbidden from declarative packages.
    - A Unified APKG consolidating both models without breaking isolation is an explicit **v1.1 milestone target** [PLANNED].
 

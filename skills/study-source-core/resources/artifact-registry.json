@@ -132,7 +132,8 @@
     "proceduralApkg": {
         "task_id": "task-export-studylab-anki",
         "task_name": "StudyLab Procedural APKG Packaging",
-        "status": "TEMPORARILY_SUSPENDED",
+        "status": "ARCHIVED_INACTIVE",
+        "archive_notice": "ARCHIVED & INACTIVE (GAP-30 / ADR-22 / ADR-24): Binary procedural APKG packaging is permanently archived and inactive in production. Canonical Markdown Question Banks ('Questions.md') serve as the active primary practice deliverable. Future agents and workflows must never generate procedural APKGs.",
         "production_alternative": "proceduralQuestionBank",
         "wave": 2,
         "owner_agent": "$DOMAIN_SPECIALIST",

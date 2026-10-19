@@ -32,6 +32,8 @@
 | **ADR-20** | Antigravity Native Skills Discovery Bridge & Global Duplicate Purge | `.agents/skills.json` bridge; rogue global mirror purged; Doctor Check 7 | 2026-10-03 |
 | **ADR-21** | Anti-Hardcoding Invariant & Elimination of Mock Chapter Fallbacks | Fail-closed chapter/evidence args; zero fixture imports in production | 2026-10-03 |
 | **ADR-22** | Canonical Question Bank Release Policy, Gate 2 Fallback & Stopword Shield | Procedural APKG paused; Question Bank primary; Gate 2 fallback audit; stopword shield | 2026-10-03 |
+| **ADR-23** | Safe Audit Libraries, Wave 2 Packaging DAG, Archive Fallback, Unified Certify CLI | Programmatic audit returns; Wave 2 DAG; archive TSV fallback; certify CLI | 2026-10-08 |
+| **ADR-24** | Target-Filtered Modular Execution & Procedural APKG Archival (Ponytail Standard) | Granular on-demand execution (`--only`); procedural APKG archived; QBank 100% primary | 2026-10-19 |
 
 ---
 
@@ -421,6 +423,30 @@ These practices violated the zero-mock production invariant and created a high r
 ### Consequences
 - **Positive**: Audit modules can be safely imported and embedded into any Node.js service, MCP tool, or test suite without abrupt process termination; task DAG respects packaging dependencies; packaged chapters pass Gate 1 completion evidence; entire vault can be certified via `npm run certify -- --all` or `studycore certify --all`.
 - **Negative**: Programmatic callers must inspect the returned `{ valid, errors }` object to determine success or failure.
+
+---
+
+## ADR-24: Target-Filtered Modular Execution & Procedural APKG Archival (Ponytail Standard)
+
+### Context
+1. **Compute Waste in Monolithic Execution**: In earlier versions, requesting a single study artifact (e.g. "Generate Notes for LCM-HCF", or "Just create a Question Bank") triggered the entire 14-agent, 3-wave, 6-tier pipeline, compiling basic flashcards, cloze flashcards, mindmaps, slide decks, graph linking, cross-artifact QA, and adversarial certification. This resulted in massive compute waste, token consumption, and unnecessary latency violating Ponytail minimalism.
+2. **Procedural APKG Binary Compilation Confusion**: While ADR-22 paused procedural APKG packaging in production, the code remained ambiguous. Without explicit archival markers and contract stops, AI agents and automated tools could mistakenly attempt to compile procedural APKGs rather than focusing 100% on active Markdown Question Banks (`Questions.md`).
+
+### Decision
+1. **Target-Filtered Granular Execution (Ponytail Standard)**:
+   - Added selective target filtering (`--only <target>` / `--targets <target>`) to `routing_engine.js` and `studycore_cli.js`.
+   - When a specific target is requested (e.g. `studycore run Math LCM-HCF --only notes`), unrequested tracks are cleanly suppressed with `OMITTED_BY_TARGET_FILTER`.
+   - Normalizes flexible user aliases: `notes` (`core-notes`), `basic`, `cloze`, `flashcards`/`anki` (`basic`, `cloze`, `apkg`), `qbank`/`questions` (`proceduralQuestionBank`), `mindmap`, `slidedeck`/`slides`, `graph`, `qa`.
+   - Enables atomic on-demand execution: users and agents can produce exact single deliverables with zero multi-agent ceremony or unwanted sibling artifacts.
+2. **Permanent Archival of Procedural APKG Binary Compilation**:
+   - Updated `skills/study-source-core/resources/artifact-registry.json` status to `"status": "ARCHIVED_INACTIVE"`.
+   - Added prominent `ARCHIVED & INACTIVE` notices to `export_studylab_procedural_anki.js` and `validate_studylab_procedural_apkg.js`.
+   - Preserved procedural APKG code cleanly on disk to guarantee backward test suite stability without deletion or mock stubbing.
+   - Codified across all 4 STEM specialist contracts (`math-apkg-author`, `physics-numerical-apkg-author`, `chemistry-numerical-apkg-author`, `reasoning-apkg-author`) that Markdown Question Banks (`Questions/[Chapter]_Questions.md`) are the 100% active primary practice deliverable, and attempting binary procedural APKG compilation in production is an explicit failure condition.
+
+### Consequences
+- **Positive**: Sub-second single-artifact generation without multi-agent overhead; zero token waste on unrequested tracks; elimination of all future agent confusion regarding procedural APKG; complete preservation of existing unit and smoke test suites.
+- **Negative**: Users requesting full suites must explicitly omit the `--only` flag to trigger all tracks.
 
 
 

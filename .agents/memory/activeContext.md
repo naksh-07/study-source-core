@@ -96,12 +96,15 @@
   - [x] BUG-12 (P3): In `cleanup_transients.js`, targeted `skills/study-source-core/scratch` directory.
 - [x] Phase 27: Antigravity 2.0 Plugin Architecture Conversion (100% Complete):
   - [x] Created root `plugin.json` manifest (`study-source-core` v1.2.0) with suggested starter prompts.
-  - [x] Established root `rules/AGENTS.md` containing single-writer, parent self-execution ban, and universal question invariants.
-  - [x] Scoped `mcp_config.json` directly to plugin root and removed legacy hardcoded entry from global `~/.gemini/config/mcp_config.json`.
+  - [x] Established root `rules/AGENTS.md` with domain scope guard, single-writer, parent self-execution ban, and universal question invariants.
+  - [x] Replaced NTFS junction with real physical plugin directory (`C:\Users\Suraj\.gemini\config\plugins\study-source-core`) for language server discovery.
   - [x] Mirrored all 14 specialist subagents to `agents/*.md` for native universal discovery.
-  - [x] Created NTFS Directory Junction (`~/.gemini/config/plugins/study-source-core` <-> workspace repo) for zero-drift real-time global availability.
-- [x] Quality Gates 100% GREEN Verified:
-  - `npm run doctor`: 8/8 checks PASS (HEALTHY)
-  - `npm run smoke`: 19/19 checks PASS (Zero-mock certified)
-  - `npm test`: 47/47 suites PASS (18.9s)
+- [x] Phase 28: Ponytail Modularity Audit, Granular Execution (`--only`) & Procedural APKG Archival (ADR-24) (100% Complete):
+  - [x] Full-Scale Modularity & Ponytail Audit: Systems Architect audit completed; verified independent runnability of discrete modules without full-pipeline compute waste.
+  - [x] Granular Execution Engine: Implemented target filtering (`--only <target>`, `--targets <target>`) in `routing_engine.js` and `studycore_cli.js` (`studycore run <Subject> <Chapter> [--only <target>]`), suppressing unrequested tracks with `OMITTED_BY_TARGET_FILTER`.
+  - [x] Procedural APKG Archival (ADR-24 / GAP-30 / ADR-22): Updated `artifact-registry.json` status to `ARCHIVED_INACTIVE`; added prominent archival banners to `export_studylab_procedural_anki.js` and `validate_studylab_procedural_apkg.js`; preserved files cleanly for test stability.
+  - [x] Agent Contract & Stop Rules Hardened: Updated `math-apkg-author.md`, `physics-numerical-apkg-author.md`, `chemistry-numerical-apkg-author.md`, `reasoning-apkg-author.md`, `adversarial-apkg-reviewer.md`, and `AGENTS.md` to permanently archive procedural APKG and lock Markdown Question Banks (`Questions.md`) as the 100% active primary practice deliverable.
+  - [x] Documentation & ADRs Synchronized: Documented ADR-24 in `.agents/DECISIONS.md`, updated `skills/study-source-core/SKILL.md`, `ARCHITECTURE.md`, and `README.md`.
+  - [x] Quality Gates Verified: 19/19 smoke tests pass, 47/47 vitest suites pass (100% GREEN).
+
 

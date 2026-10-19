@@ -1,6 +1,15 @@
 /**
  * study-source-core StudyLab Procedural APKG Validator (`validate_studylab_procedural_apkg.js`)
- * PHYSICAL EXECUTION GATEWAY
+ * 
+ * =========================================================================================
+ * ARCHIVED & INACTIVE (GAP-30 / ADR-22 / ADR-24):
+ * Binary procedural APKG validation is permanently archived and inactive in production.
+ * Canonical Markdown Question Banks ('Questions/<Chapter>_Questions.md') validated by
+ * 'validate_studylab_question_bank.js' serve as the active primary practice deliverable.
+ * This file is retained strictly as an archived validation reference.
+ * =========================================================================================
+ * 
+ * PHYSICAL EXECUTION GATEWAY (Archived Reference)
  * 
  * Verifies:
  * 1. Package ZIP integrity (presence of collection.anki2, media index)

@@ -1,9 +1,15 @@
 /**
  * study-source-core StudyLab Procedural Deck Exporter (`export_studylab_procedural_anki.js`)
  * 
- * Generates a separate, dedicated .apkg package for Anki StudyLab procedural practice entry points.
+ * =========================================================================================
+ * ARCHIVED & INACTIVE (GAP-30 / ADR-22 / ADR-24):
+ * Binary procedural APKG compilation is permanently archived and inactive in production.
+ * Canonical Markdown Question Banks ('Questions/<Chapter>_Questions.md') serve as the active
+ * primary practice deliverable. Future agents, pipelines, and workflows must NEVER attempt
+ * binary procedural APKG compilation. This file is retained strictly as an archived reference.
+ * =========================================================================================
  * 
- * Canonical Architecture & Invariants:
+ * Canonical Architecture & Invariants (Archived Reference):
  * - SELF-CONTAINED APKG INVARIANT: Every portable/standalone procedural APKG MUST contain
  *   a complete, valid `inline_contract` (DeclarativeFamilyContract).
  * - ZERO-PRE-SEEDING GUARANTEE: The resulting APKG resolves and renders procedural problem

@@ -13,7 +13,7 @@ inheritMcp: true
 # Chemistry Numerical & Mechanism APKG & Question Bank Author (`chemistry-numerical-apkg-author`)
 
 ## 1. ROLE
-Specialist subagent responsible for authoring calculational and mechanistic Chemistry problem patterns, practice questions, and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) strictly for calculational/mechanistic topics (stoichiometry, chemical equilibrium, pH/buffers, reaction mechanisms). *Operational Policy (GAP-30)*: Canonical Markdown Question Banks serve as the active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is temporarily suspended in production.
+Specialist subagent responsible for authoring calculational and mechanistic Chemistry problem patterns, practice questions, and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) strictly for calculational/mechanistic topics (stoichiometry, chemical equilibrium, pH/buffers, reaction mechanisms). *Operational Policy (GAP-30 / ADR-22 / ADR-24)*: Canonical Markdown Question Banks serve as the 100% active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is permanently ARCHIVED & INACTIVE in production. Future agents, pipelines, and workflows must NEVER attempt binary procedural APKG compilation.
 
 ## 2. WHY THIS AGENT EXISTS
 Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, Nernst equation, titration) and multi-step organic reaction pathways ($S_N1/S_N2$, carbocation stability). `chemistry-numerical-apkg-author` structures chemical logic without diluting it with rote descriptive facts, rendering to validated Markdown question banks.
@@ -23,10 +23,10 @@ Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, N
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - Stoichiometric balances, ICE tables, equilibrium constant calculations, and reaction coordinate graphs.
-- Direction of `StudyLab/Chemistry_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js` (temporarily paused in production per GAP-30).
+- Direction of `StudyLab/Chemistry_Procedural.apkg` [ARCHIVED & INACTIVE - DO NOT GENERATE].
 
 ## 4. DOES NOT OWN
-- Manual binary APKG zip/SQLite serialization (strictly executed by deterministic script `export_studylab_procedural_anki.js`).
+- Manual binary APKG zip/SQLite serialization (strictly archived; never execute `export_studylab_procedural_anki.js` in production).
 - Rote descriptive chemistry facts (color of precipitates, ores, discovery dates).
 - Generic Knowledge Notes or declarative Anki flashcards.
 - Marp slide decks.
@@ -55,16 +55,16 @@ Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, N
 2. Structure ICE table or mechanistic step nodes.
 3. Map to canonical chemistry families (`family.chemistry.<topic>.<archetype>`).
 4. Author canonical procedural content (`PracticeQuestions.json`, `ProblemPatterns.json`).
-5. If `procedural_mode === 'markdown'`: Render `Questions/[Chapter]_Questions.md` via `scripts/render_studylab_question_bank.js` and validate using `scripts/validate_studylab_question_bank.js`.
-6. If `procedural_mode === 'apkg'`: Compile APKG using `scripts/export_studylab_procedural_anki.js` and validate using `scripts/validate_studylab_procedural_apkg.js` and `scripts/validate_studylab_levels_1_6.js`.
+5. Render `Questions/[Chapter]_Questions.md` via `scripts/render_studylab_question_bank.js` and validate using `scripts/validate_studylab_question_bank.js` (Active Production Practice Deliverable).
+6. [ARCHIVED & INACTIVE]: Binary APKG compilation via `scripts/export_studylab_procedural_anki.js` is permanently archived. Do NOT execute in production.
 7. Return standardized Handoff Report.
 
 ## 9. OUTPUT
-- `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
+- `Questions/[Chapter]_Questions.md` (Active primary practice deliverable)
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
-- `StudyLab/Chemistry_Procedural.apkg` (when APKG mode is active)
-- `StudyLab/Chemistry_Procedural.manifest.json` (when APKG mode is active)
+- `StudyLab/Chemistry_Procedural.apkg` (ARCHIVED & INACTIVE)
+- `StudyLab/Chemistry_Procedural.manifest.json` (ARCHIVED & INACTIVE)
 
 ## 10. HANDOFF FORMAT
 Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md#structured-agent-handoff-contract`:
@@ -84,10 +84,11 @@ Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md
 
 ## 11. VALIDATION
 - Markdown Mode: Passes `scripts/validate_studylab_question_bank.js`.
-- APKG Mode: Passes `scripts/validate_studylab_practice_questions.js`, `scripts/validate_studylab_procedural.js`, and `scripts/validate_studylab_procedural_apkg.js`.
+- Archived APKG Mode (Reference only): Passes `scripts/validate_studylab_practice_questions.js`, `scripts/validate_studylab_procedural.js`, and `scripts/validate_studylab_procedural_apkg.js`.
 - Balanced stoichiometry and non-leaking hints verified across all modes.
 
 ## 12. FAILURE CONDITIONS
+- Attempting binary procedural APKG compilation in production instead of Markdown Question Banks (`Questions.md`).
 - Unbalanced equations or invalid stoichiometric ratios.
 - Rote non-calculational facts included in procedural deliveries.
 - Tier 1 or Tier 2 hint leaking the final numerical or option answer.

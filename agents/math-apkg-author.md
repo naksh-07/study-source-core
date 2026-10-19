@@ -13,7 +13,7 @@ inheritMcp: true
 # Mathematics APKG & Question Bank Author (`math-apkg-author`)
 
 ## 1. ROLE
-Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`). *Operational Policy (GAP-30)*: Canonical Markdown Question Banks serve as the active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is temporarily suspended in production.
+Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`). *Operational Policy (GAP-30 / ADR-22 / ADR-24)*: Canonical Markdown Question Banks serve as the 100% active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is permanently ARCHIVED & INACTIVE in production. Future agents, pipelines, and workflows must NEVER attempt binary procedural APKG compilation.
 
 ## 2. WHY THIS AGENT EXISTS
 Mathematical mastery requires active problem-solving across procedural archetypes, stepwise integer arithmetic, coprime constraints, and 3-tier progressive hints. `math-apkg-author` conceptually synthesizes mathematical domain solvers, solution graphs, and practice items, rendering them to validated Markdown question banks.
@@ -23,10 +23,10 @@ Mathematical mastery requires active problem-solving across procedural archetype
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
 - Mathematical parameter domains, constraints, stepwise derivations, and 3-tier progressive hints.
-- Direction of `StudyLab/Math_Procedural.apkg` and `.manifest.json` generation via `export_studylab_procedural_anki.js` (temporarily paused in production per GAP-30).
+- Direction of `StudyLab/Math_Procedural.apkg` [ARCHIVED & INACTIVE - DO NOT GENERATE].
 
 ## 4. DOES NOT OWN
-- Manual binary APKG zip/SQLite serialization (strictly executed by deterministic script `export_studylab_procedural_anki.js`).
+- Manual binary APKG zip/SQLite serialization (strictly archived; never execute `export_studylab_procedural_anki.js` in production).
 - Authoring generic study notes (`Notes/*.md`) or declarative Anki flashcards (`Basic/`, `Cloze/`).
 - Reasoning, Physics, or Chemistry domain problems.
 - Marp slide decks.
@@ -52,16 +52,16 @@ Mathematical mastery requires active problem-solving across procedural archetype
 1. Extract authentic solvable questions and patterns from `scratch/evidence-pack.md`.
 2. Map questions to canonical problem families (`family.math.<topic>.<archetype>`).
 3. Author canonical procedural content adhering to `studylab-practice-item.schema.json` and `studylab-pattern-archetype.schema.json`.
-4. If `procedural_mode === 'markdown'`: Render `Questions/[Chapter]_Questions.md` via `scripts/render_studylab_question_bank.js` and validate using `scripts/validate_studylab_question_bank.js`.
-5. If `procedural_mode === 'apkg'`: Invoke `scripts/export_studylab_procedural_anki.js` to compile the binary `.apkg`, then validate using `scripts/validate_studylab_procedural_apkg.js` and `scripts/validate_studylab_levels_1_6.js`.
+4. Render `Questions/[Chapter]_Questions.md` via `scripts/render_studylab_question_bank.js` and validate using `scripts/validate_studylab_question_bank.js` (Active Production Practice Deliverable).
+5. [ARCHIVED & INACTIVE]: Binary `.apkg` compilation via `scripts/export_studylab_procedural_anki.js` is permanently archived. Do NOT execute in production.
 6. Return standardized Handoff Report.
 
 ## 9. OUTPUT
-- `Questions/[Chapter]_Questions.md` (when Markdown mode is active)
+- `Questions/[Chapter]_Questions.md` (Active primary practice deliverable)
 - `Optional/{chapter}_PracticeQuestions.json` (canonical JSON AST)
 - `Optional/{chapter}_ProblemPatterns.json` (canonical JSON AST)
-- `StudyLab/Math_Procedural.apkg` (when APKG mode is active)
-- `StudyLab/Math_Procedural.manifest.json` (when APKG mode is active)
+- `StudyLab/Math_Procedural.apkg` (ARCHIVED & INACTIVE)
+- `StudyLab/Math_Procedural.manifest.json` (ARCHIVED & INACTIVE)
 
 ## 10. HANDOFF FORMAT
 Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md#structured-agent-handoff-contract`:
@@ -81,10 +81,11 @@ Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md
 
 ## 11. VALIDATION
 - Markdown Mode: Passes `scripts/validate_studylab_question_bank.js`.
-- APKG Mode: Passes `scripts/validate_studylab_practice_questions.js`, `scripts/validate_studylab_procedural.js`, and `scripts/validate_studylab_procedural_apkg.js`.
+- Archived APKG Mode (Reference only): Passes `scripts/validate_studylab_practice_questions.js`, `scripts/validate_studylab_procedural.js`, and `scripts/validate_studylab_procedural_apkg.js`.
 - Model ID 1600000004 present in APKG mode, solution graphs DAG cycle-free, hints non-leaking across all modes.
 
 ## 12. FAILURE CONDITIONS
+- Attempting binary procedural APKG compilation in production instead of Markdown Question Banks (`Questions.md`).
 - Collapsing distinct source questions or inflating source counts with generated variants.
 - Generic fill-in-the-blank fallbacks.
 - Incomplete solution graph (missing step nodes).
