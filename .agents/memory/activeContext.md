@@ -116,3 +116,9 @@
   - [x] STEM Authoring DRY Consolidation: Created `scripts/shared_studylab_author.js` (289 lines); eliminated ~800 lines of duplicate parsing boilerplate across `author_math_studylab.js`, `author_physics_studylab.js`, `author_chemistry_studylab.js`, and `author_reasoning_studylab.js`.
   - [x] Net Ponytail Scoreboard: **-60,540 lines deleted**, **-1 npm dependency eliminated**, **100% test preservation** (19/19 smoke PASS, 45/45 suites PASS).
   - [x] Synced to Global Plugin (`C:\Users\Suraj\.gemini\config\plugins\study-source-core`) and merged cleanly to `main` with remote push.
+- [x] Phase 30: Secondary Ponytail Purge & Documentation Synchronization (100% Complete):
+  - [x] Expert Audit Consensus: Systems Auditor and Code Hygiene Specialist completed full-scale post-purge scan.
+  - [x] Standalone Orphan Pruning: Removed 7 dead scripts with zero active callers totaling 2,255 lines (`artifact_suitability_policy.js`, `build_demo_apkg.js`, `generate_vnext_audit_artifacts.js`, `init_procedural_db.py`, `markdown_audit.js`, `mcq_blackbox_validator.js`, `subject_boundary_validator.js`).
+  - [x] Master Documentation Synchronized: Updated `.agents/SCRIPTS.md`, `.agents/agents/core-notes.md`, `agents/core-notes.md`, `docs/CURRENT_IMPLEMENTATION.md` to reflect active DRY architecture.
+  - [x] Quality Gates Verified: 19/19 smoke checks PASS, 45/45 test suites PASS (100% GREEN).
+  - [x] Cumulative Ponytail Impact: **-62,795 lines deleted**, **-1 npm dependency eliminated**, **Zero regressions**.

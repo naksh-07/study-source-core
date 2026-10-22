@@ -22,15 +22,12 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 |---|---|---|---|---|---|
 | `artifact_provenance.js` | `PROVENANCE` | Node.js | Computes and verifies SHA-256 cryptographic hashes for all pipeline deliverables. | `project_orchestrator` / Physical Verification Gate | `ACTIVE` |
 | `author_math_studylab.js` | `SPECIALIST` | Node.js | Authors 17-dimension canonical procedural content from raw Math evidence, enforcing non-leaking hints and rendering/validating deliverables. | `math-apkg-author` (Wave 1) | `ACTIVE` |
-| `build_demo_apkg.js` | `UTILITY` | Node.js | Builds standalone demo APKG packages for pipeline smoke tests and visual checks. | CI Test Runner / Developer | `UTILITY` |
 | `cleanup_transients.js` | `UTILITY` | Node.js | Safely cleans up temporary build files while strictly preserving user deliverables. | `project_orchestrator` | `ACTIVE` |
 | `cross_artifact_checker.js` | `VALIDATION` | Node.js | Cross-checks factual consistency and structural alignment across Notes, Anki, Mindmap, Slides, and Question Banks; shields against stopword entity collisions. | `bm-qa` | `ACTIVE` |
 | `export_anki.js` | `PACKAGING` | Node.js | Compiles Basic, Cloze, and Image Occlusion artifacts into a standard Anki `.apkg`. | `project_orchestrator` (Wave 2) | `ACTIVE` |
 | `export_studylab_procedural_anki.js` | `PACKAGING` | Node.js | Compiles StudyLab procedural problem patterns, solution DAGs, and 3-tier hints into interactive APKGs. | StudyLab Specialist Agents (Wave 1) | `FROZEN` |
 | `latex_validator.js` | `VALIDATION` | Node.js | Validates LaTeX math syntax, equation delimiters, environments, fractions, and symbols; exports `validateLatexContent` with escaped `\$` dollar isolation. | `math-apkg-author`, `physics-numerical-apkg-author`, `bm-qa`, `mcp_server` | `ACTIVE` |
 | `link_audit.js` | `AUDIT` | Node.js | Audits Obsidian wikilinks across Markdown notes and verifies absence of dead links. | `bm-graph` | `ACTIVE` |
-| `markdown_audit.js` | `AUDIT` | Node.js | Audits markdown formatting, header hierarchies, code blocks, and callouts. | `core-notes` | `ACTIVE` |
-| `mcq_blackbox_validator.js` | `VALIDATION` | Node.js | Performs black-box testing on MCQ options: asserts $\ge 4$ options and 1 valid key. | `adversarial-apkg-reviewer` | `ACTIVE` |
 | `mermaid_validator.js` | `VALIDATION` | Node.js | Validates Mermaid diagram and mindmap syntax, node connections, and formatting; exports `validateMermaidContent`. | `core-mindmap`, `mcp_server` | `ACTIVE` |
 | `note_contract_audit.js` | `AUDIT` | Node.js | Verifies YAML frontmatter metadata, required structural sections, and note architecture. | `core-notes` | `ACTIVE` |
 | `path_resolver.js` | `UTILITY` | Node.js | Resolves canonical repository and vault paths across Windows and POSIX; traverses upward with multi-marker detection (`Study Materials`+`Sources`, `.agents`, `agents`, `.git`+`skills`) and prioritizes `STUDYCORE_VAULT_ROOT` override. | All scripts and agents | `ACTIVE` |
@@ -39,6 +36,7 @@ StudySourceCore maintains 39 executable tools and test suites organized into fun
 | `resolve_visual_asset.js` | `UTILITY` | Node.js | Resolves local visual image paths and computes asset cryptographic hashes. | `core-image-occlusion` | `ACTIVE` |
 | `routing_engine.js` | `ROUTING` | Node.js | Evaluates chapter content and computes required artifact tracks and subagent dispatch. | `project_orchestrator` | `ACTIVE` |
 | `shared_anki_utils.js` | `UTILITY` | Node.js | Shared helper library for SQLite collections, model definitions, and Anki zip packaging. | `export_anki.js`, `export_studylab_procedural_anki.js` | `FROZEN` |
+| `shared_studylab_author.js` | `UTILITY` | Node.js | Centralized DRY parser and normalizer for STEM authoring engines (Math, Physics, Chemistry, Reasoning). | STEM Author Engines | `ACTIVE` |
 | `slide_deck_prompt_audit.js` | `AUDIT` | Node.js | Audits Marp slide presentation formatting, slide counts (5–15), and theme headers. | `core-slide-deck` | `ACTIVE` |
 | `source_invariant_checker.js` | `VALIDATION` | Node.js | Asserts zero hallucinations and verifies strict factual preservation from source evidence. | `bm-qa` | `ACTIVE` |
 | `validate_apkg.js` | `VALIDATION` | Node.js | Validates SQLite database tables, card counts, note models, and zip structure in APKGs. | `project_orchestrator` / CI | `ACTIVE` |

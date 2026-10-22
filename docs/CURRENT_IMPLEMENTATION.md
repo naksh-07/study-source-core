@@ -122,8 +122,6 @@ The implementation logic is partitioned into focused, single-responsibility scri
 | `semantic_deduplication.js` | Cross-track semantic deduplication preserving the `1 Pattern != 1 Question` invariant. | `[CURRENT]` Production | Node `crypto` |
 | `pedagogical_compiler.js` | Instructional compiler transforming IR nodes into 4-stage scaffolding (Example $\to$ Faded $\to$ Practice $\to$ Transfer). | `[CURRENT]` Production | Pure JS |
 | `hint_distractor_semantics.js` | Audits 3-tier progressive hints against answer leaks and synthesizes trap-driven plausible distractors ($\ge 4$ options). | `[CURRENT]` Production | Pure JS |
-| `subject_boundary_validator.js` | Enforces domain centroid taxonomies and detects foreign subject contamination across outputs. | `[CURRENT]` Production | Pure JS |
-| `artifact_suitability_policy.js` | Enforces the $9\text{-subject} \times 13\text{-artifact}$ eligibility matrix and suppression codes. | `[CURRENT]` Production | Pure JS |
 | `semantic_qa_engine.js` | Integrated semantic QA harness executing cross-artifact audits with fail-closed gating. | `[CURRENT]` Production | All pedagogical subsystems |
 
 ### 3.4 Specialist Authors & Declarative Renderers
