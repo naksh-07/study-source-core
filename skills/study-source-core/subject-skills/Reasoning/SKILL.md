@@ -17,7 +17,18 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Reasoning is a **PATTERN RECOGNITION + CONSTRAINT PROCESSING + INFERENCE + TRAP AVOIDANCE** discipline. The central goal is NOT "memorize solutions", but:  
 `Understand Problem Type → Identify Constraints → Select Deduction Rules → Process Case Possibilities → Arrive at Valid Conclusion → Verify Traps`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
 
+> **Authoritative Specification**: [`docs/subjects/04_REASONING.md`](../../../../docs/subjects/04_REASONING.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Deductive Constraint Logic & Spatial-Relational Puzzles  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Reasoning strictly enforces **"Ginti Ki Cheezein"** (2 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Primary Deductive Engine**: Obsidian Question Bank (`Questions/<Chapter>_Questions.md`) featuring discrete puzzle patterns (syllogisms, seating, matrix, inequalities); 4-option MCQs, 3-tier hints (`> [!tip]-`), and step-by-step logic DAGs (`> [!success]-`). Solved with paper grids/Venn diagrams.
+2. **Maintenance Rule Anki**: Rapid 5–10s atomic cards for syllogism distribution rules, Venn shorthand, directional bearings, and fallacy identifiers.
+3. **Strict Zero-Memorization Rule**: Memorizing specific puzzle statements, seating orders, or solutions in Anki is strictly forbidden.
+4. **Strictly Banned Bloat**: Continuous narrative prose notes, flashcards memorizing puzzle solutions, and slide decks.
 
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from study-source-core. Do not duplicate core definitions here.*
 

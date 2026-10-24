@@ -17,7 +17,23 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Chemistry is a **HYBRID BRANCHED DISCIPLINE** consisting of three distinct sub-domains. The central goal is NOT "memorize chemical facts", but:  
 `Understand Chemical Model → Identify Governing Rule / Principle → Represent Correctly → Apply to Reactions / Numerical Problems → Distinguish Exceptions`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
 
+> **Authoritative Specification**: [`docs/subjects/03_CHEMISTRY.md`](../../../../docs/subjects/03_CHEMISTRY.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Tri-Bifurcated (Physical Calculational / Inorganic Descriptive / Organic Mechanistic)  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Chemistry strictly enforces branch-specific **"Ginti Ki Cheezein"** (2–3 active high-yield deliverables per sub-domain):
+1. **Physical Chemistry (Calculational)**:
+   - *Primary*: Obsidian Question Bank (`Questions/<Chapter>_Questions.md`) for stoichiometry, gas laws, equilibrium ICE tables, electrochemistry; 4-option MCQs, 3-tier hints (`> [!tip]-`), step-by-step DAGs (`> [!success]-`).
+   - *Maintenance*: Atomic Formula & Constant Anki (5–10s recall). Zero multi-step algebra in Anki!
+2. **Inorganic Chemistry (Descriptive & Periodic)**:
+   - *Primary*: High-Density Spaced Anki (`_Anki.apkg` via Cloze/Basic) for trends, exception orders, colors, coordination ligands.
+   - *Reference*: Thematic Comparative Trend Tables in Notes. (Procedural QBank is suppressed via `DESCRIPTIVE_ROTE_NO_CALCULATIONS`).
+3. **Organic Chemistry (Mechanistic & Synthesis)**:
+   - *Primary*: Visual Reaction Roadmap Notes + Reagent Condition Cloze Anki.
+4. **Strictly Banned Bloat**: Multi-step stoichiometry calculations in Anki, procedural question banks on descriptive inorganic chapters, and unsolicited slide decks.
 
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from study-source-core. Do not duplicate core definitions here.*
 

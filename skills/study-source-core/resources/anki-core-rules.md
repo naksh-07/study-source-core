@@ -68,10 +68,11 @@ Visual-spatial learning targets (diagrams, anatomy, maps, circuits, process geom
 
 ---
 
-## 6. Standard Anki Exclusions
+## 6. Standard Anki Exclusions & The Zero-Scratchpad Rule
 DO NOT put these into standard Anki flashcards:
-- Full numerical problem solving or multi-step calculations.
-- Long algebraic derivations.
+- **Scratchpad Math & Multi-Step Calculations (STRICTLY BANNED)**: Never place calculation-heavy physics numericals, multi-step math problems, stoichiometry equations, or reasoning seating puzzles into Anki cards. Anki is designed for rapid 5–15 second active retrieval. Forcing scratchpad calculations causes flashcard fatigue and breaks the daily review habit.
+- **Atomic-Only Retainers for STEM**: For STEM topics, Anki cards must strictly test **atomic formula recall** ($K_p = K_c(RT)^{\Delta n_g}$), **governing laws / conditions** (e.g. when is $\Delta H = \Delta U$?), **SI units / dimensions**, **boundary conditions**, and **examiner trap definitions**.
+- Long algebraic derivations or proof steps.
 - Complex multi-step mechanisms or complete reaction networks.
 - Full chapter summaries or essay explanations.
 - Uncontextualized 500-card reagent or fact dumps.
@@ -87,18 +88,15 @@ All available declarative flashcards for a chapter are assembled into **ONE nati
   2. `Cloze/[Chapter]_Cloze.tsv` ──► Standard Cloze notes/cards (if generated)
   3. `ImageOcclusion/[Chapter]_ImageOcclusion.json` ──► Native Image Occlusion notes/cards (if generated)
   4. `ImageOcclusion/media/` ──► Bundled image/diagram assets (if generated)
-- Export command: `node .agents/skills/study-source-core/scripts/export_anki.js <path_to_chapter_dir>`
-- Validation command: `node .agents/skills/study-source-core/scripts/validate_apkg.js <path_to_apkg>`
+- Export command: `node skills/study-source-core/scripts/export_anki.js <path_to_chapter_dir>`
+- Validation command: `node skills/study-source-core/scripts/validate_apkg.js <path_to_apkg>`
 - Single-click import: The user imports one `.apkg` into Anki to receive the entire chapter deck hierarchy.
 
 ---
 
-## 8. StudyLab Procedural Sibling Package Contract
+## 8. Procedural Mastery & Question Bank Decoupling (ADR-24 & ADR-25)
 
-Procedural problem-solving skills (numerical methods, physical models, reaction mechanisms, logical deductions) are packaged into a **SECOND, dedicated package**:
-- Package Path: `Study Materials/[Subject]/[Chapter]/StudyLab/[Chapter]_StudyLab_Procedural.apkg`
-- Purpose: Question-backed practice objects for Anki StudyLab, distinct from static memory flashcards.
-- Architecture Invariant: Consumes solvable `PracticeQuestions.json` (enriched with `ProblemPatterns.json` procedural metadata). Preserves distinct question identities ($1 \text{ Pattern} \ne 1 \text{ Question}$) and never collapses multiple questions into one generic pattern anchor. Suppressed if 0 solvable questions exist.
-- Export command: `node .agents/skills/study-source-core/scripts/export_studylab_procedural_anki.js <path_to_chapter_dir_or_json>`
-- Validation command: `node .agents/skills/study-source-core/scripts/validate_studylab_procedural_apkg.js <path_to_apkg>`
-- Absolute Invariant: Normal `[Chapter]_Anki.apkg` and StudyLab `[Chapter]_StudyLab_Procedural.apkg` coexist peacefully and independently.
+In accordance with ADR-24 and ADR-25 (The Clean Triad), procedural problem-solving (numerical physics, algebraic math, chemical calculations, logical puzzles) is permanently decoupled from Anki:
+- **Primary Delivery**: Delivered exclusively as a self-contained, interactive, anti-spoiler Obsidian Question Bank (`Study Materials/[Subject]/[Chapter]/Questions/[Chapter]_Questions.md`).
+- **Interactive Scaffolding**: Features 4-option MCQs with misconception distractors, default-collapsed 3-tier progressive hints (`> [!tip]- संकेत`), and default-collapsed step-by-step DAG solutions (`> [!success]- उत्तर एवं विस्तृत हल`).
+- **Archived Binary Packaging**: Interactive procedural APKG packaging (`_StudyLab_Procedural.apkg`) is archived and inactive in production. Learners solve problems frictionlessly on paper within Obsidian, eliminating flashcard fatigue.

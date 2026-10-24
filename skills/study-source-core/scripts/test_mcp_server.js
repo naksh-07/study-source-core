@@ -143,6 +143,109 @@ async function runTest() {
     if (fs.existsSync(sampleMermaidPath)) fs.unlinkSync(sampleMermaidPath);
     console.log("✅ Mermaid artifact validation test passed!");
 
+    // Test 8: Call ingest_source_to_evidence_pack
+    console.log("\n[Test 8] Calling 'ingest_source_to_evidence_pack' for sample markdown...");
+    const sampleSourcePath = path.resolve(__dirname, 'scratch/mcp_test_source.md');
+    const sampleScratchDir = path.resolve(__dirname, 'scratch/mcp_evidence_out');
+    fs.mkdirSync(path.dirname(sampleSourcePath), { recursive: true });
+    fs.writeFileSync(sampleSourcePath, "# MCP Test Chapter\n\n## Overview\nThis is a sample source document for testing MCP ingestion.\n\n## Concept 1\nFormulas: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$\n", 'utf8');
+
+    const ingestCall = await client.callTool({
+        name: "ingest_source_to_evidence_pack",
+        arguments: {
+            sourcePath: sampleSourcePath,
+            subject: "Math",
+            chapter: "MCP-Test-Chapter",
+            scratchDir: sampleScratchDir
+        }
+    });
+    const ingestResult = JSON.parse(ingestCall.content[0].text);
+    console.log("Ingestion result:", ingestResult);
+    if (ingestResult.status !== "SUCCESS" || !ingestResult.evidence_hash) {
+        throw new Error("ingest_source_to_evidence_pack failed!");
+    }
+    console.log("✅ MCP ingest_source_to_evidence_pack test passed!");
+
+    // Test 9: Call export_anki_package on scratch chapter
+    console.log("\n[Test 9] Calling 'export_anki_package' for scratch chapter...");
+    const mcpChapterDir = path.resolve(__dirname, 'scratch/mcp_anki_chapter');
+    const basicDir = path.join(mcpChapterDir, 'Basic');
+    fs.mkdirSync(basicDir, { recursive: true });
+    fs.writeFileSync(path.join(basicDir, 'mcp_anki_chapter_Basic.tsv'), "Front\tBack\tTags\nWhat is MCP?\tModel Context Protocol\tMCP::Core\n", 'utf8');
+
+    const exportAnkiCall = await client.callTool({
+        name: "export_anki_package",
+        arguments: {
+            chapterDir: mcpChapterDir,
+            cleanIntermediates: false
+        }
+    });
+    const exportAnkiResult = JSON.parse(exportAnkiCall.content[0].text);
+    console.log("export_anki_package result:", exportAnkiResult);
+    if (!exportAnkiResult.success || !fs.existsSync(exportAnkiResult.outputPath)) {
+        throw new Error("export_anki_package failed to produce valid APKG!");
+    }
+    console.log("✅ MCP export_anki_package test passed!");
+
+    // Test 10: Call export_studylab_procedural_package on real LCM-HCF PracticeQuestions
+    console.log("\n[Test 10] Calling 'export_studylab_procedural_package' on LCM-HCF PracticeQuestions...");
+    const vaultRoot = path.resolve(__dirname, '../../..');
+    const lcmPracticePath = path.join(vaultRoot, 'Study Materials/Math/LCM-HCF/Optional/LCM-HCF_PracticeQuestions.json');
+    const proceduralOutDir = path.resolve(__dirname, 'scratch/mcp_procedural_out');
+    fs.mkdirSync(proceduralOutDir, { recursive: true });
+
+    const exportProceduralCall = await client.callTool({
+        name: "export_studylab_procedural_package",
+        arguments: {
+            targetPath: lcmPracticePath,
+            outputDir: proceduralOutDir
+        }
+    });
+    const exportProceduralResult = JSON.parse(exportProceduralCall.content[0].text);
+    console.log("export_studylab_procedural_package result:", exportProceduralResult);
+    if (!exportProceduralResult.success || !fs.existsSync(exportProceduralResult.outputPath)) {
+        throw new Error("export_studylab_procedural_package failed to produce valid procedural APKG!");
+    }
+    console.log("✅ MCP export_studylab_procedural_package test passed!");
+
+    // Test 11: Call validate_artifact for note_contract and apkg_standard
+    console.log("\n[Test 11] Calling 'validate_artifact' for note_contract and apkg_standard...");
+    const lcmNotePath = path.join(vaultRoot, 'Study Materials/Math/LCM-HCF/Notes/LCM-HCF_Notes.md');
+    const noteValidationCall = await client.callTool({
+        name: "validate_artifact",
+        arguments: {
+            artifactPath: lcmNotePath,
+            artifactType: "note_contract"
+        }
+    });
+    const noteResult = JSON.parse(noteValidationCall.content[0].text);
+    console.log("Note contract validation result:", noteResult);
+    if (!noteResult.isValid) {
+        throw new Error("validate_artifact for note_contract failed!");
+    }
+
+    const apkgValidationCall = await client.callTool({
+        name: "validate_artifact",
+        arguments: {
+            artifactPath: exportAnkiResult.outputPath,
+            artifactType: "apkg_standard"
+        }
+    });
+    const apkgResult = JSON.parse(apkgValidationCall.content[0].text);
+    console.log("APKG standard validation result:", apkgResult);
+    if (!apkgResult.isValid) {
+        throw new Error("validate_artifact for apkg_standard failed!");
+    }
+    console.log("✅ MCP validate_artifact (note_contract & apkg_standard) test passed!");
+
+    // Clean scratch
+    try {
+        if (fs.existsSync(sampleSourcePath)) fs.unlinkSync(sampleSourcePath);
+        if (fs.existsSync(sampleScratchDir)) fs.rmSync(sampleScratchDir, { recursive: true, force: true });
+        if (fs.existsSync(mcpChapterDir)) fs.rmSync(mcpChapterDir, { recursive: true, force: true });
+        if (fs.existsSync(proceduralOutDir)) fs.rmSync(proceduralOutDir, { recursive: true, force: true });
+    } catch (_) {}
+
     await client.close();
     console.log("\n🎉 ALL MCP TESTS PASSED SUCCESSFULLY!\n");
 }

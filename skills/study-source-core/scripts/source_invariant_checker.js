@@ -73,12 +73,18 @@ function checkInvariants(sourcePath, outputPath, options = {}) {
   const sourceMode = options.sourceMode || 'EXTEND';
 
   if (!fs.existsSync(sourcePath)) {
-    console.error(`[ERROR] Source file not found: ${sourcePath}`);
-    process.exit(1);
+    if (require.main === module) {
+      console.error(`[ERROR] Source file not found: ${sourcePath}`);
+      process.exit(1);
+    }
+    return { passed: false, isValid: false, issues: [`Source file not found: ${sourcePath}`], metrics: {}, details: [] };
   }
   if (!fs.existsSync(outputPath)) {
-    console.error(`[ERROR] Output file not found: ${outputPath}`);
-    process.exit(1);
+    if (require.main === module) {
+      console.error(`[ERROR] Output file not found: ${outputPath}`);
+      process.exit(1);
+    }
+    return { passed: false, isValid: false, issues: [`Output file not found: ${outputPath}`], metrics: {}, details: [] };
   }
 
   const sourceText = fs.readFileSync(sourcePath, 'utf8');
@@ -95,6 +101,7 @@ function checkInvariants(sourcePath, outputPath, options = {}) {
     unsupportedNew: 0,
     details: [],
     passed: true,
+    isValid: true,
   };
 
   for (const inv of sourceInvariants) {

@@ -38,6 +38,8 @@ const { buildExecutionTaskGraph } = require('./orchestration_engine');
 const { AntigravityHostAdapter } = require('./antigravity_adapter');
 const { loadAllAgentDefinitions, buildAntigravityRegistrationPayload } = require('./register_antigravity_subagents');
 
+const BOOLEAN_FLAGS = new Set(['json', 'all', 'studylab', 'clean', 'dry-run', 'verbose', 'summary', 'spans', 'clear', 'silent', 'help']);
+
 function parseFlags(args) {
     const positional = [];
     const flags = {};
@@ -46,7 +48,7 @@ function parseFlags(args) {
         if (arg.startsWith('--')) {
             const key = arg.slice(2);
             const next = args[i + 1];
-            if (next !== undefined && !next.startsWith('--')) {
+            if (!BOOLEAN_FLAGS.has(key) && next !== undefined && !next.startsWith('--')) {
                 flags[key] = next;
                 i++;
             } else {
@@ -317,7 +319,7 @@ async function verifyChapterInternal(subject, chapter, flags = {}) {
                     const content = JSON.parse(fs.readFileSync(file, 'utf8'));
                     return validatePracticeQuestionsContent(content, file);
                 }
-                return validateQuestionBankMarkdown(fs.readFileSync(file, 'utf8'));
+                return validateQuestionBankMarkdown(fs.readFileSync(file, 'utf8'), file);
             }
         },
         {

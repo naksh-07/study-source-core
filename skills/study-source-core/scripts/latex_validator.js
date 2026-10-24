@@ -21,6 +21,14 @@ function validateLatexContent(content, filePath = 'content.md', options = {}) {
     effectiveOptions = filePath;
     effectivePath = 'content.md';
   }
+  if (typeof content !== 'string') {
+    return {
+      isValid: false,
+      issues: ['Content must be a non-null string'],
+      warnings: [],
+      metrics: { totalDisplayBlocks: 0, totalInlineSpans: 0, totalMathElements: 0 }
+    };
+  }
   const lines = content.split(/\r?\n/);
   const issues = [];
   const warnings = [];
@@ -177,7 +185,8 @@ function validateLatex(filePath, options = {}) {
 function validateFormulaSyntax(text, context = 'inline') {
   const errors = [];
   const warnings = [];
-  if (!text || typeof text !== 'string') return { isValid: true, errors, warnings };
+  if (typeof text !== 'string') return { isValid: false, errors: ['Formula text must be a string'], warnings };
+  if (!text.trim()) return { isValid: true, errors, warnings };
 
   // 1. Check matching curly braces { } (ignoring escaped \{ and \})
   let braceDepth = 0;
@@ -195,17 +204,27 @@ function validateFormulaSyntax(text, context = 'inline') {
     errors.push(`Unclosed opening brace '{' in formula: "${text}"`);
   }
 
-  // 2. Check matching \begin{env} and \end{env}
-  const beginMatches = [...text.matchAll(/\\begin\{([a-zA-Z0-9*]+)\}/g)].map(m => m[1]);
-  const endMatches = [...text.matchAll(/\\end\{([a-zA-Z0-9*]+)\}/g)].map(m => m[1]);
-  if (beginMatches.length !== endMatches.length) {
-    errors.push(`Mismatched LaTeX environments: \\begin{...} (${beginMatches.join(', ')}) vs \\end{...} (${endMatches.join(', ')})`);
-  } else {
-    for (let i = 0; i < beginMatches.length; i++) {
-      if (beginMatches[i] !== endMatches[i]) {
-        errors.push(`LaTeX environment mismatch: \\begin{${beginMatches[i]}} closed by \\end{${endMatches[i]}}`);
+  // 2. Check matching \begin{env} and \end{env} with LIFO stack
+  const envTokenRegex = /\\(begin|end)\{([a-zA-Z0-9*]+)\}/g;
+  const envStack = [];
+  let tokenMatch;
+  while ((tokenMatch = envTokenRegex.exec(text)) !== null) {
+    const [, type, name] = tokenMatch;
+    if (type === 'begin') {
+      envStack.push(name);
+    } else {
+      if (envStack.length === 0) {
+        errors.push(`LaTeX environment \\end{${name}} without corresponding \\begin{...}`);
+      } else {
+        const last = envStack.pop();
+        if (last !== name) {
+          errors.push(`LaTeX environment mismatch: \\begin{${last}} closed by \\end{${name}}`);
+        }
       }
     }
+  }
+  while (envStack.length > 0) {
+    errors.push(`Unclosed LaTeX environment: \\begin{${envStack.pop()}}`);
   }
 
   // 3. Check for unescaped HTML characters inside LaTeX math spans (< or > without spacing/command)

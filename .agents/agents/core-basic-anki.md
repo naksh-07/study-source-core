@@ -77,6 +77,7 @@ Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md
 - 2-column or 4-column TSV output.
 - Missing tab delimiters or raw unescaped newlines breaking TSV rows.
 - Multi-concept questions on a single card.
+- Multi-step numerical calculations, scratchpad math, or derivations (violates Zero-Scratchpad Rule; causes flashcard fatigue).
 - English-only explanations violating the bilingual contract.
 
 ## 13. DUPLICATION GUARD

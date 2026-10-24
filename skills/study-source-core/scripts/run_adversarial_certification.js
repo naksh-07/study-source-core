@@ -612,7 +612,17 @@ Options:
 
     const isAll = rawArgs.includes('--all');
     const isJson = rawArgs.includes('--json');
-    const positionalDir = rawArgs.find(a => !a.startsWith('-'));
+    const FLAGS_WITH_VALUE = new Set(['--chapter', '--subject', '--chapter-dir', '--apkg', '--procedural-apkg', '--output-report']);
+    let positionalDir = null;
+    for (let i = 0; i < rawArgs.length; i++) {
+        if (!rawArgs[i].startsWith('-')) {
+            const prev = i > 0 ? rawArgs[i - 1] : null;
+            if (!FLAGS_WITH_VALUE.has(prev)) {
+                positionalDir = rawArgs[i];
+                break;
+            }
+        }
+    }
 
     const chapter = getArg('--chapter');
     const subject = getArg('--subject');

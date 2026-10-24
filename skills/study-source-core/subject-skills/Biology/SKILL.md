@@ -17,6 +17,19 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Biology is **NOT** a raw dump of disconnected facts. It is a multi-dimensional discipline built on structure, function, process, causation, classification, and system relationships:  
 `Understand Structure → Identify Function → Trace Process → Understand Cause/Effect → Connect Systems → Distinguish Similar Concepts → Retrieve High-Value Facts → Apply Knowledge to New Questions`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
+
+> **Authoritative Specification**: [`docs/subjects/05_BIOLOGY.md`](../../../../docs/subjects/05_BIOLOGY.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Visual Anatomy, Physiological Sequences & Declarative Terminology  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Biology strictly enforces **"Ginti Ki Cheezein"** (3 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Primary Visual Memory Weapon**: Native Image Occlusion (`ImageOcclusion/<Chapter>_IO.json` + SVG masks) for anatomical organs, tissue layers, and cellular ultrastructures.
+2. **High-Density Spaced Anki Deck**: Cloze deletion cards (`{{c1::}}`) for physiological sequences, enzyme pathways, hormone functions, and taxonomic classifications.
+3. **Comparative Reference Notes**: Structured Obsidian Notes with comparison tables (e.g. Mitosis vs Meiosis, Xylem vs Phloem).
+4. **Strictly Banned Bloat**: Procedural Question Banks (suppressed with `NON_PROCEDURAL_DOMAIN`), text-only descriptions of anatomical diagrams, and slide decks.
+
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from `study-source-core`. Do not duplicate core definitions here.*
 
 ---

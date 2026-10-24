@@ -286,8 +286,9 @@ domain: Math
                 solution: "24 और 36 का अभाज्य गुणनखंडन करके अधिकतम घातों का गुणनफल 72 प्राप्त होता है।",
                 exam_metadata: { exam: "RRB ALP", year: 2018 },
                 hints: [
-                    { tier: 1, text: "संख्याओं का अभाज्य गुणनखंडन करें।" },
-                    { tier: 2, text: "अधिकतम घातों 2^3 और 3^2 का गुणनफल लें।" }
+                    { tier: 1, text: "संख्याओं का अभाज्य गुणनखंडन (Prime Factorization) करें।" },
+                    { tier: 2, text: "ल.स.प. के लिए अभाज्य गुणनखंडों की अधिकतम घातों 2^3 और 3^2 का चयन करें।" },
+                    { tier: 3, text: "2^3 = 8 तथा 3^2 = 9 का गुणनफल निकाल कर अभीष्ट ल.स.प. 72 प्राप्त करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -364,8 +365,9 @@ domain: Math
                 solution: "गुणनफल सर्वसमिका LCM * HCF = N1 * N2 का प्रयोग करें। 432 / 6 = 72.",
                 exam_metadata: { exam: "SSC CGL", year: 2020 },
                 hints: [
-                    { tier: 1, text: "गुणनफल सर्वसमिका LCM * HCF = N1 * N2 का प्रयोग करें।" },
-                    { tier: 2, text: "432 को 6 से विभाजित करें।" }
+                    { tier: 1, text: "दो संख्याओं के ल.स.प. और म.स.प. का गुणनफल उन दोनों संख्याओं के गुणनफल के बराबर होता है।" },
+                    { tier: 2, text: "संबंध LCM * HCF = N1 * N2 का प्रयोग कर अज्ञात ल.स.प. का समीकरण बनाएं।" },
+                    { tier: 3, text: "गुणनफल 432 को म.स.प. 6 से विभाजित कर अभीष्ट ल.स.प. ज्ञात करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -442,8 +444,9 @@ domain: Math
                 solution: "न्यूनतम संख्या = LCM + r = 48 + 5 = 53.",
                 exam_metadata: { exam: "RRB Group D", year: 2018 },
                 hints: [
-                    { tier: 1, text: "न्यूनतम संख्या = LCM + r सूत्र लागू करें।" },
-                    { tier: 2, text: "12, 16, 24 का LCM निकालकर 5 जोड़ें।" }
+                    { tier: 1, text: "समान शेषफल r छोड़ने वाली न्यूनतम संख्या का प्रारूप LCM(a, b, c) + r होता है।" },
+                    { tier: 2, text: "पहले भाजकों (12, 16, 24) का ल.स.प. ज्ञात करें।" },
+                    { tier: 3, text: "प्राप्त ल.स.प. 48 में अभीष्ट शेषफल 5 जोड़कर 53 प्राप्त करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -520,8 +523,9 @@ domain: Math
                 solution: "LCM = HCF * x * y = 4 * 3 * 4 = 48.",
                 exam_metadata: { exam: "RRB NTPC", year: 2019 },
                 hints: [
-                    { tier: 1, text: "संख्याएँ = HCF * अनुपात पद।" },
-                    { tier: 2, text: "सूत्र: LCM = HCF * x * y का अनुप्रयोग करें।" }
+                    { tier: 1, text: "यदि संख्याओं का अनुपात x : y तथा म.स.प. H हो, तो संख्याएँ Hx और Hy होती हैं।" },
+                    { tier: 2, text: "ल.स.प. का सूत्र: LCM = H * x * y का अनुप्रयोग करें।" },
+                    { tier: 3, text: "मान H = 4, x = 3, y = 4 रखकर 4 * 3 * 4 की गणना से ल.स.प. 48 प्राप्त करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -598,8 +602,9 @@ domain: Math
                 solution: "भिन्नों का LCM = LCM(अंश) / HCF(हर) = 4 / 3.",
                 exam_metadata: { exam: "SSC CHSL", year: 2021 },
                 hints: [
-                    { tier: 1, text: "भिन्नों का LCM = LCM(अंश) / HCF(हर)।" },
-                    { tier: 2, text: "LCM(2, 4) = 4 तथा HCF(3, 9) = 3।" }
+                    { tier: 1, text: "भिन्नों का ल.स.प. ज्ञात करने के लिए अंशों और हरों के विशेष नियम का पालन करें।" },
+                    { tier: 2, text: "सूत्र: भिन्नों का LCM = LCM(अंश) / HCF(हर) लागू करें।" },
+                    { tier: 3, text: "अंशों का LCM(2, 4) = 4 तथा हरों का HCF(3, 9) = 3 रखकर 4/3 प्राप्त करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -676,8 +681,9 @@ domain: Math
                 solution: "पुनः एक साथ बजने का समय अंतरालों का ल.स.प. होता है जो 180 सेकंड है।",
                 exam_metadata: { exam: "RRB ALP", year: 2018 },
                 hints: [
-                    { tier: 1, text: "पुनः एक साथ बजने का समय = अंतरालों का LCM।" },
-                    { tier: 2, text: "12, 15, 18 का LCM निकालें।" }
+                    { tier: 1, text: "आवर्ती घटनाओं के पुनः एक साथ घटित होने का समय अंतरालों के ल.स.प. के बराबर होता है।" },
+                    { tier: 2, text: "अंतरालों (12, 15, 18) के अभाज्य गुणनखंडों की अधिकतम घातें चुनें।" },
+                    { tier: 3, text: "2^2 * 3^2 * 5 = 4 * 9 * 5 की गणना कर 180 सेकंड प्राप्त करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -754,8 +760,9 @@ domain: Math
                 solution: "संख्याओं में से उनके शेषफल घटाकर प्राप्त संख्याओं का म.स.प. 24 है।",
                 exam_metadata: { exam: "SSC CGL", year: 2019 },
                 hints: [
-                    { tier: 1, text: "संख्याओं में से उनके शेषफल घटाकर HCF ज्ञात करें।" },
-                    { tier: 2, text: "984 और 1320 का HCF निकालें।" }
+                    { tier: 1, text: "दी गई संख्याओं में से उनके संबंधित शेषफल घटाने पर प्राप्त संख्याएँ अभीष्ट भाजक से पूर्णतः विभाजित होंगी।" },
+                    { tier: 2, text: "संख्याओं 989 - 5 = 984 तथा 1327 - 7 = 1320 का महत्तम समापवर्तक निकालें।" },
+                    { tier: 3, text: "यूक्लिड विभाजन या गुणनखंडन द्वारा 984 और 1320 का म.स.प. 24 प्राप्त करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -832,8 +839,9 @@ domain: Math
                 solution: "परिभाषानुसार सह-अभाज्य संख्याओं का म.स.प. सदैव 1 होता है।",
                 exam_metadata: { exam: "RRB Group D", year: 2022 },
                 hints: [
-                    { tier: 1, text: "सह-अभाज्य संख्याओं की परिभाषा याद करें।" },
-                    { tier: 2, text: "सह-अभाज्य संख्याओं का एकमात्र उभयनिष्ठ भाजक 1 होता है।" }
+                    { tier: 1, text: "सह-अभाज्य संख्याओं की मूल गणितीय परिभाषा का स्मरण करें।" },
+                    { tier: 2, text: "जिन संख्याओं में 1 के अतिरिक्त अन्य कोई उभयनिष्ठ गुणनखंड न हो, वे सह-अभाज्य कहलाती हैं।" },
+                    { tier: 3, text: "परिभाषानुसार सह-अभाज्य संख्याओं का म.स.प. सदैव 1 निर्धारित करें।" }
                 ],
                 inline_contract: {
                     contract: {
@@ -898,7 +906,7 @@ domain: Math
         ]
     };
 
-    writeIfMissing(
+    fs.writeFileSync(
         path.join(mathOptional, 'LCM-HCF_PracticeQuestions.json'),
         JSON.stringify(mathQuestions, null, 2),
         'utf8'
@@ -1110,24 +1118,50 @@ domain: Physics
     const physQuestionsList = [];
     for (let i = 1; i <= 10; i++) {
         const isFric = i <= 5;
+        // Accurate calculations:
+        // Friction: F = μ * m * g = 0.2 * (i * 2) * 10 = i * 4 N.
+        // Work-Energy: W = ΔK => F * s = K => F * 5 = i * 10 => F = i * 2 N.
+        const correctVal = isFric ? `${i * 4} N` : `${i * 2} N`;
+        
+        // Balanced option distribution across A, B, C, D:
+        let qOptions;
+        if (i === 1 || i === 5) {
+            // Option (A)
+            qOptions = isFric ? [`${i * 4} N`, `${i * 2} N`, `${i * 6} N`, `${i * 8} N`] : [`${i * 2} N`, `${i * 4} N`, `${i * 6} N`, `${i * 8} N`];
+        } else if (i === 3 || i === 6 || i === 9) {
+            // Option (B)
+            qOptions = isFric ? [`${i * 2} N`, `${i * 4} N`, `${i * 6} N`, `${i * 8} N`] : [`${i * 4} N`, `${i * 2} N`, `${i * 6} N`, `${i * 8} N`];
+        } else if (i === 2 || i === 7 || i === 10) {
+            // Option (C)
+            qOptions = isFric ? [`${i * 6} N`, `${i * 2} N`, `${i * 4} N`, `${i * 8} N`] : [`${i * 4} N`, `${i * 1} N`, `${i * 2} N`, `${i * 3} N`];
+        } else {
+            // Option (D) (i === 4, i === 8)
+            qOptions = isFric ? [`${i * 2} N`, `${i * 6} N`, `${i * 8} N`, `${i * 4} N`] : [`${i * 4} N`, `${i * 1} N`, `${i * 3} N`, `${i * 2} N`];
+        }
+
+        const solText = isFric
+            ? `1. अभिलंब प्रतिक्रिया: N = mg = ${i * 2} * 10 = ${i * 20} N\n2. सीमांत घर्षण: fs = μN = 0.2 * ${i * 20} = ${i * 4} N\n3. आवश्यक न्यूनतम बल F = ${i * 4} N.`
+            : `1. कार्य-ऊर्जा प्रमेय: W = ΔK\n2. F * s = K => F * 5 = ${i * 10}\n3. F = ${i * 10} / 5 = ${i * 2} N.`;
+
         physQuestionsList.push({
-            id: `q-phys-${String(i).padStart(2, '0')}`,
+            id: `q-phys-${String(i).padStart(2, "0")}`,
             pattern_id: isFric ? "pat-phys-fric-001" : "pat-phys-work-002",
             problem_family: isFric ? "Dynamics & Friction" : "Work-Energy",
             question_type: "mcq",
             origin_type: "AUTHENTIC_PYQ",
             prompt: isFric
-                ? `एक ${i * 2} kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा?`
+                ? `एक ${i * 2} kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा? (g = 10 m/s²)`
                 : `एक वस्तु ${i * 10} J गतिज ऊर्जा से गतिमान है। घर्षण बल द्वारा 5 m में रोके जाने पर औसत बल क्या होगा?`,
-            options: [`${i * 4} N`, `${i * 2} N`, `${i * 6} N`, `${i * 8} N`],
-            correct_option: `${i * 4} N`,
-            difficulty: 2.0,
-            explanation: "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-            solution: "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+            options: qOptions,
+            correct_option: correctVal,
+            difficulty: isFric ? 2.0 : 3.0,
+            explanation: isFric ? "स्थैतिक घर्षण नियम fs = μN द्वारा बल की गणना।" : "कार्य-ऊर्जा प्रमेय W = ΔK द्वारा बल की गणना।",
+            solution: solText,
             exam_metadata: { exam: "RRB ALP", year: 2018 },
             hints: [
-                { tier: 1, text: "FBD आरेख बनाकर अभिलंब बल ज्ञात करें।" },
-                { tier: 2, text: "सूत्र लागू करें।" }
+                { tier: 1, text: isFric ? "FBD आरेख बनाकर ऊर्ध्वाधर दिशा में संतुलन से अभिलंब बल ज्ञात करें।" : "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल का कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें।" },
+                { tier: 2, text: isFric ? "क्षैतिज सतह पर N = mg होता है तथा सीमांत घर्षण बल fs = μN सूत्र लागू करें।" : "रुकने पर अंतिम ऊर्जा शून्य होती है, अतः परिमाण रूप में F * s = K सूत्र का प्रयोग करें।" },
+                { tier: 3, text: isFric ? `सूत्र F = μmg में मान रखकर गणना करें: F = 0.2 * ${i * 2} * 10.` : `गतिज ऊर्जा ${i * 10} J को विस्थापन 5 m से विभाजित करें।` }
             ]
         });
     }
@@ -1143,7 +1177,7 @@ domain: Physics
         questions: physQuestionsList
     };
 
-    writeIfMissing(
+    fs.writeFileSync(
         path.join(physOptional, 'Newton-Laws-Friction_PracticeQuestions.json'),
         JSON.stringify(physQuestions, null, 2),
         'utf8'
@@ -1259,19 +1293,49 @@ tags: [Geography, Map, Europe, PhysicalGeography]
 `;
     fs.writeFileSync(path.join(mapNotes, 'Europe_Notes.md'), europeNotesMd, 'utf8');
 
-    // Generate 95 Basic notes for Europe
-    let europeBasicTsv = "Front\tBack\tTags\n";
-    for (let i = 1; i <= 95; i++) {
-        europeBasicTsv += `यूरोप तथ्य प्रश्न ${i} का उत्तर क्या है?\tउत्तर विवरण ${i}\tMap::Europe\n`;
-    }
-    writeIfMissing(path.join(mapBasic, 'Europe_Basic.tsv'), europeBasicTsv, 'utf8');
+    // Generate authentic European geography flashcards (eliminating synthetic placeholder stubs)
+    const authenticBasicCards = [
+        ["यूरोप को एशिया से पूर्व में कौन-सी पर्वत श्रृंखला और नदी अलग करती है?", "यूराल पर्वत (Ural Mountains) और यूराल नदी (Ural River)।"],
+        ["यूरोप की सबसे लंबी नदी कौन-सी है और यह किस सागर में गिरती है?", "वोल्गा नदी (Volga River, 3,530 km), जो कैस्पियन सागर में गिरती है।"],
+        ["यूरोप और अफ्रीका को अलग करने वाला जलडमरूमध्य कौन-सा है?", "जिब्राल्टर जलडमरूमध्य (Strait of Gibraltar), जो भूमध्य सागर को अटलांटिक महासागर से जोड़ता है।"],
+        ["डेन्यूब नदी (Danube River) कितने यूरोपीय देशों की राजधानियों से होकर गुजरती है?", "4 राजधानियों से: विएना (ऑस्ट्रिया), ब्रातिस्लावा (स्लोवाकिया), बुडापेस्ट (हंगरी), और बेलग्रेड (सर्बिया)।"],
+        ["यूरोप का सबसे ऊँचा पर्वत शिखर कौन-सा है?", "माउंट एल्ब्रस (Mount Elbrus, 5,642 m), जो काकेशस पर्वत श्रृंखला (रूस) में स्थित है।"],
+        ["आल्प्स पर्वत श्रृंखला (Alps Mountains) का सबसे ऊँचा शिखर कौन-सा है?", "माउंट ब्लैंक (Mont Blanc, 4,809 m), जो फ्रांस और इटली की सीमा पर स्थित है।"],
+        ["आइबेरियन प्रायद्वीप (Iberian Peninsula) पर कौन-से दो मुख्य देश स्थित हैं?", "स्पेन (Spain) और पुर्तगाल (Portugal)।"],
+        ["स्कैंडिनेवियाई प्रायद्वीप (Scandinavian Peninsula) पर मुख्य रूप से कौन-से देश शामिल हैं?", "नॉर्वे (Norway) और स्वीडन (Sweden)।"],
+        ["राइन नदी (Rhine River) किस पर्वत से निकलती है और किस सागर में गिरती है?", "स्विस आल्प्स से निकलती है और उत्तरी सागर (North Sea) में गिरती है।"],
+        ["इटली की पो नदी घाटी (Po Valley) किस समुद्र में अपना मुहाना बनाती है?", "एड्रियाटिक सागर (Adriatic Sea) में।"],
+        ["फ्रांस और स्पेन के मध्य प्राकृतिक सीमा बनाने वाली पर्वत श्रृंखला कौन-सी है?", "पिरेनीज पर्वत श्रृंखला (Pyrenees Mountains)।"],
+        ["काला सागर (Black Sea) और मरमरा सागर (Sea of Marmara) को जोड़ने वाला जलडमरूमध्य कौन-सा है?", "बॉस्फोरस जलडमरूमध्य (Bosphorus Strait, इस्तांबुल)।"],
+        ["ब्रिटेन और फ्रांस को अलग करने वाला जल निकाय कौन-सा है?", "इंग्लिश चैनल (English Channel) और डोवर जलडमरूमध्य।"],
+        ["बाल्टिक राज्यों (Baltic States) में कौन-से तीन देश शामिल हैं?", "एस्टोनिया (Estonia), लातविया (Latvia), और लिथुआनिया (Lithuania)।"],
+        ["यूरोप का 'प्लेग्राउंड' (Playground of Europe) किस देश को कहा जाता है?", "स्विट्जरलैंड (Switzerland) को आल्प्स की खूबसूरत घाटियों के कारण।"]
+    ];
 
-    // Generate 45 Cloze notes for Europe
-    let europeClozeTsv = "Text\tExtra\tTags\n";
-    for (let i = 1; i <= 45; i++) {
-        europeClozeTsv += `यूरोप का मुख्य भौगोलिक बिंदु {{c1::तथ्य ${i}}} है।\tविवरण ${i}\tMap::Europe\n`;
+    let europeBasicTsv = "Front\tBack\tTags\n";
+    for (const [front, back] of authenticBasicCards) {
+        europeBasicTsv += `${front}\t${back}\tMap::Europe\n`;
     }
-    writeIfMissing(path.join(mapCloze, 'Europe_Cloze.tsv'), europeClozeTsv, 'utf8');
+    fs.writeFileSync(path.join(mapBasic, 'Europe_Basic.tsv'), europeBasicTsv, 'utf8');
+
+    const authenticClozeCards = [
+        ["यूरोप और एशिया के मध्य सीमा {{c1::यूराल पर्वत (Ural Mountains)::पूर्वी पर्वतमाला}} तथा यूराल नदी द्वारा निर्धारित होती है।", "यह रूस के मध्य से होकर गुजरती है।"],
+        ["यूरोप की सबसे लंबी नदी {{c1::वोल्गा (Volga)::3530 किमी लंबी नदी}} है जो कैस्पियन सागर में गिरती है।", "यह रूस की राष्ट्रीय नदी मानी जाती है।"],
+        ["{{c1::जिब्राल्टर जलडमरूमध्य (Strait of Gibraltar)::प्रवेश द्वार}} भूमध्य सागर को अटलांटिक महासागर से जोड़ता है।", "यह स्पेन और मोरक्को के बीच स्थित है।"],
+        ["डेन्यूब नदी {{c1::काला सागर (Black Sea)::अंतिम मुहाना सागर}} में गिरती है।", "यह यूरोप की दूसरी सबसे लंबी नदी है।"],
+        ["यूरोप का सर्वोच्च पर्वत शिखर {{c1::माउंट एल्ब्रस (Mount Elbrus)::काकेशस शिखर}} है।", "इसकी ऊँचाई 5,642 मीटर है।"],
+        ["फ्रांस और स्पेन के मध्य प्राकृतिक सीमा {{c1::पिरेनीज पर्वत (Pyrenees)::सीमावर्ती पर्वत}} बनाते हैं।", "यह आइबेरियन प्रायद्वीप को शेष यूरोप से जोड़ता है।"],
+        ["काला सागर और मरमरा सागर को जोड़ने वाला जलमार्ग {{c1::बॉस्फोरस (Bosphorus)::तुर्किये जलडमरूमध्य}} कहलाता है।", "यह इस्तांबुल को दो महाद्वीपों में बांटता है।"],
+        ["आल्प्स की सबसे ऊँची चोटी {{c1::माउंट ब्लैंक (Mont Blanc)::फ्रांस-इटली शिखर}} 4,809 मीटर ऊँची है।", "यह पश्चिमी यूरोप का सबसे ऊँचा बिंदु है।"],
+        ["राइन नदी अंततः {{c1::उत्तरी सागर (North Sea)::यूरोपीय सागर}} में विसर्जित होती है।", "यह यूरोप का सबसे व्यस्त व्यापारिक जलमार्ग है।"],
+        ["स्पेन और पुर्तगाल {{c1::आइबेरियन (Iberian)::प्रायद्वीप का नाम}} प्रायद्वीप पर स्थित हैं।", "यह दक्षिण-पश्चिम यूरोप का बड़ा भूभाग है।"]
+    ];
+
+    let europeClozeTsv = "Text\tExtra\tTags\n";
+    for (const [text, extra] of authenticClozeCards) {
+        europeClozeTsv += `${text}\t${extra}\tMap::Europe\n`;
+    }
+    fs.writeFileSync(path.join(mapCloze, 'Europe_Cloze.tsv'), europeClozeTsv, 'utf8');
 
     // Rich cartographic SVG media asset in both mapMedia and mapIOMedia
     const europeSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">

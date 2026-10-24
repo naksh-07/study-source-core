@@ -17,7 +17,18 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Mathematics is a **PROCEDURAL + CONCEPTUAL + PATTERN RECOGNITION + EXECUTION** discipline. The goal is NOT "remember every formula", but:  
 `Recognize Problem Pattern → Select Best Method → Execute Accurately → Verify Solution → Avoid Examiner Traps`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
 
+> **Authoritative Specification**: [`docs/subjects/01_MATH.md`](../../../../docs/subjects/01_MATH.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Pure Quantitative STEM & Multi-Step Procedural Practice  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Mathematics strictly enforces **"Ginti Ki Cheezein"** (2 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Primary Practice Engine**: Obsidian Question Bank (`Questions/<Chapter>_Questions.md`) featuring canonical problem families, authentic 4-option MCQs with misconception distractors, default-collapsed 3-tier hints (`> [!tip]-`), and default-collapsed step-by-step solution DAGs (`> [!success]-`). Solved with pen & paper.
+2. **Maintenance Reflex Weapon**: Lean Formula Anki Deck (`_Anki.apkg`) for rapid 5–10s atomic recall (formulas, domain conditions, trigger rules).
+3. **Strict Zero-Scratchpad Rule**: Multi-step numerical calculations, scratchpad algebra, and derivations are strictly forbidden in Anki cards.
+4. **Strictly Banned Bloat**: Scratchpad math in flashcards, long prose narrative notes, slide decks, and visual mindmaps as primary study material.
 
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from study-source-core. Do not duplicate core definitions here.*
 

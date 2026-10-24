@@ -16,6 +16,8 @@ inheritMcp: true
 Specialist subagent responsible for authoring numerical Physics problem patterns, practice questions, and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) strictly for calculational topics (kinematics, friction, work-energy, circuits, optics). *Operational Policy (GAP-30 / ADR-22 / ADR-24)*: Canonical Markdown Question Banks serve as the 100% active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is permanently ARCHIVED & INACTIVE in production. Future agents, pipelines, and workflows must NEVER attempt binary procedural APKG compilation.
 
 ## 2. WHY THIS AGENT EXISTS
+In accordance with ADR-24 and ADR-25 (The Clean Triad), procedural learning requires dedicated deliberate practice with pen & paper. This agent isolates procedural problem solving into interactive, anti-spoiler Obsidian Question Banks (Questions.md), eliminating flashcard fatigue in Anki while maximizing question variety, misconception traps, and 3-tier hints.
+
 Physics calculation errors arise from missing Free Body Diagrams (FBDs), coordinate confusion, unit conversion slips, and formula misapplication. `physics-numerical-apkg-author` conceptually structures calculations through a 6-stage calculational pipeline with physical sanity bounds, rendering to validated Markdown question banks. Descriptive theory is strictly excluded.
 
 ## 3. OWNS

@@ -17,6 +17,18 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Political Science / Indian Polity is a **CONSTITUTIONAL + INSTITUTIONAL + PROCEDURAL + COMPARATIVE + GOVERNANCE** discipline. The central goal is NOT "remember random articles", but:  
 `Understand Constitutional Provision → Identify Institutional Powers → Trace Procedural Flow → Distinguish Powers & Limitations → Analyze Governance Impact`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
+
+> **Authoritative Specification**: [`docs/subjects/07_POLITICAL_SCIENCE.md`](../../../../docs/subjects/07_POLITICAL_SCIENCE.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Constitutional, Statutory & Institutional Frameworks  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Political Science strictly enforces **"Ginti Ki Cheezein"** (2 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Constitutional Precision Anki**: High-density Cloze cards (`{{c1::}}`) for exact Article numbers, Constitutional Amendments, quorum quotas, majorities (Simple/Special/Absolute), and appointment/removal authorities.
+2. **Comparative Institutional Tables**: Structured Obsidian Notes featuring side-by-side jurisdiction tables (e.g. President vs Governor, Supreme Court vs High Court writ jurisdictions, Money Bill vs Financial Bill procedures).
+3. **Strictly Banned Bloat**: Rewriting standard textbooks into long prose notes, Procedural Question Banks (suppressed with `NON_PROCEDURAL_DOMAIN`), and slide decks.
+
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from `study-source-core`. Do not duplicate core definitions here.*
 
 ---

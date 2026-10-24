@@ -120,14 +120,22 @@ The Markdown Question Bank is a **clean, lightweight, human-facing problem deliv
      - Option label prefixes (e.g. `(A)`, `A.`, `(1)`, `1.`) from raw extractions are cleanly normalized to avoid duplicate label prefixes.
    - **Separator**: Horizontal rule `---` between adjacent question blocks.
 
-### Prohibited Sections in Human-Facing Markdown (Anti-Leakage Boundary):
-To prevent answer leakage, maintain genuine testing conditions, and preserve pedagogical integrity, the human-facing `Questions.md` file **MUST NOT** render:
-1. ❌ **`### Method & Recognition`**: Recognition signals, expected methods, and decision points.
-2. ❌ **`### Traps & Errors`**: Distractor traps and error category codes.
-3. ❌ **`### Progressive Hints`**: Tier 1 (Conceptual), Tier 2 (Strategic Setup), and Tier 3 (Next Step) hint callouts.
-4. ❌ **`### Solution`**: Step-by-step derivations, calculations, or solution DAG step nodes.
-5. ❌ **`### Verification`**: Reverse plug-in checks, dimensional checks, or sanity bounds.
-6. ❌ **Answers**: Explicit correct answers (`correct_answer`, `correct_option`, `Answer: ...`).
+    - **Anti-Spoiler Scaffolding (Default-Collapsed Callouts)**:
+      - **3-Tier Progressive Hints (> [!tip]- संकेत (3-Tier Hints))**:
+        - Collapsible by default (- suffix mandatory) so students never see hints prematurely.
+        - Tier 1: Conceptual approach/direction (never leaks answer).
+        - Tier 2: Mathematical formula / strategy (never leaks answer).
+        - Tier 3: Setup / initial calculation step.
+      - **Answer & Step-by-Step DAG Solution (> [!success]- उत्तर एवं विस्तृत हल (Answer & Explanation))**:
+        - Collapsible by default (- suffix mandatory).
+        - Explicit correct answer (**सही उत्तर**: (Option)).
+        - Numbered step-by-step derivation nodes with units and sanity checks.
+
+### Anti-Spoiler Ergonomics & Pedagogy (ADR-22, ADR-24, ADR-25):
+In Obsidian preview/reading mode, the student sees ONLY the question statement and MCQ options. The hints and full solution remain tightly closed until the student intentionally clicks to unfold them. This achieves:
+1. **Zero Spoilers**: Realistic exam simulation on pen & paper.
+2. **Progressive Assistance**: If stuck, open Tier 1 hint; if still stuck, open Tier 2; inspect solution only after attempting.
+3. **Zero Flashcard Fatigue**: Heavy algebra and multi-step math remain on desk scratchpads, entirely decoupled from Anki review decks.
 
 ### Archiving & Reactivation Guarantee:
 The omission of procedural sections from `Questions.md` does **not** discard them. All 17 canonical dimensions (solution DAGs, 3-tier hints, step-by-step solutions, verification routines, traps, and CLR records) remain 100% archived in:

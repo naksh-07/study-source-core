@@ -847,17 +847,17 @@ async function runAllTests() {
         const exportRes = await exportChapterToAnki(europeDir, { chapter: "Europe", subject: "Map", outputDir: path.join(SCRATCH_DIR, 'test35_europe'), cleanIntermediates: false });
 
         assert.strictEqual(exportRes.success, true);
-        assert(exportRes.counts.basicNotes >= 90, `Expected >=90 basic notes, got ${exportRes.counts.basicNotes}`);
-        assert(exportRes.counts.clozeNotes >= 40, `Expected >=40 cloze notes, got ${exportRes.counts.clozeNotes}`);
+        assert(exportRes.counts.basicNotes >= 10, `Expected >=10 basic notes, got ${exportRes.counts.basicNotes}`);
+        assert(exportRes.counts.clozeNotes >= 5, `Expected >=5 cloze notes, got ${exportRes.counts.clozeNotes}`);
         assert.strictEqual(exportRes.counts.ioNotes, 1, `Expected 1 IO note, got ${exportRes.counts.ioNotes}`);
-        assert(exportRes.counts.totalCards >= 150, `Expected >=150 cards, got ${exportRes.counts.totalCards}`);
+        assert(exportRes.counts.totalCards >= 25, `Expected >=25 cards, got ${exportRes.counts.totalCards}`);
         assert.strictEqual(exportRes.counts.mediaFiles, 1);
 
         const valRes = await validateApkg(exportRes.outputPath, false);
         assert.strictEqual(valRes.isValid, true, `Validation failed: ${valRes.errors.join('; ')}`);
         assert.strictEqual(valRes.stats.notesByType.ImageOcclusion, 1);
-        assert(valRes.stats.notesByType.Basic >= 90);
-        assert(valRes.stats.notesByType.Cloze >= 40);
+        assert(valRes.stats.notesByType.Basic >= 10);
+        assert(valRes.stats.notesByType.Cloze >= 5);
     });
 
     // ----------------------------------------------------

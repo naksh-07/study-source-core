@@ -61,9 +61,12 @@ StudySourceCore supports both full-chapter batch generation and surgical, on-dem
 3. **Mode 3: Full Chapter Multi-Wave Pipeline**:
    - Used only when the user explicitly requests a comprehensive chapter package or full study suite.
 
-### Procedural APKG Archival (GAP-30 / ADR-22 / ADR-24):
+### Procedural APKG Archival & The Clean Triad (ADR-24 & ADR-25):
 - **ARCHIVED & INACTIVE**: Binary procedural APKG compilation (`export_studylab_procedural_anki.js`, `validate_studylab_procedural_apkg.js`) is permanently archived.
-- **Active Primary**: Canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) validated by `validate_studylab_question_bank.js` serve as the 100% active primary practice deliverable.
+- **The Clean Triad of Learning Separation (ADR-25)**:
+  1. **Anki Flashcards (Atomic Retrieval)**: Fast 5–15s active recall of formulas ($K_p = K_c(RT)^{\Delta n}$), units, boundary conditions, and examiner trap definitions. Multi-step calculations, scratchpad math, and derivations are strictly forbidden in Anki cards to prevent flashcard fatigue.
+  2. **Obsidian Notes (Conceptual Foundations)**: Deep knowledge architecture, mental models, master derivations, and misconception callouts.
+  3. **Obsidian Question Bank (Procedural Deliberate Practice)**: Primary practice deliverable (`Questions/[Chapter]_Questions.md`). High question variety across pattern families, 4-option MCQs with authentic misconception traps, default-collapsed 3-tier hints (`> [!tip]-`), and default-collapsed step-by-step DAG solutions (`> [!success]-`). Solved with pen & paper at the learner's own pace without cognitive friction.
 - Future agents and workflows must **NEVER** generate or attempt procedural APKG compilation.
 
 ## 5. Routing & Dispatch

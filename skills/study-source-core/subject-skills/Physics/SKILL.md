@@ -17,7 +17,19 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Physics is a **CONCEPTUAL + MATHEMATICAL + PROCEDURAL + PATTERN-RECOGNITION + VISUALIZATION + TRANSFER** discipline. The central goal is NOT "remember every formula", but:  
 `Understand Physical Model → Identify Governing Principle → Select Mathematical Representation → Execute Accurately → Transfer to New Problems`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
 
+> **Authoritative Specification**: [`docs/subjects/02_PHYSICS.md`](../../../../docs/subjects/02_PHYSICS.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Physical Modeling & Multi-Stage Numericals  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Physics strictly enforces **"Ginti Ki Cheezein"** (3 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Primary Calculational Engine**: 6-Stage Numerical Question Bank (`Questions/<Chapter>_Questions.md`) with FBD, Coordinates, Law, Solve, SI units, and Sanity check steps; 4-option MCQs, default-collapsed 3-tier hints (`> [!tip]-`), and step-by-step DAGs (`> [!success]-`). Solved on paper.
+2. **Formula, Unit & Sign Anki**: Rapid 5–10s atomic recall (governing equations, SI dimensions, sign conventions, boundary traps).
+3. **FBD & Model Reference Notes**: Lean conceptual foundation notes with free-body diagrams, mental models, and coordinate definitions.
+4. **Strict Zero-Scratchpad Rule**: Multi-step numerical physics problems are strictly forbidden in Anki cards.
+5. **Strictly Banned Bloat**: Multi-step numerical calculations in flashcards, pure qualitative lecture prose notes, and unsolicited slide decks.
 
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from study-source-core. Do not duplicate core definitions here.*
 

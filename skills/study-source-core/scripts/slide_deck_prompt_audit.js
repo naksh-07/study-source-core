@@ -67,6 +67,7 @@ function auditSlideDeckPrompt(filePath) {
     const results = {
         file: filePath,
         passed: true,
+        isValid: true,
         errors: [],
         warnings: [],
         metrics: {}
@@ -74,6 +75,7 @@ function auditSlideDeckPrompt(filePath) {
 
     if (!fs.existsSync(filePath)) {
         results.passed = false;
+        results.isValid = false;
         results.errors.push(`File does not exist: ${filePath}`);
         return results;
     }
@@ -90,6 +92,7 @@ function auditSlideDeckPrompt(filePath) {
     const { frontmatter, rawBody } = parseYamlFrontmatter(content);
     if (!frontmatter) {
         results.passed = false;
+        results.isValid = false;
         results.errors.push('Missing or malformed YAML frontmatter enclosed in --- blocks.');
         return results;
     }
@@ -147,6 +150,7 @@ function auditSlideDeckPrompt(filePath) {
     const codeBlockMatch = rawBody.match(/```text\r?\n([\s\S]*?)\r?\n```/);
     if (!codeBlockMatch) {
         results.passed = false;
+        results.isValid = false;
         results.errors.push("Missing copy-paste ready ```text ... ``` payload under '## Copy & Paste into NotebookLM'.");
         return results;
     }
@@ -294,6 +298,7 @@ function auditSlideDeckPrompt(filePath) {
     if (results.errors.length > 0) {
         results.passed = false;
     }
+    results.isValid = results.passed && results.errors.length === 0;
 
     return results;
 }

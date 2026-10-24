@@ -19,6 +19,18 @@ History must **NOT** be treated as a giant collection of dates and names. Histor
 1. **HISTORICAL MEMORY (Anki)**: Dates, rulers, dynasties, battles, treaties, acts, books, personalities, places, architecture, organizations, movements, archaeological sites, terminology, and discrete facts.
 2. **HISTORICAL UNDERSTANDING (Obsidian Notes)**: Chronology, causation, continuity, change, context, relationships, developments, comparisons, consequences, and historical processes.
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
+
+> **Authoritative Specification**: [`docs/subjects/06_HISTORY.md`](../../../../docs/subjects/06_HISTORY.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Chronological Progression & Causality Networks  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, History strictly enforces **"Ginti Ki Cheezein"** (2 active high-yield deliverables) while eliminating overengineering bloat:
+1. **High-Density Spaced Anki**: Chronological and event Cloze deletions (`{{c1::}}`) for specific dates, rulers, battles, treaties, administrative acts, and cultural artifacts.
+2. **Thematic Timeline Spine Notes**: Obsidian Notes serving as chronological anchors and cause-and-effect narrative synthesis (Background $\rightarrow$ Catalysts $\rightarrow$ Turning Points $\rightarrow$ Immediate Impact $\rightarrow$ Long-Term Legacy).
+3. **Strictly Banned Bloat**: Procedural Question Banks (suppressed with `NON_PROCEDURAL_DOMAIN`), 50-branch sprawling rainbow mindmaps, and mechanical slide decks.
+
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from `study-source-core`. Do not duplicate core definitions here.*
 
 ---

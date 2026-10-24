@@ -459,6 +459,12 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     let dbWrapper = createAnkiDatabase(tempColPath);
     let db;
     let isNativeDb = false;
+    let dbClosed = false;
+    let apkgBuffer;
+    let noteIdCounter = 1700001000000;
+    let cardIdCounter = 1700005000000;
+    let totalCardsCreated = 0;
+    let totalNotesCreated = 0;
 
     if (dbWrapper) {
         db = dbWrapper.db;
@@ -469,6 +475,7 @@ async function exportChapterToAnki(chapterDir, options = {}) {
         initializeAnkiSchema(db);
     }
 
+    try {
     const { decksConfig, dconfConfig, globalConf, nowSecs, nowMs } = buildDeckConfigurations(
         deckId,
         deckName,
@@ -512,11 +519,6 @@ async function exportChapterToAnki(chapterDir, options = {}) {
         JSON.stringify(dconfConfig)
     ]);
     insertColStmt.free();
-
-    let noteIdCounter = 1700001000000;
-    let cardIdCounter = 1700005000000;
-    let totalCardsCreated = 0;
-    let totalNotesCreated = 0;
 
     const insertNoteStmt = db.prepare(`
         INSERT INTO notes (id, guid, mid, mod, usn, tags, flds, sfld, csum, flags, data)
@@ -602,9 +604,9 @@ async function exportChapterToAnki(chapterDir, options = {}) {
     insertCardStmt.free();
 
     // 10. Assemble Zip Package (.apkg) via shared streaming utility (Zero Heap OOM)
-    let apkgBuffer;
     if (isNativeDb) {
         db.close();
+        dbClosed = true;
         await assembleApkgStream(tempColPath, mediaFilesMap, outputPath);
         try {
             if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath);
@@ -616,8 +618,21 @@ async function exportChapterToAnki(chapterDir, options = {}) {
         const dbBinaryData = db.export();
         const dbBuffer = Buffer.from(dbBinaryData);
         db.close();
+        dbClosed = true;
         apkgBuffer = await assembleApkgZip(dbBuffer, mediaFilesMap);
         fs.writeFileSync(outputPath, apkgBuffer);
+    }
+    } finally {
+        if (isNativeDb && !dbClosed) {
+            try { db.close(); } catch (_) {}
+            try {
+                if (fs.existsSync(tempColPath)) fs.unlinkSync(tempColPath);
+                if (fs.existsSync(tempColPath + '-wal')) fs.unlinkSync(tempColPath + '-wal');
+                if (fs.existsSync(tempColPath + '-shm')) fs.unlinkSync(tempColPath + '-shm');
+            } catch (_) {}
+        } else if (db && !dbClosed && typeof db.close === 'function') {
+            try { db.close(); } catch (_) {}
+        }
     }
 
     // 13. Validate APKG immediately upon assembly before touching any source inputs

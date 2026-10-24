@@ -86,17 +86,30 @@ StudySourceCore is an Antigravity-native multi-agent study asset synthesis ecosy
 - [`docs/GAP_REGISTER.md`](GAP_REGISTER.md) — Complete historical gap tracking ledger (GAP-01 through GAP-35, all closed).
 - [`docs/CURRENT_IMPLEMENTATION.md`](CURRENT_IMPLEMENTATION.md) — Active baseline assessment, script inventory, and test registry.
 
-### Layer C: Pedagogical Design & Learning Theory
+### Layer C: Pedagogical Design, Cognitive Science & Subject Blueprints
+- [`docs/subjects/README.md`](subjects/README.md) — Master Subject Pedagogical Directory & "Ginti Ki Cheezein" Framework (ADR-25).
+- [`docs/subjects/01_MATH.md`](subjects/01_MATH.md) — Mathematics Pedagogical Blueprint (Question Bank + Lean Formula Anki).
+- [`docs/subjects/02_PHYSICS.md`](subjects/02_PHYSICS.md) — Physics Pedagogical Blueprint (6-Stage Calculational QBank + FBD Reference Notes).
+- [`docs/subjects/03_CHEMISTRY.md`](subjects/03_CHEMISTRY.md) — Chemistry Pedagogical Blueprint (Tri-Bifurcated: Physical ICE QBank / Inorganic Anki / Organic Roadmaps).
+- [`docs/subjects/04_REASONING.md`](subjects/04_REASONING.md) — Reasoning Pedagogical Blueprint (Deductive Constraint Logic QBank + Logic DAGs).
+- [`docs/subjects/05_BIOLOGY.md`](subjects/05_BIOLOGY.md) — Biology Pedagogical Blueprint (Image Occlusion + High-Density Cloze + Comparison Notes).
+- [`docs/subjects/06_HISTORY.md`](subjects/06_HISTORY.md) — History Pedagogical Blueprint (Chronological Cloze + Thematic Timeline Spine Notes).
+- [`docs/subjects/07_POLITICAL_SCIENCE.md`](subjects/07_POLITICAL_SCIENCE.md) — Political Science Pedagogical Blueprint (Article/Amendment Cloze + Institutional Tables).
+- [`docs/subjects/08_GEOGRAPHY.md`](subjects/08_GEOGRAPHY.md) — Geography Pedagogical Blueprint (Native Anki Image Occlusion Maps + Geomorphological Notes).
+- [`docs/subjects/09_MAP.md`](subjects/09_MAP.md) — Map Pedagogical Blueprint (Pure Cartography & SVG Mask Image Occlusion).
+- [`docs/SUBJECT_POLICIES.md`](SUBJECT_POLICIES.md) — Master 9-Subject Artifact Matrix, 4 Cognitive Archetypes & suppression codes.
 - [`docs/LEARNING_PRINCIPLES.md`](LEARNING_PRINCIPLES.md) — Cognitive load theory, desirable difficulties, active recall, and spaced retrieval.
 - [`docs/VISUAL_LEARNING.md`](VISUAL_LEARNING.md) — Coordinate normalization, SVG masks, Marp slide deck constraints, and visual prompt design.
 - [`docs/KNOWLEDGE_UNITS.md`](KNOWLEDGE_UNITS.md) — Knowledge Unit (KU) formalization and domain boundaries.
-- [`docs/SUBJECT_POLICIES.md`](SUBJECT_POLICIES.md) — Subject-specific artifact eligibility matrices and domain capability flags.
 
 ### Layer D: Quality Assurance & Independent Certification
+- [`docs/audits/FINAL_360_AUDIT_REPORT.md`](audits/FINAL_360_AUDIT_REPORT.md) — Comprehensive 360-Degree Final Audit & Remediation Plan (Architecture, Bugs, Anti-Patterns).
+- [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md) — Authoritative Research Synthesis on Evidence-Based Learning vs. Overengineering (ADR-25).
+- [`docs/audits/CURRENT_SUBJECT_STATE_AUDIT.md`](audits/CURRENT_SUBJECT_STATE_AUDIT.md) — Baseline Reconnaissance of Subject Architectures & "Kitchen-Sink" Configuration Overhangs.
 - [`docs/VALIDATION_AND_CERTIFICATION.md`](VALIDATION_AND_CERTIFICATION.md) — Multi-tier verification harness and contract validators.
 - [`docs/SECURITY_AND_TRUST.md`](SECURITY_AND_TRUST.md) — Path traversal defense, SHA-256 cryptographic provenance, and fail-closed invariants.
 - [`skills/study-source-core/scripts/telemetry_engine.js`](../skills/study-source-core/scripts/telemetry_engine.js) — Telemetry & Observability Engine (Structured Spans, Token Economy, SQLite WAL Store, and Calibration Analytics).
-- [`skills/study-source-core/scripts/run_master_smoke_test.js`](../skills/study-source-core/scripts/run_master_smoke_test.js) — 18-Gate Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`).
+- [`skills/study-source-core/scripts/run_master_smoke_test.js`](../skills/study-source-core/scripts/run_master_smoke_test.js) — 19-Gate Master Smoke Test & Anti-Tamper Architectural Integrity Harness (`npm run smoke`).
 - [`skills/study-source-core/scripts/test_final_audit_harness.js`](../skills/study-source-core/scripts/test_final_audit_harness.js) — 10-Gate Master Final Audit and Freeze Verification Harness.
 
 ---
@@ -108,21 +121,21 @@ The workspace maintains production-ready chapter deliverables structured as foll
 | Subject | Chapter | Verified Deliverables | Badges Status |
 |---|---|---|---|
 | **Map** | `Europe` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, Image Occlusion JSON+SVG, MindMap JSON, SlideDeck Prompt, Declarative APKG) | `Notes✅ Basic✅ Cloze✅ IO✅ Map✅ Deck✅ Anki✅` |
-| **Math** | `Arithmetic-Progression` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 26-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
+| **Math** | `Arithmetic-Progression` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 26-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Archived)` |
 | **Math** | `LCM-HCF` | 6 Deliverables (Notes, Basic TSV, Cloze TSV, Question Bank Markdown, Declarative APKG, StudyLab Procedural APKG) | `Notes✅ Basic✅ Cloze✅ QBank✅ Anki✅ StudyLab✅` |
 | **Physics** | `Newton-Laws-Friction` | 8 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, Question Bank, Declarative APKG, StudyLab Procedural APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab✅` |
-| **Reasoning** | `Syllogism` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
-| **Chemistry** | `Chemical-Equilibrium` | 8 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Paused)` |
+| **Reasoning** | `Syllogism` | 7 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Archived)` |
+| **Chemistry** | `Chemical-Equilibrium` | 8 Deliverables (Notes, Basic TSV, Cloze TSV, MindMap JSON, SlideDeck Prompt, 25-MCQ Question Bank, Declarative APKG, Graph Index, QA Report) | `Notes✅ Basic✅ Cloze✅ Map✅ Deck✅ QBank✅ Anki✅ StudyLab⚪(Archived)` |
 
 > [!NOTE]
-> **Operational Policy (GAP-30)**: For all procedural STEM subjects (Math, Physics, Chemistry, Reasoning), **canonical Markdown Question Banks (`Questions.md`)** serve as the active primary practice deliverable. Binary Procedural APKG packaging is temporarily paused in automated production runs in favor of human-readable, verifiable Markdown Question Banks with full pedagogical dimensions and 3-tier hints.
+> **Operational Policy (GAP-30 / ADR-24 / ADR-25)**: For all procedural STEM subjects (Math, Physics, Chemistry, Reasoning), **canonical Markdown Question Banks (`Questions.md`)** serve as the active primary practice deliverable. Binary Procedural APKG packaging is permanently archived in production runs (ADR-24) in favor of human-readable, anti-spoiler Markdown Question Banks with full pedagogical dimensions, default-collapsed hints (`> [!tip]-`), and step-by-step solution DAGs (`> [!success]-`).
 
 ---
 
 ## 4. Verification & Testing Commands
 
 ```bash
-# Run the 18-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4.5s)
+# Run the 19-Gate Master Smoke Test & Anti-Tamper Integrity Harness (Zero Mocks, ~4.5s)
 npm run smoke
 
 # Inspect Runtime Telemetry, Token Economy & Production Calibration Scorecard
@@ -131,7 +144,7 @@ npm run telemetry
 # Inspect Live Telemetry Span Timeline
 node skills/study-source-core/scripts/studycore_cli.js telemetry --spans
 
-# Run all 47 Vitest test suites (100% green, ~6.5s)
+# Run all 45 Master Test Suites (100% green, ~41s)
 npm test
 
 # Run the 10-Gate Master Final Audit Harness

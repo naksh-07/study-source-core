@@ -448,6 +448,25 @@ These practices violated the zero-mock production invariant and created a high r
 - **Positive**: Sub-second single-artifact generation without multi-agent overhead; zero token waste on unrequested tracks; elimination of all future agent confusion regarding procedural APKG; complete preservation of existing unit and smoke test suites.
 - **Negative**: Users requesting full suites must explicitly omit the `--only` flag to trigger all tracks.
 
+---
 
+## ADR-25: Procedural Triad & Frictionless Direct-to-Markdown Practice (The Zero-Scratchpad Rule)
 
+### Context
+1. **Flashcard Fatigue via Multi-Step Anki Calculations**: Anki is cognitively designed for rapid, sub-15-second atomic retrieval (spaced repetition of formulas, definitions, and boundary conditions). Attempting to force multi-step physics numericals, stoichiometry equilibrium calculations, or complex reasoning seating puzzles into Anki flashcards violates its cognitive contract, forces learners into cumbersome on-screen scratchpad arithmetic, and induces severe review bounce/fatigue.
+2. **Intermediate JSON AST Sprawl**: Previously, authoring procedural practice questions required formatting rigid machine-executable JSON files (_ProblemPatterns.json and _PracticeQuestions.json) as a prerequisite to rendering Markdown Question Banks (Questions.md). With procedural APKG archived (ADR-24), this intermediate JSON layer represented speculative middleman bloat, consuming agent token budget on schema serialization rather than maximizing authentic question variety, edge cases, and distractor traps.
 
+### Decision
+1. **The Clean Triad of Learning Separation**:
+   - **Tier 1: Anki Flashcards (Atomic Active Recall)**: Strictly locked to fast 5–15 second factual and relational retrieval. Covers formula recall ( = K_c(RT)^{\Delta n_g}$), physical units (\text{ N} = 10^5\text{ dyne}$), governing conditions, exceptions, and examiner definition traps. Multi-step calculations, scratchpad math, and algebraic derivations are strictly banned from Anki.
+   - **Tier 2: Obsidian Notes (Conceptual Foundations)**: Deep hierarchical knowledge architecture containing conceptual mental models, visual diagrams, theoretical explanations, and master derivation frameworks.
+   - **Tier 3: Obsidian Question Bank (Procedural Mastery & Deliberate Practice)**: Primary practice destination (Questions/<Chapter>_Questions.md). Organized into discrete Problem Families/Patterns, featuring 4-option MCQs with misconception distractors, default-collapsed 3-tier hints (> [!tip]-), and default-collapsed step-by-step DAG solutions (> [!success]-). Solved with pen and paper on the learner's desk at their own pace.
+2. **Direct-to-Markdown Practice Delivery**:
+   - STEM authoring subagents (math-apkg-author, physics-numerical-apkg-author, chemistry-numerical-apkg-author, 
+easoning-apkg-author) prioritize generating rich, self-contained Markdown Question Banks (Questions/<Chapter>_Questions.md) directly from chapter evidence.
+   - Intermediate JSON files (_PracticeQuestions.json) are demoted to optional secondary test fixtures rather than mandatory production gates.
+   - Tokens saved from JSON ceremony are directly re-invested into authoring higher question variety (Foundation, Standard PYQ, High-Yield Traps).
+
+### Consequences
+- **Positive**: Complete elimination of flashcard fatigue; frictionless learner desk experience; higher question density and variety in Question Banks; sub-second target filtering; zero JSON syntax serialization failures during authoring.
+- **Negative**: Test suites inspecting raw JSON ASTs must operate on test fixtures or use the canonical question bank parser (source_question_inventory.js).

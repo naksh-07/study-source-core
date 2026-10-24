@@ -77,6 +77,7 @@ Follows canonical structured handoff contract in `.agents/EXECUTION_LIFECYCLE.md
 - 2-column or 4-column TSV rows.
 - Ambiguous cloze deletions where multiple unrelated words fit the blank.
 - Over-clozing whole sentences obscuring context.
+- Multi-step numerical calculations or scratchpad math in cloze cards (violates Zero-Scratchpad Rule; causes flashcard fatigue).
 
 ## 13. DUPLICATION GUARD
 - Evaluates candidate count; if `clozeCandidateCount === 0`, suppresses output with `ZERO_CLOZE_CANDIDATES` rather than creating an empty file.

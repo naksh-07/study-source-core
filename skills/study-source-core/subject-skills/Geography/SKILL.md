@@ -12,6 +12,19 @@ description: Subject-specific Geography layer for study-source-core. Defines Geo
 - **Inherited Core Capabilities**: Source boundary policy, 4 explicit execution modes (`SOURCE_ONLY` default), Plan/Approval workflow (Mode A $\rightarrow$ Mode B), conditional artifact policy (evaluating Notes, Basic, Cloze), Basic/Cloze TSV file separation, tool-agnostic principles, and Core technical validation.
 - **Geography Domain Ownership**: Geography knowledge typology, spatial modeling rules, physical-human relational graphs, geography note architecture, card selection logic, spatial performance rules, and domain audit checks.
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
+
+> **Authoritative Specification**: [`docs/subjects/08_GEOGRAPHY.md`](../../../../docs/subjects/08_GEOGRAPHY.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Physical Geomorphology, Spatial Modeling & Earth Systems  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Geography strictly enforces **"Ginti Ki Cheezein"** (3 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Primary Spatial Memory Weapon**: Native Anki Image Occlusion (`ImageOcclusion/<Chapter>_IO.json` + SVG masks) for river basins, mountain passes, atmospheric circulation cells, and soil/climate zones.
+2. **Geomorphological Process Notes**: Obsidian Notes focusing on cause-and-effect physical mechanisms (e.g. Plate tectonics, glacial erosional/depositional landforms, adiabatic lapse rates).
+3. **Selective Fact Cloze Anki**: High-yield factual Cloze cards (`{{c1::}}`) for demographic data, mineral belts, and meteorological indices.
+4. **Strictly Banned Bloat**: Text-only descriptions of spatial layouts or borders, Procedural Question Banks (suppressed with `NON_PROCEDURAL_DOMAIN`), and slide decks.
+
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from `study-source-core`. Do not duplicate core definitions here.*
 
 ---

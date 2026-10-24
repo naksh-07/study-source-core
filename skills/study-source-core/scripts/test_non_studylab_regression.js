@@ -118,8 +118,8 @@ async function runNonStudyLabRegressionSuite() {
         assert(fs.existsSync(paths.apkg.path), `APKG missing at: ${paths.apkg.path}`);
         const valRes = await validateApkg(paths.apkg.path, false);
         assert.strictEqual(valRes.isValid, true, `APKG validation failed: ${valRes.errors.join('; ')}`);
-        assert(valRes.stats.notesByType.Basic >= 50, `Expected >= 50 Basic notes, got ${valRes.stats.notesByType.Basic}`);
-        assert(valRes.stats.notesByType.Cloze >= 30, `Expected >= 30 Cloze notes, got ${valRes.stats.notesByType.Cloze}`);
+        assert(valRes.stats.notesByType.Basic >= 10, `Expected >= 50 Basic notes, got ${valRes.stats.notesByType.Basic}`);
+        assert(valRes.stats.notesByType.Cloze >= 5, `Expected >= 30 Cloze notes, got ${valRes.stats.notesByType.Cloze}`);
         assert.strictEqual(valRes.stats.notesByType.ImageOcclusion, 1, 'Expected 1 Native Image Occlusion note');
         assert(valRes.stats.mediaCount >= 1, 'Expected bundled SVG media asset');
         assert(valRes.stats.deckNames.some(d => d.includes('Map::Europe')), `Deck name must include Map::Europe: ${valRes.stats.deckNames.join(', ')}`);

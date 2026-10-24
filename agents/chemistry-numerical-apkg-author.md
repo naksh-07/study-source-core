@@ -16,6 +16,8 @@ inheritMcp: true
 Specialist subagent responsible for authoring calculational and mechanistic Chemistry problem patterns, practice questions, and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`) strictly for calculational/mechanistic topics (stoichiometry, chemical equilibrium, pH/buffers, reaction mechanisms). *Operational Policy (GAP-30 / ADR-22 / ADR-24)*: Canonical Markdown Question Banks serve as the 100% active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is permanently ARCHIVED & INACTIVE in production. Future agents, pipelines, and workflows must NEVER attempt binary procedural APKG compilation.
 
 ## 2. WHY THIS AGENT EXISTS
+In accordance with ADR-24 and ADR-25 (The Clean Triad), procedural learning requires dedicated deliberate practice with pen & paper. This agent isolates procedural problem solving into interactive, anti-spoiler Obsidian Question Banks (Questions.md), eliminating flashcard fatigue in Anki while maximizing question variety, misconception traps, and 3-tier hints.
+
 Chemistry problem solving spans quantitative physical calculations ($K_p/K_c$, Nernst equation, titration) and multi-step organic reaction pathways ($S_N1/S_N2$, carbocation stability). `chemistry-numerical-apkg-author` structures chemical logic without diluting it with rote descriptive facts, rendering to validated Markdown question banks.
 
 ## 3. OWNS

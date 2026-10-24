@@ -78,12 +78,17 @@ function auditLinks(filePath, options = {}) {
   let genericLinkCount = 0;
   let selfLinkCount = 0;
 
+  let inCodeFence = false;
   for (let i = 0; i < lines.length; i++) {
     const lineNum = i + 1;
     const line = lines[i];
 
     // Skip lines inside code fences
-    if (line.trim().startsWith('```')) continue;
+    if (line.trim().startsWith('```')) {
+      inCodeFence = !inCodeFence;
+      continue;
+    }
+    if (inCodeFence) continue;
 
     while ((match = linkRegex.exec(line)) !== null) {
       const fullMatch = match[1];
@@ -167,7 +172,8 @@ function auditLinks(filePath, options = {}) {
     genericLinkCount,
     issues,
     warnings,
-    success: issues.length === 0
+    success: issues.length === 0,
+    isValid: issues.length === 0
   };
 }
 

@@ -357,7 +357,11 @@ function ingestSourceToEvidencePack(sourceInput, options = {}) {
                     if (pageEnd !== undefined && pageEnd !== null) {
                         pyArgs.push('--page-end', String(pageEnd));
                     }
-                    const stdout = execFileSync(pythonPath, pyArgs, { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 });
+                    const stdout = execFileSync(pythonPath, pyArgs, {
+                        encoding: 'utf8',
+                        maxBuffer: 50 * 1024 * 1024,
+                        env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
+                    });
                     sourceFixture = JSON.parse(stdout);
                     rawSourceContent = stdout;
                     sourceId = sourceFixture.source_provenance?.source_id || options.source_id || path.basename(sourceInput, '.pdf');

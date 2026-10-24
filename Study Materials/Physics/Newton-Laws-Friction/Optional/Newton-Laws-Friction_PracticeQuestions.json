@@ -13,7 +13,7 @@
       "problem_family": "Dynamics & Friction",
       "question_type": "mcq",
       "origin_type": "AUTHENTIC_PYQ",
-      "prompt": "एक 2 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा?",
+      "prompt": "एक 2 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा? (g = 10 m/s²)",
       "options": [
         "4 N",
         "2 N",
@@ -21,44 +21,26 @@
         "8 N"
       ],
       "correct_option": "4 N",
-      "difficulty": 1,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "difficulty": 2,
+      "explanation": "स्थैतिक घर्षण नियम fs = μN द्वारा बल की गणना।",
+      "solution": "1. अभिलंब प्रतिक्रिया: N = mg = 2 * 10 = 20 N\n2. सीमांत घर्षण: fs = μN = 0.2 * 20 = 4 N\n3. आवश्यक न्यूनतम बल F = 4 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "गुटके का मुक्त पिंड आरेख (FBD) बनाएं और ऊर्ध्वाधर संतुलन से अभिलंब प्रतिक्रिया बल (Normal Force N) पहचानें।",
-        "tier2_strategic": "क्षैतिज सतह पर N = mg होता है तथा गति प्रारंभ करने के लिए आवश्यक न्यूनतम बल सीमांत घर्षण बल F = μN के बराबर होता है।",
-        "tier3_next_step": "दिए गए द्रव्यमान m, गुरुत्वीय त्वरण g तथा घर्षण गुणांक μ के मान सूत्र F = μmg में प्रतिस्थापित कर SI मात्रक न्यूटन (N) में मान ज्ञात करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q01",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "क्षैतिज सतह पर गुटका (Block on horizontal surface)",
-        "घर्षण गुणांक (Coefficient of friction μ)",
-        "आवश्यक न्यूनतम क्षैतिज बल (Minimum horizontal force)"
-      ],
-      "expected_method": "मुक्त पिंड आरेख (FBD) -> अभिलंब प्रतिक्रिया N = mg -> सीमांत घर्षण बल F_min = μN",
-      "decision_points": [
-        "सतह क्षैतिज होने के कारण अभिलंब बल N = mg लें",
-        "गति प्रारंभ करने हेतु आवश्यक न्यूनतम बल सीमांत स्थैतिक घर्षण f_s(max) = μN के बराबर रखें"
-      ],
-      "trap": "द्रव्यमान m को सीधे घर्षण गुणांक μ से गुणा कर देना और गुरुत्वीय त्वरण g का गुणा भूल जाना",
-      "error_category": [
-        "ERR_PHY_01",
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [μ][m][g] = 1 × kg × m/s² = N (न्यूटन), तथा μ → 0 होने पर आवश्यक बल शून्य की ओर अग्रसर होता है।",
-      "prerequisites": [
-        "न्यूटन के गति के नियम (Newton's Laws of Motion)",
-        "स्थैतिक एवं सीमांत घर्षण (Static & Limiting Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "FBD आरेख बनाकर ऊर्ध्वाधर दिशा में संतुलन से अभिलंब बल ज्ञात करें।"
+        },
+        {
+          "tier": 2,
+          "text": "क्षैतिज सतह पर N = mg होता है तथा सीमांत घर्षण बल fs = μN सूत्र लागू करें।"
+        },
+        {
+          "tier": 3,
+          "text": "सूत्र F = μmg में मान रखकर गणना करें: F = 0.2 * 2 * 10."
+        }
       ]
     },
     {
@@ -67,52 +49,34 @@
       "problem_family": "Dynamics & Friction",
       "question_type": "mcq",
       "origin_type": "AUTHENTIC_PYQ",
-      "prompt": "एक 4 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा?",
+      "prompt": "एक 4 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा? (g = 10 m/s²)",
       "options": [
-        "8 N",
-        "4 N",
         "12 N",
+        "4 N",
+        "8 N",
         "16 N"
       ],
       "correct_option": "8 N",
-      "difficulty": 1,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "difficulty": 2,
+      "explanation": "स्थैतिक घर्षण नियम fs = μN द्वारा बल की गणना।",
+      "solution": "1. अभिलंब प्रतिक्रिया: N = mg = 4 * 10 = 40 N\n2. सीमांत घर्षण: fs = μN = 0.2 * 40 = 8 N\n3. आवश्यक न्यूनतम बल F = 8 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "गुटके का मुक्त पिंड आरेख (FBD) बनाएं और ऊर्ध्वाधर संतुलन से अभिलंब प्रतिक्रिया बल (Normal Force N) पहचानें।",
-        "tier2_strategic": "क्षैतिज सतह पर N = mg होता है तथा गति प्रारंभ करने के लिए आवश्यक न्यूनतम बल सीमांत घर्षण बल F = μN के बराबर होता है।",
-        "tier3_next_step": "दिए गए द्रव्यमान m, गुरुत्वीय त्वरण g तथा घर्षण गुणांक μ के मान सूत्र F = μmg में प्रतिस्थापित कर SI मात्रक न्यूटन (N) में मान ज्ञात करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q02",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "क्षैतिज सतह पर गुटका (Block on horizontal surface)",
-        "घर्षण गुणांक (Coefficient of friction μ)",
-        "आवश्यक न्यूनतम क्षैतिज बल (Minimum horizontal force)"
-      ],
-      "expected_method": "मुक्त पिंड आरेख (FBD) -> अभिलंब प्रतिक्रिया N = mg -> सीमांत घर्षण बल F_min = μN",
-      "decision_points": [
-        "सतह क्षैतिज होने के कारण अभिलंब बल N = mg लें",
-        "गति प्रारंभ करने हेतु आवश्यक न्यूनतम बल सीमांत स्थैतिक घर्षण f_s(max) = μN के बराबर रखें"
-      ],
-      "trap": "द्रव्यमान m को सीधे घर्षण गुणांक μ से गुणा कर देना और गुरुत्वीय त्वरण g का गुणा भूल जाना",
-      "error_category": [
-        "ERR_PHY_01",
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [μ][m][g] = 1 × kg × m/s² = N (न्यूटन), तथा μ → 0 होने पर आवश्यक बल शून्य की ओर अग्रसर होता है।",
-      "prerequisites": [
-        "न्यूटन के गति के नियम (Newton's Laws of Motion)",
-        "स्थैतिक एवं सीमांत घर्षण (Static & Limiting Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "FBD आरेख बनाकर ऊर्ध्वाधर दिशा में संतुलन से अभिलंब बल ज्ञात करें।"
+        },
+        {
+          "tier": 2,
+          "text": "क्षैतिज सतह पर N = mg होता है तथा सीमांत घर्षण बल fs = μN सूत्र लागू करें।"
+        },
+        {
+          "tier": 3,
+          "text": "सूत्र F = μmg में मान रखकर गणना करें: F = 0.2 * 4 * 10."
+        }
       ]
     },
     {
@@ -121,52 +85,34 @@
       "problem_family": "Dynamics & Friction",
       "question_type": "mcq",
       "origin_type": "AUTHENTIC_PYQ",
-      "prompt": "एक 6 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा?",
+      "prompt": "एक 6 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा? (g = 10 m/s²)",
       "options": [
-        "12 N",
         "6 N",
+        "12 N",
         "18 N",
         "24 N"
       ],
       "correct_option": "12 N",
       "difficulty": 2,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "explanation": "स्थैतिक घर्षण नियम fs = μN द्वारा बल की गणना।",
+      "solution": "1. अभिलंब प्रतिक्रिया: N = mg = 6 * 10 = 60 N\n2. सीमांत घर्षण: fs = μN = 0.2 * 60 = 12 N\n3. आवश्यक न्यूनतम बल F = 12 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "गुटके का मुक्त पिंड आरेख (FBD) बनाएं और ऊर्ध्वाधर संतुलन से अभिलंब प्रतिक्रिया बल (Normal Force N) पहचानें।",
-        "tier2_strategic": "क्षैतिज सतह पर N = mg होता है तथा गति प्रारंभ करने के लिए आवश्यक न्यूनतम बल सीमांत घर्षण बल F = μN के बराबर होता है।",
-        "tier3_next_step": "दिए गए द्रव्यमान m, गुरुत्वीय त्वरण g तथा घर्षण गुणांक μ के मान सूत्र F = μmg में प्रतिस्थापित कर SI मात्रक न्यूटन (N) में मान ज्ञात करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q03",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "क्षैतिज सतह पर गुटका (Block on horizontal surface)",
-        "घर्षण गुणांक (Coefficient of friction μ)",
-        "आवश्यक न्यूनतम क्षैतिज बल (Minimum horizontal force)"
-      ],
-      "expected_method": "मुक्त पिंड आरेख (FBD) -> अभिलंब प्रतिक्रिया N = mg -> सीमांत घर्षण बल F_min = μN",
-      "decision_points": [
-        "सतह क्षैतिज होने के कारण अभिलंब बल N = mg लें",
-        "गति प्रारंभ करने हेतु आवश्यक न्यूनतम बल सीमांत स्थैतिक घर्षण f_s(max) = μN के बराबर रखें"
-      ],
-      "trap": "द्रव्यमान m को सीधे घर्षण गुणांक μ से गुणा कर देना और गुरुत्वीय त्वरण g का गुणा भूल जाना",
-      "error_category": [
-        "ERR_PHY_01",
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [μ][m][g] = 1 × kg × m/s² = N (न्यूटन), तथा μ → 0 होने पर आवश्यक बल शून्य की ओर अग्रसर होता है।",
-      "prerequisites": [
-        "न्यूटन के गति के नियम (Newton's Laws of Motion)",
-        "स्थैतिक एवं सीमांत घर्षण (Static & Limiting Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "FBD आरेख बनाकर ऊर्ध्वाधर दिशा में संतुलन से अभिलंब बल ज्ञात करें।"
+        },
+        {
+          "tier": 2,
+          "text": "क्षैतिज सतह पर N = mg होता है तथा सीमांत घर्षण बल fs = μN सूत्र लागू करें।"
+        },
+        {
+          "tier": 3,
+          "text": "सूत्र F = μmg में मान रखकर गणना करें: F = 0.2 * 6 * 10."
+        }
       ]
     },
     {
@@ -175,52 +121,34 @@
       "problem_family": "Dynamics & Friction",
       "question_type": "mcq",
       "origin_type": "AUTHENTIC_PYQ",
-      "prompt": "एक 8 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा?",
+      "prompt": "एक 8 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा? (g = 10 m/s²)",
       "options": [
-        "16 N",
         "8 N",
         "24 N",
-        "32 N"
+        "32 N",
+        "16 N"
       ],
       "correct_option": "16 N",
       "difficulty": 2,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "explanation": "स्थैतिक घर्षण नियम fs = μN द्वारा बल की गणना।",
+      "solution": "1. अभिलंब प्रतिक्रिया: N = mg = 8 * 10 = 80 N\n2. सीमांत घर्षण: fs = μN = 0.2 * 80 = 16 N\n3. आवश्यक न्यूनतम बल F = 16 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "गुटके का मुक्त पिंड आरेख (FBD) बनाएं और ऊर्ध्वाधर संतुलन से अभिलंब प्रतिक्रिया बल (Normal Force N) पहचानें।",
-        "tier2_strategic": "क्षैतिज सतह पर N = mg होता है तथा गति प्रारंभ करने के लिए आवश्यक न्यूनतम बल सीमांत घर्षण बल F = μN के बराबर होता है।",
-        "tier3_next_step": "दिए गए द्रव्यमान m, गुरुत्वीय त्वरण g तथा घर्षण गुणांक μ के मान सूत्र F = μmg में प्रतिस्थापित कर SI मात्रक न्यूटन (N) में मान ज्ञात करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q04",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "क्षैतिज सतह पर गुटका (Block on horizontal surface)",
-        "घर्षण गुणांक (Coefficient of friction μ)",
-        "आवश्यक न्यूनतम क्षैतिज बल (Minimum horizontal force)"
-      ],
-      "expected_method": "मुक्त पिंड आरेख (FBD) -> अभिलंब प्रतिक्रिया N = mg -> सीमांत घर्षण बल F_min = μN",
-      "decision_points": [
-        "सतह क्षैतिज होने के कारण अभिलंब बल N = mg लें",
-        "गति प्रारंभ करने हेतु आवश्यक न्यूनतम बल सीमांत स्थैतिक घर्षण f_s(max) = μN के बराबर रखें"
-      ],
-      "trap": "द्रव्यमान m को सीधे घर्षण गुणांक μ से गुणा कर देना और गुरुत्वीय त्वरण g का गुणा भूल जाना",
-      "error_category": [
-        "ERR_PHY_01",
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [μ][m][g] = 1 × kg × m/s² = N (न्यूटन), तथा μ → 0 होने पर आवश्यक बल शून्य की ओर अग्रसर होता है।",
-      "prerequisites": [
-        "न्यूटन के गति के नियम (Newton's Laws of Motion)",
-        "स्थैतिक एवं सीमांत घर्षण (Static & Limiting Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "FBD आरेख बनाकर ऊर्ध्वाधर दिशा में संतुलन से अभिलंब बल ज्ञात करें।"
+        },
+        {
+          "tier": 2,
+          "text": "क्षैतिज सतह पर N = mg होता है तथा सीमांत घर्षण बल fs = μN सूत्र लागू करें।"
+        },
+        {
+          "tier": 3,
+          "text": "सूत्र F = μmg में मान रखकर गणना करें: F = 0.2 * 8 * 10."
+        }
       ]
     },
     {
@@ -229,7 +157,7 @@
       "problem_family": "Dynamics & Friction",
       "question_type": "mcq",
       "origin_type": "AUTHENTIC_PYQ",
-      "prompt": "एक 10 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा?",
+      "prompt": "एक 10 kg द्रव्यमान का गुटका क्षैतिज सतह पर रखा है (μ = 0.2)। आवश्यक न्यूनतम क्षैतिज बल क्या होगा? (g = 10 m/s²)",
       "options": [
         "20 N",
         "10 N",
@@ -238,43 +166,25 @@
       ],
       "correct_option": "20 N",
       "difficulty": 2,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "explanation": "स्थैतिक घर्षण नियम fs = μN द्वारा बल की गणना।",
+      "solution": "1. अभिलंब प्रतिक्रिया: N = mg = 10 * 10 = 100 N\n2. सीमांत घर्षण: fs = μN = 0.2 * 100 = 20 N\n3. आवश्यक न्यूनतम बल F = 20 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "गुटके का मुक्त पिंड आरेख (FBD) बनाएं और ऊर्ध्वाधर संतुलन से अभिलंब प्रतिक्रिया बल (Normal Force N) पहचानें।",
-        "tier2_strategic": "क्षैतिज सतह पर N = mg होता है तथा गति प्रारंभ करने के लिए आवश्यक न्यूनतम बल सीमांत घर्षण बल F = μN के बराबर होता है।",
-        "tier3_next_step": "दिए गए द्रव्यमान m, गुरुत्वीय त्वरण g तथा घर्षण गुणांक μ के मान सूत्र F = μmg में प्रतिस्थापित कर SI मात्रक न्यूटन (N) में मान ज्ञात करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q05",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "क्षैतिज सतह पर गुटका (Block on horizontal surface)",
-        "घर्षण गुणांक (Coefficient of friction μ)",
-        "आवश्यक न्यूनतम क्षैतिज बल (Minimum horizontal force)"
-      ],
-      "expected_method": "मुक्त पिंड आरेख (FBD) -> अभिलंब प्रतिक्रिया N = mg -> सीमांत घर्षण बल F_min = μN",
-      "decision_points": [
-        "सतह क्षैतिज होने के कारण अभिलंब बल N = mg लें",
-        "गति प्रारंभ करने हेतु आवश्यक न्यूनतम बल सीमांत स्थैतिक घर्षण f_s(max) = μN के बराबर रखें"
-      ],
-      "trap": "द्रव्यमान m को सीधे घर्षण गुणांक μ से गुणा कर देना और गुरुत्वीय त्वरण g का गुणा भूल जाना",
-      "error_category": [
-        "ERR_PHY_01",
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [μ][m][g] = 1 × kg × m/s² = N (न्यूटन), तथा μ → 0 होने पर आवश्यक बल शून्य की ओर अग्रसर होता है।",
-      "prerequisites": [
-        "न्यूटन के गति के नियम (Newton's Laws of Motion)",
-        "स्थैतिक एवं सीमांत घर्षण (Static & Limiting Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "FBD आरेख बनाकर ऊर्ध्वाधर दिशा में संतुलन से अभिलंब बल ज्ञात करें।"
+        },
+        {
+          "tier": 2,
+          "text": "क्षैतिज सतह पर N = mg होता है तथा सीमांत घर्षण बल fs = μN सूत्र लागू करें।"
+        },
+        {
+          "tier": 3,
+          "text": "सूत्र F = μmg में मान रखकर गणना करें: F = 0.2 * 10 * 10."
+        }
       ]
     },
     {
@@ -290,44 +200,27 @@
         "36 N",
         "48 N"
       ],
-      "correct_option": "24 N",
+      "correct_option": "12 N",
       "difficulty": 3,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "explanation": "कार्य-ऊर्जा प्रमेय W = ΔK द्वारा बल की गणना।",
+      "solution": "1. कार्य-ऊर्जा प्रमेय: W = ΔK\n2. F * s = K => F * 5 = 60\n3. F = 60 / 5 = 12 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर होता है।",
-        "tier2_strategic": "रुकने की स्थिति में अंतिम गतिज ऊर्जा शून्य होती है, अतः घर्षण कार्य के परिमाण F × s को दी गई गतिज ऊर्जा के बराबर रखें।",
-        "tier3_next_step": "दी गई गतिज ऊर्जा को रुकने की दूरी s से विभाजित कर औसत बल का परिमाण न्यूटन (N) में प्राप्त करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q06",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "गतिज ऊर्जा (Kinetic Energy K)",
-        "घर्षण बल द्वारा रुकने की दूरी (Stopping distance s)",
-        "औसत मंदन बल (Average retarding force)"
-      ],
-      "expected_method": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem): W_friction = ΔK => -F_avg * s = 0 - K_i",
-      "decision_points": [
-        "वस्तु अंततः विराम में आती है अतः अंतिम गतिज ऊर्जा K_f = 0 रखें",
-        "घर्षण द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें"
-      ],
-      "trap": "गतिज ऊर्जा को दूरी से गुणा करना या कार्य-ऊर्जा प्रमेय में चिह्न त्रुटि करना",
-      "error_category": [
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [K]/[s] = J/m = (N·m)/m = N (न्यूटन), जो बल के SI मात्रक के पूर्णतः संगत है।",
-      "prerequisites": [
-        "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem)",
-        "घर्षण द्वारा किया गया कार्य (Work Done by Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल का कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें।"
+        },
+        {
+          "tier": 2,
+          "text": "रुकने पर अंतिम ऊर्जा शून्य होती है, अतः परिमाण रूप में F * s = K सूत्र का प्रयोग करें।"
+        },
+        {
+          "tier": 3,
+          "text": "गतिज ऊर्जा 60 J को विस्थापन 5 m से विभाजित करें।"
+        }
       ]
     },
     {
@@ -339,48 +232,31 @@
       "prompt": "एक वस्तु 70 J गतिज ऊर्जा से गतिमान है। घर्षण बल द्वारा 5 m में रोके जाने पर औसत बल क्या होगा?",
       "options": [
         "28 N",
+        "7 N",
         "14 N",
-        "42 N",
-        "56 N"
+        "21 N"
       ],
-      "correct_option": "28 N",
+      "correct_option": "14 N",
       "difficulty": 3,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "explanation": "कार्य-ऊर्जा प्रमेय W = ΔK द्वारा बल की गणना।",
+      "solution": "1. कार्य-ऊर्जा प्रमेय: W = ΔK\n2. F * s = K => F * 5 = 70\n3. F = 70 / 5 = 14 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर होता है।",
-        "tier2_strategic": "रुकने की स्थिति में अंतिम गतिज ऊर्जा शून्य होती है, अतः घर्षण कार्य के परिमाण F × s को दी गई गतिज ऊर्जा के बराबर रखें।",
-        "tier3_next_step": "दी गई गतिज ऊर्जा को रुकने की दूरी s से विभाजित कर औसत बल का परिमाण न्यूटन (N) में प्राप्त करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q07",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "गतिज ऊर्जा (Kinetic Energy K)",
-        "घर्षण बल द्वारा रुकने की दूरी (Stopping distance s)",
-        "औसत मंदन बल (Average retarding force)"
-      ],
-      "expected_method": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem): W_friction = ΔK => -F_avg * s = 0 - K_i",
-      "decision_points": [
-        "वस्तु अंततः विराम में आती है अतः अंतिम गतिज ऊर्जा K_f = 0 रखें",
-        "घर्षण द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें"
-      ],
-      "trap": "गतिज ऊर्जा को दूरी से गुणा करना या कार्य-ऊर्जा प्रमेय में चिह्न त्रुटि करना",
-      "error_category": [
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [K]/[s] = J/m = (N·m)/m = N (न्यूटन), जो बल के SI मात्रक के पूर्णतः संगत है।",
-      "prerequisites": [
-        "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem)",
-        "घर्षण द्वारा किया गया कार्य (Work Done by Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल का कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें।"
+        },
+        {
+          "tier": 2,
+          "text": "रुकने पर अंतिम ऊर्जा शून्य होती है, अतः परिमाण रूप में F * s = K सूत्र का प्रयोग करें।"
+        },
+        {
+          "tier": 3,
+          "text": "गतिज ऊर्जा 70 J को विस्थापन 5 m से विभाजित करें।"
+        }
       ]
     },
     {
@@ -392,48 +268,31 @@
       "prompt": "एक वस्तु 80 J गतिज ऊर्जा से गतिमान है। घर्षण बल द्वारा 5 m में रोके जाने पर औसत बल क्या होगा?",
       "options": [
         "32 N",
-        "16 N",
-        "48 N",
-        "64 N"
+        "8 N",
+        "24 N",
+        "16 N"
       ],
-      "correct_option": "32 N",
+      "correct_option": "16 N",
       "difficulty": 3,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "explanation": "कार्य-ऊर्जा प्रमेय W = ΔK द्वारा बल की गणना।",
+      "solution": "1. कार्य-ऊर्जा प्रमेय: W = ΔK\n2. F * s = K => F * 5 = 80\n3. F = 80 / 5 = 16 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर होता है।",
-        "tier2_strategic": "रुकने की स्थिति में अंतिम गतिज ऊर्जा शून्य होती है, अतः घर्षण कार्य के परिमाण F × s को दी गई गतिज ऊर्जा के बराबर रखें।",
-        "tier3_next_step": "दी गई गतिज ऊर्जा को रुकने की दूरी s से विभाजित कर औसत बल का परिमाण न्यूटन (N) में प्राप्त करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q08",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "गतिज ऊर्जा (Kinetic Energy K)",
-        "घर्षण बल द्वारा रुकने की दूरी (Stopping distance s)",
-        "औसत मंदन बल (Average retarding force)"
-      ],
-      "expected_method": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem): W_friction = ΔK => -F_avg * s = 0 - K_i",
-      "decision_points": [
-        "वस्तु अंततः विराम में आती है अतः अंतिम गतिज ऊर्जा K_f = 0 रखें",
-        "घर्षण द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें"
-      ],
-      "trap": "गतिज ऊर्जा को दूरी से गुणा करना या कार्य-ऊर्जा प्रमेय में चिह्न त्रुटि करना",
-      "error_category": [
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [K]/[s] = J/m = (N·m)/m = N (न्यूटन), जो बल के SI मात्रक के पूर्णतः संगत है।",
-      "prerequisites": [
-        "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem)",
-        "घर्षण द्वारा किया गया कार्य (Work Done by Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल का कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें।"
+        },
+        {
+          "tier": 2,
+          "text": "रुकने पर अंतिम ऊर्जा शून्य होती है, अतः परिमाण रूप में F * s = K सूत्र का प्रयोग करें।"
+        },
+        {
+          "tier": 3,
+          "text": "गतिज ऊर्जा 80 J को विस्थापन 5 m से विभाजित करें।"
+        }
       ]
     },
     {
@@ -449,44 +308,27 @@
         "54 N",
         "72 N"
       ],
-      "correct_option": "36 N",
-      "difficulty": 4,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "correct_option": "18 N",
+      "difficulty": 3,
+      "explanation": "कार्य-ऊर्जा प्रमेय W = ΔK द्वारा बल की गणना।",
+      "solution": "1. कार्य-ऊर्जा प्रमेय: W = ΔK\n2. F * s = K => F * 5 = 90\n3. F = 90 / 5 = 18 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर होता है।",
-        "tier2_strategic": "रुकने की स्थिति में अंतिम गतिज ऊर्जा शून्य होती है, अतः घर्षण कार्य के परिमाण F × s को दी गई गतिज ऊर्जा के बराबर रखें।",
-        "tier3_next_step": "दी गई गतिज ऊर्जा को रुकने की दूरी s से विभाजित कर औसत बल का परिमाण न्यूटन (N) में प्राप्त करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q09",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "गतिज ऊर्जा (Kinetic Energy K)",
-        "घर्षण बल द्वारा रुकने की दूरी (Stopping distance s)",
-        "औसत मंदन बल (Average retarding force)"
-      ],
-      "expected_method": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem): W_friction = ΔK => -F_avg * s = 0 - K_i",
-      "decision_points": [
-        "वस्तु अंततः विराम में आती है अतः अंतिम गतिज ऊर्जा K_f = 0 रखें",
-        "घर्षण द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें"
-      ],
-      "trap": "गतिज ऊर्जा को दूरी से गुणा करना या कार्य-ऊर्जा प्रमेय में चिह्न त्रुटि करना",
-      "error_category": [
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [K]/[s] = J/m = (N·m)/m = N (न्यूटन), जो बल के SI मात्रक के पूर्णतः संगत है।",
-      "prerequisites": [
-        "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem)",
-        "घर्षण द्वारा किया गया कार्य (Work Done by Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल का कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें।"
+        },
+        {
+          "tier": 2,
+          "text": "रुकने पर अंतिम ऊर्जा शून्य होती है, अतः परिमाण रूप में F * s = K सूत्र का प्रयोग करें।"
+        },
+        {
+          "tier": 3,
+          "text": "गतिज ऊर्जा 90 J को विस्थापन 5 m से विभाजित करें।"
+        }
       ]
     },
     {
@@ -498,48 +340,31 @@
       "prompt": "एक वस्तु 100 J गतिज ऊर्जा से गतिमान है। घर्षण बल द्वारा 5 m में रोके जाने पर औसत बल क्या होगा?",
       "options": [
         "40 N",
+        "10 N",
         "20 N",
-        "60 N",
-        "80 N"
+        "30 N"
       ],
-      "correct_option": "40 N",
-      "difficulty": 4,
-      "explanation": "बलों के संतुलन से आवश्यक बल की गणना प्राप्त होती है।",
-      "solution": "F = μ * N = 0.2 * mg = गणना पूर्ण।",
+      "correct_option": "20 N",
+      "difficulty": 3,
+      "explanation": "कार्य-ऊर्जा प्रमेय W = ΔK द्वारा बल की गणना।",
+      "solution": "1. कार्य-ऊर्जा प्रमेय: W = ΔK\n2. F * s = K => F * 5 = 100\n3. F = 100 / 5 = 20 N.",
       "exam_metadata": {
         "exam": "RRB ALP",
         "year": 2018
       },
-      "hints": {
-        "tier1_conceptual": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर होता है।",
-        "tier2_strategic": "रुकने की स्थिति में अंतिम गतिज ऊर्जा शून्य होती है, अतः घर्षण कार्य के परिमाण F × s को दी गई गतिज ऊर्जा के बराबर रखें।",
-        "tier3_next_step": "दी गई गतिज ऊर्जा को रुकने की दूरी s से विभाजित कर औसत बल का परिमाण न्यूटन (N) में प्राप्त करें।"
-      },
-      "source_question_id": "sqi.physics.newton_laws_friction.q10",
-      "provenance": {
-        "origin": "authentic_pyq",
-        "source": "Authentic Engineering & Railway Physics Compendium",
-        "exam": "RRB ALP",
-        "year": 2018
-      },
-      "recognition_signals": [
-        "गतिज ऊर्जा (Kinetic Energy K)",
-        "घर्षण बल द्वारा रुकने की दूरी (Stopping distance s)",
-        "औसत मंदन बल (Average retarding force)"
-      ],
-      "expected_method": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem): W_friction = ΔK => -F_avg * s = 0 - K_i",
-      "decision_points": [
-        "वस्तु अंततः विराम में आती है अतः अंतिम गतिज ऊर्जा K_f = 0 रखें",
-        "घर्षण द्वारा किया गया कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें"
-      ],
-      "trap": "गतिज ऊर्जा को दूरी से गुणा करना या कार्य-ऊर्जा प्रमेय में चिह्न त्रुटि करना",
-      "error_category": [
-        "ERR_PHY_02"
-      ],
-      "verification": "विमीय जांच: [K]/[s] = J/m = (N·m)/m = N (न्यूटन), जो बल के SI मात्रक के पूर्णतः संगत है।",
-      "prerequisites": [
-        "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem)",
-        "घर्षण द्वारा किया गया कार्य (Work Done by Friction)"
+      "hints": [
+        {
+          "tier": 1,
+          "text": "कार्य-ऊर्जा प्रमेय (Work-Energy Theorem) के अनुसार घर्षण बल का कार्य गतिज ऊर्जा में परिवर्तन के बराबर रखें।"
+        },
+        {
+          "tier": 2,
+          "text": "रुकने पर अंतिम ऊर्जा शून्य होती है, अतः परिमाण रूप में F * s = K सूत्र का प्रयोग करें।"
+        },
+        {
+          "tier": 3,
+          "text": "गतिज ऊर्जा 100 J को विस्थापन 5 m से विभाजित करें।"
+        }
       ]
     }
   ]

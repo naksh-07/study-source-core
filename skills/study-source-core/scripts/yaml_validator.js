@@ -147,9 +147,9 @@ function validateYamlFrontmatter(filePath, options = {}) {
     const key = line.substring(0, colonIdx).trim();
     const rawValue = line.substring(colonIdx + 1).trim();
 
-    // Key format validation
-    if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key)) {
-      issues.push(`Line ${lineNum}: Invalid property key format: "${key}" (use [a-zA-Z_][a-zA-Z0-9_]*).`);
+    // Key format validation (allows hyphens in property names e.g. schema-version)
+    if (!/^[a-zA-Z_][a-zA-Z0-9_-]*$/.test(key)) {
+      issues.push(`Line ${lineNum}: Invalid property key format: "${key}" (use [a-zA-Z_][a-zA-Z0-9_-]*).`);
     }
 
     // Duplicate key detection

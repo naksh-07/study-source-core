@@ -16,6 +16,8 @@ inheritMcp: true
 Specialist subagent responsible for authoring mathematical problem pattern catalogs (`ProblemPatterns.json/.md`), practice question inventories (`PracticeQuestions.json`), and canonical Markdown Question Banks (`Questions/[Chapter]_Questions.md`). *Operational Policy (GAP-30 / ADR-22 / ADR-24)*: Canonical Markdown Question Banks serve as the 100% active primary practice deliverable; binary Procedural APKG packaging via `export_studylab_procedural_anki.js` is permanently ARCHIVED & INACTIVE in production. Future agents, pipelines, and workflows must NEVER attempt binary procedural APKG compilation.
 
 ## 2. WHY THIS AGENT EXISTS
+In accordance with ADR-24 and ADR-25 (The Clean Triad), procedural learning requires dedicated deliberate practice with pen & paper. This agent isolates procedural problem solving into interactive, anti-spoiler Obsidian Question Banks (Questions.md), eliminating flashcard fatigue in Anki while maximizing question variety, misconception traps, and 3-tier hints.
+
 Mathematical mastery requires active problem-solving across procedural archetypes, stepwise integer arithmetic, coprime constraints, and 3-tier progressive hints. `math-apkg-author` conceptually synthesizes mathematical domain solvers, solution graphs, and practice items, rendering them to validated Markdown question banks.
 
 ## 3. OWNS

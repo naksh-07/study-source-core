@@ -239,7 +239,7 @@ See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record 
 | [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) | Diagnostic trees for 8 failure classes |
 | [`SCRIPTS.md`](./SCRIPTS.md) | CLI script reference with exit codes & usage |
 | [`RESOURCES.md`](./RESOURCES.md) | 38 JSON schemas and rulebooks index |
-| [`skills/study-source-core/resources/workflow.md`](./skills/study-source-core/resources/workflow.md) | Full 11-phase workflow specification |
+| [`skills/study-source-core/resources/workflow.md`](../skills/study-source-core/resources/workflow.md) | Full 11-phase workflow specification |
 
 ---
 

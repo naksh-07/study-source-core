@@ -31,6 +31,9 @@ const MAX_NODES_PER_DIAGRAM = 12;
 const MAX_DIAGRAMS_PER_NOTE = 3;
 
 function extractMermaidBlocks(content) {
+  if (typeof content !== 'string') {
+    return [];
+  }
   const blocks = [];
   const lines = content.split(/\r?\n/);
   let inFence = false;
@@ -79,11 +82,23 @@ function validateMermaidBlock(block, issues, warnings) {
     return;
   }
 
-  const firstLine = lines[0].text.trim();
+  let declIndex = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const t = lines[i].text.trim();
+    if (!t || t.startsWith('%%') || t.startsWith('%{')) continue;
+    declIndex = i;
+    break;
+  }
+  if (declIndex === -1) {
+    warnings.push(`Mermaid block at line ${startLine}: Diagram contains only comments or directives.`);
+    return;
+  }
+
+  const firstLine = lines[declIndex].text.trim();
   const graphType = VALID_GRAPH_TYPES.find(t => firstLine.startsWith(t));
 
   if (!graphType) {
-    issues.push(`Line ${startLine + 1}: Unrecognized Mermaid diagram type: "${firstLine}". Valid types: ${VALID_GRAPH_TYPES.join(', ')}.`);
+    issues.push(`Line ${lines[declIndex].lineNum}: Unrecognized Mermaid diagram type: "${firstLine}". Valid types: ${VALID_GRAPH_TYPES.join(', ')}.`);
     return;
   }
 
@@ -91,7 +106,7 @@ function validateMermaidBlock(block, issues, warnings) {
 
   let nodeCount = 0;
 
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = declIndex + 1; i < lines.length; i++) {
     const { text: rawLine, lineNum } = lines[i];
     const l = rawLine.trim();
 
@@ -151,6 +166,14 @@ function validateMermaidContent(content, filePath = 'content.md', options = {}) 
   if (typeof filePath === 'object' && filePath !== null) {
     effectiveOptions = filePath;
     effectivePath = 'content.md';
+  }
+  if (typeof content !== 'string') {
+    return {
+      isValid: false,
+      issues: ['Content must be a non-null string'],
+      warnings: [],
+      metrics: { totalDiagrams: 0, totalNodes: 0, byType: {} }
+    };
   }
 
   const blocks = extractMermaidBlocks(content);

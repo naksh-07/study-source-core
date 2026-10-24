@@ -17,6 +17,19 @@ This document defines ONLY the subject-specific knowledge architecture, memory s
 Mapping is a **SPATIAL ANCHOR + DIRECTIONAL SEQUENCE + PERIMETER TOPOLOGY + HYDROGRAPHIC DRAINAGE + STRATEGIC CHOKEPOINT + MULTI-LAYER OVERLAY** discipline. The central goal is NOT "memorize disconnected location names", but:  
 `Anchor Coordinates / Grids → Frame Spatial Bounding Box → Sequence Directional Orders (N/S/E/W) → Trace Perimeter Adjacencies → Map Hydrographic Confluences → Overlay Conservation & Strategic Assets → Eliminate Examiner Traps`
 
+### Authoritative Pedagogical Blueprint & Minimalist Architecture (ADR-25)
+
+> **Authoritative Specification**: [`docs/subjects/09_MAP.md`](../../../../docs/subjects/09_MAP.md)  
+> **Master Subject Directory**: [`docs/subjects/README.md`](../../../../docs/subjects/README.md)  
+> **Cognitive Archetype**: Pure Cartography, Coordinate Topology & Spatial Bounding Boxes  
+> **Pedagogical Research**: [`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](../../../../docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md)  
+
+In accordance with **The Clean Triad (ADR-25)** and Ponytail minimalism, Map Study strictly enforces **"Ginti Ki Cheezein"** (2 active high-yield deliverables) while eliminating overengineering bloat:
+1. **Primary Cartographic Memory Weapon**: Native Anki Image Occlusion (`ImageOcclusion/<Chapter>_IO.json` + normalized SVG coordinate masks) masking political borders, mountain ranges, straits, river courses, and capitals.
+2. **Clean Landmark Legend / Table**: Minimal Obsidian Note serving strictly as a coordinate legend, directional order table (North-to-South / West-to-East), and strategic chokepoint index.
+3. **Fail-Closed Map Invariant**: If no approved high-resolution map image exists in the asset folder, the build fails closed with `NO_APPROVED_ASSET`.
+4. **Strictly Banned Bloat**: Generic synthetic text flashcards (memorizing coordinates in text is pure noise), prose lecture notes, and Procedural Question Banks.
+
 > *This skill inherits all core policies, StudyLab invariants, 3-tier hints, options contracts, error taxonomies, and universal language contracts directly from `study-source-core`. Do not duplicate core definitions here.*
 
 ---

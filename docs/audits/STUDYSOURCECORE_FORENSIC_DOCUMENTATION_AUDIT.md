@@ -109,7 +109,7 @@ Adversarial inspection reveals four severe authority collisions across the repos
 #### 3. Collision 3: Divergent Agent & Task Registries
 - [`.agents/AGENTS.md`](../../.agents/AGENTS.md) defines **14 subagents**, explicitly including `mold-gap-auditor` (#13) and `adversarial-apkg-reviewer` (#14).
 - [`docs/ORCHESTRATION_AND_EXECUTION.md`](../ORCHESTRATION_AND_EXECUTION.md) presents a conflicting 14-agent table that includes `export_anki.js` as agent #11 and completely omits `mold-gap-auditor`.
-- [`.agents/skills/study-source-core/resources/artifact-registry.json`](../../.agents/skills/study-source-core/resources/artifact-registry.json) defines only **12 artifact tasks**, entirely omitting `mold-gap-auditor` and `adversarial-apkg-reviewer` from the machine-executable DAG.
+- [`.agents/skills/study-source-core/resources/artifact-registry.json`](../../skills/study-source-core/resources/artifact-registry.json) defines only **12 artifact tasks**, entirely omitting `mold-gap-auditor` and `adversarial-apkg-reviewer` from the machine-executable DAG.
 
 #### 4. Collision 4: Shadow Mirroring & Dual Maintenance
 - **31 identical files** in `docs/` are mirrored byte-for-byte inside `.agents/docs/`.
@@ -286,14 +286,14 @@ To eliminate ambiguity for future remediation teams, the following register cont
 In strict accordance with the non-destructive Phase B mandate, only surgical, objectively safe hygiene edits were applied. **Zero code, scripts, schemas, or subject-skill policies were modified**:
 
 1. **Repaired Corrupted Escape Characters**:
-   - File: [`.agents/skills/study-source-core/resources/artifact-registry.md`](../../.agents/skills/study-source-core/resources/artifact-registry.md)
+   - File: [`.agents/skills/study-source-core/resources/artifact-registry.md`](../../skills/study-source-core/resources/artifact-registry.md)
    - *Edit*: Eliminated raw control characters (`\a`, `\r`, `\t`, `\v`), restored clean Markdown table headers, corrected keys to `validator`, `artifactKey`, and `task_id`.
 2. **Repaired Broken Internal Links**:
    - Files:
      - [`docs/STUDYSOURCECORE_VNEXT_ORCHESTRATION.md`](../STUDYSOURCECORE_VNEXT_ORCHESTRATION.md)
      - [`docs/STUDYSOURCECORE_ARCHITECTURE.md`](../STUDYSOURCECORE_ARCHITECTURE.md)
      - [`docs/STUDYSOURCECORE_FAILURE_HANDLING.md`](../STUDYSOURCECORE_FAILURE_HANDLING.md)
-     - [`.agents/skills/study-source-core/SKILL.md`](../../.agents/skills/study-source-core/SKILL.md)
+     - [`.agents/skills/study-source-core/SKILL.md`](../../skills/study-source-core/SKILL.md)
    - *Edit*: Corrected broken `file:///` URLs pointing to non-existent repo root files, pointing them accurately to `.agents/OWNERSHIP.md`, `.agents/EXECUTION_LIFECYCLE.md`, `.agents/AGENTS.md`, and `.agents/RESOURCES.md`.
 3. **Normalized Canonical Resource Paths**:
    - Files:

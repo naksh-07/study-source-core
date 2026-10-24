@@ -5,7 +5,7 @@
     "subject": "Map",
     "completed_count": 7,
     "artifact_count": 7,
-    "verified_timestamp": "2026-10-08T00:49:21.857Z",
+    "verified_timestamp": "2026-10-24T15:10:43.570Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -19,15 +19,15 @@
     {
       "task_id": "task-basic-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Basic\\Europe_Basic.tsv",
-      "bytes": 13488,
-      "sha256": "7cdf24f1801b83e35e4521e03b5dc9856a9639fa44aca552ae7c44a5607a6d46",
+      "bytes": 4559,
+      "sha256": "7d8b239bc05adebbc925a93c25110354b4817db0a24f6a218c341bf94cd6df9e",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
       "task_id": "task-cloze-tsv",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Cloze\\Europe_Cloze.tsv",
-      "bytes": 6388,
-      "sha256": "c4d4b0047e1eaba7e34ffef65eca04b7fa00ab6df41c303a47946b7865e52825",
+      "bytes": 3339,
+      "sha256": "900b57bc22981702425f42552155b443824bd86780a0002dbc3fb1856fe6b3c8",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
@@ -54,8 +54,8 @@
     {
       "task_id": "task-declarative-apkg",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\Europe_Anki.apkg",
-      "bytes": 18818,
-      "sha256": "21ff04a3eaaf3c14422d0038ce8473e6f9a611e25a56a0bfefc15ad33704b8d9",
+      "bytes": 10926,
+      "sha256": "3494508e5af35070f98cebda1573dc7b056fdbe13eb1bb1c67ccdc001658c642",
       "physical_status": "VERIFIED_ON_DISK"
     }
   ]

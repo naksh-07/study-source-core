@@ -7,7 +7,7 @@ This document provides a factual, transparent assessment of the StudySourceCore 
 It details the code, scripts, schemas, subagent definitions, and test suites that are actively implemented, passing, and functional in the repository today.
 
 ### Baseline Health Summary
-- **Core Test Suite**: **47 of 47 test suites passing (100% pass rate)** via `npm test` using sequential fail-closed harness `scripts/run_all_tests.js` in ~18 seconds.
+- **Core Test Suite**: **45 of 45 test suites passing (100% pass rate)** via `npm test` using sequential fail-closed harness `scripts/run_all_tests.js` in ~41 seconds.
 - **Master Smoke Test & Anti-Tamper Integrity**: **19 of 19 zero-mock gates passing (100% pass rate)** via `npm run smoke` in ~5.5 seconds.
 - **Environment Doctor Diagnostics**: 8 automated checks passing via `npm run doctor` (validating Node.js, npm, git, dependencies, paths, permissions, MCP server, `.agents/skills.json` discovery, and production scripts anti-mock purity).
 - **Targeted Test Suites**:
@@ -18,8 +18,13 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
   - `npm run test:phase10`: Concurrency clamping (MAX_CONCURRENT_WORKERS = 4), crash-resilient atomic checkpoints, and runtime adversarial matrix.
   - `npm run test:legacy`: Direct Node runner executing the original 28 standalone validation scripts.
 - **Primary Runtime Engine**: Node.js v20+ / v22+ LTS (ES modules and CommonJS interop).
-- **Core Dependencies**: `ajv` (JSON Schema validation), `archiver` + `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `zod` (runtime schema parsing), `@modelcontextprotocol/sdk` (MCP server integration).
-- **Active Primary Practice Deliverable**: Canonical Markdown Question Banks (`Questions/<Chapter>_Questions.md`) adhering to GAP-30/ADR-22 with strict 4-option MCQs (`(A)`, `(B)`, `(C)`, `(D)`) and non-leaking hints; procedural APKGs permanently paused by default in production. Gate 2 in adversarial certification actively audits Question Banks.
+- **Core Dependencies**: `ajv` (JSON Schema validation), `better-sqlite3` (zero-heap streaming compiler), `jszip`, `sql.js`, `zod` (runtime schema parsing), `@modelcontextprotocol/sdk` (MCP server integration).
+- **Active Primary Practice Deliverable & The Clean Triad (ADR-25 / Phase 32)**:
+  - Canonical Markdown Question Banks (`Questions/<Chapter>_Questions.md`) adhering to GAP-30/ADR-22/ADR-25 serve as the active primary practice deliverable with strict 4-option MCQs (`(A)`, `(B)`, `(C)`, `(D)`), default-collapsed 3-tier hints (`> [!tip]-`), and step-by-step solution DAGs (`> [!success]-`). Procedural APKG binary compilation is permanently archived across all subjects.
+  - **Strict Zero-Scratchpad Anki Rule**: Multi-step numerical calculations, scratchpad algebra, and complex derivations are permanently banned from Anki cards. Flashcard review is strictly constrained to 5–15s atomic retrieval (formulas, SI units, boundary conditions, trap triggers), while deliberate problem solving is directed to paper and Obsidian Question Banks.
+- **Subject-by-Subject Pedagogical Blueprints & Research Synthesis (Phase 33)**:
+  - Established canonical minimalist specifications under [`docs/subjects/`](subjects/README.md) (`01_MATH.md` through `09_MAP.md` + `README.md`) enforcing **"Ginti Ki Cheezein"** (strictly 2–3 active high-yield deliverables per subject) and eliminating kitchen-sink configuration overhangs.
+  - Formally grounded in cognitive psychology and learning science: Dunlosky (2013), Karpicke & Blunt (2011), Sweller Cognitive Load Theory, and community anti-bloat consensus ([`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md), [`docs/audits/CURRENT_SUBJECT_STATE_AUDIT.md`](audits/CURRENT_SUBJECT_STATE_AUDIT.md)).
 - **Certified Chapter Catalog**: 6 fully verified production chapters:
   1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
   2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG (`QBank⚪(Legacy JSON only)` status).
@@ -37,7 +42,7 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
 StudySourceCore/
 ├── ARCHITECTURE.md                  # Tier 0: 6-Tier Architecture & System Invariants
 ├── PRODUCT.md                       # Tier 0: Product Identity, Principles & Non-Goals
-├── ROADMAP.md                       # Tier 0: 11 Implementation Phases (Phases 0–10 Certified)
+├── ROADMAP.md                       # Tier 0: Master Engineering Implementation Roadmap
 ├── README.md                        # Master repository overview and quickstart
 ├── CONTRIBUTING.md                  # Developer guidelines and contribution protocol
 │
@@ -56,7 +61,8 @@ StudySourceCore/
 │   ├── GOVERNANCE.md                # Authority hierarchy, ADR protocol, single-rule ownership
 │   ├── GAP_REGISTER.md              # Authoritative register of known gaps and resolutions
 │   ├── CURRENT_IMPLEMENTATION.md    # Active baseline assessment & test inventory
-│   ├── audits/                      # Historical audit reports & verification proofs (11 files)
+│   ├── subjects/                    # Tier 1: Canonical 9 Subject Pedagogical Blueprints (01_MATH..09_MAP + README)
+│   ├── audits/                      # Historical audit reports, pedagogical research & baseline audits (18 files)
 │   ├── archive/                     # Retired drafts & archive indexes
 │   └── target_architecture/         # Forward-looking target architecture specifications
 │   └── STUDYSOURCECORE_*            # Test-retained legacy specifications with epistemic annotations
@@ -252,7 +258,6 @@ npm run test:legacy
 Defined in `skills/study-source-core/package.json`:
 - `"@modelcontextprotocol/sdk": "^1.30.0"`: Standard Model Context Protocol SDK exposing the 6 deterministic tools to Antigravity and Claude Desktop.
 - `"ajv": "^8.20.0"`: Strict JSON Schema Draft-07 / 2020-12 validator.
-- `"archiver": "^8.0.0"`: High-performance streaming zip archive generator for APKG packaging.
 - `"better-sqlite3": "^12.11.1"`: Synchronous, native C++ SQLite driver for high-throughput WAL querying of `procedural.db` and telemetry logs.
 - `"jszip": "^3.10.1"`: Pure JavaScript ZIP archive generation for declarative `.apkg` packages.
 - `"sql.js": "^1.14.2"`: Pure WebAssembly port of SQLite 3 for environment-agnostic database compilation.
@@ -267,5 +272,7 @@ The **v1.2.0-beta.7 Production Baseline** is certified, passing all 47 automated
 - Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 23.
 - Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-40 (100% resolved and verified).
 - Refer to [`docs/MCP_SERVER_API.md`](./MCP_SERVER_API.md) for full documentation of the 6 deterministic MCP tools.
-- Production question delivery is standardized on canonical Markdown Question Banks (`Questions.md`) under GAP-30.
+- **Phase 32 (The Clean Triad & Procedural Practice Architecture - ADR-25)**: Established canonical Markdown Question Banks (`Questions.md`) as the active primary practice deliverable; permanently archived binary procedural APKG packaging across all subjects; enforced the strict Zero-Scratchpad Anki rule.
+- **Phase 33 (Subject-by-Subject Pedagogical Blueprints - "Ginti Ki Cheezein")**: Published the 9 canonical subject blueprints under [`docs/subjects/`](subjects/README.md) (`01_MATH.md` to `09_MAP.md`), establishing the 4 Cognitive Archetypes, strictly banning overengineering bloat, and standardizing frictionless 24-hour student review workflows.
 - Workspace skills discovery is standardized via native `.agents/skills.json` under GAP-35.
+

@@ -66,18 +66,54 @@ STANDARD TRACK                                  STUDYLAB TRACK
 
 ---
 
+## The Clean Triad Framework (ADR-25) & Cognitive Architecture
+
+To eliminate the **"Overengineering Trap"** (procrasti-learning, collector's fallacy, and flashcard fatigue caused by generating 12+ files per chapter), StudySourceCore enforces **The Clean Triad of Learning Separation (ADR-25)**:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        THE CLEAN LEARNING TRIAD                        │
+├────────────────────────────────────────────────────────────────────────┤
+│ 1. ANKI FLASHCARDS (Active Reflex Recall | 5–15s / card)               │
+│    • Formulas, definitions, boundary conditions, examiner traps        │
+│    • STRICT ZERO-SCRATCHPAD RULE: No multi-step algebra in Anki        │
+├────────────────────────────────────────────────────────────────────────┤
+│ 2. OBSIDIAN NOTES (Conceptual Anchor & Error Reference)                │
+│    • Single H1, monotonic hierarchy, mental models, FBDs, proofs       │
+│    • Consulted ONLY during initial recon or when a problem is failed   │
+├────────────────────────────────────────────────────────────────────────┤
+│ 3. OBSIDIAN QUESTION BANK (Deliberate Practice | Pen & Paper)          │
+│    • Canonical Problem Families with high variation & authentic traps  │
+│    • 4-option MCQs with misconception distractors                      │
+│    • Default-collapsed hints (> [!tip]-) & full DAGs (> [!success]-)   │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### The 4 Universal Cognitive Archetypes ("Ginti Ki Cheezein")
+
+Every subject domain is governed by its authoritative blueprint under [`docs/subjects/`](./docs/subjects/README.md), strictly enforcing 2–3 active deliverables while banning redundant bloat:
+
+| Cognitive Archetype | Example Subjects | Active High-Yield Weapons | Strictly Banned Bloat |
+|---|---|---|---|
+| **1. Calculational STEM** | Math, Physics, Physical Chem | • Question Bank (`Questions.md`) with 3-tier hints<br>• Atomic Formula Anki (5–10s reflex recall) | ❌ Scratchpad math in Anki<br>❌ Long narrative essay notes<br>❌ Mindmaps as study |
+| **2. Deductive Logic** | Reasoning, Syllogisms, Puzzles | • Deductive Question Bank (`Questions.md`) with Logic DAGs<br>• Notation, Rule & Fallacy Anki | ❌ Memorizing puzzle answers in Anki<br>❌ Prose lecture notes |
+| **3. Declarative High-Fact** | History, Polity, Inorganic Chem | • High-Density Spaced Anki (`_Anki.apkg`)<br>• Thematic Timeline & Comparative Notes | ❌ Procedural Question Banks<br>❌ 50-branch rainbow mindmaps |
+| **4. Visual-Spatial** | Map, Geography, Biology Anatomy | • Native Anki Image Occlusion (`_IO.json` + SVG masks)<br>• Terminology Cloze Anki | ❌ Pure text border/location cards<br>❌ Procedural Question Banks |
+
+---
+
 ## Deliverables Generated (per chapter)
 
 | Track | Output | Format | Status |
 |---|---|---|---|
-| Notes | `Notes/<Chapter>_Notes.md` | Obsidian Markdown + YAML frontmatter | Active Primary |
-| Basic Flashcards | `Basic/<Chapter>_Basic.tsv` | 3-column TSV → Anki import | Active Primary |
-| Cloze Flashcards | `Cloze/<Chapter>_Cloze.tsv` | Cloze `{{c1::}}` TSV → Anki import | Active Primary |
-| Image Occlusion | `ImageOcclusion/<Chapter>_IO.json` | SVG bounding-box manifest | Active Primary |
-| MindMap | `MindMap/<Chapter>_MindMap.md` | Mermaid + JSON concept tree | Active Primary |
-| Slide Deck | `SlideDeck/<Chapter>_SlideDeck.md` | Marp presentation | Active Primary |
-| Practice Question Bank | `Questions/<Chapter>_Questions.md` | Canonical Markdown Question Bank (5 dimensions, DAGs, 3-tier hints) | Active Primary |
-| Procedural APKG | `StudyLab/<Chapter>_StudyLab_Procedural.apkg` | Anki `.apkg` binary (Level 1–7 hints) | Temporarily Paused (GAP-30 / ADR-22) |
+| Notes | `Notes/<Chapter>_Notes.md` | Obsidian Markdown + YAML frontmatter | Active Primary (Conceptual Anchor) |
+| Basic Flashcards | `Basic/<Chapter>_Basic.tsv` | 3-column TSV → Anki import | Active Primary (Atomic Recall) |
+| Cloze Flashcards | `Cloze/<Chapter>_Cloze.tsv` | Cloze `{{c1::}}` TSV → Anki import | Active Primary (Contextual Relations) |
+| Image Occlusion | `ImageOcclusion/<Chapter>_IO.json` | SVG bounding-box manifest | Active Primary (Visual Anatomy / Maps) |
+| MindMap | `MindMap/<Chapter>_MindMap.md` | Mermaid + JSON concept tree | Conditional (Orientation only) |
+| Slide Deck | `SlideDeck/<Chapter>_SlideDeck.md` | Marp presentation | Conditional (Pedagogical Overview) |
+| Practice Question Bank | `Questions/<Chapter>_Questions.md` | Canonical Markdown Question Bank (4-option MCQs, 3-tier hints, DAGs) | Active Primary (STEM / Reasoning) |
+| Procedural APKG | `StudyLab/<Chapter>_StudyLab_Procedural.apkg` | Anki `.apkg` binary | Permanently Archived (ADR-24 / ADR-25) |
 
 ---
 
@@ -88,12 +124,12 @@ StudySourceCore/
 ├── README.md                       ← Master repository overview and quickstart
 ├── PRODUCT.md                      ← Product Charter, 10 Immutable Principles, non-goals
 ├── ARCHITECTURE.md                 ← Canonical 6-Tier Architecture & Contract Matrix
-├── ROADMAP.md                      ← Master 23-Phase Roadmap (Phases 0–22 Certified)
+├── ROADMAP.md                      ← Master Implementation Roadmap (Phases 0–23 Certified)
 ├── CONTRIBUTING.md                 ← Developer workflow, testing, PR guidelines
 │
-├── docs/                           ← Tier 1: Canonical Technical Specifications
+├── docs/                           ← Tier 1: Canonical Technical Specifications & Blueprints
 │   ├── LEARNING_PRINCIPLES.md      ← Cognitive load, 4-stage progression, 17 dimensions
-│   ├── SUBJECT_POLICIES.md         ← 9-subject artifact matrix & suppression rules
+│   ├── SUBJECT_POLICIES.md         ← 9-subject artifact matrix, 4 archetypes & suppression codes
 │   ├── STUDYLAB_SPECIFICATION.md   ← StudyLab procedural IR, 3-tier hints, DAGs
 │   ├── KNOWLEDGE_UNITS.md          ← Knowledge Units (KU), deduplication, reservations
 │   ├── VISUAL_LEARNING.md          ← 9-stage visual pipeline, IO coordinate constraints
@@ -106,7 +142,8 @@ StudySourceCore/
 │   ├── GOVERNANCE.md               ← Authority hierarchy, ADR protocol, single-rule ownership
 │   ├── GAP_REGISTER.md             ← Authoritative register of architectural gaps & resolutions
 │   ├── CURRENT_IMPLEMENTATION.md   ← Active baseline assessment & test inventory
-│   ├── audits/                     ← Audit reports & Master Audit Roadmap (MASTER_AUDIT_AND_BUG_HUNTING_PLAN.md)
+│   ├── subjects/                   ← Tier 1: Canonical 9 Subject Pedagogical Blueprints (01_MATH..09_MAP + README)
+│   ├── audits/                     ← Audit reports, pedagogical research & baseline audits (18 files)
 │   ├── archive/                    ← Retired drafts & archive indexes
 │   └── target_architecture/        ← Forward-looking target architecture specifications
 │
@@ -466,7 +503,7 @@ node skills/study-source-core/scripts/studycore_cli.js certify --all
 
 | Domain | Chapter | Notes | Flashcards | MindMap | Deck | Question Bank (GAP-30) | APKG | Certification |
 |---|---|---|---|---|---|---|---|---|
-| **Geography** | `Europe` | ✅ Comprehensive | ✅ 20 Basic + 20 Cloze | ✅ MindMap | ✅ SlideDeck | ⚪ N/A (Visual) | ✅ 40-Note Unified | 🟢 4/4 PASS |
+| **Map** | `Europe` | ✅ Comprehensive | ✅ 20 Basic + 20 Cloze | ✅ MindMap | ✅ SlideDeck | ⚪ N/A (Visual) | ✅ 40-Note Unified | 🟢 4/4 PASS |
 | **Mathematics** | `LCM-HCF` | ✅ Verified | ✅ 20 Basic + 20 Cloze | ⚪ Suppressed | ⚪ Suppressed | ✅ Practice Qs | ✅ Dual APKGs | 🟢 4/4 PASS |
 | **Mathematics** | `Arithmetic-Progression` | ✅ 2,400+ words | ✅ 20 Basic + 20 Cloze | ✅ 34 Nodes | ✅ 8 Slides | ✅ 26 MCQs (CBSE/SSC/CDS) | ✅ 27-Card APKG | 🟢 4/4 PASS |
 | **Physics** | `Newton-Laws-Friction` | ✅ 3,100+ words | ✅ 20 Basic + 20 Cloze | ✅ 36 Nodes | ✅ 8 Slides | ✅ 25 Numerical MCQs | ✅ 23-Card + Procedural | 🟢 4/4 PASS |
@@ -581,6 +618,11 @@ See [`DECISIONS.md`](./DECISIONS.md) for the full Architectural Decision Record 
 | ADR-18 | Strict Script De-Usurpation & Fail-Closed Pedagogical Integrity |
 | ADR-19 | Mechanical vs Cognitive Separation of Concerns |
 | ADR-20 | Antigravity Native Skills Discovery Bridge & Global Duplicate Purge |
+| ADR-21 | Anti-Hardcoding & Zero-Mock Production Hardening |
+| ADR-22 | Question Bank Primary Policy & Gate 2 Certification Fallback |
+| ADR-23 | Safe Programmatic Audit Libraries & Unified Certification CLI |
+| ADR-24 | Procedural APKG Archival & Markdown Question Bank Primacy |
+| ADR-25 | The Clean Triad, Cognitive Science Alignment & Minimalist Subject Blueprints |
 
 ---
 

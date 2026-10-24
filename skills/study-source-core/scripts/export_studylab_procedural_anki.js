@@ -908,6 +908,18 @@ async function exportStudyLabProceduralAnki(targetInput, options = {}) {
         subjectName = options.subject || rawData.domain || "Subject";
         chapterDir = options.chapterDir || path.join(getVaultRoot(), 'Study Materials', subjectName, chapterName);
         
+        if (rawData.questionsPath && fs.existsSync(rawData.questionsPath)) {
+            practiceQuestionsData = JSON.parse(fs.readFileSync(rawData.questionsPath, 'utf8'));
+        }
+        if (rawData.patternsPath && fs.existsSync(rawData.patternsPath)) {
+            problemPatternsData = JSON.parse(fs.readFileSync(rawData.patternsPath, 'utf8'));
+        }
+        if (rawData.questionsPath && fs.existsSync(rawData.questionsPath)) {
+            practiceQuestionsData = JSON.parse(fs.readFileSync(rawData.questionsPath, 'utf8'));
+        }
+        if (rawData.patternsPath && fs.existsSync(rawData.patternsPath)) {
+            problemPatternsData = JSON.parse(fs.readFileSync(rawData.patternsPath, 'utf8'));
+        }
         if (Array.isArray(rawData.questions)) {
             practiceQuestionsData = rawData;
         } else if (Array.isArray(rawData.patterns)) {
