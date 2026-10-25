@@ -12,7 +12,7 @@ domain: "Math"
 > [!info] Chapter Overview
 > - **Subject / Domain**: Math
 > - **Chapter**: Arithmetic-Progression
-> - **Skill ID**: `math.number_system.lcm_hcf`
+> - **Skill ID**: `math.algebra.arithmetic_progression`
 > - **Language**: hi
 > - **Total Practice Questions**: 26
 > - **Architecture**: StudyLab Semantic Pipeline (Source-First Practice Universe)

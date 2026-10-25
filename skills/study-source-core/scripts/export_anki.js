@@ -256,10 +256,10 @@ function deduplicateBasicAgainstCloze(basicRows, clozeRows) {
             if (bFront === cf.strippedSentence || bCombined === cf.strippedSentence) {
                 return true;
             }
-            const answerMatchesTarget = cf.targets.some(t => t && (bBack === t || bBack.startsWith(t + ' ')));
+            const answerMatchesTarget = cf.targets.some(t => t && (bBack === t || bBack.startsWith(t + ' ') || bBack.includes(t) || (t.length > 3 && t.includes(bBack))));
             if (answerMatchesTarget && cf.stemTokens.length >= 2) {
                 const matchedTokens = cf.stemTokens.filter(tok => bFront.includes(tok));
-                if (matchedTokens.length / cf.stemTokens.length >= 0.6) {
+                if (matchedTokens.length / cf.stemTokens.length >= 0.35) {
                     return true;
                 }
             }
