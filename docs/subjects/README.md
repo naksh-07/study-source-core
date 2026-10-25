@@ -1,6 +1,6 @@
 # Master Subject Pedagogical Directory (`docs/subjects/`)
 
-**Status**: AUTHORITATIVE / FROZEN BASELINE (v1.2.0-beta.7)  
+**Status**: AUTHORITATIVE / FROZEN BASELINE (v1.2.0-stable)  
 **Standard**: Ponytail Minimalism & Cognitive Science Alignment (ADR-25)  
 **Foundation**: Dunlosky (2013), Sweller Cognitive Load Theory, Karpicke & Blunt (2011), Paivio Dual Coding Theory  
 

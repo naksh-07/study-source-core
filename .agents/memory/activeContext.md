@@ -62,6 +62,16 @@
 - [x] Fixed 2 Numerical Chemistry Questions in `Chemical-Equilibrium_Questions.md` to authentic 4-option MCQs.
 - [x] Upgraded Europe Image Occlusion Coordinates in `Europe_ImageOcclusion.json` to true SVG geographic positions.
 - [x] Enriched Physics Question Variety in `Newton-Laws-Friction_Questions.md` with 10 diverse mechanics scenarios (FBDs, incline, Atwood pulley, Work-Energy stopping distance, elevator pseudo-force, vertical wall, recoil).
+- [x] Documentation Finalized for v1.2.0-stable: Authored canonical `CHANGELOG.md` and synchronized `README.md` (Clean Triad, 4 Cognitive Archetypes, 45/45 suites, 19/19 smoke gates).
+
+## Phase 38: Zero-Risk Bloat Pruning & Final Clean Packaging (In Progress)
+- [x] Executing Option A Pruning:
+  - Purging `skills/study-source-core/scripts/scratch/` (~66.4 MB, 784 transient test scratch files).
+  - Removing root duplicate `agents/` directory (14 files, 1,489 lines).
+  - Removing dead script `vault_indexer.js` (372 lines) and unreferenced schemas (`studylab-source-question-inventory`, `studylab-question-bank`).
+  - Removing `vitest` dependency and configs (`vitest.config.js`, `vitest.setup.js`).
+  - Pruning duplicate fixture `fresh_math_ap_source_fixture.json` and debug scripts in root `scratch/`.
+- [ ] Post-pruning master test verification (45/45 suites, 19/19 smoke checks).
 - [x] Master Verification Certified:
   - Master Test Suite: **45/45 suites 100% GREEN PASS** (37.05s).
   - Master Smoke Test: **19/19 checks PASS** (Zero-mock certified).

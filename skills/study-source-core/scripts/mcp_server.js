@@ -35,7 +35,7 @@ const { ingestSourceToEvidencePack, persistEvidencePack } = require('./evidence_
 // Initialize MCP Server
 const server = new McpServer({
     name: "studysource-core",
-    version: "1.2.0-beta.7"
+    version: "1.2.0"
 });
 
 // Tool 1: Compile Standard Anki Package
@@ -339,7 +339,7 @@ server.tool(
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error("[StudySourceCore MCP] Server v1.2.0-beta.7 listening on stdio.");
+    console.error("[StudySourceCore MCP] Server v1.2.0 listening on stdio.");
 }
 
 main().catch(err => {

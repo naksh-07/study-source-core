@@ -2,7 +2,7 @@
 
 > **Canonical Document**: `ROADMAP.md`  
 > **Status**: AUTHORITATIVE / GOVERNED BASELINE  
-> **Version**: 1.2.0-beta.7-ROADMAP  
+> **Version**: 1.2.0-stable-ROADMAP  
 > **Target Release**: StudySourceCore v1.2.0 (Production Stable)  
 > **Governance Authority**: StudySourceCore Master Governance Board  
 
@@ -74,7 +74,7 @@ No phase may be initiated until all of its prerequisite phases have passed their
 │  [ PHASE 23: Safe Audit Libs, Wave 2 DAG, Unified Certify CLI ] ──► COMPLETED          │
 │                           │                                                            │
 │                           ▼                                                            │
-│       🏆 v1.2.0-beta.7 PRODUCTION BASELINE CERTIFIED ◄── (CURRENT STATUS: ACTIVE)      │
+│       🏆 v1.2.0 STABLE PRODUCTION RELEASE CERTIFIED ◄── (CURRENT STATUS: ACTIVE)       │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 

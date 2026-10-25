@@ -1,7 +1,7 @@
 # StudySourceCore — Model Context Protocol (MCP) Server API Specification
 
 > **Canonical Document**: `docs/MCP_SERVER_API.md`  
-> **Server Version**: `1.2.0-beta.5`  
+> **Server Version**: `1.2.0`  
 > **Transport**: Standard Input/Output (`stdio`) via JSON-RPC 2.0  
 > **Protocol Specification**: Model Context Protocol (MCP) SDK `^1.30.0`  
 > **Source Script**: [`skills/study-source-core/scripts/mcp_server.js`](../skills/study-source-core/scripts/mcp_server.js)  

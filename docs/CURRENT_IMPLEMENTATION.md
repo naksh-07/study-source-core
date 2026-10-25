@@ -2,7 +2,7 @@
 
 ## 1. Overview & Baseline State
 
-This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0-beta.7 Production Baseline**.
+This document provides a factual, transparent assessment of the StudySourceCore repository as of **v1.2.0 Stable Release**.
 
 It details the code, scripts, schemas, subagent definitions, and test suites that are actively implemented, passing, and functional in the repository today.
 
@@ -36,6 +36,12 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
   - Remapped Europe Map Image Occlusion masks (`Europe_ImageOcclusion.json`) from synthetic 3x5 grid to exact geographic SVG polygon positions.
   - Replaced mechanical parameter repetition in Physics (`Newton-Laws-Friction_Questions.md`) with 10 authentic mechanics problems (incline, Atwood pulley, Work-Energy stopping distance, elevator apparent weight, vertical wall, recoil).
   - 45/45 Master Test Suites (37.05s) and 19/19 Smoke checks 100% GREEN PASS.
+- **Zero-Risk Bloat Pruning & Repository Cleanliness (Phase 38)**:
+  - Purged 784 transient test scratch files and orphaned temporary SQLite DBs (~66.4 MB) in `skills/study-source-core/scripts/scratch/`.
+  - Removed duplicate root `agents/` directory (14 files, 1,489 lines) to retain single authoritative `.agents/agents/`.
+  - Pruned dead script `vault_indexer.js` (372 lines) and 2 unreferenced prototype schemas (`studylab-source-question-inventory.schema.json`, `studylab-question-bank.schema.json`).
+  - Pruned redundant `vitest` dependency and configs (`vitest.config.js`, `vitest.setup.js`), standardizing on native `run_all_tests.js`.
+  - Pruned duplicate fixture `fresh_math_ap_source_fixture.json` and legacy debug scratch files.
 - **Certified Chapter Catalog**: 6 fully verified production chapters:
   1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
   2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG (`QBank⚪(Legacy JSON only)` status).
@@ -279,7 +285,7 @@ Defined in `skills/study-source-core/package.json`:
 
 ## 7. Release State & Roadmap Transition
 
-The **v1.2.0-beta.7 Production Baseline** is certified, passing all 47 automated test suites, passing the 19-gate zero-mock smoke test, achieving 4-Gate adversarial certification across all 6 production chapters, and passing all 8 Environment Doctor checks:
+The **v1.2.0 Stable Release** is certified, passing all 45 automated test suites, passing the 19-gate zero-mock smoke test, achieving 4-Gate adversarial certification across all 6 production chapters, and passing all 8 Environment Doctor checks:
 - Refer to [`ROADMAP.md`](../ROADMAP.md) for detailed deliverables, invariants, and exit criteria across completed Phases 0 through 23.
 - Refer to [`docs/GAP_REGISTER.md`](./GAP_REGISTER.md) for the resolution records of GAP-01 through GAP-40 (100% resolved and verified).
 - Refer to [`docs/MCP_SERVER_API.md`](./MCP_SERVER_API.md) for full documentation of the 6 deterministic MCP tools.

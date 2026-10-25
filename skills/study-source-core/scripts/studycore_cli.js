@@ -1045,7 +1045,7 @@ async function cmdRun(positional, flags) {
 
 function printHelp() {
     console.log(`
-StudySourceCore CLI (v1.2.0-beta.7)
+StudySourceCore CLI (v1.2.0)
 
 Commands:
   studycore run <Subject> <Chapter> [--only <target>] [--all] [--json]
