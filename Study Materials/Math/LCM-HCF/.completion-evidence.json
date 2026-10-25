@@ -33,8 +33,8 @@
     {
       "task_id": "task-question-bank",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\Questions\\LCM-HCF_Questions.md",
-      "bytes": 12701,
-      "sha256": "43464d59542b58f124e0dec5aa990a61651e8dea6e0930f9d79e75182db27ae6",
+      "bytes": 13230,
+      "sha256": "063db4f42dafe8646950e516379e4565c8b28e3ea6d51c04a29970944b3ea8d7",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
@@ -48,7 +48,7 @@
       "task_id": "task-studylab-procedural-apkg",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Math\\LCM-HCF\\StudyLab\\LCM-HCF_StudyLab_Procedural.apkg",
       "bytes": 8270,
-      "sha256": "5a03cbb278d83991be1b93069896f84eb781bfaa9d6c2324dd9dfce8b295809b",
+      "sha256": "7d87b8cbec039a7eba235586ca17af6b76e2417fabb06d47707fd3932aa113f0",
       "physical_status": "VERIFIED_ON_DISK"
     }
   ]

@@ -66,12 +66,17 @@ domain: "Chemistry"
 > - **Pattern ID**: `pat-chem-eq-kc-calc`
 > - **Topic / Pattern**: Homogeneous Gaseous Equilibrium Constant (Kc) Calculation (समांगी गैसीय साम्य स्थिरांक Kc की गणना)
 > - **Provenance**: `authentic_pyq` (RRB Group D 2018 Shift 1)
-> - **Question Type**: numerical
+> - **Question Type**: mcq
 > - **Difficulty**: 2
 
 ### Question
 
 एक 1 लीटर के बंद फ्लास्क में साम्यावस्था पर N2O4(g) <=> 2NO2(g) अभिक्रिया के लिए [N2O4] = 0.2 mol/L तथा [NO2] = 0.4 mol/L पाए गए। इस ताप पर अभिक्रिया का साम्य स्थिरांक Kc (mol/L में) ज्ञात कीजिए।
+
+- (A) 0.8 mol/L
+- (B) 0.4 mol/L
+- (C) 1.6 mol/L
+- (D) 0.2 mol/L
 
 > [!tip]- संकेत (3-Tier Hints)
 > - **Tier 1 (संकल्पना / Approach)**: रासायनिक सिद्धांत पहचानें: Homogeneous Gaseous Equilibrium Constant (Kc) Calculation (समांगी गैसीय साम्य स्थिरांक Kc की गणना) के अंतर्गत जब किसी बंद पात्र में संतुलित उत्क्रमणीय गैसीय अभिक्रिया के लिए साम्यावस्था पर अभिकारकों एवं उत्पादों की मोलर सांद्रता या मोल दिए गए हों, तो साम्य स्थिरांक व्यंजक Kc = [उत्पाद]^[गुणांक] / [अभिकारक]^[गुणांक] लागू कर Kc की गणना की जाती है। की पहचान करें।
@@ -79,7 +84,7 @@ domain: "Chemistry"
 > - **Tier 3 (हल की दिशा / Setup)**: चरणबद्ध संक्रिया: व्यंजक में मान प्रतिस्थापित कर आवश्यक अज्ञात रासायनिक राशि का मान ज्ञात करें।
 
 > [!success]- उत्तर एवं विस्तृत हल (Answer & Explanation)
-> **सही उत्तर (Correct Option)**: **0.8 mol/L**
+> **सही उत्तर (Correct Option)**: **(A) 0.8 mol/L**
 >
 > **विस्तृत हल (Step-by-Step Solution)**:
 > चरणबद्ध रासायनिक समाधान (7-Stage Chemical Reasoning Pipeline):
@@ -142,12 +147,17 @@ domain: "Chemistry"
 > - **Pattern ID**: `pat-chem-eq-kp-deltang`
 > - **Topic / Pattern**: Conversion Between Kp and Kc Using Reaction Stoichiometry (Kp एवं Kc का रूपांतरण तथा डेल्टा n_g)
 > - **Provenance**: `authentic_pyq` (RRB NTPC 2019 Shift 3)
-> - **Question Type**: numerical
+> - **Question Type**: mcq
 > - **Difficulty**: 2
 
 ### Question
 
 अभिक्रिया H2(g) + I2(g) <=> 2HI(g) के लिए 500 K पर Kc का मान 50 है। इस ताप पर Kp का मान क्या होगा?
+
+- (A) 50
+- (B) 25
+- (C) 100
+- (D) 2500
 
 > [!tip]- संकेत (3-Tier Hints)
 > - **Tier 1 (संकल्पना / Approach)**: रासायनिक सिद्धांत पहचानें: Conversion Between Kp and Kc Using Reaction Stoichiometry (Kp एवं Kc का रूपांतरण तथा डेल्टा n_g) के अंतर्गत गैसीय अभिक्रिया के लिए Kp और Kc के बीच संबंध Kp = Kc(RT)^{\Delta n_g} द्वारा दिया जाता है। यहाँ \Delta n_g गैसीय उत्पादों के मोलों और गैसीय अभिकारकों के मोलों का अंतर है तथा T परम ताप (K) है। की पहचान करें।
@@ -155,7 +165,7 @@ domain: "Chemistry"
 > - **Tier 3 (हल की दिशा / Setup)**: चरणबद्ध संक्रिया: व्यंजक में मान प्रतिस्थापित कर आवश्यक अज्ञात रासायनिक राशि का मान ज्ञात करें।
 
 > [!success]- उत्तर एवं विस्तृत हल (Answer & Explanation)
-> **सही उत्तर (Correct Option)**: **50**
+> **सही उत्तर (Correct Option)**: **(A) 50**
 >
 > **विस्तृत हल (Step-by-Step Solution)**:
 > चरणबद्ध रासायनिक समाधान (7-Stage Chemical Reasoning Pipeline):

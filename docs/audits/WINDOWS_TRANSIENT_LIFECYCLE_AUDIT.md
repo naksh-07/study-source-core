@@ -1,6 +1,6 @@
 # Windows File Handles & Transient Lifecycle Audit Report (Track 6)
 
-**Execution Date**: 2026-10-25T01:38:51.655Z
+**Execution Date**: 2026-10-25T02:38:05.268Z
 **Environment**: Windows 11 PC AI Workstation
 **Audit Status**: ✅ 100% PASSED
 
@@ -13,16 +13,16 @@ Transient file deletions and directory purges were wrapped with exponential-back
 
 | Iteration | Status | Duration (ms) | Transients Cleared | Error |
 |---|---|---|---|---|
-| 1 | PASS | 328 | 67 | None |
-| 2 | PASS | 125 | 3 | None |
-| 3 | PASS | 149 | 3 | None |
-| 4 | PASS | 80 | 3 | None |
-| 5 | PASS | 132 | 3 | None |
-| 6 | PASS | 126 | 3 | None |
-| 7 | PASS | 87 | 3 | None |
-| 8 | PASS | 126 | 3 | None |
-| 9 | PASS | 113 | 3 | None |
-| 10 | PASS | 104 | 3 | None |
+| 1 | PASS | 240 | 67 | None |
+| 2 | PASS | 134 | 3 | None |
+| 3 | PASS | 115 | 3 | None |
+| 4 | PASS | 100 | 3 | None |
+| 5 | PASS | 89 | 3 | None |
+| 6 | PASS | 94 | 3 | None |
+| 7 | PASS | 94 | 3 | None |
+| 8 | PASS | 115 | 3 | None |
+| 9 | PASS | 112 | 3 | None |
+| 10 | PASS | 133 | 3 | None |
 
 ## 3. Invariants Verified
 

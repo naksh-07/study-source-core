@@ -29,6 +29,13 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
   - Enhanced `deduplicateBasicAgainstCloze()` in `export_anki.js` with mathematical target containment, automatically stripping redundant formula basic cards and cutting student review queue by ~50%.
   - Resolved metadata leak in `Arithmetic-Progression_Questions.md` (correcting skill ID to `math.algebra.arithmetic_progression`).
   - Documented specific cognitive weapon kits for Physics (6-stage QBank + Lean Anki + FBDs), History (Chronological Cloze Anki + Timeline Spine Notes), and Geography (Image Occlusion + Process Notes).
+- **360° Multi-Angle Findings Remediation & Hardening (Phase 37)**:
+  - Hardened hint leak validator (`validate_studylab_question_bank.js`) with Hindi SOV suffix check (`...\d+.*(सही उत्तर|अंतिम उत्तर|उत्तर है|प्राप्त करें|is the correct answer)`) and Markdown Tier 3 hint leak enforcement.
+  - Eliminated 7 Tier 3 answer leaks in `LCM-HCF_Questions.md` and `ensure_test_fixtures.js`, transforming hints into genuine cognitive guides without number leakage.
+  - Converted Chemistry open numerical questions in `Chemical-Equilibrium_Questions.md` to 100% 4-option MCQs.
+  - Remapped Europe Map Image Occlusion masks (`Europe_ImageOcclusion.json`) from synthetic 3x5 grid to exact geographic SVG polygon positions.
+  - Replaced mechanical parameter repetition in Physics (`Newton-Laws-Friction_Questions.md`) with 10 authentic mechanics problems (incline, Atwood pulley, Work-Energy stopping distance, elevator apparent weight, vertical wall, recoil).
+  - 45/45 Master Test Suites (37.05s) and 19/19 Smoke checks 100% GREEN PASS.
 - **Certified Chapter Catalog**: 6 fully verified production chapters:
   1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
   2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG (`QBank⚪(Legacy JSON only)` status).

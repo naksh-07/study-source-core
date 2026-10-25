@@ -57,7 +57,8 @@ function hintLeaksAnswer(hintText, answer) {
         new RegExp(`(?:final\\s+)?(?:answer|उत्तर|correct\\s*option|सही\\s*विकल्प|ans|result|परिणाम)\\s*(?:is|है|होगा|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}(?:\\s*(?:is|है|होगा|था|।|\\.))?(?!\\w)`, 'i'),
         new RegExp(`(?:final\\s*answer|अंतिम\\s*उत्तर)\\s*(?:is|होगा|है|:|=|था)?\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}(?:\\s*(?:is|है|होगा|था|।|\\.))?(?!\\w)`, 'i'),
         new RegExp(`(?:yields|gives|equals|बराबर|प्राप्त\\s*होता\\s*है|प्राप्त\\s*होगा)\\s*(?:exactly\\s*)?${escapeRegex(ansStr)}(?:\\s*(?:is|है|होगा|था|।|\\.))?(?!\\w)`, 'i'),
-        new RegExp(`(?:\\\\therefore|hence|अतः|परिणामस्वरूप|\\bans\\b|\\bresult\\b|\\btarget\\b|\\bउत्तर\\b)[^.!?\\n]{0,25}[:=]\\s*${escapeRegex(ansStr)}(?!\\w)`, 'i')
+        new RegExp(`(?:\\\\therefore|hence|अतः|परिणामस्वरूप|\\bans\\b|\\bresult\\b|\\btarget\\b|\\bउत्तर\\b)[^.!?\\n]{0,25}[:=]\\s*${escapeRegex(ansStr)}(?!\\w)`, 'i'),
+        new RegExp(`(?:^|[^a-zA-Z0-9])${escapeRegex(ansStr)}\\s*(?:N|J|m\\/s|m\\/s²|kg|m|%|W|mol\\/L|units?)?\\s*(?:ही\\s*)?(?:सही\\s*(?:विकल्प|उत्तर)|अंतिम\\s*उत्तर|उत्तर\\s*है|is\\s*(?:the\\s*)?(?:correct\\s*)?answer)`, 'i')
     ];
 
     for (const pat of explicitPatterns) {
@@ -445,6 +446,10 @@ function validateQuestionBankMarkdown(content, filePath = 'in-memory') {
                 const t2Match = tipContent.match(/>\s*-\s*\*\*Tier 2[^\*]*\*\*:\s*([^\n]+)/i);
                 if (t2Match && hintLeaksAnswer(t2Match[1], targetAns)) {
                     errors.push(`[HINT_ANSWER_LEAKAGE] Question '## ${heading}' Hint Tier 2 leaks final answer '${targetAns}'.`);
+                }
+                const t3Match = tipContent.match(/>\s*-\s*\*\*Tier 3[^\*]*\*\*:\s*([^\n]+)/i);
+                if (t3Match && hintLeaksAnswer(t3Match[1], targetAns)) {
+                    errors.push(`[HINT_ANSWER_LEAKAGE] Question '## ${heading}' Hint Tier 3 leaks final answer '${targetAns}'.`);
                 }
             }
         }

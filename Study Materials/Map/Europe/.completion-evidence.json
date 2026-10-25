@@ -5,7 +5,7 @@
     "subject": "Map",
     "completed_count": 7,
     "artifact_count": 7,
-    "verified_timestamp": "2026-10-25T01:39:10.640Z",
+    "verified_timestamp": "2026-10-25T02:38:16.390Z",
     "schema_version": "1.0.0"
   },
   "artifacts": [
@@ -33,8 +33,8 @@
     {
       "task_id": "task-image-occlusion",
       "target_path": "C:\\Users\\Suraj\\Documents\\Antigravity\\Studycore\\Study Materials\\Map\\Europe\\ImageOcclusion\\Europe_ImageOcclusion.json",
-      "bytes": 6100,
-      "sha256": "7dd5ad29ccb7ca0373f280c983154dbdeddefdabd492fa3f824e686c7822c594",
+      "bytes": 6120,
+      "sha256": "98ff2d430a69836d1ad46c785bc05f9475c810f50c73347956aeef48465aaa92",
       "physical_status": "VERIFIED_ON_DISK"
     },
     {
