@@ -25,6 +25,10 @@ It details the code, scripts, schemas, subagent definitions, and test suites tha
 - **Subject-by-Subject Pedagogical Blueprints & Research Synthesis (Phase 33)**:
   - Established canonical minimalist specifications under [`docs/subjects/`](subjects/README.md) (`01_MATH.md` through `09_MAP.md` + `README.md`) enforcing **"Ginti Ki Cheezein"** (strictly 2–3 active high-yield deliverables per subject) and eliminating kitchen-sink configuration overhangs.
   - Formally grounded in cognitive psychology and learning science: Dunlosky (2013), Karpicke & Blunt (2011), Sweller Cognitive Load Theory, and community anti-bloat consensus ([`docs/audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md`](audits/PEDAGOGICAL_AND_COGNITIVE_SCIENCE_RESEARCH_REPORT.md), [`docs/audits/CURRENT_SUBJECT_STATE_AUDIT.md`](audits/CURRENT_SUBJECT_STATE_AUDIT.md)).
+- **Ponytail Standard Optimization & Formula Deduplication (Phase 36)**:
+  - Enhanced `deduplicateBasicAgainstCloze()` in `export_anki.js` with mathematical target containment, automatically stripping redundant formula basic cards and cutting student review queue by ~50%.
+  - Resolved metadata leak in `Arithmetic-Progression_Questions.md` (correcting skill ID to `math.algebra.arithmetic_progression`).
+  - Documented specific cognitive weapon kits for Physics (6-stage QBank + Lean Anki + FBDs), History (Chronological Cloze Anki + Timeline Spine Notes), and Geography (Image Occlusion + Process Notes).
 - **Certified Chapter Catalog**: 6 fully verified production chapters:
   1. `Map / Europe`: Cartographic multi-layer SVG, Notes, 20 Basic, 20 Cloze, IO manifest, 40-note Anki APKG.
   2. `Math / LCM-HCF`: Notes, 20 Basic, 20 Cloze, Practice Questions, Anki APKG, StudyLab APKG (`QBank⚪(Legacy JSON only)` status).

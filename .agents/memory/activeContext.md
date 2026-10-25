@@ -46,3 +46,15 @@
     - Master Test Suite: **45/45 suites 100% GREEN PASS** (41.46s).
     - Master Smoke Test: **19/19 checks PASS** (Zero-mock certified).
   - [x] Master Audit Report Finalized: [`docs/audits/FINAL_360_AUDIT_REPORT.md`](file:///c:/Users/Suraj/Documents/Antigravity/Studycore/docs/audits/FINAL_360_AUDIT_REPORT.md).
+
+## Phase 36: Ponytail Standard Optimization & Multi-Angle Final Re-Audit (Current)
+- [x] Ponytail Standard Read-Only Audit & Product Lifecycle Trace:
+  - `debugger-detective`: Ingestion -> Policy -> DAG Dispatch -> Anki Packaging -> Quality Verification (< 1.0s, zero memory leak, peak RAM < 65MB).
+  - `architect-planner`: Evaluated Piotr Wozniak Minimum Information Principle (MIP), YAGNI, and learner overwhelm.
+- [x] Concrete Optimizations Applied:
+  - Enhanced `deduplicateBasicAgainstCloze` in `export_anki.js` with mathematical target containment, automatically eliminating redundant formula cards.
+  - Fixed Arithmetic-Progression skill ID leak from `lcm_hcf` to `math.algebra.arithmetic_progression`.
+  - Documented specific cognitive weapon kits for Physics (6-stage QBank + Lean Anki + FBDs), History (Chronological Cloze Anki + Timeline Spine Notes), and Geography (Image Occlusion + Process Notes).
+- [x] Final Re-Verification:
+  - 45/45 Master Test Suites: 100% GREEN PASS.
+  - 19/19 Smoke Test Checks: 100% PASS (Zero-mock certified).
